@@ -1,15 +1,25 @@
 {
-  "name": "node-js-getting-started",
-  "version": "0.3.0",
-  "description": "A sample Node.js app using Express 4",
+  "name": "flexible-finance-server",
+  "version": "1.0.0",
+  "description": "",
   "engines": {
-    "node": "14.x"
+    "node": "16.x",
+    "npm": "^8.x"
   },
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "test": "node test.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com:b2079/flexible-finance-server.git"
+  },
+  "author": "Mike Warburton",
+  "bugs": {
+    "url": "https://gitlab.com/b2079/flexible-finance-server/issues"
+  },
+  "homepage": "https://gitlab.com/b2079/flexible-finance-server#readme",
   "dependencies": {
     "ejs": "^3.1.5",
     "express": "^4.15.2"
@@ -18,14 +28,4 @@
     "got": "^11.3.0",
     "tape": "^4.7.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
-  },
-  "keywords": [
-    "node",
-    "heroku",
-    "express"
-  ],
-  "license": "MIT"
 }
