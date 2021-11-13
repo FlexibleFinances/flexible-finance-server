@@ -9,9 +9,16 @@ const toobusy = require('toobusy-js');
 
 const app = express();
 
-// var corsOptions = {
-//   origin: "http://localhost:4200"
-// };
+var whitelist = ['http://localhost:4200', 'https://flexible-finance-client.herokuapp.com/']
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
 
 const db = require("./database/models");
 const Role = db.role;
@@ -26,7 +33,7 @@ app
   .use(express.static(path.join(__dirname, 'public')))
   .use(helmet())
   .use(compression())
-//  .use(cors(corsOptions))
+  .use(cors(corsOptions))
   .use(express.json({ limit: "1kb" }))
   .use(express.urlencoded({ extended: true, limit: "1kb"  }))
   .use(hpp())
