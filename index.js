@@ -6,21 +6,28 @@ const hpp = require('hpp');
 const path = require('path')
 const PORT = process.env.PORT || 5000
 const toobusy = require('toobusy-js');
+const Umzug = require('umzug');
+const fs = require('fs');
 
 const app = express();
 
-var corsOptions = {
-  origin: process.env.REQUEST_ORIGIN || process.env.DEV_REQUEST_ORIGIN
-}
-
 const db = require("./database/models");
-const Role = db.role;
 
-//db.sequelize.sync();
-db.sequelize.sync({force: true}).then(() => {
-   console.log('Drop and Resync Database with { force: true }');
-   initial();
- });
+const umzug = new Umzug({
+  migrations: {path: __dirname + '/database/migrations/'},
+  logger: console,
+}); 
+
+(async () => {
+  if (process.env.ALLOW_DB_TEARDOWN === 'true' && !fs.existsSync('./.preserve_db')) {
+    await umzug.down();
+  }
+})();
+
+(async () => {
+  await umzug.up();
+  fs.writeFile('.preserve_db', '', () => {});
+})();
 
 app
   .use(express.static(path.join(__dirname, 'public')))
@@ -48,15 +55,3 @@ require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
-
-function initial() {
-  Role.create({
-    id: 1,
-    name: "user"
-  });
- 
-  Role.create({
-    id: 2,
-    name: "admin"
-  });
-}

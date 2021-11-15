@@ -1,8 +1,7 @@
-const db = require("../../database/models");
-const User = db.user;
-const Role = db.role;
+const { User, Role } = require("../../database/models");
+const Sequelize = require('sequelize');
 
-const Op = db.Sequelize.Op;
+const Op = Sequelize.Op;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
