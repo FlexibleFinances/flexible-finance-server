@@ -1,4 +1,4 @@
-import { Role, User } from '../../database/models/index.js';
+import { Role, User } from '../../database/index.js';
 import Sequelize from 'sequelize';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';

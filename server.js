@@ -1,9 +1,7 @@
-import Umzug from 'umzug';
 import compression from 'compression';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import fs from 'fs';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import path from 'path';
@@ -18,25 +16,6 @@ const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 const PORT = process.env.PORT || 5000;
 const app = express();
-
-const umzug = new Umzug({
-  migrations: { path: path.join(__dirname, '/database/migrations/') },
-  logger: console,
-});
-
-(async () => {
-  if (
-    process.env.ALLOW_DB_TEARDOWN === 'true' &&
-    !fs.existsSync('./.preserve_db')
-  ) {
-    await umzug.down();
-  }
-})();
-
-(async () => {
-  await umzug.up();
-  fs.writeFile('.preserve_db', '', () => {});
-})();
 
 app
   .use(express.static(path.join(__dirname, '/public')))

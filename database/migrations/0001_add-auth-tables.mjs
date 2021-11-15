@@ -1,4 +1,4 @@
-import { Role, User, UserRole, sequelize } from '../models/index.js';
+import { Role, User, UserRole, sequelize } from '..';
 
 async function up () {
   await Promise.all([User.sync(), Role.sync()]);

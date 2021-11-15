@@ -1,4 +1,4 @@
-import { User } from '../../database/models/index.js';
+import { User } from '../../database/index.js';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 

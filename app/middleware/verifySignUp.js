@@ -1,4 +1,4 @@
-import { ROLES, User } from '../../database/models/index.js';
+import { ROLES, User } from '../../database/index.js';
 
 function checkDuplicateUsernameOrEmail (req, res, next) {
   // Username
