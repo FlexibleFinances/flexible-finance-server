@@ -7,7 +7,7 @@ import { getUserRoleModel } from './userRole.model.js';
 dotenv.config();
 
 let sequelize;
-if (process.env.DATABASE_UR) {
+if (process.env.DATABASE_URL) {
   sequelize = new Sequelize(
     process.env.DATABASE_URL,
     {
