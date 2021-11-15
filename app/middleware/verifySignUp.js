@@ -1,4 +1,4 @@
-import { ROLES, User } from '../../database/models/index.mjs';
+import { ROLES, User } from '../../database/models/index.js';
 
 function checkDuplicateUsernameOrEmail (req, res, next) {
   // Username
@@ -47,9 +47,7 @@ function checkRolesExisted (req, res, next) {
   next();
 }
 
-const verifySignUp = {
+export const verifySignUp = {
   checkDuplicateUsernameOrEmail: checkDuplicateUsernameOrEmail,
   checkRolesExisted: checkRolesExisted,
 };
-
-module.exports = verifySignUp;

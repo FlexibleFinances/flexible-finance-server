@@ -1,5 +1,8 @@
-import User from '../../database/models/index.mjs';
+import { User } from '../../database/models/index.js';
+import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+
+dotenv.config();
 
 function verifyToken (req, res, next) {
   const token = req.headers['x-access-token'];
@@ -38,8 +41,7 @@ function isAdmin (req, res, next) {
   });
 }
 
-const authJwt = {
+export const authJwt = {
   verifyToken: verifyToken,
   isAdmin: isAdmin,
 };
-module.exports = authJwt;

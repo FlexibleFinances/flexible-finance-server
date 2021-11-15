@@ -1,6 +1,9 @@
+import dotenv from 'dotenv';
 import got from 'got';
 import spawn from 'child_process';
 import test from 'tape';
+
+dotenv.config();
 
 // Start the app
 const env = Object.assign({}, process.env, { PORT: 5000 });

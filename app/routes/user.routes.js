@@ -1,7 +1,7 @@
-import authJwt from '../middleware';
-import controller from '../controllers/user.controller';
+import * as controller from '../controllers/user.controller.js';
+import { authJwt } from '../middleware/authJwt.js';
 
-module.exports = function (app) {
+export function setUserRoutes (app) {
   app.use(function (req, res, next) {
     res.header(
       'Access-Control-Allow-Headers',

@@ -1,18 +1,26 @@
 import Umzug from 'umzug';
 import compression from 'compression';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import express from 'express';
 import fs from 'fs';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import path from 'path';
+import { setAuthRoutes } from './app/routes/auth.routes.js';
+import { setUserRoutes } from './app/routes/user.routes.js';
 import toobusy from 'toobusy-js';
+import url from 'url';
+
+dotenv.config();
+
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 const PORT = process.env.PORT || 5000;
 const app = express();
 
 const umzug = new Umzug({
-  migrations: { path: path.join([__dirname, '/database/migrations/']) },
+  migrations: { path: path.join(__dirname, '/database/migrations/') },
   logger: console,
 });
 
@@ -31,14 +39,14 @@ const umzug = new Umzug({
 })();
 
 app
-  .use(express.static(path.join(__dirname, 'public')))
+  .use(express.static(path.join(__dirname, '/public')))
   .use(helmet())
   .use(compression())
   .use(cors())
   .use(express.json({ limit: '1kb' }))
   .use(express.urlencoded({ extended: true, limit: '1kb' }))
   .use(hpp())
-  .set('views', path.join(__dirname, 'views'))
+  .set('views', __dirname, '/views')
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'));
 
@@ -51,8 +59,7 @@ app.use(function (req, res, next) {
   }
 });
 
-// routes
-require('./app/routes/auth.routes')(app);
-require('./app/routes/user.routes')(app);
+setAuthRoutes(app); ;
+setUserRoutes(app);
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));

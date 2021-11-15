@@ -1,12 +1,14 @@
-import { Role, User } from '../../database/models/index.mjs';
+import { Role, User } from '../../database/models/index.js';
 import Sequelize from 'sequelize';
+import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
+
+dotenv.config();
 
 const Op = Sequelize.Op;
 
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-
-exports.signup = (req, res) => {
+export function signup (req, res) {
   // Save User to Database
   User.create({
     username: req.body.username,
@@ -38,7 +40,7 @@ exports.signup = (req, res) => {
     });
 };
 
-exports.signin = (req, res) => {
+export function signin (req, res) {
   User.findOne({
     where: {
       username: req.body.username,
