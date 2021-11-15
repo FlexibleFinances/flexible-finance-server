@@ -8,7 +8,10 @@ const db = {};
 
 const sequelize = new Sequelize(process.env.DATABASE_URL || process.env.DEV_DATABASE_URL, {
   dialectOptions: {
-    ssl: process.env.DATABASE_URL ? true : false
+    ssl: {
+      require: process.env.DATABASE_URL ? true : false,
+      rejectUnauthorized: false
+    }
   }
 }
 );
