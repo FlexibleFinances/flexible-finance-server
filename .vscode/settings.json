@@ -1,0 +1,9 @@
+{
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": false,
+  "eslint.enable": true,
+  "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+  "eslint.validate": ["javascript"]
+}

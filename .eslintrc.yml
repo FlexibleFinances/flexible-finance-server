@@ -1,0 +1,27 @@
+---
+env:
+  node: true
+  es2021: true
+extends:
+  - standard
+parserOptions:
+  ecmaVersion: 12
+  sourceType: module
+  impliedStrict: true
+rules:
+  no-await-in-loop: error
+  no-duplicate-imports: error
+  require-atomic-updates: error
+  camelcase: error
+  default-case-last: error
+  func-style:
+    - error
+    - declaration
+  no-inline-comments: error
+  sort-imports: error
+  semi: 
+    - error
+    - always
+  comma-dangle:
+    - error
+    - always-multiline

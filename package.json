@@ -2,14 +2,16 @@
   "name": "flexible-finance-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
+  "type": "module",
   "engines": {
     "node": "17.0.1",
     "npm": "8.1.0"
   },
   "scripts": {
-    "start": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -38,6 +40,16 @@
     "umzug": "^2.3.0"
   },
   "devDependencies": {
-    "@types/sequelize": "^4.28.10"
+    "@types/sequelize": "^4.28.10",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.1",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.0.2"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix"
   }
 }

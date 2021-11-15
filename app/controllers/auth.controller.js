@@ -1,39 +1,39 @@
-const { User, Role } = require("../../database/models");
-const Sequelize = require('sequelize');
+import { Role, User } from '../../database/models/index.mjs';
+import Sequelize from 'sequelize';
 
 const Op = Sequelize.Op;
 
-var jwt = require("jsonwebtoken");
-var bcrypt = require("bcryptjs");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 exports.signup = (req, res) => {
   // Save User to Database
   User.create({
     username: req.body.username,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8)
+    password: bcrypt.hashSync(req.body.password, 8),
   })
-    .then(user => {
+    .then((user) => {
       if (req.body.roles) {
         Role.findAll({
           where: {
             name: {
-              [Op.or]: req.body.roles
-            }
-          }
-        }).then(roles => {
+              [Op.or]: req.body.roles,
+            },
+          },
+        }).then((roles) => {
           user.setRoles(roles).then(() => {
-            res.send({ message: "User registered successfully!" });
+            res.send({ message: 'User registered successfully!' });
           });
         });
       } else {
         // user role = 1
         user.setRoles([1]).then(() => {
-          res.send({ message: "User registered successfully!" });
+          res.send({ message: 'User registered successfully!' });
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({ message: err.message });
     });
 };
@@ -41,45 +41,46 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
   User.findOne({
     where: {
-      username: req.body.username
-    }
+      username: req.body.username,
+    },
   })
-    .then(user => {
+    .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: "User Not found." });
+        return res.status(404).send({ message: 'User Not found.' });
       }
 
-      var passwordIsValid = bcrypt.compareSync(
+      const passwordIsValid = bcrypt.compareSync(
         req.body.password,
-        user.password
+        user.password,
       );
 
       if (!passwordIsValid) {
         return res.status(401).send({
           accessToken: null,
-          message: "Invalid Password!"
+          message: 'Invalid Password!',
         });
       }
 
-      var token = jwt.sign({ id: user.id }, process.env.AUTH_SECRET, {
-        expiresIn: 86400 // 24 hours
+      const token = jwt.sign({ id: user.id }, process.env.AUTH_SECRET, {
+        // 24 hours
+        expiresIn: 86400,
       });
 
-      var authorities = [];
-      user.getRoles().then(roles => {
+      const authorities = [];
+      user.getRoles().then((roles) => {
         for (let i = 0; i < roles.length; i++) {
-          authorities.push("ROLE_" + roles[i].name.toUpperCase());
+          authorities.push('ROLE_' + roles[i].name.toUpperCase());
         }
         res.status(200).send({
           id: user.id,
           username: user.username,
           email: user.email,
           roles: authorities,
-          accessToken: token
+          accessToken: token,
         });
       });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({ message: err.message });
     });
 };

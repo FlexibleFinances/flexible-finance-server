@@ -1,43 +1,42 @@
-const jwt = require("jsonwebtoken");
-const { User } = require("../../database/models");
+import User from '../../database/models/index.mjs';
+import jwt from 'jsonwebtoken';
 
-verifyToken = (req, res, next) => {
-  let token = req.headers["x-access-token"];
+function verifyToken (req, res, next) {
+  const token = req.headers['x-access-token'];
 
   if (!token) {
     return res.status(403).send({
-      message: "No token provided!"
+      message: 'No token provided!',
     });
   }
 
   jwt.verify(token, process.env.AUTH_SECRET, (err, decoded) => {
     if (err) {
       return res.status(401).send({
-        message: "Unauthorized!"
+        message: 'Unauthorized!',
       });
     }
     req.userId = decoded.id;
     next();
   });
-};
+}
 
-isAdmin = (req, res, next) => {
-  User.findByPk(req.userId).then(user => {
-    user.getRoles().then(roles => {
+function isAdmin (req, res, next) {
+  User.findByPk(req.userId).then((user) => {
+    user.getRoles().then((roles) => {
       for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "admin") {
+        if (roles[i].name === 'admin') {
           next();
           return;
         }
       }
 
       res.status(403).send({
-        message: "Require Admin Role!"
+        message: 'Require Admin Role!',
       });
-      return;
     });
   });
-};
+}
 
 const authJwt = {
   verifyToken: verifyToken,
