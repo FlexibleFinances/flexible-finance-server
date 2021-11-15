@@ -1,8 +1,6 @@
 {
-  "name": "Start on Heroku: Node.js",
-  "description": "A barebones Node.js app using Express 4",
-  "repository": "https://github.com/heroku/node-js-getting-started",
-  "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/main/public/node.svg",
-  "keywords": ["node", "express", "heroku"],
-  "image": "heroku/nodejs"
+  "name": "Flexible Finance Server",
+  "description": "The backend of a budgeting app to give you options that don't overwhelm.",
+  "repository": "https://gitlab.com/b2079/flexible-finance-server",
+  "keywords": ["node", "express", "heroku", "sequelize", "postgres", "budget", "finance"]
 }
