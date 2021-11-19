@@ -1,0 +1,71 @@
+import {
+  Association,
+  DataTypes,
+  HasManyAddAssociationMixin,
+  HasManyCountAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyGetAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManySetAssociationsMixin,
+  Model,
+} from "sequelize";
+import Role from "./Role";
+import sequelize from "../index";
+
+interface UserAttributes {
+  username: string;
+  email: string;
+  password: string;
+}
+
+class User extends Model implements UserAttributes {
+  public id!: number;
+
+  // timestamps!
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+
+  public username!: string;
+
+  public email!: string;
+
+  public password!: string;
+
+  // Since TS cannot determine model association at compile time
+  // we have to declare them here purely virtually
+  // these will not exist until `Model.init` was called.
+  public getRoles!: HasManyGetAssociationsMixin<Role>;
+  public setRoles!: HasManySetAssociationsMixin<Role, number>;
+  public addRole!: HasManyAddAssociationMixin<Role, number>;
+  public hasRole!: HasManyHasAssociationMixin<Role, number>;
+  public countRoles!: HasManyCountAssociationsMixin;
+  public createRole!: HasManyCreateAssociationMixin<Role>;
+
+  public readonly roles?: Role[];
+
+  public static override associations: {
+    roles: Association<User, Role>;
+  };
+}
+
+User.init(
+  {
+    username: {
+      type: new DataTypes.STRING(128),
+      allowNull: false,
+    },
+    email: {
+      type: new DataTypes.STRING(128),
+      allowNull: true,
+    },
+    password: {
+      type: new DataTypes.STRING(128),
+      allowNull: true,
+    },
+  },
+  {
+    sequelize,
+  }
+);
+
+export default User;

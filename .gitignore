@@ -1,5 +1,6 @@
 /node_modules
-
+/build
+/config
 .env
 umzug.json
 .preserve_db

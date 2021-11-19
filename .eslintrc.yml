@@ -1,27 +1,15 @@
 ---
-env:
-  node: true
-  es2021: true
+parser: "@typescript-eslint/parser"
+plugins:
+  - "@typescript-eslint"
 extends:
-  - standard
+  - standard-with-typescript
+  - plugin:@typescript-eslint/recommended-requiring-type-checking
+  - prettier
 parserOptions:
-  ecmaVersion: 12
-  sourceType: module
-  impliedStrict: true
+  project: ./tsconfig.json
 rules:
-  no-await-in-loop: error
-  no-duplicate-imports: error
-  require-atomic-updates: error
-  camelcase: error
-  default-case-last: error
-  func-style:
-    - error
-    - declaration
-  no-inline-comments: error
+  "@typescript-eslint/no-unsafe-assignment": off
+  "@typescript-eslint/no-unsafe-call": off
+  "@typescript-eslint/no-unsafe-member-access": off
   sort-imports: error
-  semi: 
-    - error
-    - always
-  comma-dangle:
-    - error
-    - always-multiline

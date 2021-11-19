@@ -2,5 +2,13 @@
   "name": "Flexible Finance Server",
   "description": "The backend of a budgeting app to give you options that don't overwhelm.",
   "repository": "https://gitlab.com/b2079/flexible-finance-server",
-  "keywords": ["node", "express", "heroku", "sequelize", "postgres", "budget", "finance"]
+  "keywords": [
+    "node",
+    "express",
+    "heroku",
+    "sequelize",
+    "postgres",
+    "budget",
+    "finance"
+  ]
 }

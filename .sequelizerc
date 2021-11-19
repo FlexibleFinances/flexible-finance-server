@@ -1,7 +1,5 @@
-import path from 'path';
-
 module.exports = {
-  'models-path': path.resolve('database', 'models'),
-  'seeders-path': path.resolve('database', 'seeders'),
-  'migrations-path': path.resolve('database', 'migrations'),
+  'models-path': 'src/database/models',
+  'seeders-path': 'src/database/seeders',
+  'migrations-path': 'src/database/migrations',
 };
