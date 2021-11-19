@@ -45,7 +45,7 @@ export class File extends Model implements FileAttributes {
 File.init(
   {
     name: {
-      type: new DataTypes.STRING(128),
+      type: DataTypes.STRING(128),
       allowNull: false,
     },
   },

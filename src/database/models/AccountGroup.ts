@@ -18,7 +18,7 @@ export class AccountGroup extends Model implements AccountGroupAttributes {
 AccountGroup.init(
   {
     name: {
-      type: new DataTypes.STRING(128),
+      type: DataTypes.STRING(128),
       allowNull: false,
     },
   },

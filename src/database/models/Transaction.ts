@@ -56,7 +56,7 @@ export class Transaction extends Model implements TransactionAttributes {
 Transaction.init(
   {
     name: {
-      type: new DataTypes.STRING(128),
+      type: DataTypes.STRING(128),
       allowNull: false,
     },
   },

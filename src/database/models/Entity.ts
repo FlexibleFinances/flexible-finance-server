@@ -45,7 +45,7 @@ export class Entity extends Model implements EntityAttributes {
 Entity.init(
   {
     name: {
-      type: new DataTypes.STRING(128),
+      type: DataTypes.STRING(128),
       allowNull: false,
     },
   },

@@ -45,7 +45,7 @@ export class Template extends Model implements TemplateAttributes {
 Template.init(
   {
     name: {
-      type: new DataTypes.STRING(128),
+      type: DataTypes.STRING(128),
       allowNull: false,
     },
   },

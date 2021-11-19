@@ -18,7 +18,7 @@ export class Status extends Model implements StatusAttributes {
 Status.init(
   {
     name: {
-      type: new DataTypes.STRING(128),
+      type: DataTypes.STRING(128),
       allowNull: false,
     },
   },
