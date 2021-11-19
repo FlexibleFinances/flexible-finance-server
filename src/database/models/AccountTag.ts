@@ -1,9 +1,9 @@
-import { Account } from "./Account";
+import Account from "./Account";
 import { Model } from "sequelize";
-import { Tag } from "./Tag";
+import Tag from "./Tag";
 import sequelize from "..";
 
-export class AccountTag extends Model {
+class AccountTag extends Model {
   public id!: number;
 
   // timestamps!
@@ -24,3 +24,5 @@ AccountTag.init(
 
 Account.belongsToMany(Tag, { through: AccountTag });
 Tag.belongsToMany(Account, { through: AccountTag });
+
+export default AccountTag;

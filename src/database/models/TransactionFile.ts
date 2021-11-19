@@ -1,9 +1,9 @@
-import { File } from "./File";
+import File from "./File";
 import { Model } from "sequelize";
-import { Transaction } from "./Transaction";
+import Transaction from "./Transaction";
 import sequelize from "..";
 
-export class TransactionFile extends Model {
+class TransactionFile extends Model {
   public id!: number;
 
   // timestamps!
@@ -24,3 +24,5 @@ TransactionFile.init(
 
 Transaction.belongsToMany(File, { through: TransactionFile });
 File.belongsToMany(Transaction, { through: TransactionFile });
+
+export default TransactionFile;

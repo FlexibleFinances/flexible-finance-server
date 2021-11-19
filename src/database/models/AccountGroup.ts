@@ -5,7 +5,7 @@ interface AccountGroupAttributes {
   name: string;
 }
 
-export class AccountGroup extends Model implements AccountGroupAttributes {
+class AccountGroup extends Model implements AccountGroupAttributes {
   public id!: number;
 
   // timestamps!
@@ -26,3 +26,5 @@ AccountGroup.init(
     sequelize,
   }
 );
+
+export default AccountGroup;

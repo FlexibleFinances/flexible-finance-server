@@ -9,14 +9,14 @@ import {
   HasManySetAssociationsMixin,
   Model,
 } from "sequelize";
-import { Transaction } from "./Transaction";
+import Transaction from "./Transaction";
 import sequelize from "../index";
 
 interface FileAttributes {
   name: string;
 }
 
-export class File extends Model implements FileAttributes {
+class File extends Model implements FileAttributes {
   public id!: number;
 
   // timestamps!
@@ -53,3 +53,5 @@ File.init(
     sequelize,
   }
 );
+
+export default File;

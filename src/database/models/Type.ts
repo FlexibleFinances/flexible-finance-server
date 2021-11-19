@@ -5,7 +5,7 @@ interface TypeAttributes {
   name: string;
 }
 
-export class Type extends Model implements TypeAttributes {
+class Type extends Model implements TypeAttributes {
   public id!: number;
 
   // timestamps!
@@ -26,3 +26,5 @@ Type.init(
     sequelize,
   }
 );
+
+export default Type;

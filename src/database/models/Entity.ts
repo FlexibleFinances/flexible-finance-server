@@ -9,7 +9,7 @@ import {
   HasManySetAssociationsMixin,
   Model,
 } from "sequelize";
-import { Tag } from "./Tag";
+import Tag from "./Tag";
 import sequelize from "../index";
 
 interface EntityAttributes {
@@ -53,3 +53,5 @@ Entity.init(
     sequelize,
   }
 );
+
+export default Entity;

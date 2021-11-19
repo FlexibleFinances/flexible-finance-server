@@ -1,9 +1,9 @@
-import { Entity } from "./Entity";
+import Entity from "./Entity";
 import { Model } from "sequelize";
-import { Tag } from "./Tag";
+import Tag from "./Tag";
 import sequelize from "..";
 
-export class EntityTag extends Model {
+class EntityTag extends Model {
   public id!: number;
 
   // timestamps!
@@ -24,3 +24,5 @@ EntityTag.init(
 
 Entity.belongsToMany(Tag, { through: EntityTag });
 Tag.belongsToMany(Entity, { through: EntityTag });
+
+export default EntityTag;

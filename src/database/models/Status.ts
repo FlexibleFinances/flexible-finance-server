@@ -5,7 +5,7 @@ interface StatusAttributes {
   name: string;
 }
 
-export class Status extends Model implements StatusAttributes {
+class Status extends Model implements StatusAttributes {
   public id!: number;
 
   // timestamps!
@@ -26,3 +26,5 @@ Status.init(
     sequelize,
   }
 );
+
+export default Status;

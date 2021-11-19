@@ -9,14 +9,14 @@ import {
   HasManySetAssociationsMixin,
   Model,
 } from "sequelize";
-import { Tag } from "./Tag";
+import Tag from "./Tag";
 import sequelize from "../index";
 
 interface ReportAttributes {
   name: string;
 }
 
-export class Report extends Model implements ReportAttributes {
+class Report extends Model implements ReportAttributes {
   public id!: number;
 
   // timestamps!
@@ -53,3 +53,5 @@ Report.init(
     sequelize,
   }
 );
+
+export default Report;

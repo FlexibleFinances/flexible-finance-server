@@ -9,14 +9,14 @@ import {
   HasManySetAssociationsMixin,
   Model,
 } from "sequelize";
-import { Tag } from "./Tag";
+import Tag from "./Tag";
 import sequelize from "../index";
 
 interface TemplateAttributes {
   name: string;
 }
 
-export class Template extends Model implements TemplateAttributes {
+class Template extends Model implements TemplateAttributes {
   public id!: number;
 
   // timestamps!
@@ -53,3 +53,5 @@ Template.init(
     sequelize,
   }
 );
+
+export default Template;

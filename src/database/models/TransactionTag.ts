@@ -1,9 +1,9 @@
 import { Model } from "sequelize";
-import { Tag } from "./Tag";
-import { Transaction } from "./Transaction";
+import Tag from "./Tag";
+import Transaction from "./Transaction";
 import sequelize from "..";
 
-export class TransactionTag extends Model {
+class TransactionTag extends Model {
   public id!: number;
 
   // timestamps!
@@ -24,3 +24,5 @@ TransactionTag.init(
 
 Transaction.belongsToMany(Tag, { through: TransactionTag });
 Tag.belongsToMany(Transaction, { through: TransactionTag });
+
+export default TransactionTag;

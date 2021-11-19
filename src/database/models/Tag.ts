@@ -9,18 +9,18 @@ import {
   HasManySetAssociationsMixin,
   Model,
 } from "sequelize";
-import { Account } from "./Account";
-import { Entity } from "./Entity";
-import { Report } from "./Report";
-import { Template } from "./Template";
-import { Transaction } from "./Transaction";
+import Account from "./Account";
+import Entity from "./Entity";
+import Report from "./Report";
+import Template from "./Template";
+import Transaction from "./Transaction";
 import sequelize from "../index";
 
 interface TagAttributes {
   name: string;
 }
 
-export class Tag extends Model implements TagAttributes {
+class Tag extends Model implements TagAttributes {
   public id!: number;
 
   // timestamps!
@@ -97,3 +97,5 @@ Tag.init(
     sequelize,
   }
 );
+
+export default Tag;

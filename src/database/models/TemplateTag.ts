@@ -1,9 +1,9 @@
 import { Model } from "sequelize";
-import { Tag } from "./Tag";
-import { Template } from "./Template";
+import Tag from "./Tag";
+import Template from "./Template";
 import sequelize from "..";
 
-export class TemplateTag extends Model {
+class TemplateTag extends Model {
   public id!: number;
 
   // timestamps!
@@ -24,3 +24,5 @@ TemplateTag.init(
 
 Template.belongsToMany(Tag, { through: TemplateTag });
 Tag.belongsToMany(Template, { through: TemplateTag });
+
+export default TemplateTag;

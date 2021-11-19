@@ -9,15 +9,15 @@ import {
   HasManySetAssociationsMixin,
   Model,
 } from "sequelize";
-import { File } from "./File";
-import { Tag } from "./Tag";
+import File from "./File";
+import Tag from "./Tag";
 import sequelize from "../index";
 
 interface TransactionAttributes {
   name: string;
 }
 
-export class Transaction extends Model implements TransactionAttributes {
+class Transaction extends Model implements TransactionAttributes {
   public id!: number;
 
   // timestamps!
@@ -64,3 +64,5 @@ Transaction.init(
     sequelize,
   }
 );
+
+export default Transaction;

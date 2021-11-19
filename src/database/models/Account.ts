@@ -9,14 +9,14 @@ import {
   HasManySetAssociationsMixin,
   Model,
 } from "sequelize";
-import { Tag } from "./Tag";
+import Tag from "./Tag";
 import sequelize from "../index";
 
 interface AccountAttributes {
   name: string;
 }
 
-export class Account extends Model implements AccountAttributes {
+class Account extends Model implements AccountAttributes {
   public id!: number;
 
   // timestamps!
@@ -53,3 +53,5 @@ Account.init(
     sequelize,
   }
 );
+
+export default Account;

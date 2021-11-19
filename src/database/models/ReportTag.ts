@@ -1,9 +1,9 @@
 import { Model } from "sequelize";
-import { Report } from "./Report";
-import { Tag } from "./Tag";
+import Report from "./Report";
+import Tag from "./Tag";
 import sequelize from "..";
 
-export class ReportTag extends Model {
+class ReportTag extends Model {
   public id!: number;
 
   // timestamps!
@@ -24,3 +24,5 @@ ReportTag.init(
 
 Report.belongsToMany(Tag, { through: ReportTag });
 Tag.belongsToMany(Report, { through: ReportTag });
+
+export default ReportTag;
