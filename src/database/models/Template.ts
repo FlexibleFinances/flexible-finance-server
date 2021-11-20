@@ -9,6 +9,7 @@ import {
   HasManySetAssociationsMixin,
   Model,
 } from "sequelize";
+import Account from "./Account";
 import Tag from "./Tag";
 import sequelize from "../index";
 
@@ -25,15 +26,25 @@ class Template extends Model implements TemplateAttributes {
 
   public name!: string;
 
+  public readonly accounts?: Account[];
+
   public readonly tags?: Tag[];
 
   public static override associations: {
+    accounts: Association<Template, Account>;
     tags: Association<Template, Tag>;
   };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
+  public getAccounts!: HasManyGetAssociationsMixin<Account>;
+  public setAccounts!: HasManySetAssociationsMixin<Account, number>;
+  public addAccount!: HasManyAddAssociationMixin<Account, number>;
+  public hasAccount!: HasManyHasAssociationMixin<Account, number>;
+  public countAccounts!: HasManyCountAssociationsMixin;
+  public createAccount!: HasManyCreateAssociationMixin<Account>;
+
   public getTags!: HasManyGetAssociationsMixin<Tag>;
   public setTags!: HasManySetAssociationsMixin<Tag, number>;
   public addTag!: HasManyAddAssociationMixin<Tag, number>;

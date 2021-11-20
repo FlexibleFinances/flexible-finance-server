@@ -1,11 +1,10 @@
 import { DataTypes } from "sequelize";
-import Role from "../models/Role";
 import sequelize from "../index";
 
 const queryInterface = sequelize.getQueryInterface();
 
 export async function up(): Promise<void> {
-  await queryInterface.createTable("Roles", {
+  await queryInterface.createTable("FieldTypes", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -25,7 +24,7 @@ export async function up(): Promise<void> {
     },
   });
 
-  await queryInterface.createTable("Users", {
+  await queryInterface.createTable("Fields", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -43,9 +42,18 @@ export async function up(): Promise<void> {
       type: DataTypes.STRING(128),
       allowNull: false,
     },
+    FieldTypeId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "FieldTypes",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
   });
 
-  await queryInterface.createTable("UserRoles", {
+  await queryInterface.createTable("FieldData", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -59,39 +67,66 @@ export async function up(): Promise<void> {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    UserId: {
+    FieldId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
-        model: "Users",
+        model: "Fields",
         key: "id",
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
-    RoleId: {
+    AccountId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       references: {
-        model: "Roles",
+        model: "Accounts",
         key: "id",
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
+    EntityId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Entities",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    TransactionId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Transactions",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    stringValue: {
+      type: DataTypes.STRING,
+    },
+    intValue: {
+      type: DataTypes.INTEGER,
+    },
+    dateValue: {
+      type: DataTypes.DATE,
+    },
+    boolValue: {
+      type: DataTypes.BOOLEAN,
+    },
   });
 
-  await Role.create({
-    name: "user",
-  });
-
-  await Role.create({
-    name: "admin",
-  });
-  console.log("0001 up");
+  console.log("0003 up");
 }
 
 export async function down(): Promise<void> {
-  await queryInterface.dropTable("UserRoles", {});
-  await queryInterface.dropTable("Users", {});
-  await queryInterface.dropTable("Roles", {});
-  console.log("0001 down");
+  await queryInterface.dropTable("FieldData", {});
+  await queryInterface.dropTable("Fields", {});
+  await queryInterface.dropTable("FieldTypes", {});
+  console.log("0003 down");
 }

@@ -412,21 +412,21 @@ export async function up(): Promise<void> {
 }
 
 export async function down(): Promise<void> {
-  await sequelize.getQueryInterface().dropTable("AccountTags");
-  await sequelize.getQueryInterface().dropTable("EntityTags");
-  await sequelize.getQueryInterface().dropTable("ReportTags");
-  await sequelize.getQueryInterface().dropTable("TemplateTags");
-  await sequelize.getQueryInterface().dropTable("TransactionFiles");
-  await sequelize.getQueryInterface().dropTable("TransactionTags");
-  await sequelize.getQueryInterface().dropTable("Accounts");
-  await sequelize.getQueryInterface().dropTable("AccountGroups");
-  await sequelize.getQueryInterface().dropTable("Entities");
-  await sequelize.getQueryInterface().dropTable("Files");
-  await sequelize.getQueryInterface().dropTable("Reports");
-  await sequelize.getQueryInterface().dropTable("Tags");
-  await sequelize.getQueryInterface().dropTable("Templates");
-  await sequelize.getQueryInterface().dropTable("Transactions");
-  await sequelize.getQueryInterface().dropTable("Statuses");
-  await sequelize.getQueryInterface().dropTable("Types");
+  await sequelize.getQueryInterface().dropTable("AccountTags", {});
+  await sequelize.getQueryInterface().dropTable("EntityTags", {});
+  await sequelize.getQueryInterface().dropTable("ReportTags", {});
+  await sequelize.getQueryInterface().dropTable("TemplateTags", {});
+  await sequelize.getQueryInterface().dropTable("TransactionFiles", {});
+  await sequelize.getQueryInterface().dropTable("TransactionTags", {});
+  await sequelize.getQueryInterface().dropTable("Accounts", {});
+  await sequelize.getQueryInterface().dropTable("AccountGroups", {});
+  await sequelize.getQueryInterface().dropTable("Entities", {});
+  await sequelize.getQueryInterface().dropTable("Files", {});
+  await sequelize.getQueryInterface().dropTable("Reports", {});
+  await sequelize.getQueryInterface().dropTable("Tags", {});
+  await sequelize.getQueryInterface().dropTable("Templates", {});
+  await sequelize.getQueryInterface().dropTable("Transactions", {});
+  await sequelize.getQueryInterface().dropTable("Statuses", {});
+  await sequelize.getQueryInterface().dropTable("Types", {});
   console.log("0002 down");
 }

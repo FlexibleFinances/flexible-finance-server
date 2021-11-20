@@ -1,5 +1,8 @@
 import {
   Association,
+  BelongsToCreateAssociationMixin,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
   DataTypes,
   HasManyAddAssociationMixin,
   HasManyCountAssociationsMixin,
@@ -10,14 +13,14 @@ import {
   Model,
 } from "sequelize";
 import FieldDatum from "./FieldDatum";
-import Tag from "./Tag";
+import FieldType from "./FieldType";
 import sequelize from "../index";
 
-interface EntityAttributes {
+interface FieldAttributes {
   name: string;
 }
 
-export class Entity extends Model implements EntityAttributes {
+class Field extends Model implements FieldAttributes {
   public id!: number;
 
   // timestamps!
@@ -28,11 +31,11 @@ export class Entity extends Model implements EntityAttributes {
 
   public readonly data?: FieldDatum[];
 
-  public readonly tags?: Tag[];
+  public readonly fieldType?: FieldType;
 
   public static override associations: {
-    data: Association<Entity, FieldDatum>;
-    tags: Association<Entity, Tag>;
+    data: Association<FieldDatum, Field>;
+    fieldType: Association<FieldType, Field>;
   };
 
   // Since TS cannot determine model association at compile time
@@ -45,15 +48,12 @@ export class Entity extends Model implements EntityAttributes {
   public countData!: HasManyCountAssociationsMixin;
   public createDatum!: HasManyCreateAssociationMixin<FieldDatum>;
 
-  public getTags!: HasManyGetAssociationsMixin<Tag>;
-  public setTags!: HasManySetAssociationsMixin<Tag, number>;
-  public addTag!: HasManyAddAssociationMixin<Tag, number>;
-  public hasTag!: HasManyHasAssociationMixin<Tag, number>;
-  public countTags!: HasManyCountAssociationsMixin;
-  public createTag!: HasManyCreateAssociationMixin<Tag>;
+  public getFieldType!: BelongsToGetAssociationMixin<FieldType>;
+  public setFieldType!: BelongsToSetAssociationMixin<FieldType, number>;
+  public createFieldType!: BelongsToCreateAssociationMixin<FieldType>;
 }
 
-Entity.init(
+Field.init(
   {
     name: {
       type: DataTypes.STRING(128),
@@ -65,7 +65,7 @@ Entity.init(
   }
 );
 
-FieldDatum.belongsTo(Entity);
-Entity.hasMany(FieldDatum);
+Field.hasMany(FieldDatum);
+FieldDatum.belongsTo(Field);
 
-export default Entity;
+export default Field;

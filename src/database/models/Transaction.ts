@@ -9,6 +9,7 @@ import {
   HasManySetAssociationsMixin,
   Model,
 } from "sequelize";
+import FieldDatum from "./FieldDatum";
 import File from "./File";
 import Tag from "./Tag";
 import sequelize from "../index";
@@ -26,11 +27,14 @@ class Transaction extends Model implements TransactionAttributes {
 
   public name!: string;
 
+  public readonly data?: FieldDatum[];
+
   public readonly files?: File[];
 
   public readonly tags?: Tag[];
 
   public static override associations: {
+    data: Association<Transaction, FieldDatum>;
     files: Association<Transaction, File>;
     tags: Association<Transaction, Tag>;
   };
@@ -38,6 +42,13 @@ class Transaction extends Model implements TransactionAttributes {
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
+  public getData!: HasManyGetAssociationsMixin<FieldDatum>;
+  public setData!: HasManySetAssociationsMixin<FieldDatum, number>;
+  public addDatum!: HasManyAddAssociationMixin<FieldDatum, number>;
+  public hasDatum!: HasManyHasAssociationMixin<FieldDatum, number>;
+  public countData!: HasManyCountAssociationsMixin;
+  public createDatum!: HasManyCreateAssociationMixin<FieldDatum>;
+
   public getFiles!: HasManyGetAssociationsMixin<File>;
   public setFiles!: HasManySetAssociationsMixin<File, number>;
   public addFile!: HasManyAddAssociationMixin<File, number>;
@@ -64,5 +75,8 @@ Transaction.init(
     sequelize,
   }
 );
+
+FieldDatum.belongsTo(Transaction);
+Transaction.hasMany(FieldDatum);
 
 export default Transaction;
