@@ -39,8 +39,16 @@ export async function up(): Promise<void> {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    name: {
-      type: DataTypes.STRING(128),
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   });

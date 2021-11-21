@@ -1,4 +1,4 @@
-import { migrator, runMigrations } from "./database/index";
+import sequelize, { migrator, runMigrations } from "./database/index";
 import compression from "compression";
 import cors from "cors";
 import express from "express";
@@ -36,7 +36,9 @@ setAuthRoutes(app);
 setUserRoutes(app);
 
 runMigrations(migrator)
-  .then(() => {})
+  .then(() => {
+    void sequelize.sync();
+  })
   .catch((err: any) => {
     console.log(err);
   });
