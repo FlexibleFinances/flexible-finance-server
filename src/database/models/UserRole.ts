@@ -25,4 +25,6 @@ UserRole.init(
 Role.belongsToMany(User, { through: UserRole });
 User.belongsToMany(Role, { through: UserRole });
 
+void UserRole.sync();
+
 export default UserRole;

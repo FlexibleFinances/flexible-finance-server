@@ -88,7 +88,7 @@ export function signin(req: express.Request, res: express.Response): void {
       const authorities = [] as string[];
       void user.getRoles().then((roles) => {
         for (let i = 0; i < roles.length; i++) {
-          authorities.push("ROLE_" + roles[i].name.toUpperCase());
+          authorities.push("ROLE_" + roles[i].name.toString().toUpperCase());
         }
         res.status(200).send({
           id: user.id,
