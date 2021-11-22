@@ -21,6 +21,7 @@ export async function up(): Promise<void> {
     name: {
       type: DataTypes.STRING(128),
       allowNull: false,
+      unique: true,
     },
   });
   await queryInterface.createTable("Files", {
@@ -40,6 +41,7 @@ export async function up(): Promise<void> {
     name: {
       type: DataTypes.STRING(128),
       allowNull: false,
+      unique: true,
     },
   });
   await queryInterface.createTable("Reports", {
@@ -59,6 +61,7 @@ export async function up(): Promise<void> {
     name: {
       type: DataTypes.STRING(128),
       allowNull: false,
+      unique: true,
     },
   });
   await queryInterface.createTable("Statuses", {
@@ -78,6 +81,7 @@ export async function up(): Promise<void> {
     name: {
       type: DataTypes.STRING(128),
       allowNull: false,
+      unique: true,
     },
   });
   await queryInterface.createTable("Tags", {
@@ -97,6 +101,7 @@ export async function up(): Promise<void> {
     name: {
       type: DataTypes.STRING(128),
       allowNull: false,
+      unique: true,
     },
   });
   await queryInterface.createTable("Templates", {
@@ -116,6 +121,7 @@ export async function up(): Promise<void> {
     name: {
       type: DataTypes.STRING(128),
       allowNull: false,
+      unique: true,
     },
   });
   await queryInterface.createTable("Types", {
@@ -135,6 +141,7 @@ export async function up(): Promise<void> {
     name: {
       type: DataTypes.STRING(128),
       allowNull: false,
+      unique: true,
     },
   });
 
@@ -155,6 +162,7 @@ export async function up(): Promise<void> {
     name: {
       type: DataTypes.STRING(128),
       allowNull: false,
+      unique: true,
     },
     TemplateId: {
       type: DataTypes.INTEGER,
@@ -192,6 +200,7 @@ export async function up(): Promise<void> {
     name: {
       type: DataTypes.STRING(128),
       allowNull: false,
+      unique: true,
     },
     TemplateId: {
       type: DataTypes.INTEGER,
@@ -221,6 +230,7 @@ export async function up(): Promise<void> {
     name: {
       type: DataTypes.STRING(128),
       allowNull: false,
+      unique: true,
     },
     TemplateId: {
       type: DataTypes.INTEGER,

@@ -70,6 +70,7 @@ Template.init(
     name: {
       type: DataTypes.STRING(128),
       allowNull: false,
+      unique: true,
     },
     type: {
       type: DataTypes.ENUM({ values: Object.keys(templateTypeEnum) }),

@@ -22,6 +22,7 @@ export async function up(): Promise<void> {
     name: {
       type: DataTypes.STRING(128),
       allowNull: false,
+      unique: true,
     },
   });
 
@@ -42,6 +43,7 @@ export async function up(): Promise<void> {
     name: {
       type: DataTypes.STRING(128),
       allowNull: false,
+      unique: true,
     },
     FieldTypeId: {
       type: DataTypes.INTEGER,

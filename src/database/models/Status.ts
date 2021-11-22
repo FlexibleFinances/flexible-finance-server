@@ -20,6 +20,7 @@ Status.init(
     name: {
       type: DataTypes.STRING(128),
       allowNull: false,
+      unique: true,
     },
   },
   {
