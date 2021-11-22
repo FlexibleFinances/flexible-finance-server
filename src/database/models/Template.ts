@@ -10,11 +10,14 @@ import {
   Model,
 } from "sequelize";
 import Account from "./Account";
+import Field from "./Field";
 import Tag from "./Tag";
 import sequelize from "../index";
+import templateTypeEnum from "../../app/utils/templateType.enum";
 
 interface TemplateAttributes {
   name: string;
+  type: templateTypeEnum;
 }
 
 class Template extends Model implements TemplateAttributes {
@@ -25,13 +28,15 @@ class Template extends Model implements TemplateAttributes {
   public readonly updatedAt!: Date;
 
   public name!: string;
+  public type!: templateTypeEnum;
 
   public readonly accounts?: Account[];
-
+  public readonly fields?: Field[];
   public readonly tags?: Tag[];
 
   public static override associations: {
     accounts: Association<Template, Account>;
+    fields: Association<Template, Field>;
     tags: Association<Template, Tag>;
   };
 
@@ -45,6 +50,13 @@ class Template extends Model implements TemplateAttributes {
   public countAccounts!: HasManyCountAssociationsMixin;
   public createAccount!: HasManyCreateAssociationMixin<Account>;
 
+  public getFields!: HasManyGetAssociationsMixin<Field>;
+  public setFields!: HasManySetAssociationsMixin<Field, number>;
+  public addField!: HasManyAddAssociationMixin<Field, number>;
+  public hasField!: HasManyHasAssociationMixin<Field, number>;
+  public countFields!: HasManyCountAssociationsMixin;
+  public createField!: HasManyCreateAssociationMixin<Field>;
+
   public getTags!: HasManyGetAssociationsMixin<Tag>;
   public setTags!: HasManySetAssociationsMixin<Tag, number>;
   public addTag!: HasManyAddAssociationMixin<Tag, number>;
@@ -57,6 +69,10 @@ Template.init(
   {
     name: {
       type: DataTypes.STRING(128),
+      allowNull: false,
+    },
+    type: {
+      type: DataTypes.ENUM({ values: Object.keys(templateTypeEnum) }),
       allowNull: false,
     },
   },

@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../index";
+import templateTypeEnum from "../../app/utils/templateType.enum";
 
 const queryInterface = sequelize.getQueryInterface();
 
@@ -120,11 +121,53 @@ export async function up(): Promise<void> {
       type: DataTypes.BOOLEAN,
     },
   });
+  await queryInterface.createTable("TemplateFields", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    TemplateId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Templates",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    FieldId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Fields",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+  });
 
+  await queryInterface.addColumn("Templates", "type", {
+    type: DataTypes.ENUM({ values: Object.keys(templateTypeEnum) }),
+    allowNull: false,
+    validate: {
+      isIn: [Object.keys(templateTypeEnum)],
+    },
+  });
   console.log("0003 up");
 }
 
 export async function down(): Promise<void> {
+  await queryInterface.removeColumn("Templates", "type", {});
+  await queryInterface.dropTable("TemplateFields", {});
   await queryInterface.dropTable("FieldData", {});
   await queryInterface.dropTable("Fields", {});
   await queryInterface.dropTable("FieldTypes", {});

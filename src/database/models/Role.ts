@@ -54,6 +54,4 @@ Role.init(
   }
 );
 
-void Role.sync();
-
 export default Role;

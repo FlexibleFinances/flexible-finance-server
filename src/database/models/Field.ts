@@ -14,6 +14,7 @@ import {
 } from "sequelize";
 import FieldDatum from "./FieldDatum";
 import FieldType from "./FieldType";
+import Template from "./Template";
 import sequelize from "../index";
 
 interface FieldAttributes {
@@ -30,11 +31,12 @@ class Field extends Model implements FieldAttributes {
   public name!: string;
 
   public readonly data?: FieldDatum[];
-
+  public readonly templates?: Template[];
   public readonly fieldType?: FieldType;
 
   public static override associations: {
     data: Association<FieldDatum, Field>;
+    templates: Association<Template, Field>;
     fieldType: Association<FieldType, Field>;
   };
 
@@ -47,6 +49,13 @@ class Field extends Model implements FieldAttributes {
   public hasDatum!: HasManyHasAssociationMixin<FieldDatum, number>;
   public countData!: HasManyCountAssociationsMixin;
   public createDatum!: HasManyCreateAssociationMixin<FieldDatum>;
+
+  public getTemplates!: HasManyGetAssociationsMixin<Template>;
+  public setTemplates!: HasManySetAssociationsMixin<Template, number>;
+  public addTemplate!: HasManyAddAssociationMixin<Template, number>;
+  public hasTemplate!: HasManyHasAssociationMixin<Template, number>;
+  public countTemplates!: HasManyCountAssociationsMixin;
+  public createTemplate!: HasManyCreateAssociationMixin<Template>;
 
   public getFieldType!: BelongsToGetAssociationMixin<FieldType>;
   public setFieldType!: BelongsToSetAssociationMixin<FieldType, number>;

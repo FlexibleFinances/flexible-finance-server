@@ -12,6 +12,7 @@ import Role from "./database/models/Role";
 import Status from "./database/models/Status";
 import Tag from "./database/models/Tag";
 import Template from "./database/models/Template";
+import TemplateField from "./database/models/TemplateField";
 import TemplateTag from "./database/models/TemplateTag";
 import Transaction from "./database/models/Transaction";
 import TransactionFile from "./database/models/TransactionFile";
@@ -25,7 +26,9 @@ import express from "express";
 import helmet from "helmet";
 import hpp from "hpp";
 import path from "path";
+import { setAccountRoutes } from "./app/routes/account.routes";
 import { setAuthRoutes } from "./app/routes/auth.routes";
+import { setTemplateRoutes } from "./app/routes/template.routes";
 import { setUserRoutes } from "./app/routes/user.routes";
 import toobusy from "toobusy-js";
 
@@ -52,7 +55,9 @@ app.use(function (req, res, next) {
   }
 });
 
+setAccountRoutes(app);
 setAuthRoutes(app);
+setTemplateRoutes(app);
 setUserRoutes(app);
 
 runMigrations(migrator)
@@ -70,6 +75,7 @@ runMigrations(migrator)
     void Status.sync();
     void Tag.sync();
     void Template.sync();
+    void TemplateField.sync();
     void TemplateTag.sync();
     void Transaction.sync();
     void TransactionFile.sync();
