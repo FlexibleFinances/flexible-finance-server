@@ -16,7 +16,7 @@ interface FieldTypeAttributes {
   name: string;
 }
 
-class FieldType extends Model implements FieldTypeAttributes {
+export class FieldType extends Model implements FieldTypeAttributes {
   public id!: number;
 
   // timestamps!

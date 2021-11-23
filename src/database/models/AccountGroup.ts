@@ -5,7 +5,7 @@ interface AccountGroupAttributes {
   name: string;
 }
 
-class AccountGroup extends Model implements AccountGroupAttributes {
+export class AccountGroup extends Model implements AccountGroupAttributes {
   public id!: number;
 
   // timestamps!

@@ -18,7 +18,7 @@ interface UserAttributes {
   password: string;
 }
 
-class User extends Model implements UserAttributes {
+export class User extends Model implements UserAttributes {
   public id!: number;
 
   // timestamps!

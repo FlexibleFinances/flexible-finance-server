@@ -18,7 +18,7 @@ interface TransactionAttributes {
   name: string;
 }
 
-class Transaction extends Model implements TransactionAttributes {
+export class Transaction extends Model implements TransactionAttributes {
   public id!: number;
 
   // timestamps!

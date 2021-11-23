@@ -1,35 +1,12 @@
+import * as models from "./database/models/index";
 import { migrator, runMigrations } from "./database/index";
-import Account from "./database/models/Account";
-import AccountGroup from "./database/models/AccountGroup";
-import Entity from "./database/models/Entity";
-import EntityTag from "./database/models/EntityTag";
-import Field from "./database/models/Field";
-import FieldDatum from "./database/models/FieldDatum";
-import FieldType from "./database/models/FieldType";
-import Report from "./database/models/Report";
-import ReportTag from "./database/models/ReportTag";
-import Role from "./database/models/Role";
-import Status from "./database/models/Status";
-import Tag from "./database/models/Tag";
-import Template from "./database/models/Template";
-import TemplateField from "./database/models/TemplateField";
-import TemplateTag from "./database/models/TemplateTag";
-import Transaction from "./database/models/Transaction";
-import TransactionFile from "./database/models/TransactionFile";
-import TransactionTag from "./database/models/TransactionTag";
-import Type from "./database/models/Type";
-import User from "./database/models/User";
-import UserRole from "./database/models/UserRole";
 import compression from "compression";
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import hpp from "hpp";
 import path from "path";
-import { setAccountRoutes } from "./app/routes/account.routes";
-import { setAuthRoutes } from "./app/routes/auth.routes";
-import { setTemplateRoutes } from "./app/routes/template.routes";
-import { setUserRoutes } from "./app/routes/user.routes";
+import setAllRoutes from "./app/routes/index";
 import toobusy from "toobusy-js";
 
 const app = express();
@@ -55,34 +32,11 @@ app.use(function (req, res, next) {
   }
 });
 
-setAccountRoutes(app);
-setAuthRoutes(app);
-setTemplateRoutes(app);
-setUserRoutes(app);
+setAllRoutes(app);
 
 runMigrations(migrator)
   .then(() => {
-    void Account.sync();
-    void AccountGroup.sync();
-    void Entity.sync();
-    void EntityTag.sync();
-    void Field.sync();
-    void FieldDatum.sync();
-    void FieldType.sync();
-    void Report.sync();
-    void ReportTag.sync();
-    void Role.sync();
-    void Status.sync();
-    void Tag.sync();
-    void Template.sync();
-    void TemplateField.sync();
-    void TemplateTag.sync();
-    void Transaction.sync();
-    void TransactionFile.sync();
-    void TransactionTag.sync();
-    void Type.sync();
-    void User.sync();
-    void UserRole.sync();
+    void models.syncAllModels();
   })
   .catch((err: any) => {
     console.log(err);

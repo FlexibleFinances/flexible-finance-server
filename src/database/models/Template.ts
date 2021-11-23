@@ -20,7 +20,7 @@ interface TemplateAttributes {
   type: templateTypeEnum;
 }
 
-class Template extends Model implements TemplateAttributes {
+export class Template extends Model implements TemplateAttributes {
   public id!: number;
 
   // timestamps!

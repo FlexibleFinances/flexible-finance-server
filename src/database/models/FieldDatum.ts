@@ -19,7 +19,7 @@ interface FieldDatumAttributes {
   boolValue?: boolean;
 }
 
-class FieldDatum extends Model implements FieldDatumAttributes {
+export class FieldDatum extends Model implements FieldDatumAttributes {
   public id!: number;
 
   // timestamps!

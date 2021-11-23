@@ -5,7 +5,7 @@ interface StatusAttributes {
   name: string;
 }
 
-class Status extends Model implements StatusAttributes {
+export class Status extends Model implements StatusAttributes {
   public id!: number;
 
   // timestamps!

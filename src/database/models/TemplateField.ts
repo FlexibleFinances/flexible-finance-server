@@ -3,7 +3,7 @@ import { Model } from "sequelize";
 import Template from "./Template";
 import sequelize from "../index";
 
-class TemplateField extends Model {
+export class TemplateField extends Model {
   public id!: number;
 
   // timestamps!

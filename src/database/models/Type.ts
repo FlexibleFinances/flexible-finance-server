@@ -5,7 +5,7 @@ interface TypeAttributes {
   name: string;
 }
 
-class Type extends Model implements TypeAttributes {
+export class Type extends Model implements TypeAttributes {
   public id!: number;
 
   // timestamps!

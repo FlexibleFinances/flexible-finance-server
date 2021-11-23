@@ -20,7 +20,7 @@ interface TagAttributes {
   name: string;
 }
 
-class Tag extends Model implements TagAttributes {
+export class Tag extends Model implements TagAttributes {
   public id!: number;
 
   // timestamps!

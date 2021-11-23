@@ -16,7 +16,7 @@ interface RoleAttributes {
   name: string;
 }
 
-class Role extends Model implements RoleAttributes {
+export class Role extends Model implements RoleAttributes {
   public id!: number;
 
   // timestamps!

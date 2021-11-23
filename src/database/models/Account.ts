@@ -23,7 +23,7 @@ interface AccountAttributes {
   name: string;
 }
 
-class Account extends Model implements AccountAttributes {
+export class Account extends Model implements AccountAttributes {
   public id!: number;
 
   // timestamps!

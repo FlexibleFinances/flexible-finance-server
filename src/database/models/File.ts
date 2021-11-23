@@ -16,7 +16,7 @@ interface FileAttributes {
   name: string;
 }
 
-class File extends Model implements FileAttributes {
+export class File extends Model implements FileAttributes {
   public id!: number;
 
   // timestamps!

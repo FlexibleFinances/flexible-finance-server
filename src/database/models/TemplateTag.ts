@@ -3,7 +3,7 @@ import Tag from "./Tag";
 import Template from "./Template";
 import sequelize from "..";
 
-class TemplateTag extends Model {
+export class TemplateTag extends Model {
   public id!: number;
 
   // timestamps!

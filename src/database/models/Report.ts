@@ -16,7 +16,7 @@ interface ReportAttributes {
   name: string;
 }
 
-class Report extends Model implements ReportAttributes {
+export class Report extends Model implements ReportAttributes {
   public id!: number;
 
   // timestamps!

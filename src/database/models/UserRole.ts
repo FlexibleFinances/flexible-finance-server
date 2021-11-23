@@ -3,7 +3,7 @@ import Role from "./Role";
 import User from "./User";
 import sequelize from "../index";
 
-class UserRole extends Model {
+export class UserRole extends Model {
   public id!: number;
 
   // timestamps!
