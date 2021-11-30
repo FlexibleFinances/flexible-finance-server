@@ -1,3 +1,4 @@
+import * as OpenApiValidator from "express-openapi-validator";
 import * as models from "./database/models/index";
 import { migrator, runMigrations } from "./database/index";
 import compression from "compression";
@@ -11,6 +12,13 @@ import toobusy from "toobusy-js";
 
 const app = express();
 
+const validatorOptions = {
+  coerceTypes: true,
+  apiSpec: "./openapi.yml",
+  validateRequests: true,
+  validateResponses: true,
+};
+
 app
   .use(express.static(path.join(__dirname, "/public")))
   .use(helmet())
@@ -19,6 +27,23 @@ app
   .use(express.json({ limit: "1kb" }))
   .use(express.urlencoded({ extended: true, limit: "1kb" }))
   .use(hpp())
+  .use(OpenApiValidator.middleware(validatorOptions))
+  .use(
+    (
+      err: any,
+      req: express.Request,
+      res: express.Response,
+      next: express.NextFunction
+    ) => {
+      res.status(err.status).json({
+        error: {
+          type: "request_validation",
+          message: err.message,
+          errors: err.errors,
+        },
+      });
+    }
+  )
   .set("views", path.join(__dirname, "/views"))
   .set("view engine", "ejs")
   .get("/", (req, res) => res.render("pages/index"));

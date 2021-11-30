@@ -1,0 +1,23 @@
+openapi: 3.0.0
+servers:
+  - url: https://flexible-finance-server.herokuapp.com/api
+    description: Production server
+  - url: http://localhost:5000/api
+    description: Local server
+info:
+  description: >-
+    This is the server for Flexible Finance.
+  version: 1.0.0
+  title: OpenAPI Flexible Finance
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+#tags:
+paths:
+  $ref: ./app/routes/openapi.part.yml
+components:
+  schemas:
+    $ref: ./database/models/openapi.part.yml
+#  responses:
+#  parameters:
+

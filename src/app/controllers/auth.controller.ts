@@ -29,7 +29,7 @@ export function signup(req: express.Request, res: express.Response): void {
         }).then((roles) => {
           console.log("roles", roles);
           void user.setRoles(roles).then(() => {
-            res.send({ message: "User registered successfully!" });
+            res.status(200).send({ message: "User registered successfully!" });
           });
         });
       } else {
@@ -43,7 +43,9 @@ export function signup(req: express.Request, res: express.Response): void {
           if (role !== undefined && role !== null) {
             console.log("role", role);
             void user.setRoles([role]).then(() => {
-              res.send({ message: "User registered successfully!" });
+              res
+                .status(200)
+                .send({ message: "User registered successfully!" });
             });
           }
         });
