@@ -6,6 +6,15 @@ function checkDuplicateUsernameOrEmail(
   res: express.Response,
   next: express.NextFunction
 ): void {
+  if (
+    req.body.username === undefined ||
+    req.body.email === undefined ||
+    req.body.password === undefined
+  ) {
+    res.status(400).send({ message: "Missing a required parameter." });
+    return;
+  }
+
   // Username
   void sequelize.models.User.findOne({
     where: {

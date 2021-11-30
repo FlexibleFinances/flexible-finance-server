@@ -11,6 +11,15 @@ dotenv.config();
 const Op = Sequelize.Op;
 
 export function signup(req: express.Request, res: express.Response): void {
+  if (
+    req.body.username === undefined ||
+    req.body.email === undefined ||
+    req.body.password === undefined
+  ) {
+    res.status(400).send({ message: "Missing a required parameter." });
+    return;
+  }
+
   // Save User to Database
   User.create({
     username: req.body.username,

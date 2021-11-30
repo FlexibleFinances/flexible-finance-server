@@ -16,8 +16,19 @@ info:
 paths:
   $ref: ./app/routes/openapi.part.yml
 components:
+  responses:
+    Message:
+      description: a simple response with just a message
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Message"
   schemas:
+    Message:
+      type: object
+      properties:
+        message:
+          type: string
     $ref: ./database/models/openapi.part.yml
-#  responses:
 #  parameters:
 

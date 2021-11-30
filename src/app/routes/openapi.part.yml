@@ -1,5 +1,23 @@
 /auth/signup:
   post:
+    requestBody:
+      description: Optional description in *Markdown*
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              email:
+                type: string
+              password:
+                type: string
     responses:
-      "200":
-        description: OK
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
