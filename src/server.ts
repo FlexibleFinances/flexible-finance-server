@@ -1,9 +1,12 @@
 import * as OpenApiValidator from "express-openapi-validator";
 import * as models from "./database/models/index";
+import * as swaggerUi from "swagger-ui-express";
+import * as yaml from "js-yaml";
 import { migrator, runMigrations } from "./database/index";
 import compression from "compression";
 import cors from "cors";
 import express from "express";
+import fs from "fs";
 import helmet from "helmet";
 import hpp from "hpp";
 import path from "path";
@@ -11,6 +14,10 @@ import setAllRoutes from "./app/routes/index";
 import toobusy from "toobusy-js";
 
 const app = express();
+
+const apiDoc = yaml.load(
+  fs.readFileSync("./openapi.yml").toString()
+) as swaggerUi.JsonObject;
 
 const validatorOptions = {
   coerceTypes: true,
@@ -44,6 +51,7 @@ app
       });
     }
   )
+  .use("/api-docs", swaggerUi.serve, swaggerUi.setup(apiDoc))
   .set("views", path.join(__dirname, "/views"))
   .set("view engine", "ejs")
   .get("/", (req, res) => res.render("pages/index"));
