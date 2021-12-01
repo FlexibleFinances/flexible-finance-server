@@ -19,12 +19,12 @@ properties:
   accounts:
     type: array
     items:
-      $ref: ./openapi.part.yml#/Account
+      $ref: ../../openapi.root.yml#/components/schemas/Account
   fields:
     type: array
     items:
-      $ref: ./openapi.part.yml#/Field
+      $ref: ../../openapi.root.yml#/components/schemas/Field
   tags:
     type: array
     items:
-      $ref: ./openapi.part.yml#/Tag
+      $ref: ../../openapi.root.yml#/components/schemas/Tag

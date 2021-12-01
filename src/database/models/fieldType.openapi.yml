@@ -11,4 +11,4 @@ properties:
   name:
     type: string
   fields:
-    $ref: ./openapi.part.yml#/Field
+    $ref: ../../openapi.root.yml#/components/schemas/Field

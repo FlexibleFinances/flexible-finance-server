@@ -11,4 +11,4 @@ properties:
   name:
     type: string
   tags:
-    $ref: ./openapi.part.yml#/Tag
+    $ref: ../../openapi.root.yml#/components/schemas/Tag

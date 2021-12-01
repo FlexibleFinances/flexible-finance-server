@@ -11,4 +11,4 @@ properties:
   name:
     type: string
   transactions:
-    $ref: ./openapi.part.yml#/Transaction
+    $ref: ../../openapi.root.yml#/components/schemas/Transaction

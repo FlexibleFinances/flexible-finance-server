@@ -66,6 +66,11 @@ export function signup(req: express.Request, res: express.Response): void {
 }
 
 export function signin(req: express.Request, res: express.Response): void {
+  if (req.body.username === undefined || req.body.password === undefined) {
+    res.status(400).send({ message: "Missing a required parameter." });
+    return;
+  }
+
   User.findOne({
     where: {
       username: req.body.username,
@@ -90,6 +95,9 @@ export function signin(req: express.Request, res: express.Response): void {
       let authSecret = "";
       if (process.env.AUTH_SECRET !== undefined) {
         authSecret = process.env.AUTH_SECRET;
+      } else {
+        res.status(500).send("Authentication secret is unavailable.");
+        return;
       }
       const token = jwt.sign({ id: user.id }, authSecret, {
         // 24 hours

@@ -14,7 +14,11 @@ info:
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 #tags:
 paths:
-  $ref: ./app/routes/openapi.part.yml
+  # Authentication Requests
+  /auth/signup:
+    $ref: ./app/routes/auth.openapi.yml#/SignUp
+  /auth/signin:
+    $ref: ./app/routes/auth.openapi.yml#/SignIn
 components:
   responses:
     Message:
@@ -29,6 +33,35 @@ components:
       properties:
         message:
           type: string
-    $ref: ./database/models/openapi.part.yml
+    Account:
+      $ref: ./database/models/account.openapi.yml
+    AccountGroup:
+      $ref: ./database/models/accountGroup.openapi.yml
+    Entity:
+      $ref: ./database/models/entity.openapi.yml
+    Field:
+      $ref: ./database/models/field.openapi.yml
+    FieldDatum:
+      $ref: ./database/models/fieldDatum.openapi.yml
+    FieldType:
+      $ref: ./database/models/fieldType.openapi.yml
+    File:
+      $ref: ./database/models/file.openapi.yml
+    Report:
+      $ref: ./database/models/report.openapi.yml
+    Role:
+      $ref: ./database/models/role.openapi.yml
+    Status:
+      $ref: ./database/models/status.openapi.yml
+    Tag:
+      $ref: ./database/models/tag.openapi.yml
+    Template:
+      $ref: ./database/models/template.openapi.yml
+    Transaction:
+      $ref: ./database/models/transaction.openapi.yml
+    Type:
+      $ref: ./database/models/type.openapi.yml
+    User:
+      $ref: ./database/models/user.openapi.yml
 #  parameters:
 

@@ -9,32 +9,33 @@ function verifyToken(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
-): any {
+): void {
   const token = req.headers["x-access-token"];
 
-  if (token !== undefined && token !== null && typeof token === "string") {
-    let authSecret = "";
-    if (process.env.AUTH_SECRET !== undefined) {
-      authSecret = process.env.AUTH_SECRET;
-    }
-    jwt.verify(
-      token,
-      authSecret,
-      (err: jwt.VerifyErrors | null, decoded: any) => {
-        if (err != null) {
-          return res.status(401).send({
-            message: "Unauthorized!",
-          });
-        }
-        req.body.userId = decoded.id;
-        next();
-      }
-    );
-  } else {
-    return res.status(403).send({
+  if (token === undefined || token === null || typeof token !== "string") {
+    res.status(403).send({
       message: "No token provided!",
     });
+    return;
   }
+  if (process.env.AUTH_SECRET === undefined) {
+    res.status(500).send("Authentication secret is unavailable.");
+    return;
+  }
+
+  jwt.verify(
+    token,
+    process.env.AUTH_SECRET,
+    (err: jwt.VerifyErrors | null, decoded: any) => {
+      if (err != null) {
+        return res.status(401).send({
+          message: "Unauthorized!",
+        });
+      }
+      req.body.userId = decoded.id;
+      next();
+    }
+  );
 }
 
 function isAdmin(
@@ -42,6 +43,13 @@ function isAdmin(
   res: express.Response,
   next: express.NextFunction
 ): void {
+  if (req.body.userId === undefined) {
+    res
+      .status(500)
+      .send({ message: "Did not decode access token into user ID." });
+    return;
+  }
+
   void User.findByPk(req.body.userId).then((user) => {
     user?.getRoles().then((roles) => {
       for (let i = 0; i < roles.length; i++) {

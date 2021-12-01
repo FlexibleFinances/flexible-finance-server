@@ -13,12 +13,12 @@ properties:
   data:
     type: array
     items:
-      $ref: ./openapi.part.yml#/FieldDatum
+      $ref: ../../openapi.root.yml#/components/schemas/FieldDatum
   files:
     type: array
     items:
-      $ref: ./openapi.part.yml#/File
+      $ref: ../../openapi.root.yml#/components/schemas/File
   tags:
     type: array
     items:
-      $ref: ./openapi.part.yml#/Tag
+      $ref: ../../openapi.root.yml#/components/schemas/Tag

@@ -13,8 +13,8 @@ properties:
   data:
     type: array
     items:
-      $ref: ./openapi.part.yml#/FieldDatum
+      $ref: ../../openapi.root.yml#/components/schemas/FieldDatum
   fieldType:
-    $ref: ./openapi.part.yml#/FieldType
+    $ref: ../../openapi.root.yml#/components/schemas/FieldType
   template:
-    $ref: ./openapi.part.yml#/Template
+    $ref: ../../openapi.root.yml#/components/schemas/Template

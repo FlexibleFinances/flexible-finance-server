@@ -13,20 +13,20 @@ properties:
   accounts:
     type: array
     items:
-      $ref: ./openapi.part.yml#/Account
+      $ref: ../../openapi.root.yml#/components/schemas/Account
   entities:
     type: array
     items:
-      $ref: ./openapi.part.yml#/Entity
+      $ref: ../../openapi.root.yml#/components/schemas/Entity
   reports:
     type: array
     items:
-      $ref: ./openapi.part.yml#/Report
+      $ref: ../../openapi.root.yml#/components/schemas/Report
   templates:
     type: array
     items:
-      $ref: ./openapi.part.yml#/Template
+      $ref: ../../openapi.root.yml#/components/schemas/Template
   transactions:
     type: array
     items:
-      $ref: ./openapi.part.yml#/Transaction
+      $ref: ../../openapi.root.yml#/components/schemas/Transaction
