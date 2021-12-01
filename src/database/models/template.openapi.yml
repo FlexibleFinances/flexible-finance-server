@@ -1,0 +1,30 @@
+type: object
+properties:
+  id:
+    type: integer
+  createdAt:
+    type: string
+    format: date-time
+  updatedAt:
+    type: string
+    format: date-time
+  name:
+    type: string
+  type:
+    type: string
+    enum:
+      - Account
+      - Entity
+      - Transaction
+  accounts:
+    type: array
+    items:
+      $ref: ./openapi.part.yml#/Account
+  fields:
+    type: array
+    items:
+      $ref: ./openapi.part.yml#/Field
+  tags:
+    type: array
+    items:
+      $ref: ./openapi.part.yml#/Tag

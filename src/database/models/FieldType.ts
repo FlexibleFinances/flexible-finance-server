@@ -25,7 +25,7 @@ export class FieldType extends Model implements FieldTypeAttributes {
 
   public name!: string;
 
-  public readonly tags?: Field[];
+  public readonly fields?: Field[];
 
   public static override associations: {
     fields: Association<FieldType, Field>;

@@ -1,0 +1,28 @@
+type: object
+properties:
+  id:
+    type: integer
+  createdAt:
+    type: string
+    format: date-time
+  updatedAt:
+    type: string
+    format: date-time
+  name:
+    type: string
+  fields:
+    type: array
+    items:
+      $ref: ../../../openapi.yml#/components/schemas/Field
+  accountGroup:
+    $ref: ./openapi.part.yml#/AccountGroup
+  data:
+    type: array
+    items:
+      $ref: ./openapi.part.yml#/FieldDatum
+  tags:
+    type: array
+    items:
+      $ref: ./openapi.part.yml#/Tag
+  template:
+    $ref: ./openapi.part.yml#/Template

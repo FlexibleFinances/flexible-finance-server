@@ -1,0 +1,32 @@
+type: object
+properties:
+  id:
+    type: integer
+  createdAt:
+    type: string
+    format: date-time
+  updatedAt:
+    type: string
+    format: date-time
+  name:
+    type: string
+  accounts:
+    type: array
+    items:
+      $ref: ./openapi.part.yml#/Account
+  entities:
+    type: array
+    items:
+      $ref: ./openapi.part.yml#/Entity
+  reports:
+    type: array
+    items:
+      $ref: ./openapi.part.yml#/Report
+  templates:
+    type: array
+    items:
+      $ref: ./openapi.part.yml#/Template
+  transactions:
+    type: array
+    items:
+      $ref: ./openapi.part.yml#/Transaction

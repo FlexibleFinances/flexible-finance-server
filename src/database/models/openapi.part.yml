@@ -1,27 +1,30 @@
+Account:
+  $ref: ./account.openapi.yml
+AccountGroup:
+  $ref: ./accountGroup.openapi.yml
+Entity:
+  $ref: ./entity.openapi.yml
+Field:
+  $ref: ./field.openapi.yml
+FieldDatum:
+  $ref: ./fieldDatum.openapi.yml
+FieldType:
+  $ref: ./fieldType.openapi.yml
+File:
+  $ref: ./file.openapi.yml
+Report:
+  $ref: ./report.openapi.yml
 Role:
-  type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-    updatedAt:
-      type: string
-    name:
-      type: string
+  $ref: ./role.openapi.yml
+Status:
+  $ref: ./status.openapi.yml
+Tag:
+  $ref: ./tag.openapi.yml
+Template:
+  $ref: ./template.openapi.yml
+Transaction:
+  $ref: ./transaction.openapi.yml
+Type:
+  $ref: ./type.openapi.yml
 User:
-  type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-    updatedAt:
-      type: string
-    username:
-      type: string
-    email:
-      type: string
-    password:
-      type: string
-      format: password
+  $ref: ./user.openapi.yml

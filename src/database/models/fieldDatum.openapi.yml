@@ -1,0 +1,27 @@
+type: object
+properties:
+  id:
+    type: integer
+  createdAt:
+    type: string
+    format: date-time
+  updatedAt:
+    type: string
+    format: date-time
+  stringValue:
+    type: string
+  intValue:
+    type: integer
+  dateValue:
+    type: string
+    format: date-time
+  boolValue:
+    type: boolean
+  account:
+    $ref: ./openapi.part.yml#/Account
+  field:
+    $ref: ./openapi.part.yml#/Field
+  entity:
+    $ref: ./openapi.part.yml#/Entity
+  transaction:
+    $ref: ./openapi.part.yml#/Transaction
