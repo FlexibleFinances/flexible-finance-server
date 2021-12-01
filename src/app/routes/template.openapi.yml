@@ -1,0 +1,65 @@
+GetTemplates:
+  get:
+    parameters:
+      - name: x-access-token
+        in: header
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Returns the templates' info.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                templates:
+                  type: array
+                  items:
+                    $ref: "../../openapi.root.yml#/components/schemas/Template"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+CreateTemplate:
+  post:
+    parameters:
+      - name: x-access-token
+        in: header
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+    responses:
+      200:
+        description: Returns the new template's info.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                template:
+                  $ref: "../../openapi.root.yml#/components/schemas/Template"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"

@@ -3,6 +3,11 @@ import Template from "../../database/models/Template";
 import templateTypeEnum from "../utils/templateType.enum";
 
 export function getAccount(req: any, res: any): void {
+  if (req.body.id === undefined) {
+    res.status(400).send({ message: "Missing a required parameter." });
+    return;
+  }
+
   void Account.findOne({
     where: {
       id: req.body.accountId,
@@ -15,7 +20,7 @@ export function getAccount(req: any, res: any): void {
           account.fields = fields ?? [];
           res.status(200).send({
             message: "Account gotten.",
-            accounts: account,
+            account: account,
           });
         });
       } else {
@@ -53,6 +58,11 @@ export function getAccounts(req: any, res: any): void {
 }
 
 export async function createAccount(req: any, res: any): Promise<void> {
+  if (req.body.name === undefined) {
+    res.status(400).send({ message: "Missing a required parameter." });
+    return;
+  }
+
   let templateId: number;
   if (req.body.templateId === undefined || req.body.templateId === null) {
     await Template.create({

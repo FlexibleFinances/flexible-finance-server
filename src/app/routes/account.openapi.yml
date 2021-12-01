@@ -1,0 +1,104 @@
+GetAccount:
+  get:
+    parameters:
+      - name: x-access-token
+        in: header
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+    responses:
+      200:
+        description: Returns the account's info.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                account:
+                  $ref: "../../openapi.root.yml#/components/schemas/Account"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+GetAccounts:
+  get:
+    parameters:
+      - name: x-access-token
+        in: header
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Returns the accounts' info.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                accounts:
+                  type: array
+                  items:
+                    $ref: "../../openapi.root.yml#/components/schemas/Account"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+CreateAccount:
+  post:
+    parameters:
+      - name: x-access-token
+        in: header
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              templateId:
+                type: integer
+    responses:
+      200:
+        description: Returns the new account's info.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                account:
+                  $ref: "../../openapi.root.yml#/components/schemas/Account"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
