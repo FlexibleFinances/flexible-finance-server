@@ -8,17 +8,28 @@ import {
   HasManyHasAssociationMixin,
   HasManySetAssociationsMixin,
   Model,
+  Optional,
 } from "sequelize";
 import Role from "./Role";
 import sequelize from "../index";
 
-interface UserAttributes {
+export interface UserAttributes {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   username: string;
   email: string;
   password: string;
+  roles?: Role[];
 }
 
-export class User extends Model implements UserAttributes {
+export interface UserCreationAttributes
+  extends Optional<UserAttributes, "id">,
+    Optional<UserAttributes, "createdAt">,
+    Optional<UserAttributes, "updatedAt">,
+    Optional<UserAttributes, "roles"> {}
+
+export class User extends Model<UserAttributes, UserCreationAttributes> {
   public id!: number;
 
   // timestamps!

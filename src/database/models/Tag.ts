@@ -8,6 +8,7 @@ import {
   HasManyHasAssociationMixin,
   HasManySetAssociationsMixin,
   Model,
+  Optional,
 } from "sequelize";
 import Account from "./Account";
 import Entity from "./Entity";
@@ -16,11 +17,29 @@ import Template from "./Template";
 import Transaction from "./Transaction";
 import sequelize from "../index";
 
-interface TagAttributes {
+export interface TagAttributes {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   name: string;
+  accounts?: Account[];
+  entities?: Entity[];
+  reports?: Report[];
+  templates?: Template[];
+  transactions?: Transaction[];
 }
 
-export class Tag extends Model implements TagAttributes {
+export interface TagCreationAttributes
+  extends Optional<TagAttributes, "id">,
+    Optional<TagAttributes, "createdAt">,
+    Optional<TagAttributes, "updatedAt">,
+    Optional<TagAttributes, "accounts">,
+    Optional<TagAttributes, "entities">,
+    Optional<TagAttributes, "reports">,
+    Optional<TagAttributes, "templates">,
+    Optional<TagAttributes, "transactions"> {}
+
+export class Tag extends Model<TagAttributes, TagCreationAttributes> {
   public id!: number;
 
   // timestamps!

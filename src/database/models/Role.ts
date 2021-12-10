@@ -8,15 +8,26 @@ import {
   HasManyHasAssociationMixin,
   HasManySetAssociationsMixin,
   Model,
+  Optional,
 } from "sequelize";
 import User from "./User";
 import sequelize from "../index";
 
-interface RoleAttributes {
+export interface RoleAttributes {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   name: string;
+  users?: User[];
 }
 
-export class Role extends Model implements RoleAttributes {
+export interface RoleCreationAttributes
+  extends Optional<RoleAttributes, "id">,
+    Optional<RoleAttributes, "createdAt">,
+    Optional<RoleAttributes, "updatedAt">,
+    Optional<RoleAttributes, "users"> {}
+
+export class Role extends Model<RoleAttributes, RoleCreationAttributes> {
   public id!: number;
 
   // timestamps!
@@ -24,6 +35,12 @@ export class Role extends Model implements RoleAttributes {
   public readonly updatedAt!: Date;
 
   public name!: string;
+
+  public readonly users?: User[];
+
+  public static override associations: {
+    users: Association<User, Role>;
+  };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
@@ -34,12 +51,6 @@ export class Role extends Model implements RoleAttributes {
   public hasUser!: HasManyHasAssociationMixin<User, number>;
   public countUsers!: HasManyCountAssociationsMixin;
   public createUser!: HasManyCreateAssociationMixin<User>;
-
-  public readonly users?: User[];
-
-  public static override associations: {
-    users: Association<User, Role>;
-  };
 }
 
 Role.init(

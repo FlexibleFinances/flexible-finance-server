@@ -8,17 +8,35 @@ import {
   HasManyHasAssociationMixin,
   HasManySetAssociationsMixin,
   Model,
+  Optional,
 } from "sequelize";
 import FieldDatum from "./FieldDatum";
 import File from "./File";
 import Tag from "./Tag";
 import sequelize from "../index";
 
-interface TransactionAttributes {
+export interface TransactionAttributes {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   name: string;
+  data?: FieldDatum[];
+  files?: File[];
+  tags?: Tag[];
 }
 
-export class Transaction extends Model implements TransactionAttributes {
+export interface TransactionCreationAttributes
+  extends Optional<TransactionAttributes, "id">,
+    Optional<TransactionAttributes, "createdAt">,
+    Optional<TransactionAttributes, "updatedAt">,
+    Optional<TransactionAttributes, "data">,
+    Optional<TransactionAttributes, "files">,
+    Optional<TransactionAttributes, "tags"> {}
+
+export class Transaction extends Model<
+  TransactionAttributes,
+  TransactionCreationAttributes
+> {
   public id!: number;
 
   // timestamps!

@@ -8,16 +8,29 @@ import {
   HasManyHasAssociationMixin,
   HasManySetAssociationsMixin,
   Model,
+  Optional,
 } from "sequelize";
 import FieldDatum from "./FieldDatum";
 import Tag from "./Tag";
 import sequelize from "../index";
 
-interface EntityAttributes {
+export interface EntityAttributes {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   name: string;
+  data?: FieldDatum[];
+  tags?: Tag[];
 }
 
-export class Entity extends Model implements EntityAttributes {
+export interface EntityCreationAttributes
+  extends Optional<EntityAttributes, "id">,
+    Optional<EntityAttributes, "createdAt">,
+    Optional<EntityAttributes, "updatedAt">,
+    Optional<EntityAttributes, "data">,
+    Optional<EntityAttributes, "tags"> {}
+
+export class Entity extends Model<EntityAttributes, EntityCreationAttributes> {
   public id!: number;
 
   // timestamps!

@@ -8,15 +8,26 @@ import {
   HasManyHasAssociationMixin,
   HasManySetAssociationsMixin,
   Model,
+  Optional,
 } from "sequelize";
 import Transaction from "./Transaction";
 import sequelize from "../index";
 
-interface FileAttributes {
+export interface FileAttributes {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   name: string;
+  transactions?: Transaction[];
 }
 
-export class File extends Model implements FileAttributes {
+export interface FileCreationAttributes
+  extends Optional<FileAttributes, "id">,
+    Optional<FileAttributes, "createdAt">,
+    Optional<FileAttributes, "updatedAt">,
+    Optional<FileAttributes, "transactions"> {}
+
+export class File extends Model<FileAttributes, FileCreationAttributes> {
   public id!: number;
 
   // timestamps!

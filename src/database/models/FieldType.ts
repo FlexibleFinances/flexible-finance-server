@@ -8,15 +8,29 @@ import {
   HasManyHasAssociationMixin,
   HasManySetAssociationsMixin,
   Model,
+  Optional,
 } from "sequelize";
 import Field from "./Field";
 import sequelize from "../index";
 
-interface FieldTypeAttributes {
+export interface FieldTypeAttributes {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   name: string;
+  fields?: Field[];
 }
 
-export class FieldType extends Model implements FieldTypeAttributes {
+export interface FieldTypeCreationAttributes
+  extends Optional<FieldTypeAttributes, "id">,
+    Optional<FieldTypeAttributes, "createdAt">,
+    Optional<FieldTypeAttributes, "updatedAt">,
+    Optional<FieldTypeAttributes, "fields"> {}
+
+export class FieldType extends Model<
+  FieldTypeAttributes,
+  FieldTypeCreationAttributes
+> {
   public id!: number;
 
   // timestamps!

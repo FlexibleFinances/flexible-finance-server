@@ -11,6 +11,7 @@ import {
   HasManyHasAssociationMixin,
   HasManySetAssociationsMixin,
   Model,
+  Optional,
 } from "sequelize";
 import AccountGroup from "./AccountGroup";
 import Field from "./Field";
@@ -19,11 +20,32 @@ import Tag from "./Tag";
 import Template from "./Template";
 import sequelize from "../index";
 
-interface AccountAttributes {
+export interface AccountAttributes {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   name: string;
+  fields?: Field[];
+  accountGroup?: AccountGroup;
+  data?: FieldDatum[];
+  tags?: Tag[];
+  template?: Template;
 }
 
-export class Account extends Model implements AccountAttributes {
+export interface AccountCreationAttributes
+  extends Optional<AccountAttributes, "id">,
+    Optional<AccountAttributes, "createdAt">,
+    Optional<AccountAttributes, "updatedAt">,
+    Optional<AccountAttributes, "fields">,
+    Optional<AccountAttributes, "accountGroup">,
+    Optional<AccountAttributes, "data">,
+    Optional<AccountAttributes, "tags">,
+    Optional<AccountAttributes, "template"> {}
+
+export class Account extends Model<
+  AccountAttributes,
+  AccountCreationAttributes
+> {
   public id!: number;
 
   // timestamps!
@@ -34,7 +56,7 @@ export class Account extends Model implements AccountAttributes {
 
   public fields!: Field[];
 
-  public readonly accountGroup?: AccountGroup[];
+  public readonly accountGroup?: AccountGroup;
   public readonly data?: FieldDatum[];
   public readonly tags?: Tag[];
   public readonly template?: Template;

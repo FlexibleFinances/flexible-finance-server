@@ -8,15 +8,26 @@ import {
   HasManyHasAssociationMixin,
   HasManySetAssociationsMixin,
   Model,
+  Optional,
 } from "sequelize";
 import Tag from "./Tag";
 import sequelize from "../index";
 
-interface ReportAttributes {
+export interface ReportAttributes {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   name: string;
+  tags?: Tag[];
 }
 
-export class Report extends Model implements ReportAttributes {
+export interface ReportCreationAttributes
+  extends Optional<ReportAttributes, "id">,
+    Optional<ReportAttributes, "createdAt">,
+    Optional<ReportAttributes, "updatedAt">,
+    Optional<ReportAttributes, "tags"> {}
+
+export class Report extends Model<ReportAttributes, ReportCreationAttributes> {
   public id!: number;
 
   // timestamps!

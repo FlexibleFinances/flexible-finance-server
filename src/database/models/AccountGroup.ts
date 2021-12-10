@@ -8,15 +8,29 @@ import {
   HasManyHasAssociationMixin,
   HasManySetAssociationsMixin,
   Model,
+  Optional,
 } from "sequelize";
 import { Account } from ".";
 import sequelize from "../index";
 
-interface AccountGroupAttributes {
+export interface AccountGroupAttributes {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   name: string;
+  accounts?: Account[];
 }
 
-export class AccountGroup extends Model implements AccountGroupAttributes {
+export interface AccountGroupCreationAttributes
+  extends Optional<AccountGroupAttributes, "id">,
+    Optional<AccountGroupAttributes, "createdAt">,
+    Optional<AccountGroupAttributes, "updatedAt">,
+    Optional<AccountGroupAttributes, "accounts"> {}
+
+export class AccountGroup extends Model<
+  AccountGroupAttributes,
+  AccountGroupCreationAttributes
+> {
   public id!: number;
 
   // timestamps!

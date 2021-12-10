@@ -8,6 +8,7 @@ import {
   HasManyHasAssociationMixin,
   HasManySetAssociationsMixin,
   Model,
+  Optional,
 } from "sequelize";
 import Account from "./Account";
 import Field from "./Field";
@@ -15,12 +16,29 @@ import Tag from "./Tag";
 import sequelize from "../index";
 import { templateTypeEnum } from "../../app/utils/enumerators";
 
-interface TemplateAttributes {
+export interface TemplateAttributes {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   name: string;
   type: templateTypeEnum;
+  accounts?: Account[];
+  fields?: Field[];
+  tags?: Tag[];
 }
 
-export class Template extends Model implements TemplateAttributes {
+export interface TemplateCreationAttributes
+  extends Optional<TemplateAttributes, "id">,
+    Optional<TemplateAttributes, "createdAt">,
+    Optional<TemplateAttributes, "updatedAt">,
+    Optional<TemplateAttributes, "accounts">,
+    Optional<TemplateAttributes, "fields">,
+    Optional<TemplateAttributes, "tags"> {}
+
+export class Template extends Model<
+  TemplateAttributes,
+  TemplateCreationAttributes
+> {
   public id!: number;
 
   // timestamps!

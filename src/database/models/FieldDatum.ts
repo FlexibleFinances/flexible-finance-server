@@ -5,6 +5,7 @@ import {
   BelongsToSetAssociationMixin,
   DataTypes,
   Model,
+  Optional,
 } from "sequelize";
 import Account from "./Account";
 import Entity from "./Entity";
@@ -12,14 +13,36 @@ import Field from "./Field";
 import Transaction from "./Transaction";
 import sequelize from "../index";
 
-interface FieldDatumAttributes {
+export interface FieldDatumAttributes {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   stringValue?: string;
   intValue?: number;
   dateValue?: Date;
   boolValue?: boolean;
+  field: Field;
+  account?: Account;
+  entity?: Entity;
+  transaction?: Transaction;
 }
 
-export class FieldDatum extends Model implements FieldDatumAttributes {
+export interface FieldDatumCreationAttributes
+  extends Optional<FieldDatumAttributes, "id">,
+    Optional<FieldDatumAttributes, "createdAt">,
+    Optional<FieldDatumAttributes, "updatedAt">,
+    Optional<FieldDatumAttributes, "stringValue">,
+    Optional<FieldDatumAttributes, "intValue">,
+    Optional<FieldDatumAttributes, "dateValue">,
+    Optional<FieldDatumAttributes, "boolValue">,
+    Optional<FieldDatumAttributes, "account">,
+    Optional<FieldDatumAttributes, "entity">,
+    Optional<FieldDatumAttributes, "transaction"> {}
+
+export class FieldDatum extends Model<
+  FieldDatumAttributes,
+  FieldDatumCreationAttributes
+> {
   public id!: number;
 
   // timestamps!
@@ -66,6 +89,13 @@ export class FieldDatum extends Model implements FieldDatumAttributes {
 
 FieldDatum.init(
   {
+    field: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Field",
+        key: "id",
+      },
+    },
     stringValue: {
       type: DataTypes.STRING,
     },

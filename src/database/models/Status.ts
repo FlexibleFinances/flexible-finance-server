@@ -1,11 +1,19 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../index";
 
-interface StatusAttributes {
+export interface StatusAttributes {
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   name: string;
 }
 
-export class Status extends Model implements StatusAttributes {
+export interface StatusCreationAttributes
+  extends Optional<StatusAttributes, "id">,
+    Optional<StatusAttributes, "createdAt">,
+    Optional<StatusAttributes, "updatedAt"> {}
+
+export class Status extends Model<StatusAttributes, StatusCreationAttributes> {
   public id!: number;
 
   // timestamps!
