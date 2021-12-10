@@ -3,11 +3,11 @@ import Account from "../../database/models/Account";
 import Template from "../../database/models/Template";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
+import { hasRequestParameters } from "../utils/helperFunctions";
 import { templateTypeEnum } from "../utils/enumerators";
 
 export function getAccount(req: express.Request, res: express.Response): void {
-  if (req.params.accountId === undefined) {
-    res.status(400).send({ message: "Missing a required parameter." });
+  if (!hasRequestParameters(req, res, { body: ["accountId"] })) {
     return;
   }
 
@@ -41,8 +41,7 @@ export function createAccount(
   req: express.Request,
   res: express.Response
 ): void {
-  if (req.body.name === undefined) {
-    res.status(400).send({ message: "Missing a required parameter." });
+  if (!hasRequestParameters(req, res, { body: ["name"] })) {
     return;
   }
 
@@ -81,8 +80,7 @@ export function updateAccount(
   req: express.Request,
   res: express.Response
 ): void {
-  if (req.params.accountId === undefined) {
-    res.status(400).send({ message: "Missing a required parameter." });
+  if (!hasRequestParameters(req, res, { params: ["accountId"] })) {
     return;
   }
 
