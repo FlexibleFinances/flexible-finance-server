@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../index";
-import templateTypeEnum from "../../app/utils/templateType.enum";
+import { templateTypeEnum } from "../../app/utils/enumerators";
 
 const queryInterface = sequelize.getQueryInterface();
 

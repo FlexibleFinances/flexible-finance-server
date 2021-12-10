@@ -20,10 +20,13 @@ export function setAccountRoutes(app: express.Express): void {
     [authJwt.verifyToken],
     controller.getAccount
   );
-  app.post(
+
+  app.post("/api-v1/account/", [authJwt.verifyToken], controller.createAccount);
+
+  app.put(
     "/api-v1/account/:accountId",
     [authJwt.verifyToken],
-    controller.createAccount
+    controller.updateAccount
   );
 
   app.get("/api-v1/accounts", [authJwt.verifyToken], controller.getAccounts);

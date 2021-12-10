@@ -13,7 +13,7 @@ import Account from "./Account";
 import Field from "./Field";
 import Tag from "./Tag";
 import sequelize from "../index";
-import templateTypeEnum from "../../app/utils/templateType.enum";
+import { templateTypeEnum } from "../../app/utils/enumerators";
 
 interface TemplateAttributes {
   name: string;

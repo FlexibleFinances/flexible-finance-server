@@ -1,8 +1,11 @@
+import sequelize, { Op } from "sequelize";
 import Account from "../../database/models/Account";
 import Template from "../../database/models/Template";
-import templateTypeEnum from "../utils/templateType.enum";
+import { defaultLimit } from "../utils/constants";
+import express from "express";
+import { templateTypeEnum } from "../utils/enumerators";
 
-export function getAccount(req: any, res: any): void {
+export function getAccount(req: express.Request, res: express.Response): void {
   if (req.params.accountId === undefined) {
     res.status(400).send({ message: "Missing a required parameter." });
     return;
@@ -34,7 +37,10 @@ export function getAccount(req: any, res: any): void {
     });
 }
 
-export async function createAccount(req: any, res: any): Promise<void> {
+export function createAccount(
+  req: express.Request,
+  res: express.Response
+): void {
   if (req.body.name === undefined) {
     res.status(400).send({ message: "Missing a required parameter." });
     return;
@@ -42,7 +48,7 @@ export async function createAccount(req: any, res: any): Promise<void> {
 
   let templateId: number;
   if (req.body.templateId === undefined || req.body.templateId === null) {
-    await Template.create({
+    void Template.create({
       name: (req.body.name as string) + " Custom Template",
       type: templateTypeEnum.Account,
     })
@@ -71,10 +77,78 @@ export async function createAccount(req: any, res: any): Promise<void> {
     });
 }
 
-export function getAccounts(req: any, res: any): void {
-  void Account.findAll({
+export function updateAccount(
+  req: express.Request,
+  res: express.Response
+): void {
+  if (req.params.accountId === undefined) {
+    res.status(400).send({ message: "Missing a required parameter." });
+    return;
+  }
+
+  void Account.findOne({
+    where: {
+      id: req.params.accountId,
+    },
     include: Template,
   })
+    .then((account) => {
+      if (account !== null) {
+        const updatePromises = [];
+        if (req.body.name !== undefined) {
+          account.name = req.body.name;
+        }
+        if (req.body.accountGroupId !== undefined) {
+          updatePromises.push(account.setAccountGroup(req.body.accountGroupId));
+        }
+        if (req.body.datumIds !== undefined) {
+          updatePromises.push(account.setData(req.body.datumIds));
+        }
+        if (req.body.tagIds !== undefined) {
+          updatePromises.push(account.setTags(req.body.tagIds));
+        }
+        if (req.body.templateId !== undefined) {
+          updatePromises.push(account.setTemplate(req.body.templateId));
+        }
+        Promise.all(updatePromises)
+          .then(() => {
+            res.status(200).send({
+              message: "Account updated.",
+              account: account,
+            });
+          })
+          .catch((err) => {
+            res.status(500).send({
+              message: err.message,
+            });
+          });
+      } else {
+        res.status(500).send({
+          message: "Account not found.",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
+    });
+}
+
+export function getAccounts(req: express.Request, res: express.Response): void {
+  const finderOptions: sequelize.FindOptions = {
+    include: Template,
+    offset: +(req.query.offset ?? 0),
+    limit: +(req.query.limit ?? defaultLimit),
+  };
+
+  if (req.query.roles !== undefined) {
+    finderOptions.where = {
+      roles: {
+        [Op.in]: req.query.roles as string[],
+      },
+    };
+  }
+
+  void Account.findAll(finderOptions)
     .then((accounts) => {
       const accountFieldPromises = accounts.map(async (account) => {
         return await account.template?.getFields();
