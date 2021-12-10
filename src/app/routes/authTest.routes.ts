@@ -1,8 +1,8 @@
-import * as controller from "../controllers/user.controller";
+import * as controller from "../controllers/authTest.controller";
 import { authJwt } from "../middleware/authJwt";
 import express from "express";
 
-export function setUserRoutes(app: express.Express): void {
+export function setAuthTestRoutes(app: express.Express): void {
   app.use(function (
     req: express.Request,
     res: express.Response,

@@ -29,11 +29,6 @@ EntityRequests:
         required: true
         schema:
           type: string
-      - name: entityId
-        in: path
-        required: true
-        schema:
-          type: integer
     requestBody:
       required: true
       content:

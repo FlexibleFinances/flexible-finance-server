@@ -29,11 +29,6 @@ AccountGroupRequests:
         required: true
         schema:
           type: string
-      - name: accountGroupId
-        in: path
-        required: true
-        schema:
-          type: integer
     requestBody:
       required: true
       content:

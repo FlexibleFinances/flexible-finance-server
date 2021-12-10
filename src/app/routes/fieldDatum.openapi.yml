@@ -29,11 +29,6 @@ FieldDatumRequests:
         required: true
         schema:
           type: string
-      - name: fieldDatumId
-        in: path
-        required: true
-        schema:
-          type: integer
     requestBody:
       required: true
       content:

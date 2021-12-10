@@ -27,11 +27,6 @@ TemplateRequests:
         required: true
         schema:
           type: string
-      - name: templateId
-        in: path
-        required: true
-        schema:
-          type: integer
     requestBody:
       required: true
       content:

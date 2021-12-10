@@ -3,14 +3,14 @@ import Template from "../../database/models/Template";
 import templateTypeEnum from "../utils/templateType.enum";
 
 export function getAccount(req: any, res: any): void {
-  if (req.body.id === undefined) {
+  if (req.params.accountId === undefined) {
     res.status(400).send({ message: "Missing a required parameter." });
     return;
   }
 
   void Account.findOne({
     where: {
-      id: req.body.accountId,
+      id: req.params.accountId,
     },
     include: Template,
   })
@@ -28,29 +28,6 @@ export function getAccount(req: any, res: any): void {
           message: "Account not found.",
         });
       }
-    })
-    .catch((err: Error) => {
-      res.status(500).send({ message: err.message });
-    });
-}
-export function getAccounts(req: any, res: any): void {
-  void Account.findAll({
-    include: Template,
-  })
-    .then((accounts) => {
-      const accountFieldPromises = accounts.map(async (account) => {
-        return await account.template?.getFields();
-      });
-      Promise.all(accountFieldPromises)
-        .then((accountsWithFields) => {
-          res.status(200).send({
-            message: "Accounts gotten.",
-            accounts: accountsWithFields,
-          });
-        })
-        .catch((err) => {
-          res.status(500).send({ message: err.message });
-        });
     })
     .catch((err: Error) => {
       res.status(500).send({ message: err.message });
@@ -90,6 +67,30 @@ export async function createAccount(req: any, res: any): Promise<void> {
       });
     })
     .catch((err) => {
+      res.status(500).send({ message: err.message });
+    });
+}
+
+export function getAccounts(req: any, res: any): void {
+  void Account.findAll({
+    include: Template,
+  })
+    .then((accounts) => {
+      const accountFieldPromises = accounts.map(async (account) => {
+        return await account.template?.getFields();
+      });
+      Promise.all(accountFieldPromises)
+        .then((accountsWithFields) => {
+          res.status(200).send({
+            message: "Accounts gotten.",
+            accounts: accountsWithFields,
+          });
+        })
+        .catch((err) => {
+          res.status(500).send({ message: err.message });
+        });
+    })
+    .catch((err: Error) => {
       res.status(500).send({ message: err.message });
     });
 }

@@ -1,0 +1,51 @@
+TestAll:
+  get:
+    responses:
+      200:
+        description: Returns sample content.
+        content:
+          text/plain:
+            schema:
+              type: string
+TestUser:
+  get:
+    parameters:
+      - name: x-access-token
+        in: header
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Returns sample content.
+        content:
+          text/plain:
+            schema:
+              type: string
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+TestAdmin:
+  get:
+    parameters:
+      - name: x-access-token
+        in: header
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Returns sample content.
+        content:
+          text/plain:
+            schema:
+              type: string
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"

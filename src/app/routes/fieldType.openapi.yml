@@ -29,11 +29,6 @@ FieldTypeRequests:
         required: true
         schema:
           type: string
-      - name: fieldTypeId
-        in: path
-        required: true
-        schema:
-          type: integer
     requestBody:
       required: true
       content:

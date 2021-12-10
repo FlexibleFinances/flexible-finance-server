@@ -29,11 +29,6 @@ TagRequests:
         required: true
         schema:
           type: string
-      - name: tagId
-        in: path
-        required: true
-        schema:
-          type: integer
     requestBody:
       required: true
       content:

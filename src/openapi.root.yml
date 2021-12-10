@@ -55,11 +55,11 @@ paths:
   /tags:
     $ref: ./app/routes/tag.openapi.yml#/TagsRequests
   /test/all:
-    $ref: ./app/routes/user.openapi.yml#/TestAll
+    $ref: ./app/routes/authTest.openapi.yml#/TestAll
   /test/user:
-    $ref: ./app/routes/user.openapi.yml#/TestUser
+    $ref: ./app/routes/authTest.openapi.yml#/TestUser
   /test/admin:
-    $ref: ./app/routes/user.openapi.yml#/TestAdmin
+    $ref: ./app/routes/authTest.openapi.yml#/TestAdmin
   /template/{templateId}:
     $ref: ./app/routes/template.openapi.yml#/TemplateRequests
   /templates:
@@ -68,6 +68,10 @@ paths:
     $ref: ./app/routes/transaction.openapi.yml#/TransactionRequests
   /transactions:
     $ref: ./app/routes/transaction.openapi.yml#/TransactionsRequests
+  /user/{userId}:
+    $ref: ./app/routes/user.openapi.yml#/UserRequests
+  /users:
+    $ref: ./app/routes/user.openapi.yml#/UserRequests
 components:
   responses:
     Message:
@@ -120,6 +124,10 @@ components:
       $ref: ./app/routes/transaction.openapi.yml#/TransactionResponse
     Transactions:
       $ref: ./app/routes/transaction.openapi.yml#/TransactionsResponse
+    User:
+      $ref: ./app/routes/user.openapi.yml#/UserResponse
+    Users:
+      $ref: ./app/routes/user.openapi.yml#/UsersResponse
   schemas:
     Message:
       type: object

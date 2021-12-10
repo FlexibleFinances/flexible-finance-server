@@ -15,13 +15,16 @@ export function setAccountRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/api/getAccount", [authJwt.verifyToken], controller.getAccount);
-
-  app.get("/api/getAccounts", [authJwt.verifyToken], controller.getAccounts);
-
+  app.get(
+    "/api-v1/account/:accountId",
+    [authJwt.verifyToken],
+    controller.getAccount
+  );
   app.post(
-    "/api/createAccount",
+    "/api-v1/account/:accountId",
     [authJwt.verifyToken],
     controller.createAccount
   );
+
+  app.get("/api-v1/accounts", [authJwt.verifyToken], controller.getAccounts);
 }

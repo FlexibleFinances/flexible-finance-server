@@ -27,11 +27,6 @@ StatusRequests:
         required: true
         schema:
           type: string
-      - name: statusId
-        in: path
-        required: true
-        schema:
-          type: integer
     requestBody:
       required: true
       content:

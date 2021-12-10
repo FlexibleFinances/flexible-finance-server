@@ -27,11 +27,6 @@ RoleRequests:
         required: true
         schema:
           type: string
-      - name: roleId
-        in: path
-        required: true
-        schema:
-          type: integer
     requestBody:
       required: true
       content:
