@@ -16,15 +16,15 @@ properties:
       - Account
       - Entity
       - Transaction
-  accounts:
+  accountIds:
     type: array
     items:
-      $ref: ../../openapi.root.yml#/components/schemas/Account
-  fields:
+      type: integer
+  fieldIds:
     type: array
     items:
-      $ref: ../../openapi.root.yml#/components/schemas/Field
-  tags:
+      type: integer
+  tagIds:
     type: array
     items:
-      $ref: ../../openapi.root.yml#/components/schemas/Tag
+      type: integer

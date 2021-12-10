@@ -15,3 +15,7 @@ properties:
   password:
     type: string
     format: password
+  roleIds:
+    type: array
+    items:
+      type: integer

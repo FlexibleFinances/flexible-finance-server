@@ -10,5 +10,7 @@ properties:
     format: date-time
   name:
     type: string
-  tags:
-    $ref: ../../openapi.root.yml#/components/schemas/Tag
+  tagIds:
+    type: array
+    items:
+      type: integer

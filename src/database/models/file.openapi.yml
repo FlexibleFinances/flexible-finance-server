@@ -10,5 +10,7 @@ properties:
     format: date-time
   name:
     type: string
-  transactions:
-    $ref: ../../openapi.root.yml#/components/schemas/Transaction
+  transactionIds:
+    type: array
+    items:
+      type: integer

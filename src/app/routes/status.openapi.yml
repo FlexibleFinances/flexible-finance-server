@@ -1,4 +1,4 @@
-TemplateRequests:
+StatusRequests:
   get:
     parameters:
       - name: x-access-token
@@ -6,14 +6,14 @@ TemplateRequests:
         required: true
         schema:
           type: string
-      - name: templateId
+      - name: statusId
         in: path
         required: true
         schema:
           type: integer
     responses:
       200:
-        $ref: "../../openapi.root.yml#/components/responses/Template"
+        $ref: "../../openapi.root.yml#/components/responses/Status"
       401:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       403:
@@ -27,7 +27,7 @@ TemplateRequests:
         required: true
         schema:
           type: string
-      - name: templateId
+      - name: statusId
         in: path
         required: true
         schema:
@@ -43,7 +43,7 @@ TemplateRequests:
                 type: string
     responses:
       200:
-        $ref: "../../openapi.root.yml#/components/responses/Template"
+        $ref: "../../openapi.root.yml#/components/responses/Status"
       400:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       401:
@@ -59,7 +59,7 @@ TemplateRequests:
         required: true
         schema:
           type: string
-      - name: templateId
+      - name: statusId
         in: path
         required: true
         schema:
@@ -69,10 +69,10 @@ TemplateRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Template"
+            $ref: "../../openapi.root.yml#/components/schemas/Status"
     responses:
       200:
-        $ref: "../../openapi.root.yml#/components/responses/Template"
+        $ref: "../../openapi.root.yml#/components/responses/Status"
       400:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       401:
@@ -81,7 +81,7 @@ TemplateRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       500:
         $ref: "../../openapi.root.yml#/components/responses/Message"
-TemplatesRequests:
+StatusesRequests:
   get:
     parameters:
       - name: x-access-token
@@ -97,25 +97,17 @@ TemplatesRequests:
         in: query
         schema:
           type: integer
-      - name: type
-        in: query
-        schema:
-          type: string
-          enum:
-            - Account
-            - Entity
-            - Transaction
     responses:
       200:
-        $ref: "../../openapi.root.yml#/components/responses/Templates"
+        $ref: "../../openapi.root.yml#/components/responses/Statuses"
       401:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       403:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       500:
         $ref: "../../openapi.root.yml#/components/responses/Message"
-TemplateResponse:
-  description: Returns the template's info.
+StatusResponse:
+  description: Returns the status's info.
   content:
     application/json:
       schema:
@@ -123,10 +115,10 @@ TemplateResponse:
         properties:
           message:
             type: string
-          template:
-            $ref: "../../openapi.root.yml#/components/schemas/Template"
-TemplatesResponse:
-  description: Returns the templates' info.
+          status:
+            $ref: "../../openapi.root.yml#/components/schemas/Status"
+StatusesResponse:
+  description: Returns the statuss' info.
   content:
     application/json:
       schema:
@@ -134,7 +126,7 @@ TemplatesResponse:
         properties:
           message:
             type: string
-          templates:
+          statuses:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Template"
+              $ref: "../../openapi.root.yml#/components/schemas/Status"

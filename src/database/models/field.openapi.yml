@@ -10,11 +10,13 @@ properties:
     format: date-time
   name:
     type: string
-  data:
+  datumIds:
     type: array
     items:
-      $ref: ../../openapi.root.yml#/components/schemas/FieldDatum
-  fieldType:
-    $ref: ../../openapi.root.yml#/components/schemas/FieldType
-  template:
-    $ref: ../../openapi.root.yml#/components/schemas/Template
+      type: integer
+  fieldTypeId:
+    type: integer
+  templateIds:
+    type: array
+    items:
+      type: integer

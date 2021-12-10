@@ -10,23 +10,19 @@ properties:
     format: date-time
   name:
     type: string
-  accounts:
+  accountIds:
     type: array
     items:
-      $ref: ../../openapi.root.yml#/components/schemas/Account
-  entities:
+      type: integer
+  entityIds:
     type: array
     items:
-      $ref: ../../openapi.root.yml#/components/schemas/Entity
-  reports:
+      type: integer
+  templateIds:
     type: array
     items:
-      $ref: ../../openapi.root.yml#/components/schemas/Report
-  templates:
+      type: integer
+  transactionIds:
     type: array
     items:
-      $ref: ../../openapi.root.yml#/components/schemas/Template
-  transactions:
-    type: array
-    items:
-      $ref: ../../openapi.root.yml#/components/schemas/Transaction
+      type: integer

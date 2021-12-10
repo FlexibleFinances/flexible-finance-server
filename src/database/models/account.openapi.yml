@@ -1,28 +1,20 @@
 type: object
 properties:
-  id:
-    type: integer
-  createdAt:
-    type: string
-    format: date-time
-  updatedAt:
-    type: string
-    format: date-time
   name:
     type: string
-  fields:
+  fieldIds:
     type: array
     items:
-      $ref: ../../openapi.root.yml#/components/schemas/Field
-  accountGroup:
-    $ref: ../../openapi.root.yml#/components/schemas/AccountGroup
-  data:
+      type: integer
+  accountGroupId:
+    type: integer
+  datumIds:
     type: array
     items:
-      $ref: ../../openapi.root.yml#/components/schemas/FieldDatum
-  tags:
+      type: integer
+  tagIds:
     type: array
     items:
-      $ref: ../../openapi.root.yml#/components/schemas/Tag
-  template:
-    $ref: ../../openapi.root.yml#/components/schemas/Template
+      type: integer
+  templateId:
+    type: integer

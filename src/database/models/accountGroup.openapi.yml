@@ -10,3 +10,7 @@ properties:
     format: date-time
   name:
     type: string
+  accountIds:
+    type: array
+    items:
+      type: integer

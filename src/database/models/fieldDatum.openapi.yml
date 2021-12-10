@@ -8,6 +8,8 @@ properties:
   updatedAt:
     type: string
     format: date-time
+  fieldId:
+    type: integer
   stringValue:
     type: string
   intValue:
@@ -17,11 +19,9 @@ properties:
     format: date-time
   boolValue:
     type: boolean
-  account:
-    $ref: ../../openapi.root.yml#/components/schemas/Account
-  field:
-    $ref: ../../openapi.root.yml#/components/schemas/Field
-  entity:
-    $ref: ../../openapi.root.yml#/components/schemas/Entity
-  transaction:
-    $ref: ../../openapi.root.yml#/components/schemas/Transaction
+  accountId:
+    type: integer
+  entityId:
+    type: integer
+  transactionId:
+    type: integer
