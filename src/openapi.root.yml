@@ -68,6 +68,10 @@ paths:
     $ref: ./app/routes/transaction.openapi.yml#/TransactionRequests
   /transactions:
     $ref: ./app/routes/transaction.openapi.yml#/TransactionsRequests
+  /type/{typeId}:
+    $ref: ./app/routes/type.openapi.yml#/TypeRequests
+  /types:
+    $ref: ./app/routes/type.openapi.yml#/TypesRequests
   /user/{userId}:
     $ref: ./app/routes/user.openapi.yml#/UserRequests
   /users:
@@ -124,6 +128,10 @@ components:
       $ref: ./app/routes/transaction.openapi.yml#/TransactionResponse
     Transactions:
       $ref: ./app/routes/transaction.openapi.yml#/TransactionsResponse
+    Type:
+      $ref: ./app/routes/type.openapi.yml#/TypeResponse
+    Types:
+      $ref: ./app/routes/type.openapi.yml#/TypesResponse
     User:
       $ref: ./app/routes/user.openapi.yml#/UserResponse
     Users:
@@ -156,6 +164,8 @@ components:
       $ref: ./database/models/template.openapi.yml
     Transaction:
       $ref: ./database/models/transaction.openapi.yml
+    Type:
+      $ref: ./database/models/type.openapi.yml
     User:
       $ref: ./database/models/user.openapi.yml
 #  parameters:

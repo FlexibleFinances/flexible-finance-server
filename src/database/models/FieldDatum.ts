@@ -39,6 +39,17 @@ export interface FieldDatumCreationAttributes
     Optional<FieldDatumAttributes, "entity">,
     Optional<FieldDatumAttributes, "transaction"> {}
 
+export interface FieldDatumUpdateAttributes {
+  stringValue?: string;
+  intValue?: number;
+  dateValue?: Date;
+  boolValue?: boolean;
+  field?: Field;
+  account?: Account;
+  entity?: Entity;
+  transaction?: Transaction;
+}
+
 export class FieldDatum extends Model<
   FieldDatumAttributes,
   FieldDatumCreationAttributes

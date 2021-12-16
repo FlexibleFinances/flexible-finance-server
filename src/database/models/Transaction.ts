@@ -33,6 +33,13 @@ export interface TransactionCreationAttributes
     Optional<TransactionAttributes, "files">,
     Optional<TransactionAttributes, "tags"> {}
 
+export interface TransactionUpdateAttributes {
+  name?: string;
+  data?: FieldDatum[];
+  files?: File[];
+  tags?: Tag[];
+}
+
 export class Transaction extends Model<
   TransactionAttributes,
   TransactionCreationAttributes

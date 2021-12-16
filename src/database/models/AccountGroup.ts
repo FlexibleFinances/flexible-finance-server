@@ -27,6 +27,11 @@ export interface AccountGroupCreationAttributes
     Optional<AccountGroupAttributes, "updatedAt">,
     Optional<AccountGroupAttributes, "accounts"> {}
 
+export interface AccountGroupUpdateAttributes {
+  name?: string;
+  accounts?: Account[];
+}
+
 export class AccountGroup extends Model<
   AccountGroupAttributes,
   AccountGroupCreationAttributes
@@ -48,11 +53,11 @@ export class AccountGroup extends Model<
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  public getAccount!: HasManyGetAssociationsMixin<Account>;
-  public setAccount!: HasManySetAssociationsMixin<Account, number>;
-  public addAccounts!: HasManyAddAssociationMixin<Account, number>;
-  public hasAccounts!: HasManyHasAssociationMixin<Account, number>;
-  public countAccount!: HasManyCountAssociationsMixin;
+  public getAccounts!: HasManyGetAssociationsMixin<Account>;
+  public setAccounts!: HasManySetAssociationsMixin<Account, number>;
+  public addAccount!: HasManyAddAssociationMixin<Account, number>;
+  public hasAccount!: HasManyHasAssociationMixin<Account, number>;
+  public countAccounts!: HasManyCountAssociationsMixin;
   public createAccounts!: HasManyCreateAssociationMixin<Account>;
 }
 

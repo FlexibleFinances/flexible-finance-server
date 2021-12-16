@@ -30,6 +30,12 @@ export interface EntityCreationAttributes
     Optional<EntityAttributes, "data">,
     Optional<EntityAttributes, "tags"> {}
 
+export interface EntityUpdateAttributes {
+  name?: string;
+  data?: FieldDatum[];
+  tags?: Tag[];
+}
+
 export class Entity extends Model<EntityAttributes, EntityCreationAttributes> {
   public id!: number;
 

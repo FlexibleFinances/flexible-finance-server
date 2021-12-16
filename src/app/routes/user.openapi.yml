@@ -32,10 +32,7 @@ UserRequests:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              name:
-                type: string
+            $ref: "../../openapi.root.yml#/components/schemas/User"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/User"
@@ -92,6 +89,20 @@ UsersRequests:
         in: query
         schema:
           type: integer
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: email
+        in: query
+        schema:
+          type: string
+      - name: roleIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Users"

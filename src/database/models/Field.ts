@@ -23,9 +23,9 @@ export interface FieldAttributes {
   createdAt?: Date;
   updatedAt?: Date;
   name: string;
+  fieldType: FieldType;
   data?: FieldDatum[];
   templates?: Template[];
-  fieldType?: FieldType;
 }
 
 export interface FieldCreationAttributes
@@ -33,8 +33,14 @@ export interface FieldCreationAttributes
     Optional<FieldAttributes, "createdAt">,
     Optional<FieldAttributes, "updatedAt">,
     Optional<FieldAttributes, "data">,
-    Optional<FieldAttributes, "templates">,
-    Optional<FieldAttributes, "fieldType"> {}
+    Optional<FieldAttributes, "templates"> {}
+
+export interface FieldUpdateAttributes {
+  name?: string;
+  fieldType?: FieldType;
+  data?: FieldDatum[];
+  templates?: Template[];
+}
 
 export class Field extends Model<FieldAttributes, FieldCreationAttributes> {
   public id!: number;
@@ -45,9 +51,10 @@ export class Field extends Model<FieldAttributes, FieldCreationAttributes> {
 
   public name!: string;
 
+  public readonly fieldType!: FieldType;
+
   public readonly data?: FieldDatum[];
   public readonly templates?: Template[];
-  public readonly fieldType?: FieldType;
 
   public static override associations: {
     data: Association<FieldDatum, Field>;
@@ -83,6 +90,13 @@ Field.init(
       type: DataTypes.STRING(128),
       allowNull: false,
       unique: true,
+    },
+    fieldType: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "FieldType",
+        key: "id",
+      },
     },
   },
   {

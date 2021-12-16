@@ -91,6 +91,16 @@ AccountGroupsRequests:
         in: query
         schema:
           type: integer
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: accountIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/AccountGroups"

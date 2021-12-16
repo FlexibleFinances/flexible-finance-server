@@ -27,6 +27,11 @@ export interface FieldTypeCreationAttributes
     Optional<FieldTypeAttributes, "updatedAt">,
     Optional<FieldTypeAttributes, "fields"> {}
 
+export interface FieldTypeUpdateAttributes {
+  name?: string;
+  fields?: Field[];
+}
+
 export class FieldType extends Model<
   FieldTypeAttributes,
   FieldTypeCreationAttributes

@@ -13,6 +13,10 @@ export interface StatusCreationAttributes
     Optional<StatusAttributes, "createdAt">,
     Optional<StatusAttributes, "updatedAt"> {}
 
+export interface StatusUpdateAttributes {
+  name?: string;
+}
+
 export class Status extends Model<StatusAttributes, StatusCreationAttributes> {
   public id!: number;
 

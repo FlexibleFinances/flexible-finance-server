@@ -91,10 +91,26 @@ FieldsRequests:
         in: query
         schema:
           type: integer
-      - name: fieldTypeId
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: fieldTypeIds
         in: query
         schema:
           type: integer
+      - name: datumIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+      - name: templateIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Fields"

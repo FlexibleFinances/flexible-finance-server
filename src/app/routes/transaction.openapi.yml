@@ -91,6 +91,28 @@ TransactionsRequests:
         in: query
         schema:
           type: integer
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: datumIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+      - name: fileIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+      - name: tagIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transactions"

@@ -13,6 +13,10 @@ export interface TypeCreationAttributes
     Optional<TypeAttributes, "createdAt">,
     Optional<TypeAttributes, "updatedAt"> {}
 
+export interface TypeUpdateAttributes {
+  name?: string;
+}
+
 export class Type extends Model<TypeAttributes, TypeCreationAttributes> {
   public id!: number;
 

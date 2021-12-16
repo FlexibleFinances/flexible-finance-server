@@ -15,12 +15,12 @@ export function setAuthTestRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/api/test/all", controller.allAccess);
+  app.get("/api-v1/test/all", controller.allAccess);
 
-  app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
+  app.get("/api-v1/test/user", [authJwt.verifyToken], controller.userBoard);
 
   app.get(
-    "/api/test/admin",
+    "/api-v1/test/admin",
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
   );

@@ -91,6 +91,40 @@ TagsRequests:
         in: query
         schema:
           type: integer
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: accountIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+      - name: entityIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+      - name: reportIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+      - name: templateIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+      - name: transactionIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Tags"

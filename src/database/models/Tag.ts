@@ -39,6 +39,15 @@ export interface TagCreationAttributes
     Optional<TagAttributes, "templates">,
     Optional<TagAttributes, "transactions"> {}
 
+export interface TagUpdateAttributes {
+  name?: string;
+  accounts?: Account[];
+  entities?: Entity[];
+  reports?: Report[];
+  templates?: Template[];
+  transactions?: Transaction[];
+}
+
 export class Tag extends Model<TagAttributes, TagCreationAttributes> {
   public id!: number;
 

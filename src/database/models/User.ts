@@ -29,6 +29,13 @@ export interface UserCreationAttributes
     Optional<UserAttributes, "updatedAt">,
     Optional<UserAttributes, "roles"> {}
 
+export interface UserUpdateAttributes {
+  username?: string;
+  email?: string;
+  password?: string;
+  roles?: Role[];
+}
+
 export class User extends Model<UserAttributes, UserCreationAttributes> {
   public id!: number;
 

@@ -1,8 +1,8 @@
-import * as controller from "../controllers/template.controller";
+import * as controller from "../controllers/fieldType.controller";
 import { authJwt } from "../middleware/authJwt";
 import express from "express";
 
-export function setTemplateRoutes(app: express.Express): void {
+export function setFieldTypeRoutes(app: express.Express): void {
   app.use(function (
     req: express.Request,
     res: express.Response,
@@ -16,22 +16,26 @@ export function setTemplateRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/api-v1/template/:templateId",
+    "/api-v1/fieldType/:fieldTypeId",
     [authJwt.verifyToken],
-    controller.getTemplate
+    controller.getFieldType
   );
 
   app.post(
-    "/api-v1/template",
+    "/api-v1/fieldType",
     [authJwt.verifyToken],
-    controller.createTemplate
+    controller.createFieldType
   );
 
   app.put(
-    "/api-v1/template/:templateId",
+    "/api-v1/fieldType/:fieldTypeId",
     [authJwt.verifyToken],
-    controller.updateTemplate
+    controller.updateFieldType
   );
 
-  app.get("/api-v1/templates", [authJwt.verifyToken], controller.getTemplates);
+  app.get(
+    "/api-v1/fieldTypes",
+    [authJwt.verifyToken],
+    controller.getFieldTypes
+  );
 }

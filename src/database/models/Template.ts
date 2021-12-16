@@ -35,6 +35,14 @@ export interface TemplateCreationAttributes
     Optional<TemplateAttributes, "fields">,
     Optional<TemplateAttributes, "tags"> {}
 
+export interface TemplateUpdateAttributes {
+  name?: string;
+  type?: templateTypeEnum;
+  accounts?: Account[];
+  fields?: Field[];
+  tags?: Tag[];
+}
+
 export class Template extends Model<
   TemplateAttributes,
   TemplateCreationAttributes

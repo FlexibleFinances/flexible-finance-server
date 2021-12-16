@@ -27,6 +27,11 @@ export interface RoleCreationAttributes
     Optional<RoleAttributes, "updatedAt">,
     Optional<RoleAttributes, "users"> {}
 
+export interface RoleUpdateAttributes {
+  name?: string;
+  users?: User[];
+}
+
 export class Role extends Model<RoleAttributes, RoleCreationAttributes> {
   public id!: number;
 

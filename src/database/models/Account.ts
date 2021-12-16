@@ -12,6 +12,7 @@ import {
   HasManySetAssociationsMixin,
   Model,
   Optional,
+  WhereAttributeHash,
 } from "sequelize";
 import AccountGroup from "./AccountGroup";
 import Field from "./Field";
@@ -25,11 +26,11 @@ export interface AccountAttributes {
   createdAt?: Date;
   updatedAt?: Date;
   name: string;
-  fields?: Field[];
-  accountGroup?: AccountGroup;
-  data?: FieldDatum[];
-  tags?: Tag[];
-  template?: Template;
+  fields?: Field[] | number[];
+  accountGroup?: AccountGroup | number;
+  data?: FieldDatum[] | number[];
+  tags?: Tag[] | number[];
+  template: Template | number;
 }
 
 export interface AccountCreationAttributes
@@ -39,8 +40,16 @@ export interface AccountCreationAttributes
     Optional<AccountAttributes, "fields">,
     Optional<AccountAttributes, "accountGroup">,
     Optional<AccountAttributes, "data">,
-    Optional<AccountAttributes, "tags">,
-    Optional<AccountAttributes, "template"> {}
+    Optional<AccountAttributes, "tags"> {}
+
+export interface AccountUpdateAttributes {
+  name?: string;
+  fields?: Field[] | number[];
+  accountGroup?: AccountGroup | number;
+  data?: FieldDatum[] | number[];
+  tags?: Tag[] | number[];
+  template?: Template | number;
+}
 
 export class Account extends Model<
   AccountAttributes,
@@ -101,6 +110,13 @@ Account.init(
       allowNull: false,
       unique: true,
     },
+    template: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Template",
+        key: "id",
+      },
+    },
   },
   {
     sequelize,
@@ -117,3 +133,7 @@ FieldDatum.belongsTo(Account);
 Account.hasMany(FieldDatum);
 
 export default Account;
+
+export interface AccountWhereAttributes extends WhereAttributeHash {
+  accountGroup?: number;
+}

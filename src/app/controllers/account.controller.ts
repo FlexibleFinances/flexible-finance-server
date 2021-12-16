@@ -1,10 +1,12 @@
+import Account, {
+  AccountCreationAttributes,
+  AccountUpdateAttributes,
+} from "../../database/models/Account";
 import sequelize, { Op } from "sequelize";
-import Account from "../../database/models/Account";
 import Template from "../../database/models/Template";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
-import { templateTypeEnum } from "../utils/enumerators";
 
 export function getAccount(req: express.Request, res: express.Response): void {
   if (!hasRequestParameters(req, res, { body: ["accountId"] })) {
@@ -18,19 +20,20 @@ export function getAccount(req: express.Request, res: express.Response): void {
     include: Template,
   })
     .then((account) => {
-      if (account !== null) {
-        account?.template?.getFields().then((fields) => {
-          account.fields = fields ?? [];
-          res.status(200).send({
-            message: "Account gotten.",
-            account: account,
-          });
-        });
-      } else {
+      if (account === null) {
         res.status(500).send({
           message: "Account not found.",
         });
+        return;
       }
+
+      account?.template?.getFields().then((fields) => {
+        account.fields = fields ?? [];
+        res.status(200).send({
+          message: "Account gotten.",
+          account: account,
+        });
+      });
     })
     .catch((err: Error) => {
       res.status(500).send({ message: err.message });
@@ -41,35 +44,32 @@ export function createAccount(
   req: express.Request,
   res: express.Response
 ): void {
-  if (!hasRequestParameters(req, res, { body: ["name"] })) {
+  if (!hasRequestParameters(req, res, { body: ["name", "templateId"] })) {
     return;
   }
 
-  let templateId: number;
-  if (req.body.templateId === undefined || req.body.templateId === null) {
-    void Template.create({
-      name: (req.body.name as string) + " Custom Template",
-      type: templateTypeEnum.Account,
-    })
-      .then((template) => {
-        templateId = template.id;
-      })
-      .catch((err) => {
-        res.status(500).send({ message: err.message });
-      });
-  } else {
-    templateId = req.body.templateId;
+  const createOptions: AccountCreationAttributes = {
+    name: req.body.name,
+    template: req.body.templateId,
+  };
+  if (req.body.fieldIds !== undefined) {
+    createOptions.fields = req.body.fieldIds;
+  }
+  if (req.body.accountGroupId !== undefined) {
+    createOptions.accountGroup = req.body.accountGroupId;
+  }
+  if (req.body.datumIds !== undefined) {
+    createOptions.data = req.body.datumIds;
+  }
+  if (req.body.tagIds !== undefined) {
+    createOptions.tags = req.body.tagIds;
   }
 
-  Account.create({
-    name: req.body.name,
-  })
+  Account.create(createOptions)
     .then((newAccount) => {
-      void newAccount.setTemplate(templateId).then(() => {
-        res
-          .status(200)
-          .send({ message: "Account created.", account: newAccount });
-      });
+      res
+        .status(200)
+        .send({ message: "Account created.", account: newAccount });
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });
@@ -91,40 +91,48 @@ export function updateAccount(
     include: Template,
   })
     .then((account) => {
-      if (account !== null) {
-        const updatePromises = [];
-        if (req.body.name !== undefined) {
-          account.name = req.body.name;
-        }
-        if (req.body.accountGroupId !== undefined) {
-          updatePromises.push(account.setAccountGroup(req.body.accountGroupId));
-        }
-        if (req.body.datumIds !== undefined) {
-          updatePromises.push(account.setData(req.body.datumIds));
-        }
-        if (req.body.tagIds !== undefined) {
-          updatePromises.push(account.setTags(req.body.tagIds));
-        }
-        if (req.body.templateId !== undefined) {
-          updatePromises.push(account.setTemplate(req.body.templateId));
-        }
-        Promise.all(updatePromises)
-          .then(() => {
-            res.status(200).send({
-              message: "Account updated.",
-              account: account,
-            });
-          })
-          .catch((err) => {
-            res.status(500).send({
-              message: err.message,
-            });
-          });
-      } else {
+      if (account === null) {
         res.status(500).send({
           message: "Account not found.",
         });
+        return;
       }
+      const updateOptions: AccountUpdateAttributes = {};
+      if (req.body.name !== undefined) {
+        updateOptions.name = req.body.name;
+      }
+      if (req.body.accountGroupId !== undefined) {
+        updateOptions.accountGroup = req.body.accountGroupId;
+      }
+      if (req.body.datumIds !== undefined) {
+        updateOptions.data = req.body.datumIds;
+      }
+      if (req.body.tagIds !== undefined) {
+        updateOptions.tags = req.body.tagIds;
+      }
+      if (req.body.templateId !== undefined) {
+        updateOptions.template = req.body.templateId;
+      }
+      if (updateOptions === {}) {
+        res.status(400).send({
+          message: "No Account attributes provided.",
+        });
+        return;
+      }
+
+      account
+        .update(updateOptions)
+        .then(() => {
+          res.status(200).send({
+            message: "Account updated.",
+            account: account,
+          });
+        })
+        .catch((err) => {
+          res.status(500).send({
+            message: err.message,
+          });
+        });
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });
@@ -132,21 +140,42 @@ export function updateAccount(
 }
 
 export function getAccounts(req: express.Request, res: express.Response): void {
-  const finderOptions: sequelize.FindOptions = {
-    include: Template,
-    offset: +(req.query.offset ?? 0),
-    limit: +(req.query.limit ?? defaultLimit),
-  };
-
-  if (req.query.roles !== undefined) {
-    finderOptions.where = {
-      roles: {
-        [Op.in]: req.query.roles as string[],
-      },
+  const whereOptions: sequelize.WhereOptions = {};
+  if (req.query.name !== undefined) {
+    whereOptions.name = {
+      [Op.iLike]: req.body.name,
+    };
+  }
+  if (req.query.accountGroupIds !== undefined) {
+    whereOptions.accountGroup = {
+      [Op.in]: (req.query.accountGroupIds as string[]).map((x) => {
+        return +x;
+      }),
+    };
+  }
+  if (req.query.tagIds !== undefined) {
+    whereOptions.tags = {
+      [Op.in]: (req.query.tagIds as string[]).map((x) => {
+        return +x;
+      }),
+    };
+  }
+  if (req.query.templateIds !== undefined) {
+    whereOptions.template = {
+      [Op.in]: (req.query.templateIds as string[]).map((x) => {
+        return +x;
+      }),
     };
   }
 
-  void Account.findAll(finderOptions)
+  const findOptions: sequelize.FindOptions = {
+    include: Template,
+    offset: +(req.query.offset ?? 0),
+    limit: +(req.query.limit ?? defaultLimit),
+    where: whereOptions,
+  };
+
+  void Account.findAll(findOptions)
     .then((accounts) => {
       const accountFieldPromises = accounts.map(async (account) => {
         return await account.template?.getFields();

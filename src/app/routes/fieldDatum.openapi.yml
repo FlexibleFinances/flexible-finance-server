@@ -91,10 +91,50 @@ FieldDataRequests:
         in: query
         schema:
           type: integer
-      - name: fieldId
+      - name: stringValue
         in: query
         schema:
-          type: integer
+          type: string
+      - name: intValueGT
+        in: query
+        schema:
+          type: number
+      - name: intValueLT
+        in: query
+        schema:
+          type: number
+      - name: dateValue
+        in: query
+        schema:
+          type: string
+      - name: boolValue
+        in: query
+        schema:
+          type: boolean
+      - name: fieldIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+      - name: accountIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+      - name: entityIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+      - name: transactionIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldData"

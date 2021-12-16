@@ -1,34 +1,37 @@
 import {
-  Template,
-  TemplateCreationAttributes,
-  TemplateUpdateAttributes,
+  Transaction,
+  TransactionCreationAttributes,
+  TransactionUpdateAttributes,
 } from "../../database/models";
 import sequelize, { Op } from "sequelize";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
 
-export function getTemplate(req: express.Request, res: express.Response): void {
-  if (!hasRequestParameters(req, res, { body: ["templateId"] })) {
+export function getTransaction(
+  req: express.Request,
+  res: express.Response
+): void {
+  if (!hasRequestParameters(req, res, { body: ["transactionId"] })) {
     return;
   }
 
-  void Template.findOne({
+  void Transaction.findOne({
     where: {
-      id: req.params.templateId,
+      id: req.params.transactionId,
     },
   })
-    .then((template) => {
-      if (template === null) {
+    .then((transaction) => {
+      if (transaction === null) {
         res.status(500).send({
-          message: "Template not found.",
+          message: "Transaction not found.",
         });
         return;
       }
 
       res.status(200).send({
-        message: "Template gotten.",
-        template: template,
+        message: "Transaction gotten.",
+        transaction: transaction,
       });
     })
     .catch((err: Error) => {
@@ -36,88 +39,84 @@ export function getTemplate(req: express.Request, res: express.Response): void {
     });
 }
 
-export function createTemplate(
+export function createTransaction(
   req: express.Request,
   res: express.Response
 ): void {
   if (!hasRequestParameters(req, res, { body: ["name", "typeId"] })) {
     return;
   }
-  const createOptions: TemplateCreationAttributes = {
+  const createOptions: TransactionCreationAttributes = {
     name: req.body.name,
-    type: req.body.typeId,
   };
 
-  if (req.body.accountIds !== undefined) {
-    createOptions.accounts = req.body.accountIds;
+  if (req.body.datumIds !== undefined) {
+    createOptions.data = req.body.datumIds;
   }
-  if (req.body.fieldIds !== undefined) {
-    createOptions.fields = req.body.fieldIds;
+  if (req.body.fileIds !== undefined) {
+    createOptions.files = req.body.fileIds;
   }
   if (req.body.tagIds !== undefined) {
     createOptions.tags = req.body.tagIds;
   }
 
-  Template.create(createOptions)
-    .then((newTemplate) => {
+  Transaction.create(createOptions)
+    .then((newTransaction) => {
       res
         .status(200)
-        .send({ message: "Template created.", template: newTemplate });
+        .send({ message: "Transaction created.", transaction: newTransaction });
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });
     });
 }
 
-export function updateTemplate(
+export function updateTransaction(
   req: express.Request,
   res: express.Response
 ): void {
-  if (!hasRequestParameters(req, res, { params: ["templateId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["transactionId"] })) {
     return;
   }
 
-  void Template.findOne({
+  void Transaction.findOne({
     where: {
-      id: req.params.templateId,
+      id: req.params.transactionId,
     },
   })
-    .then((template) => {
-      if (template === null) {
+    .then((transaction) => {
+      if (transaction === null) {
         res.status(500).send({
-          message: "Template not found.",
+          message: "Transaction not found.",
         });
         return;
       }
-      const updateOptions: TemplateUpdateAttributes = {};
+      const updateOptions: TransactionUpdateAttributes = {};
       if (req.body.name !== undefined) {
         updateOptions.name = req.body.name;
       }
-      if (req.body.typeId !== undefined) {
-        updateOptions.type = req.body.typeId;
+      if (req.body.datumIds !== undefined) {
+        updateOptions.data = req.body.datumIds;
       }
-      if (req.body.accountIds !== undefined) {
-        updateOptions.accounts = req.body.accountIds;
-      }
-      if (req.body.fieldIds !== undefined) {
-        updateOptions.fields = req.body.fieldIds;
+      if (req.body.fileIds !== undefined) {
+        updateOptions.files = req.body.fileIds;
       }
       if (req.body.tagIds !== undefined) {
         updateOptions.tags = req.body.tagIds;
       }
       if (updateOptions === {}) {
         res.status(400).send({
-          message: "No Template attributes provided.",
+          message: "No Transaction attributes provided.",
         });
         return;
       }
 
-      template
+      transaction
         .update(updateOptions)
         .then(() => {
           res.status(200).send({
-            message: "Template updated.",
-            template: template,
+            message: "Transaction updated.",
+            transaction: transaction,
           });
         })
         .catch((err) => {
@@ -131,7 +130,7 @@ export function updateTemplate(
     });
 }
 
-export function getTemplates(
+export function getTransactions(
   req: express.Request,
   res: express.Response
 ): void {
@@ -141,19 +140,16 @@ export function getTemplates(
       [Op.iLike]: req.body.name,
     };
   }
-  if (req.query.type !== undefined) {
-    whereOptions.type = req.query.type;
-  }
-  if (req.query.accountIds !== undefined) {
-    whereOptions.accounts = {
-      [Op.in]: (req.query.accountIds as string[]).map((x) => {
+  if (req.query.datumIds !== undefined) {
+    whereOptions.data = {
+      [Op.in]: (req.query.datumIds as string[]).map((x) => {
         return +x;
       }),
     };
   }
-  if (req.query.fieldIds !== undefined) {
-    whereOptions.fields = {
-      [Op.in]: (req.query.fieldIds as string[]).map((x) => {
+  if (req.query.fileIds !== undefined) {
+    whereOptions.files = {
+      [Op.in]: (req.query.fileIds as string[]).map((x) => {
         return +x;
       }),
     };
@@ -172,11 +168,11 @@ export function getTemplates(
     where: whereOptions,
   };
 
-  void Template.findAll(findOptions)
-    .then((templates) => {
+  void Transaction.findAll(findOptions)
+    .then((transactions) => {
       res.status(200).send({
-        message: "Templates gotten.",
-        templates: templates,
+        message: "Transactions gotten.",
+        transactions: transactions,
       });
     })
     .catch((err: Error) => {

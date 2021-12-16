@@ -32,10 +32,7 @@ RoleRequests:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              name:
-                type: string
+            $ref: "../../openapi.root.yml#/components/schemas/Role"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Role"
@@ -92,6 +89,16 @@ RolesRequests:
         in: query
         schema:
           type: integer
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: userIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Roles"
