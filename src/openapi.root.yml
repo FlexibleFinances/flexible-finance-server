@@ -168,5 +168,11 @@ components:
       $ref: ./database/models/type.openapi.yml
     User:
       $ref: ./database/models/user.openapi.yml
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 #  parameters:
-
+security:
+  - bearerAuth: []

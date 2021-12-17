@@ -32,7 +32,7 @@ function verifyToken(
           message: "Unauthorized!",
         });
       }
-      req.body.userId = decoded.id;
+      req.body.tokenUserId = decoded.id;
       next();
     }
   );
@@ -43,14 +43,14 @@ function isAdmin(
   res: express.Response,
   next: express.NextFunction
 ): void {
-  if (req.body.userId === undefined) {
+  if (req.body.tokenUserId === undefined) {
     res
       .status(500)
       .send({ message: "Did not decode access token into user ID." });
     return;
   }
 
-  void User.findByPk(req.body.userId).then((user) => {
+  void User.findByPk(req.body.tokenUserId).then((user) => {
     user?.getRoles().then((roles) => {
       for (let i = 0; i < roles.length; i++) {
         if (roles[i].name === "admin") {
@@ -66,7 +66,28 @@ function isAdmin(
   });
 }
 
+function isSelf(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+): void {
+  if (req.body.tokenUserId === undefined) {
+    res
+      .status(500)
+      .send({ message: "Did not decode access token into user ID." });
+    return;
+  }
+
+  if (req.body.tokenUserId === req.params.userId) {
+    next();
+    return;
+  }
+
+  isAdmin(req, res, next);
+}
+
 export const authJwt = {
   verifyToken: verifyToken,
   isAdmin: isAdmin,
+  isSelf: isSelf,
 };

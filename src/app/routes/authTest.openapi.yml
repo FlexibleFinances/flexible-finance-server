@@ -1,5 +1,6 @@
 TestAll:
   get:
+    security: []
     responses:
       200:
         description: Returns sample content.
