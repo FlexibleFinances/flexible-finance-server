@@ -1,27 +1,4 @@
 EntityRequests:
-  get:
-    parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: entityId
-        in: path
-        required: true
-        schema:
-          type: integer
-    responses:
-      200:
-        $ref: "../../openapi.root.yml#/components/responses/Entity"
-      400:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      401:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      403:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      500:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     parameters:
       - name: x-access-token
@@ -35,6 +12,30 @@ EntityRequests:
         application/json:
           schema:
             $ref: "../../openapi.root.yml#/components/schemas/Entity"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/Entity"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+EntityIdRequests:
+  get:
+    parameters:
+      - name: x-access-token
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: entityId
+        in: path
+        required: true
+        schema:
+          type: integer
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Entity"

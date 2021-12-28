@@ -1,25 +1,4 @@
 StatusRequests:
-  get:
-    parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: statusId
-        in: path
-        required: true
-        schema:
-          type: integer
-    responses:
-      200:
-        $ref: "../../openapi.root.yml#/components/responses/Status"
-      401:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      403:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      500:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     parameters:
       - name: x-access-token
@@ -41,6 +20,28 @@ StatusRequests:
         $ref: "../../openapi.root.yml#/components/responses/Status"
       400:
         $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+StatusIdRequests:
+  get:
+    parameters:
+      - name: x-access-token
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: statusId
+        in: path
+        required: true
+        schema:
+          type: integer
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/Status"
       401:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       403:

@@ -1,27 +1,4 @@
 AccountRequests:
-  get:
-    parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: accountId
-        in: path
-        required: true
-        schema:
-          type: integer
-    responses:
-      200:
-        $ref: "../../openapi.root.yml#/components/responses/Account"
-      400:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      401:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      403:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      500:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     parameters:
       - name: x-access-token
@@ -35,6 +12,30 @@ AccountRequests:
         application/json:
           schema:
             $ref: "../../openapi.root.yml#/components/schemas/Account"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/Account"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+AccountIdRequests:
+  get:
+    parameters:
+      - name: x-access-token
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: integer
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Account"
