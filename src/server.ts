@@ -16,14 +16,15 @@ import toobusy from "toobusy-js";
 const app = express();
 
 const apiDoc = yaml.load(
-  fs.readFileSync("./openapi.yml").toString()
+  fs.readFileSync("build/openapi.yml").toString()
 ) as swaggerUi.JsonObject;
 
 const validatorOptions = {
-  coerceTypes: true,
-  apiSpec: "./openapi.yml",
+  apiSpec: "./build/openapi.yml",
   validateRequests: true,
   validateResponses: true,
+  validateApiSpec: true,
+  ignoreUndocumented: true,
 };
 
 app
@@ -31,9 +32,9 @@ app
   .use(helmet())
   .use(compression())
   .use(cors())
+  .use(hpp())
   .use(express.json({ limit: "1kb" }))
   .use(express.urlencoded({ extended: true, limit: "1kb" }))
-  .use(hpp())
   .use(OpenApiValidator.middleware(validatorOptions))
   .use(
     (
@@ -42,16 +43,16 @@ app
       res: express.Response,
       next: express.NextFunction
     ) => {
-      res.status(err.status).json({
+      console.log(err);
+      res.status(err.status ?? 500).json({
         error: {
-          type: "request_validation",
           message: err.message,
           errors: err.errors,
         },
       });
     }
   )
-  .use("/api-docs", swaggerUi.serve, swaggerUi.setup(apiDoc))
+  .use("/api-v1/api-docs", swaggerUi.serve, swaggerUi.setup(apiDoc))
   .set("views", path.join(__dirname, "/views"))
   .set("view engine", "ejs")
   .get("/", (req, res) => res.render("pages/index"));

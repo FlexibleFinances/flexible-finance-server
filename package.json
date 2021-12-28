@@ -14,7 +14,7 @@
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "prepare": "husky install",
-    "api": "npx swagger-cli bundle -t yaml -o openapi.yml src/openapi.root.yml"
+    "api": "npx swagger-cli bundle -t yaml -o build/openapi.yml src/openapi.root.yml"
   },
   "repository": {
     "type": "git",

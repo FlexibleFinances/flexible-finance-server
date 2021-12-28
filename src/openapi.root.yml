@@ -26,6 +26,16 @@ paths:
     $ref: ./app/routes/auth.openapi.yml#/SignUp
   /auth/signin:
     $ref: ./app/routes/auth.openapi.yml#/SignIn
+  /api-docs:
+    get:
+      security: []
+      responses:
+        200:
+          description: Returns API documentation.
+          content:
+            text/html:
+              schema:
+                type: string
   /entity/{entityId}:
     $ref: ./app/routes/entity.openapi.yml#/EntityRequests
   /entities:
@@ -75,7 +85,7 @@ paths:
   /user/{userId}:
     $ref: ./app/routes/user.openapi.yml#/UserRequests
   /users:
-    $ref: ./app/routes/user.openapi.yml#/UserRequests
+    $ref: ./app/routes/user.openapi.yml#/UsersRequests
 components:
   responses:
     Message:
