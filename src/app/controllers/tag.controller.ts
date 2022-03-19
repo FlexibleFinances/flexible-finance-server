@@ -9,7 +9,7 @@ import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
 
 export function getTag(req: express.Request, res: express.Response): void {
-  if (!hasRequestParameters(req, res, { body: ["tagId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["tagId"] })) {
     return;
   }
 

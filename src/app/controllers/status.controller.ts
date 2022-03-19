@@ -9,7 +9,7 @@ import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
 
 export function getStatus(req: express.Request, res: express.Response): void {
-  if (!hasRequestParameters(req, res, { body: ["statusId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["statusId"] })) {
     return;
   }
 

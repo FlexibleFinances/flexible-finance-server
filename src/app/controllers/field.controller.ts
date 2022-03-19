@@ -9,7 +9,7 @@ import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
 
 export function getField(req: express.Request, res: express.Response): void {
-  if (!hasRequestParameters(req, res, { body: ["fieldId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["fieldId"] })) {
     return;
   }
 

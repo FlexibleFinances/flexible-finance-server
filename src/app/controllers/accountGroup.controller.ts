@@ -11,7 +11,7 @@ export function getAccountGroup(
   req: express.Request,
   res: express.Response
 ): void {
-  if (!hasRequestParameters(req, res, { body: ["accountGroupId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["accountGroupId"] })) {
     return;
   }
 

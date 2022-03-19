@@ -12,7 +12,7 @@ export function getTransaction(
   req: express.Request,
   res: express.Response
 ): void {
-  if (!hasRequestParameters(req, res, { body: ["transactionId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["transactionId"] })) {
     return;
   }
 

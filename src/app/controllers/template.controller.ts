@@ -9,7 +9,7 @@ import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
 
 export function getTemplate(req: express.Request, res: express.Response): void {
-  if (!hasRequestParameters(req, res, { body: ["templateId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["templateId"] })) {
     return;
   }
 

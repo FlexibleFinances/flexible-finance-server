@@ -28,6 +28,8 @@ RoleIdRequests:
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Role"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
       401:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       403:

@@ -43,7 +43,7 @@ export function createFieldType(
   req: express.Request,
   res: express.Response
 ): void {
-  if (!hasRequestParameters(req, res, { body: ["name"] })) {
+  if (!hasRequestParameters(req, res, { params: ["name"] })) {
     return;
   }
 

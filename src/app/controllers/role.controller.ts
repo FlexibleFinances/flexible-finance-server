@@ -9,7 +9,7 @@ import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
 
 export function getRole(req: express.Request, res: express.Response): void {
-  if (!hasRequestParameters(req, res, { body: ["roleId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["roleId"] })) {
     return;
   }
 

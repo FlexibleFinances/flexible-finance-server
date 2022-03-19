@@ -43,7 +43,7 @@ export function createFieldDatum(
   req: express.Request,
   res: express.Response
 ): void {
-  if (!hasRequestParameters(req, res, { body: ["fieldId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["fieldId"] })) {
     return;
   }
 

@@ -9,7 +9,7 @@ import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
 
 export function getAccount(req: express.Request, res: express.Response): void {
-  if (!hasRequestParameters(req, res, { body: ["accountId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["accountId"] })) {
     return;
   }
 

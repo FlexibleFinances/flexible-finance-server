@@ -31,6 +31,8 @@ StatusIdRequests:
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Status"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
       401:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       403:
