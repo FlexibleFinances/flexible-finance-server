@@ -28,6 +28,8 @@ UserIdRequests:
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/User"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
       401:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       403:
