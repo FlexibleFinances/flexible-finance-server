@@ -1,5 +1,6 @@
 SignUp:
   post:
+    security: []
     requestBody:
       required: true
       content:
@@ -22,6 +23,7 @@ SignUp:
         $ref: "../../openapi.root.yml#/components/responses/Message"
 SignIn:
   post:
+    security: []
     requestBody:
       description: Optional description in *Markdown*
       required: true
