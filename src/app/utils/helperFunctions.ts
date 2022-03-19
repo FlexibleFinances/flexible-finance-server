@@ -23,7 +23,7 @@ export function hasRequestParameters(
     }
   });
   requiredParameters.params?.forEach((paramName: string) => {
-    if (req.query[paramName] === undefined) {
+    if (req.params[paramName] === undefined) {
       message = `Missing ${paramName} in request params.`;
     }
   });
