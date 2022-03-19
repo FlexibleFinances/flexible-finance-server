@@ -1,11 +1,5 @@
 FieldRequests:
   post:
-    parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
     requestBody:
       required: true
       content:
@@ -26,11 +20,6 @@ FieldRequests:
 FieldIdRequests:
   get:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: fieldId
         in: path
         required: true
@@ -49,11 +38,6 @@ FieldIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: fieldId
         in: path
         required: true
@@ -79,11 +63,6 @@ FieldIdRequests:
 FieldsRequests:
   get:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: offset
         in: query
         schema:

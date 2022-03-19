@@ -1,11 +1,5 @@
 TemplateRequests:
   post:
-    parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
     requestBody:
       required: true
       content:
@@ -26,11 +20,6 @@ TemplateRequests:
 TemplateIdRequests:
   get:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: templateId
         in: path
         required: true
@@ -47,11 +36,6 @@ TemplateIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: templateId
         in: path
         required: true
@@ -77,11 +61,6 @@ TemplateIdRequests:
 TemplatesRequests:
   get:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: offset
         in: query
         schema:

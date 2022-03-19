@@ -1,11 +1,5 @@
 AccountGroupRequests:
   post:
-    parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
     requestBody:
       required: true
       content:
@@ -26,11 +20,6 @@ AccountGroupRequests:
 AccountGroupIdRequests:
   get:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: accountGroupId
         in: path
         required: true
@@ -49,11 +38,6 @@ AccountGroupIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: accountGroupId
         in: path
         required: true
@@ -79,11 +63,6 @@ AccountGroupIdRequests:
 AccountGroupsRequests:
   get:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: offset
         in: query
         schema:

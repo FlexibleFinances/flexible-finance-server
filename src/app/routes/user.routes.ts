@@ -8,10 +8,7 @@ export function setUserRoutes(app: express.Express): void {
     res: express.Response,
     next: express.NextFunction
   ) {
-    res.header(
-      "Access-Control-Allow-Headers",
-      "x-access-token, Origin, Content-User, Accept"
-    );
+    res.header("Access-Control-Allow-Headers", "Origin, Content-User, Accept");
     next();
   });
 

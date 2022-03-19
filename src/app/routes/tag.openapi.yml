@@ -1,11 +1,5 @@
 TagRequests:
   post:
-    parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
     requestBody:
       required: true
       content:
@@ -26,11 +20,6 @@ TagRequests:
 TagIdRequests:
   get:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: tagId
         in: path
         required: true
@@ -49,11 +38,6 @@ TagIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: tagId
         in: path
         required: true
@@ -79,11 +63,6 @@ TagIdRequests:
 TagsRequests:
   get:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: offset
         in: query
         schema:

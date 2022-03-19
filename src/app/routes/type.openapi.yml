@@ -1,11 +1,5 @@
 TypeRequests:
   post:
-    parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
     requestBody:
       required: true
       content:
@@ -29,11 +23,6 @@ TypeRequests:
 TypeIdRequests:
   get:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: typeId
         in: path
         required: true
@@ -50,11 +39,6 @@ TypeIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: typeId
         in: path
         required: true
@@ -80,11 +64,6 @@ TypeIdRequests:
 TypesRequests:
   get:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: offset
         in: query
         schema:

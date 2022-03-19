@@ -1,11 +1,5 @@
 TransactionRequests:
   post:
-    parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
     requestBody:
       required: true
       content:
@@ -26,11 +20,6 @@ TransactionRequests:
 TransactionIdRequests:
   get:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: transactionId
         in: path
         required: true
@@ -49,11 +38,6 @@ TransactionIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: transactionId
         in: path
         required: true
@@ -79,11 +63,6 @@ TransactionIdRequests:
 TransactionsRequests:
   get:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: offset
         in: query
         schema:

@@ -10,12 +10,6 @@ TestAll:
               type: string
 TestUser:
   get:
-    parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
     responses:
       200:
         description: Returns sample content.
@@ -31,12 +25,6 @@ TestUser:
         $ref: "../../openapi.root.yml#/components/responses/Message"
 TestAdmin:
   get:
-    parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
     responses:
       200:
         description: Returns sample content.

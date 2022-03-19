@@ -8,10 +8,7 @@ export function setAuthTestRoutes(app: express.Express): void {
     res: express.Response,
     next: express.NextFunction
   ) {
-    res.header(
-      "Access-Control-Allow-Headers",
-      "x-access-token, Origin, Content-Type, Accept"
-    );
+    res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
     next();
   });
 

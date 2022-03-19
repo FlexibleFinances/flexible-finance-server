@@ -1,11 +1,5 @@
 StatusRequests:
   post:
-    parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
     requestBody:
       required: true
       content:
@@ -29,11 +23,6 @@ StatusRequests:
 StatusIdRequests:
   get:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: statusId
         in: path
         required: true
@@ -50,11 +39,6 @@ StatusIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: statusId
         in: path
         required: true
@@ -80,11 +64,6 @@ StatusIdRequests:
 StatusesRequests:
   get:
     parameters:
-      - name: x-access-token
-        in: header
-        required: true
-        schema:
-          type: string
       - name: offset
         in: query
         schema:

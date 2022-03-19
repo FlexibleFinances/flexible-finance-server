@@ -10,7 +10,7 @@ function verifyToken(
   res: express.Response,
   next: express.NextFunction
 ): void {
-  const token = req.headers["x-access-token"];
+  let token = req.headers.authorization;
 
   if (token === undefined || token === null || typeof token !== "string") {
     res.status(403).send({
@@ -18,6 +18,15 @@ function verifyToken(
     });
     return;
   }
+  const tokenParts = token.split(" ");
+  if (tokenParts[0] !== "Bearer" || tokenParts.length !== 2) {
+    res.status(403).send({
+      message: "Authorization value is not a Bearer token.",
+    });
+    return;
+  }
+  token = tokenParts[1];
+
   if (process.env.AUTH_SECRET === undefined) {
     res.status(500).send("Authentication secret is unavailable.");
     return;
