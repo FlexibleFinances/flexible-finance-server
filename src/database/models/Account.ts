@@ -112,6 +112,7 @@ Account.init(
     },
     template: {
       type: DataTypes.INTEGER,
+      field: "TemplateId",
       references: {
         model: "Template",
         key: "id",

@@ -102,6 +102,7 @@ FieldDatum.init(
   {
     field: {
       type: DataTypes.INTEGER,
+      field: "FieldId",
       references: {
         model: "Field",
         key: "id",

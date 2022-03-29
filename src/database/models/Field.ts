@@ -93,6 +93,7 @@ Field.init(
     },
     fieldType: {
       type: DataTypes.INTEGER,
+      field: "FieldTypeId",
       references: {
         model: "FieldType",
         key: "id",
