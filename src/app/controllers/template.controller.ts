@@ -45,7 +45,7 @@ export function createTemplate(
   }
   const createOptions: TemplateCreationAttributes = {
     name: req.body.name,
-    type: req.body.typeId,
+    type: req.body.type,
   };
 
   if (req.body.accountIds !== undefined) {
