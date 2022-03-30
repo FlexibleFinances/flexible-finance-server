@@ -6,4 +6,5 @@ export * from "./entity.controller";
 export * from "./field.controller";
 export * from "./fieldDatum.controller";
 export * from "./fieldType.controller";
+export * from "./tag.controller";
 export * from "./template.controller";
