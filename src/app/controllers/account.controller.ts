@@ -178,7 +178,7 @@ export function getAccounts(req: express.Request, res: express.Response): void {
   void Account.findAll(findOptions)
     .then((accounts) => {
       const accountFieldPromises = accounts.map(async (account) => {
-        return await account.template?.getFields();
+        return (await account.template?.getFields()) ?? [];
       });
       Promise.all(accountFieldPromises)
         .then((accountsWithFields) => {
