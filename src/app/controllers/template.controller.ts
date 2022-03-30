@@ -40,7 +40,7 @@ export function createTemplate(
   req: express.Request,
   res: express.Response
 ): void {
-  if (!hasRequestParameters(req, res, { body: ["name", "typeId"] })) {
+  if (!hasRequestParameters(req, res, { body: ["name", "type"] })) {
     return;
   }
   const createOptions: TemplateCreationAttributes = {
