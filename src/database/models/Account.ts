@@ -63,12 +63,12 @@ export class Account extends Model<
 
   public name!: string;
 
-  public fields!: Field[];
+  public fields?: Field[];
 
   public readonly accountGroup?: AccountGroup;
   public readonly data?: FieldDatum[];
   public readonly tags?: Tag[];
-  public readonly template?: Template;
+  public readonly template!: Template;
 
   public static override associations: {
     accountGroup: Association<Account, AccountGroup>;

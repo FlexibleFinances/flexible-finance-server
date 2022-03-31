@@ -27,12 +27,10 @@ export function getAccount(req: express.Request, res: express.Response): void {
         return;
       }
 
-      account?.template?.getFields().then((fields) => {
-        account.fields = fields ?? [];
-        res.status(200).send({
-          message: "Account gotten.",
-          account: account,
-        });
+      account.fields = account.template.fields;
+      res.status(200).send({
+        message: "Account gotten.",
+        account: account,
       });
     })
     .catch((err: Error) => {
@@ -177,19 +175,14 @@ export function getAccounts(req: express.Request, res: express.Response): void {
 
   void Account.findAll(findOptions)
     .then((accounts) => {
-      const accountFieldPromises = accounts.map(async (account) => {
-        return (await account.template?.getFields()) ?? [];
+      const accountsWithFields = accounts.map((account) => {
+        account.fields = account.template.fields;
+        return account;
       });
-      Promise.all(accountFieldPromises)
-        .then((accountsWithFields) => {
-          res.status(200).send({
-            message: "Accounts gotten.",
-            accounts: accountsWithFields,
-          });
-        })
-        .catch((err) => {
-          res.status(500).send({ message: err.message });
-        });
+      res.status(200).send({
+        message: "Accounts gotten.",
+        accounts: accountsWithFields,
+      });
     })
     .catch((err: Error) => {
       res.status(500).send({ message: err.message });
