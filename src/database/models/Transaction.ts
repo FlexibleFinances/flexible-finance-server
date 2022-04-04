@@ -1,108 +1,107 @@
 import {
   Association,
+  CreationOptional,
   DataTypes,
   HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
   HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
   HasManySetAssociationsMixin,
+  InferAttributes,
+  InferCreationAttributes,
   Model,
-  Optional,
+  NonAttribute,
+  Sequelize,
 } from "sequelize";
 import FieldDatum from "./FieldDatum";
 import File from "./File";
 import Tag from "./Tag";
-import sequelize from "../index";
-
-export interface TransactionAttributes {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  name: string;
-  data?: FieldDatum[];
-  files?: File[];
-  tags?: Tag[];
-}
-
-export interface TransactionCreationAttributes
-  extends Optional<TransactionAttributes, "id">,
-    Optional<TransactionAttributes, "createdAt">,
-    Optional<TransactionAttributes, "updatedAt">,
-    Optional<TransactionAttributes, "data">,
-    Optional<TransactionAttributes, "files">,
-    Optional<TransactionAttributes, "tags"> {}
-
-export interface TransactionUpdateAttributes {
-  name?: string;
-  data?: FieldDatum[];
-  files?: File[];
-  tags?: Tag[];
-}
 
 export class Transaction extends Model<
-  TransactionAttributes,
-  TransactionCreationAttributes
+  InferAttributes<Transaction>,
+  InferCreationAttributes<Transaction>
 > {
-  public id!: number;
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare name: string;
 
-  public name!: string;
+  declare Data: NonAttribute<FieldDatum[]>;
+  declare Files: NonAttribute<File[]>;
+  declare Tags: NonAttribute<Tag[]>;
 
-  public readonly data?: FieldDatum[];
-
-  public readonly files?: File[];
-
-  public readonly tags?: Tag[];
-
-  public static override associations: {
-    data: Association<Transaction, FieldDatum>;
-    files: Association<Transaction, File>;
-    tags: Association<Transaction, Tag>;
+  declare static associations: {
+    Data: Association<Transaction, FieldDatum>;
+    Files: Association<Transaction, File>;
+    Tags: Association<Transaction, Tag>;
   };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  public getData!: HasManyGetAssociationsMixin<FieldDatum>;
-  public setData!: HasManySetAssociationsMixin<FieldDatum, number>;
-  public addDatum!: HasManyAddAssociationMixin<FieldDatum, number>;
-  public hasDatum!: HasManyHasAssociationMixin<FieldDatum, number>;
-  public countData!: HasManyCountAssociationsMixin;
-  public createDatum!: HasManyCreateAssociationMixin<FieldDatum>;
+  declare getData: HasManyGetAssociationsMixin<FieldDatum>;
+  declare addDatum: HasManyAddAssociationMixin<FieldDatum, number>;
+  declare addData: HasManyAddAssociationsMixin<FieldDatum, number>;
+  declare setData: HasManySetAssociationsMixin<FieldDatum, number>;
+  declare removeDatum: HasManyRemoveAssociationMixin<FieldDatum, number>;
+  declare removeData: HasManyRemoveAssociationsMixin<FieldDatum, number>;
+  declare hasDatum: HasManyHasAssociationMixin<FieldDatum, number>;
+  declare hasData: HasManyHasAssociationsMixin<FieldDatum, number>;
+  declare countData: HasManyCountAssociationsMixin;
+  declare createDatum: HasManyCreateAssociationMixin<
+    FieldDatum,
+    "TransactionId"
+  >;
 
-  public getFiles!: HasManyGetAssociationsMixin<File>;
-  public setFiles!: HasManySetAssociationsMixin<File, number>;
-  public addFile!: HasManyAddAssociationMixin<File, number>;
-  public hasFile!: HasManyHasAssociationMixin<File, number>;
-  public countFiles!: HasManyCountAssociationsMixin;
-  public createFile!: HasManyCreateAssociationMixin<File>;
+  declare getFiles: HasManyGetAssociationsMixin<File>;
+  declare addFile: HasManyAddAssociationMixin<File, number>;
+  declare addFiles: HasManyAddAssociationsMixin<File, number>;
+  declare setFiles: HasManySetAssociationsMixin<File, number>;
+  declare removeFile: HasManyRemoveAssociationMixin<File, number>;
+  declare removeFiles: HasManyRemoveAssociationsMixin<File, number>;
+  declare hasFile: HasManyHasAssociationMixin<File, number>;
+  declare hasFiles: HasManyHasAssociationsMixin<File, number>;
+  declare countFiles: HasManyCountAssociationsMixin;
+  declare createFile: HasManyCreateAssociationMixin<File, "id">;
 
-  public getTags!: HasManyGetAssociationsMixin<Tag>;
-  public setTags!: HasManySetAssociationsMixin<Tag, number>;
-  public addTag!: HasManyAddAssociationMixin<Tag, number>;
-  public hasTag!: HasManyHasAssociationMixin<Tag, number>;
-  public countTags!: HasManyCountAssociationsMixin;
-  public createTag!: HasManyCreateAssociationMixin<Tag>;
+  declare getTags: HasManyGetAssociationsMixin<Tag>;
+  declare addTag: HasManyAddAssociationMixin<Tag, number>;
+  declare addTags: HasManyAddAssociationsMixin<Tag, number>;
+  declare setTags: HasManySetAssociationsMixin<Tag, number>;
+  declare removeTag: HasManyRemoveAssociationMixin<Tag, number>;
+  declare removeTags: HasManyRemoveAssociationsMixin<Tag, number>;
+  declare hasTag: HasManyHasAssociationMixin<Tag, number>;
+  declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
+  declare countTags: HasManyCountAssociationsMixin;
+  declare createTag: HasManyCreateAssociationMixin<Tag, "id">;
 }
 
-Transaction.init(
-  {
-    name: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-      unique: true,
+export function initializeTransaction(sequelize: Sequelize): void {
+  Transaction.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      name: {
+        type: DataTypes.STRING(128),
+        allowNull: false,
+        unique: true,
+      },
     },
-  },
-  {
-    sequelize,
-  }
-);
-
-FieldDatum.belongsTo(Transaction);
-Transaction.hasMany(FieldDatum);
+    {
+      sequelize,
+    }
+  );
+}
 
 export default Transaction;

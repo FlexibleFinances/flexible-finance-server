@@ -1,129 +1,126 @@
 import {
   Association,
-  BelongsToCreateAssociationMixin,
   BelongsToGetAssociationMixin,
   BelongsToSetAssociationMixin,
+  CreationOptional,
   DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
   Model,
-  Optional,
+  NonAttribute,
+  Sequelize,
 } from "sequelize";
 import Account from "./Account";
 import Entity from "./Entity";
 import Field from "./Field";
 import Transaction from "./Transaction";
-import sequelize from "../index";
-
-export interface FieldDatumAttributes {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  stringValue?: string;
-  intValue?: number;
-  dateValue?: Date;
-  boolValue?: boolean;
-  field: Field;
-  account?: Account;
-  entity?: Entity;
-  transaction?: Transaction;
-}
-
-export interface FieldDatumCreationAttributes
-  extends Optional<FieldDatumAttributes, "id">,
-    Optional<FieldDatumAttributes, "createdAt">,
-    Optional<FieldDatumAttributes, "updatedAt">,
-    Optional<FieldDatumAttributes, "stringValue">,
-    Optional<FieldDatumAttributes, "intValue">,
-    Optional<FieldDatumAttributes, "dateValue">,
-    Optional<FieldDatumAttributes, "boolValue">,
-    Optional<FieldDatumAttributes, "account">,
-    Optional<FieldDatumAttributes, "entity">,
-    Optional<FieldDatumAttributes, "transaction"> {}
-
-export interface FieldDatumUpdateAttributes {
-  stringValue?: string;
-  intValue?: number;
-  dateValue?: Date;
-  boolValue?: boolean;
-  field?: Field;
-  account?: Account;
-  entity?: Entity;
-  transaction?: Transaction;
-}
 
 export class FieldDatum extends Model<
-  FieldDatumAttributes,
-  FieldDatumCreationAttributes
+  InferAttributes<FieldDatum>,
+  InferCreationAttributes<FieldDatum>
 > {
-  public id!: number;
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare stringValue: CreationOptional<string>;
+  declare intValue: CreationOptional<number>;
+  declare dateValue: CreationOptional<Date>;
+  declare boolValue: CreationOptional<boolean>;
 
-  public stringValue?: string;
-  public intValue?: number;
-  public dateValue?: Date;
-  public boolValue?: boolean;
+  declare FieldId: number;
+  declare Field: NonAttribute<Field>;
 
-  public readonly field!: Field;
+  declare AccountId: CreationOptional<number>;
+  declare Account: NonAttribute<Account>;
+  declare EntityId: CreationOptional<number>;
+  declare Entity: NonAttribute<Entity>;
+  declare TransactionId: CreationOptional<number>;
+  declare Transaction: NonAttribute<Transaction>;
 
-  public readonly account?: Account;
-  public readonly entity?: Entity;
-  public readonly transaction?: Transaction;
-
-  public static override associations: {
-    field: Association<Field, FieldDatum>;
-    account: Association<Account, FieldDatum>;
-    entity: Association<Entity, FieldDatum>;
-    transaction: Association<Transaction, FieldDatum>;
+  declare static associations: {
+    Field: Association<Field, FieldDatum>;
+    Account: Association<Account, FieldDatum>;
+    Entity: Association<Entity, FieldDatum>;
+    Transaction: Association<Transaction, FieldDatum>;
   };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  public getField!: BelongsToGetAssociationMixin<Field>;
-  public setField!: BelongsToSetAssociationMixin<Field, number>;
-  public createField!: BelongsToCreateAssociationMixin<Field>;
+  declare getField: BelongsToGetAssociationMixin<Field>;
+  declare setField: BelongsToSetAssociationMixin<Field, number>;
 
-  public getAccount!: BelongsToGetAssociationMixin<Account>;
-  public setAccount!: BelongsToSetAssociationMixin<Account, number>;
-  public createAccount!: BelongsToCreateAssociationMixin<Account>;
+  declare getAccount: BelongsToGetAssociationMixin<Account>;
+  declare setAccount: BelongsToSetAssociationMixin<Account, number>;
 
-  public getEntity!: BelongsToGetAssociationMixin<Entity>;
-  public setEntity!: BelongsToSetAssociationMixin<Entity, number>;
-  public createEntity!: BelongsToCreateAssociationMixin<Entity>;
+  declare getEntity: BelongsToGetAssociationMixin<Entity>;
+  declare setEntity: BelongsToSetAssociationMixin<Entity, number>;
 
-  public getTransaction!: BelongsToGetAssociationMixin<Transaction>;
-  public setTransaction!: BelongsToSetAssociationMixin<Transaction, number>;
-  public createTransaction!: BelongsToCreateAssociationMixin<Transaction>;
+  declare getTransaction: BelongsToGetAssociationMixin<Transaction>;
+  declare setTransaction: BelongsToSetAssociationMixin<Transaction, number>;
 }
 
-FieldDatum.init(
-  {
-    field: {
-      type: DataTypes.INTEGER,
-      field: "FieldId",
-      references: {
-        model: "Field",
-        key: "id",
+export function initializeFieldDatum(sequelize: Sequelize): void {
+  FieldDatum.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      FieldId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Field",
+          key: "id",
+        },
+      },
+      stringValue: {
+        type: DataTypes.STRING,
+      },
+      intValue: {
+        type: DataTypes.INTEGER,
+      },
+      dateValue: {
+        type: DataTypes.DATE,
+      },
+      boolValue: {
+        type: DataTypes.BOOLEAN,
+      },
+      AccountId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: Account,
+          key: "id",
+        },
+      },
+      EntityId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: Entity,
+          key: "id",
+        },
+      },
+      TransactionId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: Transaction,
+          key: "id",
+        },
       },
     },
-    stringValue: {
-      type: DataTypes.STRING,
-    },
-    intValue: {
-      type: DataTypes.INTEGER,
-    },
-    dateValue: {
-      type: DataTypes.DATE,
-    },
-    boolValue: {
-      type: DataTypes.BOOLEAN,
-    },
-  },
-  {
-    sequelize,
-  }
-);
+    {
+      sequelize: sequelize,
+      name: {
+        singular: "FieldDatum",
+        plural: "FieldData",
+      },
+    }
+  );
+}
 
 export default FieldDatum;

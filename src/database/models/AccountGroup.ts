@@ -1,77 +1,79 @@
 import {
   Association,
+  CreationOptional,
   DataTypes,
   HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
   HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
   HasManySetAssociationsMixin,
+  InferAttributes,
+  InferCreationAttributes,
   Model,
-  Optional,
+  NonAttribute,
+  Sequelize,
 } from "sequelize";
-import { Account } from ".";
-import sequelize from "../index";
-
-export interface AccountGroupAttributes {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  name: string;
-  accounts?: Account[];
-}
-
-export interface AccountGroupCreationAttributes
-  extends Optional<AccountGroupAttributes, "id">,
-    Optional<AccountGroupAttributes, "createdAt">,
-    Optional<AccountGroupAttributes, "updatedAt">,
-    Optional<AccountGroupAttributes, "accounts"> {}
-
-export interface AccountGroupUpdateAttributes {
-  name?: string;
-  accounts?: Account[];
-}
+import Account from "./Account";
 
 export class AccountGroup extends Model<
-  AccountGroupAttributes,
-  AccountGroupCreationAttributes
+  InferAttributes<AccountGroup>,
+  InferCreationAttributes<AccountGroup>
 > {
-  public id!: number;
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare name: string;
 
-  public name!: string;
+  declare accounts: NonAttribute<Account[]>;
 
-  public readonly accounts?: Account[];
-
-  public static override associations: {
+  declare static associations: {
     accounts: Association<Account, AccountGroup>;
   };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  public getAccounts!: HasManyGetAssociationsMixin<Account>;
-  public setAccounts!: HasManySetAssociationsMixin<Account, number>;
-  public addAccount!: HasManyAddAssociationMixin<Account, number>;
-  public hasAccount!: HasManyHasAssociationMixin<Account, number>;
-  public countAccounts!: HasManyCountAssociationsMixin;
-  public createAccounts!: HasManyCreateAssociationMixin<Account>;
+  declare getAccounts: HasManyGetAssociationsMixin<Account>;
+  declare addAccount: HasManyAddAssociationMixin<Account, number>;
+  declare addAccounts: HasManyAddAssociationsMixin<Account, number>;
+  declare setAccounts: HasManySetAssociationsMixin<Account, number>;
+  declare removeAccount: HasManyRemoveAssociationMixin<Account, number>;
+  declare removeAccounts: HasManyRemoveAssociationsMixin<Account, number>;
+  declare hasAccount: HasManyHasAssociationMixin<Account, number>;
+  declare hasAccounts: HasManyHasAssociationsMixin<Account, number>;
+  declare countAccounts: HasManyCountAssociationsMixin;
+  declare createAccounts: HasManyCreateAssociationMixin<
+    Account,
+    "AccountGroupId"
+  >;
 }
 
-AccountGroup.init(
-  {
-    name: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-      unique: true,
+export function initializeAccountGroup(sequelize: Sequelize): void {
+  AccountGroup.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      name: {
+        type: DataTypes.STRING(128),
+        allowNull: false,
+        unique: true,
+      },
     },
-  },
-  {
-    sequelize,
-  }
-);
+    {
+      sequelize,
+    }
+  );
+}
 
 export default AccountGroup;

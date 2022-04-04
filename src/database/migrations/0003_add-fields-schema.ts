@@ -1,10 +1,11 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../index";
-import { templateTypeEnum } from "../../app/utils/enumerators";
+import { DataTypes, QueryInterface } from "sequelize";
 
-const queryInterface = sequelize.getQueryInterface();
-
-export async function up(): Promise<void> {
+export async function up({
+  context: queryInterface,
+}: {
+  context: QueryInterface;
+}): Promise<void> {
+  console.log("0003 up - started");
   await queryInterface.createTable("FieldTypes", {
     id: {
       type: DataTypes.INTEGER,
@@ -157,21 +158,18 @@ export async function up(): Promise<void> {
     },
   });
 
-  await queryInterface.addColumn("Templates", "type", {
-    type: DataTypes.ENUM({ values: Object.keys(templateTypeEnum) }),
-    allowNull: false,
-    validate: {
-      isIn: [Object.keys(templateTypeEnum)],
-    },
-  });
-  console.log("0003 up");
+  console.log("0003 up - finished");
 }
 
-export async function down(): Promise<void> {
-  await queryInterface.removeColumn("Templates", "type", {});
+export async function down({
+  context: queryInterface,
+}: {
+  context: QueryInterface;
+}): Promise<void> {
+  console.log("0003 down - starting");
   await queryInterface.dropTable("TemplateFields", {});
   await queryInterface.dropTable("FieldData", {});
   await queryInterface.dropTable("Fields", {});
   await queryInterface.dropTable("FieldTypes", {});
-  console.log("0003 down");
+  console.log("0003 down - finished");
 }

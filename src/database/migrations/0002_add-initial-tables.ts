@@ -1,9 +1,12 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../index";
+import { DataTypes, QueryInterface } from "sequelize";
+import { templateTypeEnum } from "../../app/utils/enumerators";
 
-const queryInterface = sequelize.getQueryInterface();
-
-export async function up(): Promise<void> {
+export async function up({
+  context: queryInterface,
+}: {
+  context: QueryInterface;
+}): Promise<void> {
+  console.log("0002 up - starting");
   await queryInterface.createTable("AccountGroups", {
     id: {
       type: DataTypes.INTEGER,
@@ -122,6 +125,13 @@ export async function up(): Promise<void> {
       type: DataTypes.STRING(128),
       allowNull: false,
       unique: true,
+    },
+    type: {
+      type: DataTypes.ENUM({ values: Object.keys(templateTypeEnum) }),
+      allowNull: false,
+      validate: {
+        isIn: [Object.keys(templateTypeEnum)],
+      },
     },
   });
   await queryInterface.createTable("Types", {
@@ -448,25 +458,30 @@ export async function up(): Promise<void> {
     },
   });
 
-  console.log("0002 up");
+  console.log("0002 up - finished");
 }
 
-export async function down(): Promise<void> {
-  await sequelize.getQueryInterface().dropTable("AccountTags", {});
-  await sequelize.getQueryInterface().dropTable("EntityTags", {});
-  await sequelize.getQueryInterface().dropTable("ReportTags", {});
-  await sequelize.getQueryInterface().dropTable("TemplateTags", {});
-  await sequelize.getQueryInterface().dropTable("TransactionFiles", {});
-  await sequelize.getQueryInterface().dropTable("TransactionTags", {});
-  await sequelize.getQueryInterface().dropTable("Accounts", {});
-  await sequelize.getQueryInterface().dropTable("Entities", {});
-  await sequelize.getQueryInterface().dropTable("Transactions", {});
-  await sequelize.getQueryInterface().dropTable("AccountGroups", {});
-  await sequelize.getQueryInterface().dropTable("Files", {});
-  await sequelize.getQueryInterface().dropTable("Reports", {});
-  await sequelize.getQueryInterface().dropTable("Tags", {});
-  await sequelize.getQueryInterface().dropTable("Templates", {});
-  await sequelize.getQueryInterface().dropTable("Statuses", {});
-  await sequelize.getQueryInterface().dropTable("Types", {});
-  console.log("0002 down");
+export async function down({
+  context: queryInterface,
+}: {
+  context: QueryInterface;
+}): Promise<void> {
+  console.log("0002 down - starting");
+  await queryInterface.dropTable("AccountTags", {});
+  await queryInterface.dropTable("EntityTags", {});
+  await queryInterface.dropTable("ReportTags", {});
+  await queryInterface.dropTable("TemplateTags", {});
+  await queryInterface.dropTable("TransactionFiles", {});
+  await queryInterface.dropTable("TransactionTags", {});
+  await queryInterface.dropTable("Accounts", {});
+  await queryInterface.dropTable("Entities", {});
+  await queryInterface.dropTable("Transactions", {});
+  await queryInterface.dropTable("AccountGroups", {});
+  await queryInterface.dropTable("Files", {});
+  await queryInterface.dropTable("Reports", {});
+  await queryInterface.dropTable("Tags", {});
+  await queryInterface.dropTable("Templates", {});
+  await queryInterface.dropTable("Statuses", {});
+  await queryInterface.dropTable("Types", {});
+  console.log("0002 down - finished");
 }

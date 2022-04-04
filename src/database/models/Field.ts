@@ -1,111 +1,108 @@
 import {
   Association,
-  BelongsToCreateAssociationMixin,
   BelongsToGetAssociationMixin,
   BelongsToSetAssociationMixin,
+  CreationOptional,
   DataTypes,
   HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
   HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
   HasManySetAssociationsMixin,
+  InferAttributes,
+  InferCreationAttributes,
   Model,
-  Optional,
+  NonAttribute,
+  Sequelize,
 } from "sequelize";
 import FieldDatum from "./FieldDatum";
 import FieldType from "./FieldType";
 import Template from "./Template";
-import sequelize from "../index";
 
-export interface FieldAttributes {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  name: string;
-  fieldType: FieldType;
-  data?: FieldDatum[];
-  templates?: Template[];
-}
+export class Field extends Model<
+  InferAttributes<Field>,
+  InferCreationAttributes<Field>
+> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-export interface FieldCreationAttributes
-  extends Optional<FieldAttributes, "id">,
-    Optional<FieldAttributes, "createdAt">,
-    Optional<FieldAttributes, "updatedAt">,
-    Optional<FieldAttributes, "data">,
-    Optional<FieldAttributes, "templates"> {}
+  declare name: string;
 
-export interface FieldUpdateAttributes {
-  name?: string;
-  fieldType?: FieldType;
-  data?: FieldDatum[];
-  templates?: Template[];
-}
+  declare FieldTypeId: number;
+  declare FieldType: NonAttribute<FieldType>;
 
-export class Field extends Model<FieldAttributes, FieldCreationAttributes> {
-  public id!: number;
+  declare Data: NonAttribute<FieldDatum[]>;
+  declare Templates: NonAttribute<Template[]>;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-
-  public name!: string;
-
-  public readonly fieldType!: FieldType;
-
-  public readonly data?: FieldDatum[];
-  public readonly templates?: Template[];
-
-  public static override associations: {
-    data: Association<FieldDatum, Field>;
-    templates: Association<Template, Field>;
-    fieldType: Association<FieldType, Field>;
+  declare static associations: {
+    Data: Association<FieldDatum, Field>;
+    Templates: Association<Template, Field>;
+    FieldType: Association<FieldType, Field>;
   };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  public getData!: HasManyGetAssociationsMixin<FieldDatum>;
-  public setData!: HasManySetAssociationsMixin<FieldDatum, number>;
-  public addDatum!: HasManyAddAssociationMixin<FieldDatum, number>;
-  public hasDatum!: HasManyHasAssociationMixin<FieldDatum, number>;
-  public countData!: HasManyCountAssociationsMixin;
-  public createDatum!: HasManyCreateAssociationMixin<FieldDatum>;
+  declare getData: HasManyGetAssociationsMixin<FieldDatum>;
+  declare addDatum: HasManyAddAssociationMixin<FieldDatum, number>;
+  declare addData: HasManyAddAssociationsMixin<FieldDatum, number>;
+  declare setData: HasManySetAssociationsMixin<FieldDatum, number>;
+  declare removeDatum: HasManyRemoveAssociationMixin<FieldDatum, number>;
+  declare removeData: HasManyRemoveAssociationsMixin<FieldDatum, number>;
+  declare hasDatum: HasManyHasAssociationMixin<FieldDatum, number>;
+  declare hasData: HasManyHasAssociationsMixin<FieldDatum, number>;
+  declare countData: HasManyCountAssociationsMixin;
+  declare createDatum: HasManyCreateAssociationMixin<FieldDatum, "FieldId">;
 
-  public getTemplates!: HasManyGetAssociationsMixin<Template>;
-  public setTemplates!: HasManySetAssociationsMixin<Template, number>;
-  public addTemplate!: HasManyAddAssociationMixin<Template, number>;
-  public hasTemplate!: HasManyHasAssociationMixin<Template, number>;
-  public countTemplates!: HasManyCountAssociationsMixin;
-  public createTemplate!: HasManyCreateAssociationMixin<Template>;
+  declare getTemplates: HasManyGetAssociationsMixin<Template>;
+  declare addTemplate: HasManyAddAssociationMixin<Template, number>;
+  declare addTemplates: HasManyAddAssociationsMixin<Template, number>;
+  declare setTemplates: HasManySetAssociationsMixin<Template, number>;
+  declare removeTemplate: HasManyRemoveAssociationMixin<Template, number>;
+  declare removeTemplates: HasManyRemoveAssociationsMixin<Template, number>;
+  declare hasTemplate: HasManyHasAssociationMixin<Template, number>;
+  declare hasTemplates: HasManyHasAssociationsMixin<Template, number>;
+  declare countTemplates: HasManyCountAssociationsMixin;
+  declare createTemplate: HasManyCreateAssociationMixin<Template, "id">;
 
-  public getFieldType!: BelongsToGetAssociationMixin<FieldType>;
-  public setFieldType!: BelongsToSetAssociationMixin<FieldType, number>;
-  public createFieldType!: BelongsToCreateAssociationMixin<FieldType>;
+  declare getFieldType: BelongsToGetAssociationMixin<FieldType>;
+  declare setFieldType: BelongsToSetAssociationMixin<FieldType, number>;
 }
 
-Field.init(
-  {
-    name: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-      unique: true,
-    },
-    fieldType: {
-      type: DataTypes.INTEGER,
-      field: "FieldTypeId",
-      references: {
-        model: "FieldType",
-        key: "id",
+export function initializeField(sequelize: Sequelize): void {
+  Field.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      name: {
+        type: DataTypes.STRING(128),
+        allowNull: false,
+        unique: true,
+      },
+      FieldTypeId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "FieldType",
+          key: "id",
+        },
       },
     },
-  },
-  {
-    sequelize,
-  }
-);
-
-Field.hasMany(FieldDatum);
-FieldDatum.belongsTo(Field);
+    {
+      sequelize,
+    }
+  );
+}
 
 export default Field;

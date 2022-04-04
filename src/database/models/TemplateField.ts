@@ -1,28 +1,61 @@
+import {
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  NonAttribute,
+  Sequelize,
+} from "sequelize";
 import Field from "./Field";
-import { Model } from "sequelize";
 import Template from "./Template";
-import sequelize from "../index";
 
-export class TemplateField extends Model {
-  public id!: number;
+export class TemplateField extends Model<
+  InferAttributes<TemplateField>,
+  InferCreationAttributes<TemplateField>
+> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare EntityId: number;
+  declare Entity: NonAttribute<Template>;
 
-  public readonly templateId!: number;
-
-  public readonly fieldId!: number;
+  declare FieldId: number;
+  declare Field: NonAttribute<Field>;
 }
 
-TemplateField.init(
-  {},
-  {
-    sequelize,
-  }
-);
-
-Field.belongsToMany(Template, { through: TemplateField });
-Template.belongsToMany(Field, { through: TemplateField });
+export function initializeTemplateField(sequelize: Sequelize): void {
+  TemplateField.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      EntityId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Template",
+          key: "id",
+        },
+      },
+      FieldId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Field",
+          key: "id",
+        },
+      },
+    },
+    {
+      sequelize,
+    }
+  );
+}
 
 export default TemplateField;

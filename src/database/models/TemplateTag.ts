@@ -1,28 +1,61 @@
-import { Model } from "sequelize";
+import {
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  NonAttribute,
+  Sequelize,
+} from "sequelize";
 import Tag from "./Tag";
 import Template from "./Template";
-import sequelize from "..";
 
-export class TemplateTag extends Model {
-  public id!: number;
+export class TemplateTag extends Model<
+  InferAttributes<TemplateTag>,
+  InferCreationAttributes<TemplateTag>
+> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare TemplateId: number;
+  declare Template: NonAttribute<Template>;
 
-  public readonly templateId!: number;
-
-  public readonly tagId!: number;
+  declare TagId: number;
+  declare Tag: NonAttribute<Tag>;
 }
 
-TemplateTag.init(
-  {},
-  {
-    sequelize,
-  }
-);
-
-Template.belongsToMany(Tag, { through: TemplateTag });
-Tag.belongsToMany(Template, { through: TemplateTag });
+export function initializeTemplateTag(sequelize: Sequelize): void {
+  TemplateTag.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      TemplateId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Template",
+          key: "id",
+        },
+      },
+      TagId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Tag",
+          key: "id",
+        },
+      },
+    },
+    {
+      sequelize,
+    }
+  );
+}
 
 export default TemplateTag;

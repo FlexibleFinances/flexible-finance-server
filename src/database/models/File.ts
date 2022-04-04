@@ -1,69 +1,80 @@
 import {
   Association,
+  CreationOptional,
   DataTypes,
   HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
   HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
   HasManySetAssociationsMixin,
+  InferAttributes,
+  InferCreationAttributes,
   Model,
-  Optional,
+  NonAttribute,
+  Sequelize,
 } from "sequelize";
 import Transaction from "./Transaction";
-import sequelize from "../index";
 
-export interface FileAttributes {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  name: string;
-  transactions?: Transaction[];
-}
+export class File extends Model<
+  InferAttributes<File>,
+  InferCreationAttributes<File>
+> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-export interface FileCreationAttributes
-  extends Optional<FileAttributes, "id">,
-    Optional<FileAttributes, "createdAt">,
-    Optional<FileAttributes, "updatedAt">,
-    Optional<FileAttributes, "transactions"> {}
+  declare name: string;
 
-export class File extends Model<FileAttributes, FileCreationAttributes> {
-  public id!: number;
+  declare transactions: NonAttribute<Transaction[]>;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-
-  public name!: string;
-
-  public readonly transactions?: Transaction[];
-
-  public static override associations: {
+  declare static associations: {
     transactions: Association<File, Transaction>;
   };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  public getTransactions!: HasManyGetAssociationsMixin<Transaction>;
-  public setTransactions!: HasManySetAssociationsMixin<Transaction, number>;
-  public addTransaction!: HasManyAddAssociationMixin<Transaction, number>;
-  public hasTransaction!: HasManyHasAssociationMixin<Transaction, number>;
-  public countTransaction!: HasManyCountAssociationsMixin;
-  public createTransaction!: HasManyCreateAssociationMixin<Transaction>;
+  declare getTransactions: HasManyGetAssociationsMixin<Transaction>;
+  declare addTransaction: HasManyAddAssociationMixin<Transaction, number>;
+  declare addTransactions: HasManyAddAssociationsMixin<Transaction, number>;
+  declare setTransactions: HasManySetAssociationsMixin<Transaction, number>;
+  declare removeTransaction: HasManyRemoveAssociationMixin<Transaction, number>;
+  declare removeTransactions: HasManyRemoveAssociationsMixin<
+    Transaction,
+    number
+  >;
+
+  declare hasTransaction: HasManyHasAssociationMixin<Transaction, number>;
+  declare hasTransactions: HasManyHasAssociationsMixin<Transaction, number>;
+  declare countTransactions: HasManyCountAssociationsMixin;
+  declare createTransaction: HasManyCreateAssociationMixin<Transaction, "id">;
 }
 
-File.init(
-  {
-    name: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-      unique: true,
+export function initializeFile(sequelize: Sequelize): void {
+  File.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      name: {
+        type: DataTypes.STRING(128),
+        allowNull: false,
+        unique: true,
+      },
     },
-  },
-  {
-    sequelize,
-  }
-);
+    {
+      sequelize,
+    }
+  );
+}
 
 export default File;

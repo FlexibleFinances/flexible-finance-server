@@ -1,126 +1,92 @@
-import {
-  Entity,
-  EntityCreationAttributes,
-  EntityUpdateAttributes,
-} from "../../database/models";
-import sequelize, { Op } from "sequelize";
+import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
+import Entity from "../../database/models/Entity";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
 
-export function getEntity(req: express.Request, res: express.Response): void {
+export async function getEntity(
+  req: express.Request,
+  res: express.Response
+): Promise<void> {
   if (!hasRequestParameters(req, res, { params: ["entityId"] })) {
     return;
   }
 
-  void Entity.findOne({
+  const entity = await Entity.findOne({
     where: {
       id: req.params.entityId,
     },
-  })
-    .then((entity) => {
-      if (entity === null) {
-        res.status(500).send({
-          message: "Entity not found.",
-        });
-        return;
-      }
-
-      res.status(200).send({
-        message: "Entity gotten.",
-        entity: entity,
-      });
-    })
-    .catch((err: Error) => {
-      res.status(500).send({ message: err.message });
+  });
+  if (entity === null) {
+    res.status(500).send({
+      message: "Entity not found.",
     });
+    return;
+  }
+
+  res.status(200).send({
+    message: "Entity gotten.",
+    entity: entity,
+  });
 }
 
-export function createEntity(
+export async function createEntity(
   req: express.Request,
   res: express.Response
-): void {
+): Promise<void> {
   if (!hasRequestParameters(req, res, { body: ["name"] })) {
     return;
   }
 
-  const createOptions: EntityCreationAttributes = {
+  const createOptions: CreationAttributes<Entity> = {
     name: req.body.name,
   };
-  if (req.body.datumIds !== undefined) {
-    createOptions.data = req.body.datumIds;
-  }
-  if (req.body.tagIds !== undefined) {
-    createOptions.tags = req.body.tagIds;
-  }
 
-  Entity.create(createOptions)
-    .then((newEntity) => {
-      res.status(200).send({ message: "Entity created.", entity: newEntity });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
-    });
+  const entity = await Entity.create(createOptions);
+  res.status(200).send({ message: "Entity created.", entity: entity });
 }
 
-export function updateEntity(
+export async function updateEntity(
   req: express.Request,
   res: express.Response
-): void {
-  if (!hasRequestParameters(req, res, { params: ["entityId"] })) {
+): Promise<void> {
+  if (
+    !hasRequestParameters(
+      req,
+      res,
+      { params: ["entityId"] },
+      { body: ["name"] }
+    )
+  ) {
     return;
   }
 
-  void Entity.findOne({
+  const entity = await Entity.findOne({
     where: {
       id: req.params.entityId,
     },
-  })
-    .then((entity) => {
-      if (entity === null) {
-        res.status(500).send({
-          message: "Entity not found.",
-        });
-        return;
-      }
-      const updateOptions: EntityUpdateAttributes = {};
-      if (req.body.name !== undefined) {
-        updateOptions.name = req.body.name;
-      }
-      if (req.body.datumIds !== undefined) {
-        updateOptions.data = req.body.datumIds;
-      }
-      if (req.body.tagIds !== undefined) {
-        updateOptions.tags = req.body.tagIds;
-      }
-      if (updateOptions === {}) {
-        res.status(400).send({
-          message: "No Entity attributes provided.",
-        });
-        return;
-      }
-
-      entity
-        .update(updateOptions)
-        .then(() => {
-          res.status(200).send({
-            message: "Entity updated.",
-            entity: entity,
-          });
-        })
-        .catch((err) => {
-          res.status(500).send({
-            message: err.message,
-          });
-        });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
+  });
+  if (entity === null) {
+    res.status(500).send({
+      message: "Entity not found.",
     });
+    return;
+  }
+  const updateOptions: CreationAttributes<Entity> = {
+    name: req.body.name,
+  };
+  await entity.update(updateOptions);
+  res.status(200).send({
+    message: "Entity updated.",
+    entity: entity,
+  });
 }
 
-export function getEntities(req: express.Request, res: express.Response): void {
-  const whereOptions: sequelize.WhereOptions = {};
+export async function getEntities(
+  req: express.Request,
+  res: express.Response
+): Promise<void> {
+  const whereOptions: WhereOptions = {};
   if (req.query.name !== undefined) {
     whereOptions.name = {
       [Op.iLike]: req.body.name,
@@ -140,21 +106,14 @@ export function getEntities(req: express.Request, res: express.Response): void {
       }),
     };
   }
-
-  const findOptions: sequelize.FindOptions = {
+  const findOptions: FindOptions = {
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
     where: whereOptions,
   };
-
-  void Entity.findAll(findOptions)
-    .then((entities) => {
-      res.status(200).send({
-        message: "Entities gotten.",
-        entities: entities,
-      });
-    })
-    .catch((err: Error) => {
-      res.status(500).send({ message: err.message });
-    });
+  const entities = await Entity.findAll(findOptions);
+  res.status(200).send({
+    message: "Entities gotten.",
+    entities: entities,
+  });
 }

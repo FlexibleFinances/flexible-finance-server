@@ -1,73 +1,49 @@
 import {
   Association,
+  CreationOptional,
   DataTypes,
   HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
   HasManyCountAssociationsMixin,
-  HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
   HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
   HasManySetAssociationsMixin,
+  InferAttributes,
+  InferCreationAttributes,
   Model,
-  Optional,
+  NonAttribute,
+  Sequelize,
 } from "sequelize";
 import Account from "./Account";
 import Entity from "./Entity";
 import Report from "./Report";
 import Template from "./Template";
 import Transaction from "./Transaction";
-import sequelize from "../index";
 
-export interface TagAttributes {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  name: string;
-  accounts?: Account[];
-  entities?: Entity[];
-  reports?: Report[];
-  templates?: Template[];
-  transactions?: Transaction[];
-}
+export class Tag extends Model<
+  InferAttributes<Tag>,
+  InferCreationAttributes<Tag>
+> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-export interface TagCreationAttributes
-  extends Optional<TagAttributes, "id">,
-    Optional<TagAttributes, "createdAt">,
-    Optional<TagAttributes, "updatedAt">,
-    Optional<TagAttributes, "accounts">,
-    Optional<TagAttributes, "entities">,
-    Optional<TagAttributes, "reports">,
-    Optional<TagAttributes, "templates">,
-    Optional<TagAttributes, "transactions"> {}
+  declare name: string;
 
-export interface TagUpdateAttributes {
-  name?: string;
-  accounts?: Account[];
-  entities?: Entity[];
-  reports?: Report[];
-  templates?: Template[];
-  transactions?: Transaction[];
-}
+  declare accounts: NonAttribute<Account[]>;
 
-export class Tag extends Model<TagAttributes, TagCreationAttributes> {
-  public id!: number;
+  declare entities: NonAttribute<Entity[]>;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare reports: NonAttribute<Report[]>;
 
-  public name!: string;
+  declare templates: NonAttribute<Template[]>;
 
-  public readonly accounts?: Account[];
+  declare transactions: NonAttribute<Transaction[]>;
 
-  public readonly entities?: Entity[];
-
-  public readonly reports?: Report[];
-
-  public readonly templates?: Template[];
-
-  public readonly transactions?: Transaction[];
-
-  public static override associations: {
+  declare static associations: {
     accounts: Association<Account, Tag>;
     entities: Association<Entity, Tag>;
     reports: Association<Report, Tag>;
@@ -78,53 +54,81 @@ export class Tag extends Model<TagAttributes, TagCreationAttributes> {
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  public getAccounts!: HasManyGetAssociationsMixin<Account>;
-  public setAccounts!: HasManySetAssociationsMixin<Account, number>;
-  public addAccount!: HasManyAddAssociationMixin<Account, number>;
-  public hasAccount!: HasManyHasAssociationMixin<Account, number>;
-  public countAccounts!: HasManyCountAssociationsMixin;
-  public createAccount!: HasManyCreateAssociationMixin<Account>;
+  declare getAccounts: HasManyGetAssociationsMixin<Account>;
+  declare addAccount: HasManyAddAssociationMixin<Account, number>;
+  declare addAccounts: HasManyAddAssociationsMixin<Account, number>;
+  declare setAccounts: HasManySetAssociationsMixin<Account, number>;
+  declare removeAccount: HasManyRemoveAssociationMixin<Account, number>;
+  declare removeAccounts: HasManyRemoveAssociationsMixin<Account, number>;
+  declare hasAccount: HasManyHasAssociationMixin<Account, number>;
+  declare hasAccounts: HasManyHasAssociationsMixin<Account, number>;
+  declare countAccounts: HasManyCountAssociationsMixin;
 
-  public getEntities!: HasManyGetAssociationsMixin<Entity>;
-  public setEntities!: HasManySetAssociationsMixin<Entity, number>;
-  public addEntity!: HasManyAddAssociationMixin<Entity, number>;
-  public hasEntity!: HasManyHasAssociationMixin<Entity, number>;
-  public countEntities!: HasManyCountAssociationsMixin;
-  public createEntity!: HasManyCreateAssociationMixin<Entity>;
+  declare getEntities: HasManyGetAssociationsMixin<Entity>;
+  declare addEntity: HasManyAddAssociationMixin<Entity, number>;
+  declare addEntities: HasManyAddAssociationsMixin<Entity, number>;
+  declare setEntities: HasManySetAssociationsMixin<Entity, number>;
+  declare removeEntity: HasManyRemoveAssociationMixin<Entity, number>;
+  declare removeEntities: HasManyRemoveAssociationsMixin<Entity, number>;
+  declare hasEntity: HasManyHasAssociationMixin<Entity, number>;
+  declare hasEntities: HasManyHasAssociationsMixin<Entity, number>;
+  declare countEntities: HasManyCountAssociationsMixin;
 
-  public getReports!: HasManyGetAssociationsMixin<Report>;
-  public setReports!: HasManySetAssociationsMixin<Report, number>;
-  public addReport!: HasManyAddAssociationMixin<Report, number>;
-  public hasReport!: HasManyHasAssociationMixin<Report, number>;
-  public countReports!: HasManyCountAssociationsMixin;
-  public createReport!: HasManyCreateAssociationMixin<Report>;
+  declare getReports: HasManyGetAssociationsMixin<Report>;
+  declare addReport: HasManyAddAssociationMixin<Report, number>;
+  declare addReports: HasManyAddAssociationsMixin<Report, number>;
+  declare setReports: HasManySetAssociationsMixin<Report, number>;
+  declare removeReport: HasManyRemoveAssociationMixin<Report, number>;
+  declare removeReports: HasManyRemoveAssociationsMixin<Report, number>;
+  declare hasReport: HasManyHasAssociationMixin<Report, number>;
+  declare hasReports: HasManyHasAssociationsMixin<Report, number>;
+  declare countReports: HasManyCountAssociationsMixin;
 
-  public getTemplates!: HasManyGetAssociationsMixin<Template>;
-  public setTemplates!: HasManySetAssociationsMixin<Template, number>;
-  public addTemplate!: HasManyAddAssociationMixin<Template, number>;
-  public hasTemplate!: HasManyHasAssociationMixin<Template, number>;
-  public countTemplates!: HasManyCountAssociationsMixin;
-  public createTemplate!: HasManyCreateAssociationMixin<Template>;
+  declare getTemplates: HasManyGetAssociationsMixin<Template>;
+  declare addTemplate: HasManyAddAssociationMixin<Template, number>;
+  declare addTemplates: HasManyAddAssociationsMixin<Template, number>;
+  declare setTemplates: HasManySetAssociationsMixin<Template, number>;
+  declare removeTemplate: HasManyRemoveAssociationMixin<Template, number>;
+  declare removeTemplates: HasManyRemoveAssociationsMixin<Template, number>;
+  declare hasTemplate: HasManyHasAssociationMixin<Template, number>;
+  declare hasTemplates: HasManyHasAssociationsMixin<Template, number>;
+  declare countTemplates: HasManyCountAssociationsMixin;
 
-  public getTransactions!: HasManyGetAssociationsMixin<Transaction>;
-  public setTransactions!: HasManySetAssociationsMixin<Transaction, number>;
-  public addTransaction!: HasManyAddAssociationMixin<Transaction, number>;
-  public hasTransaction!: HasManyHasAssociationMixin<Transaction, number>;
-  public countTransaction!: HasManyCountAssociationsMixin;
-  public createTransaction!: HasManyCreateAssociationMixin<Transaction>;
+  declare getTransactions: HasManyGetAssociationsMixin<Transaction>;
+  declare addTransaction: HasManyAddAssociationMixin<Transaction, number>;
+  declare addTransactions: HasManyAddAssociationsMixin<Transaction, number>;
+  declare setTransactions: HasManySetAssociationsMixin<Transaction, number>;
+  declare removeTransaction: HasManyRemoveAssociationMixin<Transaction, number>;
+  declare removeTransactions: HasManyRemoveAssociationsMixin<
+    Transaction,
+    number
+  >;
+
+  declare hasTransaction: HasManyHasAssociationMixin<Transaction, number>;
+  declare hasTransactions: HasManyHasAssociationsMixin<Transaction, number>;
+  declare countTransactions: HasManyCountAssociationsMixin;
 }
 
-Tag.init(
-  {
-    name: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-      unique: true,
+export function initializeTag(sequelize: Sequelize): void {
+  Tag.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      name: {
+        type: DataTypes.STRING(128),
+        allowNull: false,
+        unique: true,
+      },
     },
-  },
-  {
-    sequelize,
-  }
-);
+    {
+      sequelize,
+    }
+  );
+}
 
 export default Tag;

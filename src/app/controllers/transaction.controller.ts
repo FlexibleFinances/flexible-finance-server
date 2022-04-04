@@ -1,140 +1,91 @@
-import {
-  Transaction,
-  TransactionCreationAttributes,
-  TransactionUpdateAttributes,
-} from "../../database/models";
-import sequelize, { Op } from "sequelize";
+import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
+import Transaction from "../../database/models/Transaction";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
 
-export function getTransaction(
+export async function getTransaction(
   req: express.Request,
   res: express.Response
-): void {
+): Promise<void> {
   if (!hasRequestParameters(req, res, { params: ["transactionId"] })) {
     return;
   }
 
-  void Transaction.findOne({
+  const transaction = await Transaction.findOne({
     where: {
       id: req.params.transactionId,
     },
-  })
-    .then((transaction) => {
-      if (transaction === null) {
-        res.status(500).send({
-          message: "Transaction not found.",
-        });
-        return;
-      }
-
-      res.status(200).send({
-        message: "Transaction gotten.",
-        transaction: transaction,
-      });
-    })
-    .catch((err: Error) => {
-      res.status(500).send({ message: err.message });
+  });
+  if (transaction === null) {
+    res.status(500).send({
+      message: "Transaction not found.",
     });
-}
-
-export function createTransaction(
-  req: express.Request,
-  res: express.Response
-): void {
-  if (!hasRequestParameters(req, res, { body: ["name", "typeId"] })) {
     return;
   }
-  const createOptions: TransactionCreationAttributes = {
+  res.status(200).send({
+    message: "Transaction gotten.",
+    transaction: transaction,
+  });
+}
+
+export async function createTransaction(
+  req: express.Request,
+  res: express.Response
+): Promise<void> {
+  if (!hasRequestParameters(req, res, { body: ["name"] })) {
+    return;
+  }
+  const createOptions: CreationAttributes<Transaction> = {
     name: req.body.name,
   };
-
-  if (req.body.datumIds !== undefined) {
-    createOptions.data = req.body.datumIds;
-  }
-  if (req.body.fileIds !== undefined) {
-    createOptions.files = req.body.fileIds;
-  }
-  if (req.body.tagIds !== undefined) {
-    createOptions.tags = req.body.tagIds;
-  }
-
-  Transaction.create(createOptions)
-    .then((newTransaction) => {
-      res
-        .status(200)
-        .send({ message: "Transaction created.", transaction: newTransaction });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
-    });
+  const transaction = await Transaction.create(createOptions);
+  res
+    .status(200)
+    .send({ message: "Transaction created.", transaction: transaction });
 }
 
-export function updateTransaction(
+export async function updateTransaction(
   req: express.Request,
   res: express.Response
-): void {
-  if (!hasRequestParameters(req, res, { params: ["transactionId"] })) {
+): Promise<void> {
+  if (
+    !hasRequestParameters(
+      req,
+      res,
+      { params: ["transactionId"] },
+      { body: ["name"] }
+    )
+  ) {
     return;
   }
 
-  void Transaction.findOne({
+  const transaction = await Transaction.findOne({
     where: {
       id: req.params.transactionId,
     },
-  })
-    .then((transaction) => {
-      if (transaction === null) {
-        res.status(500).send({
-          message: "Transaction not found.",
-        });
-        return;
-      }
-      const updateOptions: TransactionUpdateAttributes = {};
-      if (req.body.name !== undefined) {
-        updateOptions.name = req.body.name;
-      }
-      if (req.body.datumIds !== undefined) {
-        updateOptions.data = req.body.datumIds;
-      }
-      if (req.body.fileIds !== undefined) {
-        updateOptions.files = req.body.fileIds;
-      }
-      if (req.body.tagIds !== undefined) {
-        updateOptions.tags = req.body.tagIds;
-      }
-      if (updateOptions === {}) {
-        res.status(400).send({
-          message: "No Transaction attributes provided.",
-        });
-        return;
-      }
-
-      transaction
-        .update(updateOptions)
-        .then(() => {
-          res.status(200).send({
-            message: "Transaction updated.",
-            transaction: transaction,
-          });
-        })
-        .catch((err) => {
-          res.status(500).send({
-            message: err.message,
-          });
-        });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
+  });
+  if (transaction === null) {
+    res.status(500).send({
+      message: "Transaction not found.",
     });
+    return;
+  }
+  const updateOptions: CreationAttributes<Transaction> = {
+    name: req.body.name,
+  };
+  await transaction.update(updateOptions);
+  res.status(200).send({
+    message: "Transaction updated.",
+    transaction: transaction,
+  });
 }
 
-export function getTransactions(
+export async function getTransactions(
   req: express.Request,
   res: express.Response
-): void {
-  const whereOptions: sequelize.WhereOptions = {};
+): Promise<void> {
+  const whereOptions: WhereOptions = {};
   if (req.query.name !== undefined) {
     whereOptions.name = {
       [Op.iLike]: req.body.name,
@@ -161,21 +112,14 @@ export function getTransactions(
       }),
     };
   }
-
-  const findOptions: sequelize.FindOptions = {
+  const findOptions: FindOptions = {
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
     where: whereOptions,
   };
-
-  void Transaction.findAll(findOptions)
-    .then((transactions) => {
-      res.status(200).send({
-        message: "Transactions gotten.",
-        transactions: transactions,
-      });
-    })
-    .catch((err: Error) => {
-      res.status(500).send({ message: err.message });
-    });
+  const transactions = await Transaction.findAll(findOptions);
+  res.status(200).send({
+    message: "Transactions gotten.",
+    transactions: transactions,
+  });
 }

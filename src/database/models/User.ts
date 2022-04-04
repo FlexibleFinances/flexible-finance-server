@@ -1,91 +1,89 @@
 import {
   Association,
+  CreationOptional,
   DataTypes,
   HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
   HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
   HasManySetAssociationsMixin,
+  InferAttributes,
+  InferCreationAttributes,
   Model,
-  Optional,
+  NonAttribute,
+  Sequelize,
 } from "sequelize";
 import Role from "./Role";
-import sequelize from "../index";
 
-export interface UserAttributes {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  username: string;
-  email: string;
-  password: string;
-  roles?: Role[];
-}
+export class User extends Model<
+  InferAttributes<User>,
+  InferCreationAttributes<User>
+> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-export interface UserCreationAttributes
-  extends Optional<UserAttributes, "id">,
-    Optional<UserAttributes, "createdAt">,
-    Optional<UserAttributes, "updatedAt">,
-    Optional<UserAttributes, "roles"> {}
+  declare username: string;
 
-export interface UserUpdateAttributes {
-  username?: string;
-  email?: string;
-  password?: string;
-  roles?: Role[];
-}
+  declare email: string;
 
-export class User extends Model<UserAttributes, UserCreationAttributes> {
-  public id!: number;
+  declare password: string;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare roles: NonAttribute<Role[]>;
 
-  public username!: string;
-
-  public email!: string;
-
-  public password!: string;
+  declare static associations: {
+    roles: Association<User, Role>;
+  };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  public getRoles!: HasManyGetAssociationsMixin<Role>;
-  public setRoles!: HasManySetAssociationsMixin<Role, number>;
-  public addRole!: HasManyAddAssociationMixin<Role, number>;
-  public hasRole!: HasManyHasAssociationMixin<Role, number>;
-  public countRoles!: HasManyCountAssociationsMixin;
-  public createRole!: HasManyCreateAssociationMixin<Role>;
-
-  public readonly roles?: Role[];
-
-  public static override associations: {
-    roles: Association<User, Role>;
-  };
+  declare getRoles: HasManyGetAssociationsMixin<Role>;
+  declare addRole: HasManyAddAssociationMixin<Role, number>;
+  declare addRoles: HasManyAddAssociationsMixin<Role, number>;
+  declare setRoles: HasManySetAssociationsMixin<Role, number>;
+  declare removeRole: HasManyRemoveAssociationMixin<Role, number>;
+  declare removeRoles: HasManyRemoveAssociationsMixin<Role, number>;
+  declare hasRole: HasManyHasAssociationMixin<Role, number>;
+  declare hasRoles: HasManyHasAssociationsMixin<Role, number>;
+  declare countRoles: HasManyCountAssociationsMixin;
+  declare createRole: HasManyCreateAssociationMixin<Role, "id">;
 }
 
-User.init(
-  {
-    username: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-      unique: true,
+export function initializeUser(sequelize: Sequelize): void {
+  User.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      username: {
+        type: DataTypes.STRING(128),
+        allowNull: false,
+        unique: true,
+      },
+      email: {
+        type: DataTypes.STRING(128),
+        allowNull: true,
+        unique: true,
+      },
+      password: {
+        type: DataTypes.STRING(128),
+        allowNull: true,
+      },
     },
-    email: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-      unique: true,
-    },
-    password: {
-      type: DataTypes.STRING(128),
-      allowNull: true,
-    },
-  },
-  {
-    sequelize,
-  }
-);
+    {
+      sequelize,
+    }
+  );
+}
 
 export default User;

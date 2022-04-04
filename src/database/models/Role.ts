@@ -1,74 +1,76 @@
 import {
   Association,
+  CreationOptional,
   DataTypes,
   HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
   HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
   HasManySetAssociationsMixin,
+  InferAttributes,
+  InferCreationAttributes,
   Model,
-  Optional,
+  NonAttribute,
+  Sequelize,
 } from "sequelize";
 import User from "./User";
-import sequelize from "../index";
 
-export interface RoleAttributes {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  name: string;
-  users?: User[];
-}
+export class Role extends Model<
+  InferAttributes<Role>,
+  InferCreationAttributes<Role>
+> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-export interface RoleCreationAttributes
-  extends Optional<RoleAttributes, "id">,
-    Optional<RoleAttributes, "createdAt">,
-    Optional<RoleAttributes, "updatedAt">,
-    Optional<RoleAttributes, "users"> {}
+  declare name: string;
 
-export interface RoleUpdateAttributes {
-  name?: string;
-  users?: User[];
-}
+  declare users: NonAttribute<User[]>;
 
-export class Role extends Model<RoleAttributes, RoleCreationAttributes> {
-  public id!: number;
-
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-
-  public name!: string;
-
-  public readonly users?: User[];
-
-  public static override associations: {
+  declare static associations: {
     users: Association<User, Role>;
   };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  public getUsers!: HasManyGetAssociationsMixin<User>;
-  public setUsers!: HasManySetAssociationsMixin<User, number>;
-  public addUser!: HasManyAddAssociationMixin<User, number>;
-  public hasUser!: HasManyHasAssociationMixin<User, number>;
-  public countUsers!: HasManyCountAssociationsMixin;
-  public createUser!: HasManyCreateAssociationMixin<User>;
+  declare getUsers: HasManyGetAssociationsMixin<User>;
+  declare addUser: HasManyAddAssociationMixin<User, number>;
+  declare addUsers: HasManyAddAssociationsMixin<User, number>;
+  declare setUsers: HasManySetAssociationsMixin<User, number>;
+  declare removeUser: HasManyRemoveAssociationMixin<User, number>;
+  declare removeUsers: HasManyRemoveAssociationsMixin<User, number>;
+  declare hasUser: HasManyHasAssociationMixin<User, number>;
+  declare hasUsers: HasManyHasAssociationsMixin<User, number>;
+  declare countUsers: HasManyCountAssociationsMixin;
+  declare createUser: HasManyCreateAssociationMixin<User, "id">;
 }
 
-Role.init(
-  {
-    name: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-      unique: true,
+export function initializeRole(sequelize: Sequelize): void {
+  Role.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      name: {
+        type: DataTypes.STRING(128),
+        allowNull: false,
+        unique: true,
+      },
     },
-  },
-  {
-    sequelize,
-  }
-);
+    {
+      sequelize,
+    }
+  );
+}
 
 export default Role;

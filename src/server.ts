@@ -1,8 +1,12 @@
 import * as OpenApiValidator from "express-openapi-validator";
-import * as models from "./database/models/index";
 import * as swaggerUi from "swagger-ui-express";
 import * as yaml from "js-yaml";
-import { migrator, runMigrations } from "./database/index";
+import {
+  initializeMigrator,
+  initializeSequelize,
+  runMigrations,
+} from "./database/index";
+import { initializeModels, syncAllModels } from "./database/models";
 import compression from "compression";
 import cors from "cors";
 import express from "express";
@@ -28,6 +32,8 @@ const validatorOptions = {
 };
 
 app
+  .set("views", path.join(__dirname, "/views"))
+  .set("view engine", "ejs")
   .use(express.static(path.join(__dirname, "/public")))
   .use(helmet())
   .use(compression())
@@ -36,6 +42,15 @@ app
   .use(express.json({ limit: "1kb" }))
   .use(express.urlencoded({ extended: true, limit: "1kb" }))
   .use(OpenApiValidator.middleware(validatorOptions))
+  .use("/api-v1/api-docs", swaggerUi.serve, swaggerUi.setup(apiDoc))
+  .use(function (req, res, next) {
+    if (toobusy()) {
+      // log if you see necessary
+      res.status(503).send("Server Too Busy");
+    } else {
+      next();
+    }
+  })
   .use(
     (
       err: any,
@@ -52,28 +67,19 @@ app
       });
     }
   )
-  .use("/api-v1/api-docs", swaggerUi.serve, swaggerUi.setup(apiDoc))
-  .set("views", path.join(__dirname, "/views"))
-  .set("view engine", "ejs")
   .get("/", (req, res) => res.render("pages/index"));
 
-app.use(function (req, res, next) {
-  if (toobusy()) {
-    // log if you see necessary
-    res.status(503).send("Server Too Busy");
-  } else {
-    next();
-  }
+void initializeSequelize().then((sequelize) => {
+  const migrator = initializeMigrator(sequelize);
+  initializeModels(sequelize);
+  runMigrations(migrator)
+    .then(async () => {
+      await syncAllModels();
+      setAllRoutes(app);
+    })
+    .catch((err: any) => {
+      console.log(err);
+    });
 });
-
-setAllRoutes(app);
-
-runMigrations(migrator)
-  .then(() => {
-    void models.syncAllModels();
-  })
-  .catch((err: any) => {
-    console.log(err);
-  });
 
 export default app;

@@ -9,7 +9,8 @@ interface paramObject {
 export function hasRequestParameters(
   req: express.Request,
   res: express.Response,
-  requiredParameters: paramObject
+  requiredParameters: paramObject,
+  minOneParameters?: paramObject
 ): boolean {
   let message = "";
   requiredParameters.body?.forEach((paramName: string) => {
@@ -27,6 +28,33 @@ export function hasRequestParameters(
       message = `Missing ${paramName} in request params.`;
     }
   });
+  if (
+    minOneParameters?.body?.some((paramName: string) => {
+      return req.body[paramName] !== undefined;
+    }) === true
+  ) {
+    message = `Missing at least one of [${minOneParameters.body.join(
+      ", "
+    )}] in request body.`;
+  }
+  if (
+    minOneParameters?.query?.some((paramName: string) => {
+      return req.query[paramName] !== undefined;
+    }) === true
+  ) {
+    message = `Missing at least one of [${minOneParameters.query.join(
+      ", "
+    )}] in request query.`;
+  }
+  if (
+    minOneParameters?.params?.some((paramName: string) => {
+      return req.params[paramName] !== undefined;
+    }) === true
+  ) {
+    message = `Missing at least one of [${minOneParameters.params.join(
+      ", "
+    )}] in request params.`;
+  }
   if (message !== "") {
     res.status(400).send({ message: message });
     return false;

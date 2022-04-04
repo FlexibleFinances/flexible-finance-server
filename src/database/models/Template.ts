@@ -1,111 +1,109 @@
 import {
   Association,
+  CreationOptional,
   DataTypes,
   HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
   HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
   HasManySetAssociationsMixin,
+  InferAttributes,
+  InferCreationAttributes,
   Model,
-  Optional,
+  NonAttribute,
+  Sequelize,
 } from "sequelize";
 import Account from "./Account";
 import Field from "./Field";
 import Tag from "./Tag";
-import sequelize from "../index";
 import { templateTypeEnum } from "../../app/utils/enumerators";
 
-export interface TemplateAttributes {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  name: string;
-  type: templateTypeEnum;
-  accounts?: Account[];
-  fields?: Field[];
-  tags?: Tag[];
-}
-
-export interface TemplateCreationAttributes
-  extends Optional<TemplateAttributes, "id">,
-    Optional<TemplateAttributes, "createdAt">,
-    Optional<TemplateAttributes, "updatedAt">,
-    Optional<TemplateAttributes, "accounts">,
-    Optional<TemplateAttributes, "fields">,
-    Optional<TemplateAttributes, "tags"> {}
-
-export interface TemplateUpdateAttributes {
-  name?: string;
-  type?: templateTypeEnum;
-  accounts?: Account[];
-  fields?: Field[];
-  tags?: Tag[];
-}
-
 export class Template extends Model<
-  TemplateAttributes,
-  TemplateCreationAttributes
+  InferAttributes<Template>,
+  InferCreationAttributes<Template>
 > {
-  public id!: number;
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare name: string;
+  declare type: templateTypeEnum;
 
-  public name!: string;
-  public type!: templateTypeEnum;
+  declare Accounts: NonAttribute<Account[]>;
+  declare Fields: NonAttribute<Field[]>;
+  declare Tags: NonAttribute<Tag[]>;
 
-  public readonly accounts?: Account[];
-  public readonly fields?: Field[];
-  public readonly tags?: Tag[];
-
-  public static override associations: {
-    accounts: Association<Template, Account>;
-    fields: Association<Template, Field>;
-    tags: Association<Template, Tag>;
+  declare static associations: {
+    Accounts: Association<Template, Account>;
+    Fields: Association<Template, Field>;
+    Tags: Association<Template, Tag>;
   };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  public getAccounts!: HasManyGetAssociationsMixin<Account>;
-  public setAccounts!: HasManySetAssociationsMixin<Account, number>;
-  public addAccount!: HasManyAddAssociationMixin<Account, number>;
-  public hasAccount!: HasManyHasAssociationMixin<Account, number>;
-  public countAccounts!: HasManyCountAssociationsMixin;
-  public createAccount!: HasManyCreateAssociationMixin<Account>;
+  declare getAccounts: HasManyGetAssociationsMixin<Account>;
+  declare addAccount: HasManyAddAssociationMixin<Account, number>;
+  declare addAccounts: HasManyAddAssociationsMixin<Account, number>;
+  declare setAccounts: HasManySetAssociationsMixin<Account, number>;
+  declare removeAccount: HasManyRemoveAssociationMixin<Account, number>;
+  declare removeAccounts: HasManyRemoveAssociationsMixin<Account, number>;
+  declare hasAccount: HasManyHasAssociationMixin<Account, number>;
+  declare hasAccounts: HasManyHasAssociationsMixin<Account, number>;
+  declare countAccounts: HasManyCountAssociationsMixin;
+  declare createAccount: HasManyCreateAssociationMixin<Account, "TemplateId">;
 
-  public getFields!: HasManyGetAssociationsMixin<Field>;
-  public setFields!: HasManySetAssociationsMixin<Field, number>;
-  public addField!: HasManyAddAssociationMixin<Field, number>;
-  public hasField!: HasManyHasAssociationMixin<Field, number>;
-  public countFields!: HasManyCountAssociationsMixin;
-  public createField!: HasManyCreateAssociationMixin<Field>;
+  declare getFields: HasManyGetAssociationsMixin<Field>;
+  declare addField: HasManyAddAssociationMixin<Field, number>;
+  declare addFields: HasManyAddAssociationsMixin<Field, number>;
+  declare setFields: HasManySetAssociationsMixin<Field, number>;
+  declare removeField: HasManyRemoveAssociationMixin<Field, number>;
+  declare removeFields: HasManyRemoveAssociationsMixin<Field, number>;
+  declare hasField: HasManyHasAssociationMixin<Field, number>;
+  declare hasFields: HasManyHasAssociationsMixin<Field, number>;
+  declare countFields: HasManyCountAssociationsMixin;
 
-  public getTags!: HasManyGetAssociationsMixin<Tag>;
-  public setTags!: HasManySetAssociationsMixin<Tag, number>;
-  public addTag!: HasManyAddAssociationMixin<Tag, number>;
-  public hasTag!: HasManyHasAssociationMixin<Tag, number>;
-  public countTags!: HasManyCountAssociationsMixin;
-  public createTag!: HasManyCreateAssociationMixin<Tag>;
+  declare getTags: HasManyGetAssociationsMixin<Tag>;
+  declare addTag: HasManyAddAssociationMixin<Tag, number>;
+  declare addTags: HasManyAddAssociationsMixin<Tag, number>;
+  declare setTags: HasManySetAssociationsMixin<Tag, number>;
+  declare removeTag: HasManyRemoveAssociationMixin<Tag, number>;
+  declare removeTags: HasManyRemoveAssociationsMixin<Tag, number>;
+  declare hasTag: HasManyHasAssociationMixin<Tag, number>;
+  declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
+  declare countTags: HasManyCountAssociationsMixin;
+  declare createTag: HasManyCreateAssociationMixin<Tag, "id">;
 }
 
-Template.init(
-  {
-    name: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-      unique: true,
+export function initializeTemplate(sequelize: Sequelize): void {
+  Template.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      name: {
+        type: DataTypes.STRING(128),
+        allowNull: false,
+        unique: true,
+      },
+      type: {
+        type: DataTypes.ENUM({ values: Object.keys(templateTypeEnum) }),
+        allowNull: false,
+      },
     },
-    type: {
-      type: DataTypes.ENUM({ values: Object.keys(templateTypeEnum) }),
-      allowNull: false,
-    },
-  },
-  {
-    sequelize,
-  }
-);
+    {
+      sequelize,
+    }
+  );
+}
 
 export default Template;

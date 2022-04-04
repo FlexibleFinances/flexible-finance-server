@@ -1,28 +1,61 @@
-import { Model } from "sequelize";
+import {
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  NonAttribute,
+  Sequelize,
+} from "sequelize";
 import Tag from "./Tag";
 import Transaction from "./Transaction";
-import sequelize from "..";
 
-export class TransactionTag extends Model {
-  public id!: number;
+export class TransactionTag extends Model<
+  InferAttributes<TransactionTag>,
+  InferCreationAttributes<TransactionTag>
+> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare TransactionId: number;
+  declare Transaction: NonAttribute<Transaction>;
 
-  public readonly transactionId!: number;
-
-  public readonly tagId!: number;
+  declare TagId: number;
+  declare Tag: NonAttribute<Tag>;
 }
 
-TransactionTag.init(
-  {},
-  {
-    sequelize,
-  }
-);
-
-Transaction.belongsToMany(Tag, { through: TransactionTag });
-Tag.belongsToMany(Transaction, { through: TransactionTag });
+export function initializeTransactionTag(sequelize: Sequelize): void {
+  TransactionTag.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      TransactionId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Transaction",
+          key: "id",
+        },
+      },
+      TagId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Tag",
+          key: "id",
+        },
+      },
+    },
+    {
+      sequelize,
+    }
+  );
+}
 
 export default TransactionTag;

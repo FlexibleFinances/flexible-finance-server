@@ -1,69 +1,126 @@
-import Account from "./Account";
-import AccountGroup from "./AccountGroup";
-import Entity from "./Entity";
-import EntityTag from "./EntityTag";
-import Field from "./Field";
-import FieldDatum from "./FieldDatum";
-import FieldType from "./FieldType";
-import Report from "./Report";
-import ReportTag from "./ReportTag";
-import Role from "./Role";
-import Status from "./Status";
-import Tag from "./Tag";
-import Template from "./Template";
-import TemplateField from "./TemplateField";
-import TemplateTag from "./TemplateTag";
-import Transaction from "./Transaction";
-import TransactionFile from "./TransactionFile";
-import TransactionTag from "./TransactionTag";
-import Type from "./Type";
-import User from "./User";
-import UserRole from "./UserRole";
+import Account, { initializeAccount } from "./Account";
+import AccountGroup, { initializeAccountGroup } from "./AccountGroup";
+import AccountTag, { initializeAccountTag } from "./AccountTag";
+import Entity, { initializeEntity } from "./Entity";
+import EntityTag, { initializeEntityTag } from "./EntityTag";
+import Field, { initializeField } from "./Field";
+import FieldDatum, { initializeFieldDatum } from "./FieldDatum";
+import FieldType, { initializeFieldType } from "./FieldType";
+import File, { initializeFile } from "./File";
+import Report, { initializeReport } from "./Report";
+import ReportTag, { initializeReportTag } from "./ReportTag";
+import Role, { initializeRole } from "./Role";
+import Status, { initializeStatus } from "./Status";
+import Tag, { initializeTag } from "./Tag";
+import Template, { initializeTemplate } from "./Template";
+import TemplateField, { initializeTemplateField } from "./TemplateField";
+import TemplateTag, { initializeTemplateTag } from "./TemplateTag";
+import Transaction, { initializeTransaction } from "./Transaction";
+import TransactionFile, { initializeTransactionFile } from "./TransactionFile";
+import TransactionTag, { initializeTransactionTag } from "./TransactionTag";
+import Type, { initializeType } from "./Type";
+import User, { initializeUser } from "./User";
+import UserRole, { initializeUserRole } from "./UserRole";
 
-export * from "./Account";
-export * from "./AccountGroup";
-export * from "./AccountTag";
-export * from "./Entity";
-export * from "./EntityTag";
-export * from "./Field";
-export * from "./FieldDatum";
-export * from "./FieldType";
-export * from "./File";
-export * from "./Report";
-export * from "./ReportTag";
-export * from "./Role";
-export * from "./Status";
-export * from "./Tag";
-export * from "./Template";
-export * from "./TemplateField";
-export * from "./TemplateTag";
-export * from "./Transaction";
-export * from "./TransactionFile";
-export * from "./TransactionTag";
-export * from "./Type";
-export * from "./User";
-export * from "./UserRole";
+import { Sequelize } from "sequelize/types";
 
-export function syncAllModels(): void {
-  void Account.sync();
-  void AccountGroup.sync();
-  void Entity.sync();
-  void EntityTag.sync();
-  void Field.sync();
-  void FieldDatum.sync();
-  void FieldType.sync();
-  void Report.sync();
-  void ReportTag.sync();
-  void Role.sync();
-  void Status.sync();
-  void Tag.sync();
-  void Template.sync();
-  void TemplateField.sync();
-  void TemplateTag.sync();
-  void Transaction.sync();
-  void TransactionFile.sync();
-  void TransactionTag.sync();
-  void Type.sync();
-  void User.sync();
-  void UserRole.sync();
+export async function syncAllModels(): Promise<void> {
+  await Promise.all([
+    AccountGroup.sync(),
+    FieldType.sync(),
+    File.sync(),
+    Report.sync(),
+    Role.sync(),
+    Status.sync(),
+    Tag.sync(),
+    Template.sync(),
+    Type.sync(),
+    User.sync(),
+  ]);
+
+  await Promise.all([
+    Field.sync(),
+    ReportTag.sync(),
+    TemplateTag.sync(),
+    UserRole.sync(),
+  ]);
+
+  await Promise.all([FieldDatum.sync(), TemplateField.sync()]);
+
+  await Promise.all([Entity.sync(), Transaction.sync()]);
+
+  await Promise.all([
+    Account.sync(),
+    EntityTag.sync(),
+    TransactionFile.sync(),
+    TransactionTag.sync(),
+  ]);
+}
+
+export function initializeModels(sequelize: Sequelize): void {
+  initializeAccountGroup(sequelize);
+  initializeFieldType(sequelize);
+  initializeFile(sequelize);
+  initializeReport(sequelize);
+  initializeRole(sequelize);
+  initializeStatus(sequelize);
+  initializeTag(sequelize);
+  initializeTemplate(sequelize);
+  initializeType(sequelize);
+  initializeUser(sequelize);
+  console.log("initialized model set 1");
+
+  initializeField(sequelize);
+  initializeReportTag(sequelize);
+  initializeTemplateTag(sequelize);
+  initializeUserRole(sequelize);
+  console.log("initialized model set 2");
+
+  initializeTemplateField(sequelize);
+  initializeEntity(sequelize);
+  initializeTransaction(sequelize);
+  console.log("initialized model set 3");
+
+  initializeAccount(sequelize);
+  initializeEntityTag(sequelize);
+  initializeTransactionFile(sequelize);
+  initializeTransactionTag(sequelize);
+  console.log("initialized model set 4");
+
+  initializeAccountTag(sequelize);
+  initializeFieldDatum(sequelize);
+  console.log("initialized model set 5");
+
+  Account.belongsTo(AccountGroup);
+  AccountGroup.hasMany(Account);
+
+  Account.belongsTo(Template);
+  Template.hasMany(Account);
+
+  Field.belongsTo(FieldType);
+  FieldType.hasMany(Field);
+
+  Account.belongsToMany(Tag, { through: AccountTag });
+  Tag.belongsToMany(Account, { through: AccountTag });
+
+  Entity.belongsToMany(Tag, { through: EntityTag });
+  Tag.belongsToMany(Entity, { through: EntityTag });
+
+  Report.belongsToMany(Tag, { through: ReportTag });
+  Tag.belongsToMany(Report, { through: ReportTag });
+
+  Template.belongsToMany(Field, { through: TemplateField });
+  Field.belongsToMany(Template, { through: TemplateField });
+
+  Template.belongsToMany(Tag, { through: TemplateTag });
+  Tag.belongsToMany(Template, { through: TemplateTag });
+
+  Transaction.belongsToMany(File, { through: TransactionFile });
+  File.belongsToMany(Transaction, { through: TransactionFile });
+
+  Transaction.belongsToMany(Tag, { through: TransactionTag });
+  Tag.belongsToMany(Transaction, { through: TransactionTag });
+
+  User.belongsToMany(Role, { through: UserRole });
+  Role.belongsToMany(User, { through: UserRole });
 }

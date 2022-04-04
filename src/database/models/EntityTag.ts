@@ -1,28 +1,61 @@
+import {
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  NonAttribute,
+  Sequelize,
+} from "sequelize";
 import Entity from "./Entity";
-import { Model } from "sequelize";
 import Tag from "./Tag";
-import sequelize from "..";
 
-export class EntityTag extends Model {
-  public id!: number;
+export class EntityTag extends Model<
+  InferAttributes<EntityTag>,
+  InferCreationAttributes<EntityTag>
+> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare EntityId: number;
+  declare Entity: NonAttribute<Entity>;
 
-  public readonly entityId!: number;
-
-  public readonly tagId!: number;
+  declare TagId: number;
+  declare Tag: NonAttribute<Tag>;
 }
 
-EntityTag.init(
-  {},
-  {
-    sequelize,
-  }
-);
-
-Entity.belongsToMany(Tag, { through: EntityTag });
-Tag.belongsToMany(Entity, { through: EntityTag });
+export function initializeEntityTag(sequelize: Sequelize): void {
+  EntityTag.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      EntityId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Entity",
+          key: "id",
+        },
+      },
+      TagId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Tag",
+          key: "id",
+        },
+      },
+    },
+    {
+      sequelize,
+    }
+  );
+}
 
 export default EntityTag;

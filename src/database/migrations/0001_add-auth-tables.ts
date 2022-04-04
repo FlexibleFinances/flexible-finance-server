@@ -1,10 +1,12 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, QueryInterface } from "sequelize";
 import Role from "../models/Role";
-import sequelize from "../index";
 
-const queryInterface = sequelize.getQueryInterface();
-
-export async function up(): Promise<void> {
+export async function up({
+  context: queryInterface,
+}: {
+  context: QueryInterface;
+}): Promise<void> {
+  console.log("0001 up - starting");
   await queryInterface.createTable("Roles", {
     id: {
       type: DataTypes.INTEGER,
@@ -97,12 +99,17 @@ export async function up(): Promise<void> {
   await Role.create({
     name: "admin",
   });
-  console.log("0001 up");
+  console.log("0001 up - finished");
 }
 
-export async function down(): Promise<void> {
+export async function down({
+  context: queryInterface,
+}: {
+  context: QueryInterface;
+}): Promise<void> {
+  console.log("0001 down - starting");
   await queryInterface.dropTable("UserRoles", {});
   await queryInterface.dropTable("Users", {});
   await queryInterface.dropTable("Roles", {});
-  console.log("0001 down");
+  console.log("0001 down - finished");
 }

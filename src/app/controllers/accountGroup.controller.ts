@@ -1,128 +1,93 @@
-import AccountGroup, {
-  AccountGroupCreationAttributes,
-  AccountGroupUpdateAttributes,
-} from "../../database/models/AccountGroup";
-import sequelize, { Op } from "sequelize";
+import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
+import AccountGroup from "../../database/models/AccountGroup";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
 
-export function getAccountGroup(
+export async function getAccountGroup(
   req: express.Request,
   res: express.Response
-): void {
+): Promise<void> {
   if (!hasRequestParameters(req, res, { params: ["accountGroupId"] })) {
     return;
   }
 
-  void AccountGroup.findOne({
+  const accountGroup = await AccountGroup.findOne({
     where: {
       id: req.params.accountGroupId,
     },
-  })
-    .then((accountGroup) => {
-      if (accountGroup === null) {
-        res.status(500).send({
-          message: "Account Group not found.",
-        });
-        return;
-      }
-
-      res.status(200).send({
-        message: "Account Group gotten.",
-        accountGroup: accountGroup,
-      });
-    })
-    .catch((err: Error) => {
-      res.status(500).send({ message: err.message });
+  });
+  if (accountGroup === null) {
+    res.status(500).send({
+      message: "Account Group not found.",
     });
+    return;
+  }
+  res.status(200).send({
+    message: "Account Group gotten.",
+    accountGroup: accountGroup,
+  });
 }
 
-export function createAccountGroup(
+export async function createAccountGroup(
   req: express.Request,
   res: express.Response
-): void {
+): Promise<void> {
   if (!hasRequestParameters(req, res, { body: ["name"] })) {
     return;
   }
 
-  const createOptions: AccountGroupCreationAttributes = {
+  const createOptions: CreationAttributes<AccountGroup> = {
     name: req.body.name,
   };
-  if (req.body.accountIds !== undefined) {
-    createOptions.accounts = req.body.accountIds;
-  }
-
-  AccountGroup.create(createOptions)
-    .then((newAccountGroup) => {
-      res.status(200).send({
-        message: "Account Group created.",
-        accountGroup: newAccountGroup,
-      });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
-    });
+  const accountGroup = await AccountGroup.create(createOptions);
+  res.status(200).send({
+    message: "Account Group created.",
+    accountGroup: accountGroup,
+  });
 }
 
-export function updateAccountGroup(
+export async function updateAccountGroup(
   req: express.Request,
   res: express.Response
-): void {
-  if (!hasRequestParameters(req, res, { params: ["accountGroupId"] })) {
+): Promise<void> {
+  if (
+    !hasRequestParameters(
+      req,
+      res,
+      { params: ["accountGroupId"] },
+      { body: ["name"] }
+    )
+  ) {
     return;
   }
 
-  void AccountGroup.findOne({
+  const accountGroup = await AccountGroup.findOne({
     where: {
       id: req.params.accountGroupId,
     },
-  })
-    .then((accountGroup) => {
-      if (accountGroup === null) {
-        res.status(500).send({
-          message: "Account Group not found.",
-        });
-        return;
-      }
-      const updateOptions: AccountGroupUpdateAttributes = {};
-      if (req.body.name !== undefined) {
-        updateOptions.name = req.body.name;
-      }
-      if (req.body.accountIds !== undefined) {
-        updateOptions.accounts = req.body.accountIds;
-      }
-      if (updateOptions === {}) {
-        res.status(400).send({
-          message: "No Account Group attributes provided.",
-        });
-        return;
-      }
-
-      accountGroup
-        .update(updateOptions)
-        .then(() => {
-          res.status(200).send({
-            message: "Account Group updated.",
-            accountGroup: accountGroup,
-          });
-        })
-        .catch((err) => {
-          res.status(500).send({
-            message: err.message,
-          });
-        });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
+  });
+  if (accountGroup === null) {
+    res.status(500).send({
+      message: "Account Group not found.",
     });
+    return;
+  }
+  const updateOptions: CreationAttributes<AccountGroup> = {
+    name: req.body.name,
+  };
+  await accountGroup.update(updateOptions);
+  res.status(200).send({
+    message: "Account Group updated.",
+    accountGroup: accountGroup,
+  });
 }
 
-export function getAccountGroups(
+export async function getAccountGroups(
   req: express.Request,
   res: express.Response
-): void {
-  const whereOptions: sequelize.WhereOptions = {};
+): Promise<void> {
+  const whereOptions: WhereOptions = {};
   if (req.query.name !== undefined) {
     whereOptions.name = {
       [Op.iLike]: req.body.name,
@@ -135,23 +100,14 @@ export function getAccountGroups(
       }),
     };
   }
-  const findOptions: sequelize.FindOptions = {
+  const findOptions: FindOptions = {
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
     where: whereOptions,
   };
-
-  void AccountGroup.findAll(findOptions)
-    .then((accountGroups) => {
-      res.status(200).send({
-        message: "Account Groups gotten.",
-        accountGroups: accountGroups,
-      });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
-    })
-    .catch((err: Error) => {
-      res.status(500).send({ message: err.message });
-    });
+  const accountGroups = await AccountGroup.findAll(findOptions);
+  res.status(200).send({
+    message: "Account Groups gotten.",
+    accountGroups: accountGroups,
+  });
 }

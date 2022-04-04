@@ -1,43 +1,43 @@
-import { DataTypes, Model, Optional } from "sequelize";
-import sequelize from "../index";
+import {
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  Sequelize,
+} from "sequelize";
 
-export interface TypeAttributes {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  name: string;
+export class Type extends Model<
+  InferAttributes<Type>,
+  InferCreationAttributes<Type>
+> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
+
+  declare name: string;
 }
 
-export interface TypeCreationAttributes
-  extends Optional<TypeAttributes, "id">,
-    Optional<TypeAttributes, "createdAt">,
-    Optional<TypeAttributes, "updatedAt"> {}
-
-export interface TypeUpdateAttributes {
-  name?: string;
-}
-
-export class Type extends Model<TypeAttributes, TypeCreationAttributes> {
-  public id!: number;
-
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-
-  public name!: string;
-}
-
-Type.init(
-  {
-    name: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-      unique: true,
+export function initializeType(sequelize: Sequelize): void {
+  Type.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      name: {
+        type: DataTypes.STRING(128),
+        allowNull: false,
+        unique: true,
+      },
     },
-  },
-  {
-    sequelize,
-  }
-);
+    {
+      sequelize,
+    }
+  );
+}
 
 export default Type;

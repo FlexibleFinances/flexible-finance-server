@@ -1,144 +1,103 @@
-import Account, {
-  AccountCreationAttributes,
-  AccountUpdateAttributes,
-} from "../../database/models/Account";
-import sequelize, { Op } from "sequelize";
+import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
+import Account from "../../database/models/Account";
+import Field from "../../database/models/Field";
 import Template from "../../database/models/Template";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
 
-export function getAccount(req: express.Request, res: express.Response): void {
+export async function getAccount(
+  req: express.Request,
+  res: express.Response
+): Promise<void> {
   if (!hasRequestParameters(req, res, { params: ["accountId"] })) {
     return;
   }
 
-  void Account.findOne({
+  const account = await Account.findOne({
     where: {
       id: req.params.accountId,
     },
-    include: Template,
-  })
-    .then((account) => {
-      if (account === null) {
-        res.status(500).send({
-          message: "Account not found.",
-        });
-        return;
-      }
-
-      account.fields = account.template.fields;
-      res.status(200).send({
-        message: "Account gotten.",
-        account: account,
-      });
-    })
-    .catch((err: Error) => {
-      res.status(500).send({ message: err.message });
+    include: [{ model: Template, include: [Field] }],
+  });
+  if (account === null) {
+    res.status(500).send({
+      message: "Account not found.",
     });
+    return;
+  }
+  account.Fields = account.Template.Fields ?? [];
+  res.status(200).send({
+    message: "Account gotten.",
+    account: account,
+  });
 }
 
-export function createAccount(
+export async function createAccount(
   req: express.Request,
   res: express.Response
-): void {
-  if (!hasRequestParameters(req, res, { body: ["name", "templateId"] })) {
+): Promise<void> {
+  if (
+    !hasRequestParameters(req, res, {
+      body: ["name", "templateId", "accountGroupId"],
+    })
+  ) {
     return;
   }
 
-  const createOptions: AccountCreationAttributes = {
+  const createOptions: CreationAttributes<Account> = {
     name: req.body.name,
-    template: req.body.templateId,
+    TemplateId: req.body.templateId,
+    AccountGroupId: req.body.accountGroupId,
   };
-  if (req.body.fieldIds !== undefined) {
-    createOptions.fields = req.body.fieldIds;
-  }
-  if (req.body.accountGroupId !== undefined) {
-    createOptions.accountGroup = req.body.accountGroupId;
-  }
-  if (req.body.datumIds !== undefined) {
-    createOptions.data = req.body.datumIds;
-  }
-  if (req.body.tagIds !== undefined) {
-    createOptions.tags = req.body.tagIds;
-  }
-
-  Account.create(createOptions)
-    .then((newAccount) => {
-      res
-        .status(200)
-        .send({ message: "Account created.", account: newAccount });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
-    });
+  const account = await Account.create(createOptions);
+  res.status(200).send({ message: "Account created.", account: account });
 }
 
-export function updateAccount(
+export async function updateAccount(
   req: express.Request,
   res: express.Response
-): void {
-  if (!hasRequestParameters(req, res, { params: ["accountId"] })) {
+): Promise<void> {
+  if (
+    !hasRequestParameters(
+      req,
+      res,
+      { params: ["accountId"] },
+      { body: ["name", "accountGroup", "template"] }
+    )
+  ) {
     return;
   }
 
-  void Account.findOne({
+  const account = await Account.findOne({
     where: {
       id: req.params.accountId,
     },
     include: Template,
-  })
-    .then((account) => {
-      if (account === null) {
-        res.status(500).send({
-          message: "Account not found.",
-        });
-        return;
-      }
-      const updateOptions: AccountUpdateAttributes = {};
-      if (req.body.name !== undefined) {
-        updateOptions.name = req.body.name;
-      }
-      if (req.body.accountGroupId !== undefined) {
-        updateOptions.accountGroup = req.body.accountGroupId;
-      }
-      if (req.body.datumIds !== undefined) {
-        updateOptions.data = req.body.datumIds;
-      }
-      if (req.body.tagIds !== undefined) {
-        updateOptions.tags = req.body.tagIds;
-      }
-      if (req.body.templateId !== undefined) {
-        updateOptions.template = req.body.templateId;
-      }
-      if (updateOptions === {}) {
-        res.status(400).send({
-          message: "No Account attributes provided.",
-        });
-        return;
-      }
-
-      account
-        .update(updateOptions)
-        .then(() => {
-          res.status(200).send({
-            message: "Account updated.",
-            account: account,
-          });
-        })
-        .catch((err) => {
-          res.status(500).send({
-            message: err.message,
-          });
-        });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
+  });
+  if (account === null) {
+    res.status(500).send({
+      message: "Account not found.",
     });
+    return;
+  }
+  const updateOptions: CreationAttributes<Account> = {
+    name: req.body.name,
+    AccountGroupId: req.body.accountGroupId,
+    TemplateId: req.body.templateId,
+  };
+  await account.update(updateOptions);
+  res.status(200).send({
+    message: "Account updated.",
+    account: account,
+  });
 }
 
-export function getAccounts(req: express.Request, res: express.Response): void {
-  const whereOptions: sequelize.WhereOptions = {};
+export async function getAccounts(
+  req: express.Request,
+  res: express.Response
+): Promise<void> {
+  const whereOptions: WhereOptions = {};
   if (req.query.name !== undefined) {
     whereOptions.name = {
       [Op.iLike]: req.body.name,
@@ -165,26 +124,19 @@ export function getAccounts(req: express.Request, res: express.Response): void {
       }),
     };
   }
-
-  const findOptions: sequelize.FindOptions = {
-    include: Template,
+  const findOptions: FindOptions = {
+    include: [{ model: Template, include: [Field] }],
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
     where: whereOptions,
   };
-
-  void Account.findAll(findOptions)
-    .then((accounts) => {
-      const accountsWithFields = accounts.map((account) => {
-        account.fields = account.template.fields;
-        return account;
-      });
-      res.status(200).send({
-        message: "Accounts gotten.",
-        accounts: accountsWithFields,
-      });
-    })
-    .catch((err: Error) => {
-      res.status(500).send({ message: err.message });
-    });
+  const accounts = await Account.findAll(findOptions);
+  const accountsWithFields = accounts.map((account) => {
+    account.Fields = account.Template.Fields ?? [];
+    return account;
+  });
+  res.status(200).send({
+    message: "Accounts gotten.",
+    accounts: accountsWithFields,
+  });
 }

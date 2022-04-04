@@ -1,91 +1,91 @@
 import {
   Association,
+  CreationOptional,
   DataTypes,
   HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
   HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
   HasManySetAssociationsMixin,
+  InferAttributes,
+  InferCreationAttributes,
   Model,
-  Optional,
+  NonAttribute,
+  Sequelize,
 } from "sequelize";
 import FieldDatum from "./FieldDatum";
 import Tag from "./Tag";
-import sequelize from "../index";
 
-export interface EntityAttributes {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  name: string;
-  data?: FieldDatum[];
-  tags?: Tag[];
-}
+export class Entity extends Model<
+  InferAttributes<Entity>,
+  InferCreationAttributes<Entity>
+> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-export interface EntityCreationAttributes
-  extends Optional<EntityAttributes, "id">,
-    Optional<EntityAttributes, "createdAt">,
-    Optional<EntityAttributes, "updatedAt">,
-    Optional<EntityAttributes, "data">,
-    Optional<EntityAttributes, "tags"> {}
+  declare name: string;
 
-export interface EntityUpdateAttributes {
-  name?: string;
-  data?: FieldDatum[];
-  tags?: Tag[];
-}
+  declare Data: NonAttribute<FieldDatum[]>;
 
-export class Entity extends Model<EntityAttributes, EntityCreationAttributes> {
-  public id!: number;
+  declare Tags: NonAttribute<Tag[]>;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-
-  public name!: string;
-
-  public readonly data?: FieldDatum[];
-
-  public readonly tags?: Tag[];
-
-  public static override associations: {
-    data: Association<Entity, FieldDatum>;
-    tags: Association<Entity, Tag>;
+  declare static associations: {
+    Data: Association<Entity, FieldDatum>;
+    Tags: Association<Entity, Tag>;
   };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  public getData!: HasManyGetAssociationsMixin<FieldDatum>;
-  public setData!: HasManySetAssociationsMixin<FieldDatum, number>;
-  public addDatum!: HasManyAddAssociationMixin<FieldDatum, number>;
-  public hasDatum!: HasManyHasAssociationMixin<FieldDatum, number>;
-  public countData!: HasManyCountAssociationsMixin;
-  public createDatum!: HasManyCreateAssociationMixin<FieldDatum>;
+  declare getData: HasManyGetAssociationsMixin<FieldDatum>;
+  declare addDatum: HasManyAddAssociationMixin<FieldDatum, number>;
+  declare addData: HasManyAddAssociationsMixin<FieldDatum, number>;
+  declare setData: HasManySetAssociationsMixin<FieldDatum, number>;
+  declare removeDatum: HasManyRemoveAssociationMixin<FieldDatum, number>;
+  declare removeData: HasManyRemoveAssociationsMixin<FieldDatum, number>;
+  declare hasDatum: HasManyHasAssociationMixin<FieldDatum, number>;
+  declare hasData: HasManyHasAssociationsMixin<FieldDatum, number>;
+  declare countData: HasManyCountAssociationsMixin;
+  declare createDatum: HasManyCreateAssociationMixin<FieldDatum, "EntityId">;
 
-  public getTags!: HasManyGetAssociationsMixin<Tag>;
-  public setTags!: HasManySetAssociationsMixin<Tag, number>;
-  public addTag!: HasManyAddAssociationMixin<Tag, number>;
-  public hasTag!: HasManyHasAssociationMixin<Tag, number>;
-  public countTags!: HasManyCountAssociationsMixin;
-  public createTag!: HasManyCreateAssociationMixin<Tag>;
+  declare getTags: HasManyGetAssociationsMixin<Tag>;
+  declare addTag: HasManyAddAssociationMixin<Tag, number>;
+  declare addTags: HasManyAddAssociationsMixin<Tag, number>;
+  declare setTags: HasManySetAssociationsMixin<Tag, number>;
+  declare removeTag: HasManyRemoveAssociationMixin<Tag, number>;
+  declare removeTags: HasManyRemoveAssociationsMixin<Tag, number>;
+  declare hasTag: HasManyHasAssociationMixin<Tag, number>;
+  declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
+  declare countTags: HasManyCountAssociationsMixin;
+  declare createTag: HasManyCreateAssociationMixin<Tag, "id">;
 }
 
-Entity.init(
-  {
-    name: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-      unique: true,
+export function initializeEntity(sequelize: Sequelize): void {
+  Entity.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      name: {
+        type: DataTypes.STRING(128),
+        allowNull: false,
+        unique: true,
+      },
     },
-  },
-  {
-    sequelize,
-  }
-);
-
-FieldDatum.belongsTo(Entity);
-Entity.hasMany(FieldDatum);
+    {
+      sequelize,
+    }
+  );
+}
 
 export default Entity;

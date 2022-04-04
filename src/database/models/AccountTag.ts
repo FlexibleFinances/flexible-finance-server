@@ -1,28 +1,61 @@
+import {
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  NonAttribute,
+  Sequelize,
+} from "sequelize";
 import Account from "./Account";
-import { Model } from "sequelize";
 import Tag from "./Tag";
-import sequelize from "..";
 
-export class AccountTag extends Model {
-  public id!: number;
+export class AccountTag extends Model<
+  InferAttributes<AccountTag>,
+  InferCreationAttributes<AccountTag>
+> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare AccountId: number;
+  declare Account: NonAttribute<Account>;
 
-  public readonly accountId!: number;
-
-  public readonly tagId!: number;
+  declare TagId: number;
+  declare Tag: NonAttribute<Tag>;
 }
 
-AccountTag.init(
-  {},
-  {
-    sequelize,
-  }
-);
-
-Account.belongsToMany(Tag, { through: AccountTag });
-Tag.belongsToMany(Account, { through: AccountTag });
+export function initializeAccountTag(sequelize: Sequelize): void {
+  AccountTag.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      AccountId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Account",
+          key: "id",
+        },
+      },
+      TagId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Tag",
+          key: "id",
+        },
+      },
+    },
+    {
+      sequelize,
+    }
+  );
+}
 
 export default AccountTag;

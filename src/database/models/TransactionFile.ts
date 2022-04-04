@@ -1,28 +1,61 @@
+import {
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  NonAttribute,
+  Sequelize,
+} from "sequelize";
 import File from "./File";
-import { Model } from "sequelize";
 import Transaction from "./Transaction";
-import sequelize from "..";
 
-export class TransactionFile extends Model {
-  public id!: number;
+export class TransactionFile extends Model<
+  InferAttributes<TransactionFile>,
+  InferCreationAttributes<TransactionFile>
+> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare TransactionId: number;
+  declare Transaction: NonAttribute<Transaction>;
 
-  public readonly transactionId!: number;
-
-  public readonly fileId!: number;
+  declare FileId: number;
+  declare File: NonAttribute<File>;
 }
 
-TransactionFile.init(
-  {},
-  {
-    sequelize,
-  }
-);
-
-Transaction.belongsToMany(File, { through: TransactionFile });
-File.belongsToMany(Transaction, { through: TransactionFile });
+export function initializeTransactionFile(sequelize: Sequelize): void {
+  TransactionFile.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      TransactionId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Transaction",
+          key: "id",
+        },
+      },
+      FileId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "File",
+          key: "id",
+        },
+      },
+    },
+    {
+      sequelize,
+    }
+  );
+}
 
 export default TransactionFile;

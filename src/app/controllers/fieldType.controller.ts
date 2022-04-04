@@ -1,128 +1,90 @@
-import {
-  FieldType,
-  FieldTypeCreationAttributes,
-  FieldTypeUpdateAttributes,
-} from "../../database/models";
-import sequelize, { Op } from "sequelize";
+import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
+import FieldType from "../../database/models/FieldType";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
 
-export function getFieldType(
+export async function getFieldType(
   req: express.Request,
   res: express.Response
-): void {
+): Promise<void> {
   if (!hasRequestParameters(req, res, { body: ["fieldTypeId"] })) {
     return;
   }
 
-  void FieldType.findOne({
+  const fieldType = await FieldType.findOne({
     where: {
       id: req.params.fieldTypeId,
     },
-  })
-    .then((fieldType) => {
-      if (fieldType === null) {
-        res.status(500).send({
-          message: "FieldType not found.",
-        });
-        return;
-      }
-
-      res.status(200).send({
-        message: "FieldType gotten.",
-        fieldType: fieldType,
-      });
-    })
-    .catch((err: Error) => {
-      res.status(500).send({ message: err.message });
+  });
+  if (fieldType === null) {
+    res.status(500).send({
+      message: "FieldType not found.",
     });
+    return;
+  }
+  res.status(200).send({
+    message: "FieldType gotten.",
+    fieldType: fieldType,
+  });
 }
 
-export function createFieldType(
+export async function createFieldType(
   req: express.Request,
   res: express.Response
-): void {
-  if (!hasRequestParameters(req, res, { params: ["name"] })) {
+): Promise<void> {
+  if (!hasRequestParameters(req, res, { body: ["name"] })) {
     return;
   }
 
-  const createOptions: FieldTypeCreationAttributes = {
+  const createOptions: CreationAttributes<FieldType> = {
     name: req.body.name,
   };
-  if (req.body.fieldIds !== undefined) {
-    createOptions.fields = req.body.fieldIds;
-  }
-
-  FieldType.create(createOptions)
-    .then((newFieldType) => {
-      res
-        .status(200)
-        .send({ message: "FieldType created.", fieldType: newFieldType });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
-    });
+  const fieldType = await FieldType.create(createOptions);
+  res.status(200).send({ message: "FieldType created.", fieldType: fieldType });
 }
 
-export function updateFieldType(
+export async function updateFieldType(
   req: express.Request,
   res: express.Response
-): void {
-  if (!hasRequestParameters(req, res, { params: ["fieldTypeId"] })) {
+): Promise<void> {
+  if (
+    !hasRequestParameters(
+      req,
+      res,
+      { params: ["fieldTypeId"] },
+      { body: ["name"] }
+    )
+  ) {
     return;
   }
 
-  void FieldType.findOne({
+  const fieldType = await FieldType.findOne({
     where: {
       id: req.params.fieldTypeId,
     },
-  })
-    .then((fieldType) => {
-      if (fieldType === null) {
-        res.status(500).send({
-          message: "FieldType not found.",
-        });
-        return;
-      }
-      const updateOptions: FieldTypeUpdateAttributes = {};
-      if (req.body.name !== undefined) {
-        updateOptions.name = req.body.name;
-      }
-      if (req.body.fieldIds !== undefined) {
-        updateOptions.fields = req.body.fieldIds;
-      }
-      if (updateOptions === {}) {
-        res.status(400).send({
-          message: "No Field Type attributes provided.",
-        });
-        return;
-      }
-
-      fieldType
-        .update(updateOptions)
-        .then(() => {
-          res.status(200).send({
-            message: "FieldType updated.",
-            fieldType: fieldType,
-          });
-        })
-        .catch((err) => {
-          res.status(500).send({
-            message: err.message,
-          });
-        });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
+  });
+  if (fieldType === null) {
+    res.status(500).send({
+      message: "FieldType not found.",
     });
+    return;
+  }
+  const updateOptions: CreationAttributes<FieldType> = {
+    name: req.body.name,
+  };
+  await fieldType.update(updateOptions);
+  res.status(200).send({
+    message: "FieldType updated.",
+    fieldType: fieldType,
+  });
 }
 
-export function getFieldTypes(
+export async function getFieldTypes(
   req: express.Request,
   res: express.Response
-): void {
-  const whereOptions: sequelize.WhereOptions = {};
+): Promise<void> {
+  const whereOptions: WhereOptions = {};
   if (req.query.name !== undefined) {
     whereOptions.name = {
       [Op.iLike]: req.body.name,
@@ -135,21 +97,14 @@ export function getFieldTypes(
       }),
     };
   }
-
-  const findOptions: sequelize.FindOptions = {
+  const findOptions: FindOptions = {
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
     where: whereOptions,
   };
-
-  void FieldType.findAll(findOptions)
-    .then((fieldTypes) => {
-      res.status(200).send({
-        message: "FieldTypes gotten.",
-        fieldTypes: fieldTypes,
-      });
-    })
-    .catch((err: Error) => {
-      res.status(500).send({ message: err.message });
-    });
+  const fieldTypes = await FieldType.findAll(findOptions);
+  res.status(200).send({
+    message: "FieldTypes gotten.",
+    fieldTypes: fieldTypes,
+  });
 }

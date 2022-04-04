@@ -1,124 +1,96 @@
-import {
-  User,
-  UserCreationAttributes,
-  UserUpdateAttributes,
-} from "../../database/models";
-import sequelize, { Op } from "sequelize";
+import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
+import User from "../../database/models/User";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
 
-export function getUser(req: express.Request, res: express.Response): void {
+export async function getUser(
+  req: express.Request,
+  res: express.Response
+): Promise<void> {
   if (!hasRequestParameters(req, res, { params: ["userId"] })) {
     return;
   }
 
-  void User.findOne({
+  const user = await User.findOne({
     where: {
       id: req.params.userId,
     },
-  })
-    .then((user) => {
-      if (user === null) {
-        res.status(500).send({
-          message: "User not found.",
-        });
-        return;
-      }
-
-      res.status(200).send({
-        message: "User gotten.",
-        user: user,
-      });
-    })
-    .catch((err: Error) => {
-      res.status(500).send({ message: err.message });
+  });
+  if (user === null) {
+    res.status(500).send({
+      message: "User not found.",
     });
+    return;
+  }
+  res.status(200).send({
+    message: "User gotten.",
+    user: user,
+  });
 }
 
-export function createUser(req: express.Request, res: express.Response): void {
+export async function createUser(
+  req: express.Request,
+  res: express.Response
+): Promise<void> {
   if (
     !hasRequestParameters(req, res, { body: ["username", "email", "password"] })
   ) {
     return;
   }
 
-  const createOptions: UserCreationAttributes = {
+  const createOptions: CreationAttributes<User> = {
     username: req.body.username,
     email: req.body.email,
     password: req.body.password,
   };
-  if (req.body.roleIds !== undefined) {
-    createOptions.roles = req.body.roleIds;
-  }
-
-  User.create(createOptions)
-    .then((newUser) => {
-      res.status(200).send({ message: "User created.", user: newUser });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
-    });
+  const user = await User.create(createOptions);
+  res.status(200).send({ message: "User created.", user: user });
 }
 
-export function updateUser(req: express.Request, res: express.Response): void {
-  if (!hasRequestParameters(req, res, { params: ["userId"] })) {
+export async function updateUser(
+  req: express.Request,
+  res: express.Response
+): Promise<void> {
+  if (
+    !hasRequestParameters(
+      req,
+      res,
+      { params: ["userId"] },
+      { body: ["username", "email", "password"] }
+    )
+  ) {
     return;
   }
 
-  void User.findOne({
+  const user = await User.findOne({
     where: {
       id: req.params.userId,
     },
-  })
-    .then((user) => {
-      if (user === null) {
-        res.status(500).send({
-          message: "User not found.",
-        });
-        return;
-      }
-      const updateOptions: UserUpdateAttributes = {};
-      if (req.body.username !== undefined) {
-        updateOptions.username = req.body.username;
-      }
-      if (req.body.email !== undefined) {
-        updateOptions.email = req.body.email;
-      }
-      if (req.body.password !== undefined) {
-        updateOptions.password = req.body.password;
-      }
-      if (req.body.roleIds !== undefined) {
-        updateOptions.roles = req.body.roleIds;
-      }
-      if (updateOptions === {}) {
-        res.status(400).send({
-          message: "No User attributes provided.",
-        });
-        return;
-      }
-
-      user
-        .update(updateOptions)
-        .then(() => {
-          res.status(200).send({
-            message: "User updated.",
-            user: user,
-          });
-        })
-        .catch((err) => {
-          res.status(500).send({
-            message: err.message,
-          });
-        });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
+  });
+  if (user === null) {
+    res.status(500).send({
+      message: "User not found.",
     });
+    return;
+  }
+  const updateOptions: CreationAttributes<User> = {
+    username: req.body.username,
+    email: req.body.email,
+    password: req.body.password,
+  };
+  await user.update(updateOptions);
+  res.status(200).send({
+    message: "User updated.",
+    user: user,
+  });
 }
 
-export function getUsers(req: express.Request, res: express.Response): void {
-  const whereOptions: sequelize.WhereOptions = {};
+export async function getUsers(
+  req: express.Request,
+  res: express.Response
+): Promise<void> {
+  const whereOptions: WhereOptions = {};
   if (req.query.name !== undefined) {
     whereOptions.name = {
       [Op.iLike]: req.body.name,
@@ -136,21 +108,14 @@ export function getUsers(req: express.Request, res: express.Response): void {
       }),
     };
   }
-
-  const findOptions: sequelize.FindOptions = {
+  const findOptions: FindOptions = {
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
     where: whereOptions,
   };
-
-  void User.findAll(findOptions)
-    .then((users) => {
-      res.status(200).send({
-        message: "Users gotten.",
-        users: users,
-      });
-    })
-    .catch((err: Error) => {
-      res.status(500).send({ message: err.message });
-    });
+  const users = await User.findAll(findOptions);
+  res.status(200).send({
+    message: "Users gotten.",
+    users: users,
+  });
 }

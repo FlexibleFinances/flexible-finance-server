@@ -1,5 +1,5 @@
-import { Sequelize } from "sequelize";
-import Umzug from "umzug";
+import { QueryInterface, Sequelize } from "sequelize";
+import { SequelizeStorage, Umzug } from "umzug";
 import dotenv from "dotenv";
 import path from "path";
 
@@ -10,43 +10,44 @@ if (process.env.DEV_DATABASE_URL !== undefined) {
   devDB = process.env.DEV_DATABASE_URL;
 }
 
-let sequelize: Sequelize;
-if (process.env.DATABASE_URL !== undefined) {
-  sequelize = new Sequelize(process.env.DATABASE_URL, {
-    dialect: "postgres",
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
+export async function initializeSequelize(): Promise<Sequelize> {
+  let sequelize: Sequelize;
+  if (process.env.DATABASE_URL !== undefined) {
+    sequelize = new Sequelize(process.env.DATABASE_URL, {
+      dialect: "postgres",
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
       },
-    },
-  });
-} else {
-  sequelize = new Sequelize(devDB, { dialect: "postgres" });
+    });
+  } else {
+    sequelize = new Sequelize(devDB, { dialect: "postgres" });
+  }
+
+  await sequelize.authenticate();
+  console.log("Connection has been established successfully.");
+
+  return sequelize;
 }
 
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log("Connection has been established successfully.");
-  })
-  .catch((err) => {
-    console.error("Unable to connect to the database:", err);
+export function initializeMigrator(
+  sequelize: Sequelize
+): Umzug<QueryInterface> {
+  return new Umzug({
+    migrations: {
+      glob: path.join(__dirname, "/migrations") + "/*",
+    },
+    storage: new SequelizeStorage({ sequelize }),
+    context: sequelize.getQueryInterface(),
+    logger: console,
   });
+}
 
-export default sequelize;
-
-export const migrator = new Umzug({
-  migrations: {
-    path: path.join(__dirname, "/migrations"),
-  },
-  storage: "sequelize",
-  storageOptions: {
-    sequelize: sequelize,
-  },
-});
-
-export async function runMigrations(migrator: Umzug.Umzug): Promise<void> {
+export async function runMigrations(
+  migrator: Umzug<QueryInterface>
+): Promise<void> {
   if (process.env.DB_TEARDOWN === "true") {
     await migrator.down({ to: 0 });
   }
@@ -57,5 +58,3 @@ export async function runMigrations(migrator: Umzug.Umzug): Promise<void> {
 }
 
 export const ROLES = ["user", "admin"];
-
-export type Migration = Umzug.Migration;

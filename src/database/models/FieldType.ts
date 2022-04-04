@@ -1,80 +1,76 @@
 import {
   Association,
+  CreationOptional,
   DataTypes,
   HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
   HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
   HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
   HasManySetAssociationsMixin,
+  InferAttributes,
+  InferCreationAttributes,
   Model,
-  Optional,
+  NonAttribute,
+  Sequelize,
 } from "sequelize";
 import Field from "./Field";
-import sequelize from "../index";
-
-export interface FieldTypeAttributes {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  name: string;
-  fields?: Field[];
-}
-
-export interface FieldTypeCreationAttributes
-  extends Optional<FieldTypeAttributes, "id">,
-    Optional<FieldTypeAttributes, "createdAt">,
-    Optional<FieldTypeAttributes, "updatedAt">,
-    Optional<FieldTypeAttributes, "fields"> {}
-
-export interface FieldTypeUpdateAttributes {
-  name?: string;
-  fields?: Field[];
-}
 
 export class FieldType extends Model<
-  FieldTypeAttributes,
-  FieldTypeCreationAttributes
+  InferAttributes<FieldType>,
+  InferCreationAttributes<FieldType>
 > {
-  public id!: number;
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare name: string;
 
-  public name!: string;
+  declare Fields: NonAttribute<Field[]>;
 
-  public readonly fields?: Field[];
-
-  public static override associations: {
-    fields: Association<FieldType, Field>;
+  declare static associations: {
+    Fields: Association<FieldType, Field>;
   };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  public getFields!: HasManyGetAssociationsMixin<Field>;
-  public setFields!: HasManySetAssociationsMixin<Field, number>;
-  public addField!: HasManyAddAssociationMixin<Field, number>;
-  public hasField!: HasManyHasAssociationMixin<Field, number>;
-  public countFields!: HasManyCountAssociationsMixin;
-  public createField!: HasManyCreateAssociationMixin<Field>;
+  declare getFields: HasManyGetAssociationsMixin<Field>;
+  declare addField: HasManyAddAssociationMixin<Field, number>;
+  declare addFields: HasManyAddAssociationsMixin<Field, number>;
+  declare setFields: HasManySetAssociationsMixin<Field, number>;
+  declare removeField: HasManyRemoveAssociationMixin<Field, number>;
+  declare removeFields: HasManyRemoveAssociationsMixin<Field, number>;
+  declare hasField: HasManyHasAssociationMixin<Field, number>;
+  declare hasFields: HasManyHasAssociationsMixin<Field, number>;
+  declare countFields: HasManyCountAssociationsMixin;
+  declare createField: HasManyCreateAssociationMixin<Field, "FieldTypeId">;
 }
 
-FieldType.init(
-  {
-    name: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-      unique: true,
+export function initializeFieldType(sequelize: Sequelize): void {
+  FieldType.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      name: {
+        type: DataTypes.STRING(128),
+        allowNull: false,
+        unique: true,
+      },
     },
-  },
-  {
-    sequelize,
-  }
-);
-
-FieldType.hasMany(Field);
-Field.belongsTo(FieldType);
+    {
+      sequelize,
+    }
+  );
+}
 
 export default FieldType;

@@ -1,43 +1,43 @@
-import { DataTypes, Model, Optional } from "sequelize";
-import sequelize from "../index";
+import {
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  Sequelize,
+} from "sequelize";
 
-export interface StatusAttributes {
-  id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  name: string;
+export class Status extends Model<
+  InferAttributes<Status>,
+  InferCreationAttributes<Status>
+> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
+
+  declare name: string;
 }
 
-export interface StatusCreationAttributes
-  extends Optional<StatusAttributes, "id">,
-    Optional<StatusAttributes, "createdAt">,
-    Optional<StatusAttributes, "updatedAt"> {}
-
-export interface StatusUpdateAttributes {
-  name?: string;
-}
-
-export class Status extends Model<StatusAttributes, StatusCreationAttributes> {
-  public id!: number;
-
-  // timestamps!
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-
-  public name!: string;
-}
-
-Status.init(
-  {
-    name: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-      unique: true,
+export function initializeStatus(sequelize: Sequelize): void {
+  Status.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      name: {
+        type: DataTypes.STRING(128),
+        allowNull: false,
+        unique: true,
+      },
     },
-  },
-  {
-    sequelize,
-  }
-);
+    {
+      sequelize,
+    }
+  );
+}
 
 export default Status;

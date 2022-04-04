@@ -1,4 +1,5 @@
-import sequelize, { ROLES } from "../../database/index";
+import { ROLES } from "../../database/index";
+import User from "../../database/models/User";
 import express from "express";
 
 function checkDuplicateUsernameOrEmail(
@@ -16,7 +17,7 @@ function checkDuplicateUsernameOrEmail(
   }
 
   // Username
-  void sequelize.models.User.findOne({
+  void User.findOne({
     where: {
       username: req.body.username,
     },
@@ -29,7 +30,7 @@ function checkDuplicateUsernameOrEmail(
     }
 
     // Email
-    void sequelize.models.User.findOne({
+    void User.findOne({
       where: {
         email: req.body.email,
       },
