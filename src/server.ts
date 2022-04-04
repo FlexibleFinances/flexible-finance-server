@@ -37,7 +37,7 @@ app
   .use(express.static(path.join(__dirname, "/public")))
   .use(helmet())
   .use(compression())
-  .use(cors())
+  .use(cors({ origin: process.env.CORS_WHITELIST?.split(" ") ?? "" }))
   .use(hpp())
   .use(express.json({ limit: "1kb" }))
   .use(express.urlencoded({ extended: true, limit: "1kb" }))
