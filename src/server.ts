@@ -31,13 +31,20 @@ const validatorOptions = {
   ignoreUndocumented: true,
 };
 
+const corsOptions = {
+  origin: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+console.log(corsOptions);
+
 app
   .set("views", path.join(__dirname, "/views"))
   .set("view engine", "ejs")
   .use(express.static(path.join(__dirname, "/public")))
   .use(helmet())
   .use(compression())
-  .use(cors({ origin: process.env.CORS_WHITELIST?.split(" ") ?? "" }))
+  .use(cors(corsOptions))
   .use(hpp())
   .use(express.json({ limit: "1kb" }))
   .use(express.urlencoded({ extended: true, limit: "1kb" }))
