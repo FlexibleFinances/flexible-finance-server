@@ -18,8 +18,8 @@ export class TemplateField extends Model<
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
-  declare EntityId: number;
-  declare Entity: NonAttribute<Template>;
+  declare TemplateId: number;
+  declare Template: NonAttribute<Template>;
 
   declare FieldId: number;
   declare Field: NonAttribute<Field>;
@@ -35,7 +35,7 @@ export function initializeTemplateField(sequelize: Sequelize): void {
       },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
-      EntityId: {
+      TemplateId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
