@@ -87,6 +87,12 @@ EntitiesRequests:
           type: array
           items:
             type: number
+      - name: templateIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Entities"

@@ -18,3 +18,5 @@ properties:
     type: array
     items:
       type: integer
+  templateId:
+    type: integer

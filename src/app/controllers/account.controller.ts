@@ -63,7 +63,7 @@ export async function updateAccount(
       req,
       res,
       { params: ["accountId"] },
-      { body: ["name", "accountGroup", "template"] }
+      { body: ["name", "accountGroupId", "templateId"] }
     )
   ) {
     return;

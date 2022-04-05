@@ -103,6 +103,9 @@ export function initializeModels(sequelize: Sequelize): void {
   Account.belongsToMany(Tag, { through: AccountTag });
   Tag.belongsToMany(Account, { through: AccountTag });
 
+  Entity.belongsTo(Template);
+  Template.hasMany(Entity);
+
   Entity.belongsToMany(Tag, { through: EntityTag });
   Tag.belongsToMany(Entity, { through: EntityTag });
 

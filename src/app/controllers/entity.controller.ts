@@ -34,12 +34,13 @@ export async function createEntity(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { body: ["name"] })) {
+  if (!hasRequestParameters(req, res, { body: ["name", "templateId"] })) {
     return;
   }
 
   const createOptions: CreationAttributes<Entity> = {
     name: req.body.name,
+    TemplateId: req.body.templateId,
   };
 
   const entity = await Entity.create(createOptions);
@@ -55,7 +56,7 @@ export async function updateEntity(
       req,
       res,
       { params: ["entityId"] },
-      { body: ["name"] }
+      { body: ["name", "templateId"] }
     )
   ) {
     return;
@@ -74,6 +75,7 @@ export async function updateEntity(
   }
   const updateOptions: CreationAttributes<Entity> = {
     name: req.body.name,
+    TemplateId: req.body.templateId,
   };
   await entity.update(updateOptions);
   res.status(200).send({
@@ -102,6 +104,13 @@ export async function getEntities(
   if (req.query.tagIds !== undefined) {
     whereOptions.tags = {
       [Op.in]: (req.query.tagIds as string[]).map((x) => {
+        return +x;
+      }),
+    };
+  }
+  if (req.query.templateIds !== undefined) {
+    whereOptions.template = {
+      [Op.in]: (req.query.templateIds as string[]).map((x) => {
         return +x;
       }),
     };
