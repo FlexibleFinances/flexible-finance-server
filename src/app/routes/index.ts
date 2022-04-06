@@ -9,6 +9,7 @@ import { setFieldRoutes } from "./field.routes";
 import { setFieldTypeRoutes } from "./fieldType.routes";
 import { setTagRoutes } from "./tag.routes";
 import { setTemplateRoutes } from "./template.routes";
+import { setTransactionRoutes } from "./transaction.routes";
 import { setUserRoutes } from "./user.routes";
 
 export default function setAllRoutes(app: express.Express): void {
@@ -21,6 +22,7 @@ export default function setAllRoutes(app: express.Express): void {
   setFieldTypeRoutes(app);
   setTagRoutes(app);
   setTemplateRoutes(app);
+  setTransactionRoutes(app);
   setUserRoutes(app);
   setAuthTestRoutes(app);
 }

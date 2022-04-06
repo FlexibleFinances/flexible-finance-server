@@ -33,11 +33,12 @@ export async function createTransaction(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { body: ["name"] })) {
+  if (!hasRequestParameters(req, res, { body: ["name", "templateId"] })) {
     return;
   }
   const createOptions: CreationAttributes<Transaction> = {
     name: req.body.name,
+    TemplateId: req.body.templateId,
   };
   const transaction = await Transaction.create(createOptions);
   res
@@ -54,7 +55,7 @@ export async function updateTransaction(
       req,
       res,
       { params: ["transactionId"] },
-      { body: ["name"] }
+      { body: ["name", "templateId"] }
     )
   ) {
     return;
@@ -73,6 +74,7 @@ export async function updateTransaction(
   }
   const updateOptions: CreationAttributes<Transaction> = {
     name: req.body.name,
+    TemplateId: req.body.templateId,
   };
   await transaction.update(updateOptions);
   res.status(200).send({

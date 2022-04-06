@@ -1,5 +1,7 @@
 import {
   Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
   CreationOptional,
   DataTypes,
   HasManyAddAssociationMixin,
@@ -21,6 +23,7 @@ import {
 import FieldDatum from "./FieldDatum";
 import File from "./File";
 import Tag from "./Tag";
+import Template from "./Template";
 
 export class Transaction extends Model<
   InferAttributes<Transaction>,
@@ -32,6 +35,9 @@ export class Transaction extends Model<
 
   declare name: string;
 
+  declare TemplateId: number;
+  declare Template: NonAttribute<Template>;
+
   declare Data: NonAttribute<FieldDatum[]>;
   declare Files: NonAttribute<File[]>;
   declare Tags: NonAttribute<Tag[]>;
@@ -40,6 +46,7 @@ export class Transaction extends Model<
     Data: Association<Transaction, FieldDatum>;
     Files: Association<Transaction, File>;
     Tags: Association<Transaction, Tag>;
+    Template: Association<Transaction, Template>;
   };
 
   // Since TS cannot determine model association at compile time
@@ -58,6 +65,9 @@ export class Transaction extends Model<
     FieldDatum,
     "TransactionId"
   >;
+
+  declare getTemplate: BelongsToGetAssociationMixin<Template>;
+  declare setTemplate: BelongsToSetAssociationMixin<Template, number>;
 
   declare getFiles: HasManyGetAssociationsMixin<File>;
   declare addFile: HasManyAddAssociationMixin<File, number>;
@@ -96,6 +106,14 @@ export function initializeTransaction(sequelize: Sequelize): void {
         type: DataTypes.STRING(128),
         allowNull: false,
         unique: true,
+      },
+      TemplateId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Template",
+          key: "id",
+        },
       },
     },
     {

@@ -8,3 +8,4 @@ export * from "./fieldDatum.controller";
 export * from "./fieldType.controller";
 export * from "./tag.controller";
 export * from "./template.controller";
+export * from "./transaction.controller";
