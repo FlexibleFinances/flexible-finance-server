@@ -10,6 +10,14 @@ properties:
     format: date-time
   name:
     type: string
+  type:
+    type: string
+  validator:
+    type: string
+  fieldTypeComponentIds:
+    type: array
+    items:
+      type: integer
   fieldIds:
     type: array
     items:
