@@ -25,6 +25,59 @@ export async function up({
       allowNull: false,
       unique: true,
     },
+    type: {
+      type: DataTypes.STRING,
+    },
+    validator: {
+      type: DataTypes.STRING,
+    },
+  });
+
+  await queryInterface.createTable("FieldTypeComponents", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    FieldTypeId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "FieldTypes",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    ParentFieldTypeId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "FieldTypes",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    order: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    isRequired: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    validator: {
+      type: DataTypes.STRING,
+    },
   });
 
   await queryInterface.createTable("Fields", {
@@ -50,6 +103,80 @@ export async function up({
       type: DataTypes.INTEGER,
       references: {
         model: "FieldTypes",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    isComponentOnly: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+  });
+
+  await queryInterface.createTable("FieldChoices", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    FieldId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Fields",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    choice: {
+      type: DataTypes.STRING(128),
+      allowNull: false,
+    },
+    order: {
+      type: DataTypes.INTEGER,
+    },
+  });
+
+  await queryInterface.createTable("FieldComponents", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    FieldId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Fields",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    ParentFieldId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Fields",
         key: "id",
       },
       onUpdate: "CASCADE",
@@ -169,7 +296,10 @@ export async function down({
   console.log("0003 down - starting");
   await queryInterface.dropTable("TemplateFields", {});
   await queryInterface.dropTable("FieldData", {});
+  await queryInterface.dropTable("FieldComponents", {});
+  await queryInterface.dropTable("FieldChoices", {});
   await queryInterface.dropTable("Fields", {});
+  await queryInterface.dropTable("FieldTypeComponents", {});
   await queryInterface.dropTable("FieldTypes", {});
   console.log("0003 down - finished");
 }

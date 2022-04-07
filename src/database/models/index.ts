@@ -4,8 +4,13 @@ import AccountTag, { initializeAccountTag } from "./AccountTag";
 import Entity, { initializeEntity } from "./Entity";
 import EntityTag, { initializeEntityTag } from "./EntityTag";
 import Field, { initializeField } from "./Field";
+import FieldChoice, { initializeFieldChoice } from "./FieldChoice";
+import FieldComponent, { initializeFieldComponent } from "./FieldComponent";
 import FieldDatum, { initializeFieldDatum } from "./FieldDatum";
 import FieldType, { initializeFieldType } from "./FieldType";
+import FieldTypeComponent, {
+  initializeFieldTypeComponent,
+} from "./FieldTypeComponent";
 import File, { initializeFile } from "./File";
 import Report, { initializeReport } from "./Report";
 import ReportTag, { initializeReportTag } from "./ReportTag";
@@ -21,7 +26,6 @@ import TransactionTag, { initializeTransactionTag } from "./TransactionTag";
 import Type, { initializeType } from "./Type";
 import User, { initializeUser } from "./User";
 import UserRole, { initializeUserRole } from "./UserRole";
-
 import { Sequelize } from "sequelize/types";
 
 export async function syncAllModels(): Promise<void> {
@@ -40,6 +44,7 @@ export async function syncAllModels(): Promise<void> {
 
   await Promise.all([
     Field.sync(),
+    FieldTypeComponent.sync(),
     ReportTag.sync(),
     TemplateTag.sync(),
     UserRole.sync(),
@@ -71,11 +76,14 @@ export function initializeModels(sequelize: Sequelize): void {
   console.log("initialized model set 1");
 
   initializeField(sequelize);
+  initializeFieldTypeComponent(sequelize);
   initializeReportTag(sequelize);
   initializeTemplateTag(sequelize);
   initializeUserRole(sequelize);
   console.log("initialized model set 2");
 
+  initializeFieldChoice(sequelize);
+  initializeFieldComponent(sequelize);
   initializeTemplateField(sequelize);
   initializeEntity(sequelize);
   initializeTransaction(sequelize);
@@ -97,8 +105,29 @@ export function initializeModels(sequelize: Sequelize): void {
   Account.belongsTo(Template);
   Template.hasMany(Account);
 
+  FieldTypeComponent.belongsTo(FieldType);
+  FieldType.hasMany(FieldTypeComponent);
+
+  FieldTypeComponent.belongsTo(FieldType, {
+    as: "ParentFieldType",
+    foreignKey: "ParentFieldTypeId",
+  });
+  FieldType.hasMany(FieldTypeComponent);
+
   Field.belongsTo(FieldType);
   FieldType.hasMany(Field);
+
+  FieldChoice.belongsTo(Field);
+  Field.hasMany(FieldChoice);
+
+  FieldComponent.belongsTo(Field);
+  Field.hasMany(FieldComponent);
+
+  FieldComponent.belongsTo(Field, {
+    as: "ParentField",
+    foreignKey: "ParentFieldId",
+  });
+  Field.hasMany(FieldComponent);
 
   Account.belongsToMany(Tag, { through: AccountTag });
   Tag.belongsToMany(Account, { through: AccountTag });

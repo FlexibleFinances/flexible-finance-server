@@ -33,6 +33,7 @@ export class Field extends Model<
   declare updatedAt: CreationOptional<Date>;
 
   declare name: string;
+  declare isComponentOnly: CreationOptional<Boolean>;
 
   declare FieldTypeId: number;
   declare FieldType: NonAttribute<FieldType>;
@@ -97,6 +98,11 @@ export function initializeField(sequelize: Sequelize): void {
           model: "FieldType",
           key: "id",
         },
+      },
+      isComponentOnly: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
     },
     {

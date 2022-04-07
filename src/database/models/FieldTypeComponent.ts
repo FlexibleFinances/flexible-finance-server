@@ -1,0 +1,90 @@
+import {
+  Association,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  NonAttribute,
+  Sequelize,
+} from "sequelize";
+import FieldType from "./FieldType";
+
+export class FieldTypeComponent extends Model<
+  InferAttributes<FieldTypeComponent>,
+  InferCreationAttributes<FieldTypeComponent>
+> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
+
+  declare FieldTypeId: number;
+  declare FieldType: NonAttribute<FieldType>;
+  declare ParentFieldTypeId: number;
+  declare ParentFieldType: NonAttribute<FieldType>;
+  declare order: number;
+  declare isRequired: Boolean;
+  declare validator?: CreationOptional<string>;
+
+  declare static associations: {
+    FieldType: Association<FieldTypeComponent, FieldType>;
+    ParentFieldType: Association<FieldTypeComponent, FieldType>;
+  };
+
+  // Since TS cannot determine model association at compile time
+  // we have to declare them here purely virtually
+  // these will not exist until `Model.init` was called.
+  declare getFieldType: BelongsToGetAssociationMixin<FieldType>;
+  declare setFieldType: BelongsToSetAssociationMixin<FieldType, number>;
+
+  declare getParentFieldType: BelongsToGetAssociationMixin<FieldType>;
+  declare setParentFieldType: BelongsToSetAssociationMixin<FieldType, number>;
+}
+
+export function initializeFieldTypeComponent(sequelize: Sequelize): void {
+  FieldTypeComponent.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      FieldTypeId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "FieldType",
+          key: "id",
+        },
+      },
+      ParentFieldTypeId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "FieldType",
+          key: "id",
+        },
+      },
+      order: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      isRequired: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      validator: {
+        type: DataTypes.STRING,
+      },
+    },
+    {
+      sequelize,
+    }
+  );
+}
+
+export default FieldTypeComponent;

@@ -19,6 +19,7 @@ import {
   Sequelize,
 } from "sequelize";
 import Field from "./Field";
+import FieldTypeComponent from "./FieldTypeComponent";
 
 export class FieldType extends Model<
   InferAttributes<FieldType>,
@@ -29,16 +30,63 @@ export class FieldType extends Model<
   declare updatedAt: CreationOptional<Date>;
 
   declare name: string;
+  declare type?: CreationOptional<string>;
+  declare validator?: CreationOptional<string>;
+
+  declare FieldTypeComponents?: NonAttribute<FieldTypeComponent[]>;
 
   declare Fields: NonAttribute<Field[]>;
 
   declare static associations: {
     Fields: Association<FieldType, Field>;
+    FieldTypeComponents: Association<FieldType, FieldTypeComponent>;
   };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
+  declare getFieldTypeComponents: HasManyGetAssociationsMixin<FieldTypeComponent>;
+  declare addFieldTypeComponent: HasManyAddAssociationMixin<
+    FieldTypeComponent,
+    number
+  >;
+
+  declare addFieldTypeComponents: HasManyAddAssociationsMixin<
+    FieldTypeComponent,
+    number
+  >;
+
+  declare setFieldTypeComponents: HasManySetAssociationsMixin<
+    FieldTypeComponent,
+    number
+  >;
+
+  declare removeFieldTypeComponent: HasManyRemoveAssociationMixin<
+    FieldTypeComponent,
+    number
+  >;
+
+  declare removeFieldTypeComponents: HasManyRemoveAssociationsMixin<
+    FieldTypeComponent,
+    number
+  >;
+
+  declare hasFieldTypeComponent: HasManyHasAssociationMixin<
+    FieldTypeComponent,
+    number
+  >;
+
+  declare hasFieldTypeComponents: HasManyHasAssociationsMixin<
+    FieldTypeComponent,
+    number
+  >;
+
+  declare countFieldTypeComponents: HasManyCountAssociationsMixin;
+  declare createFieldTypeComponent: HasManyCreateAssociationMixin<
+    FieldTypeComponent,
+    "ParentFieldTypeId"
+  >;
+
   declare getFields: HasManyGetAssociationsMixin<Field>;
   declare addField: HasManyAddAssociationMixin<Field, number>;
   declare addFields: HasManyAddAssociationsMixin<Field, number>;
@@ -65,6 +113,12 @@ export function initializeFieldType(sequelize: Sequelize): void {
         type: DataTypes.STRING(128),
         allowNull: false,
         unique: true,
+      },
+      type: {
+        type: DataTypes.STRING,
+      },
+      validator: {
+        type: DataTypes.STRING,
       },
     },
     {
