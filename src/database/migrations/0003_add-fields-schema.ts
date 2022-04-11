@@ -1,4 +1,5 @@
 import { DataTypes, QueryInterface } from "sequelize";
+import { fieldTypeTypeEnum } from "../../app/utils/enumerators";
 
 export async function up({
   context: queryInterface,
@@ -26,7 +27,10 @@ export async function up({
       unique: true,
     },
     type: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM({ values: Object.keys(fieldTypeTypeEnum) }),
+      validate: {
+        isIn: [Object.keys(fieldTypeTypeEnum)],
+      },
     },
     validator: {
       type: DataTypes.STRING,

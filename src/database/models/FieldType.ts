@@ -20,6 +20,7 @@ import {
 } from "sequelize";
 import Field from "./Field";
 import FieldTypeComponent from "./FieldTypeComponent";
+import { fieldTypeTypeEnum } from "../../app/utils/enumerators";
 
 export class FieldType extends Model<
   InferAttributes<FieldType>,
@@ -30,7 +31,7 @@ export class FieldType extends Model<
   declare updatedAt: CreationOptional<Date>;
 
   declare name: string;
-  declare type?: CreationOptional<string>;
+  declare type?: CreationOptional<fieldTypeTypeEnum>;
   declare validator?: CreationOptional<string>;
 
   declare FieldTypeComponents?: NonAttribute<FieldTypeComponent[]>;
@@ -115,7 +116,7 @@ export function initializeFieldType(sequelize: Sequelize): void {
         unique: true,
       },
       type: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM({ values: Object.keys(fieldTypeTypeEnum) }),
       },
       validator: {
         type: DataTypes.STRING,

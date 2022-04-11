@@ -12,8 +12,16 @@ properties:
     type: string
   type:
     type: string
+    nullable: true
+    enum:
+      - Text
+      - Number
+      - Date
+      - Boolean
+      - null
   validator:
     type: string
+    nullable: true
   fieldTypeComponentIds:
     type: array
     items:
