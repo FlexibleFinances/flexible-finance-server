@@ -23,7 +23,7 @@ StatusRequests:
 StatusIdRequests:
   get:
     parameters:
-      - name: statusId
+      - name: StatusId
         in: path
         required: true
         schema:
@@ -41,7 +41,7 @@ StatusIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: statusId
+      - name: StatusId
         in: path
         required: true
         schema:

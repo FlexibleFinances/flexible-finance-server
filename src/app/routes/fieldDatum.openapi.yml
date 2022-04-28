@@ -20,7 +20,7 @@ FieldDatumRequests:
 FieldDatumIdRequests:
   get:
     parameters:
-      - name: fieldDatumId
+      - name: FieldDatumId
         in: path
         required: true
         schema:
@@ -38,7 +38,7 @@ FieldDatumIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: fieldDatumId
+      - name: FieldDatumId
         in: path
         required: true
         schema:
@@ -91,25 +91,25 @@ FieldDataRequests:
         in: query
         schema:
           type: boolean
-      - name: fieldIds
+      - name: FieldIds
         in: query
         schema:
           type: array
           items:
             type: number
-      - name: accountIds
+      - name: AccountIds
         in: query
         schema:
           type: array
           items:
             type: number
-      - name: entityIds
+      - name: EntityIds
         in: query
         schema:
           type: array
           items:
             type: number
-      - name: transactionIds
+      - name: TransactionIds
         in: query
         schema:
           type: array

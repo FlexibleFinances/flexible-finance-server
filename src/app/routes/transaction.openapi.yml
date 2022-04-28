@@ -20,7 +20,7 @@ TransactionRequests:
 TransactionIdRequests:
   get:
     parameters:
-      - name: transactionId
+      - name: TransactionId
         in: path
         required: true
         schema:
@@ -38,7 +38,7 @@ TransactionIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: transactionId
+      - name: TransactionId
         in: path
         required: true
         schema:
@@ -87,7 +87,7 @@ TransactionsRequests:
           type: array
           items:
             type: number
-      - name: tagIds
+      - name: TagIds
         in: query
         schema:
           type: array

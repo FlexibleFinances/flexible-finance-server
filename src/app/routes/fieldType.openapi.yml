@@ -20,7 +20,7 @@ FieldTypeRequests:
 FieldTypeIdRequests:
   get:
     parameters:
-      - name: fieldTypeId
+      - name: FieldTypeId
         in: path
         required: true
         schema:
@@ -38,7 +38,7 @@ FieldTypeIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: fieldTypeId
+      - name: FieldTypeId
         in: path
         required: true
         schema:
@@ -75,7 +75,7 @@ FieldTypesRequests:
         in: query
         schema:
           type: string
-      - name: fieldIds
+      - name: FieldIds
         in: query
         schema:
           type: array

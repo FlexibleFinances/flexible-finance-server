@@ -2,19 +2,19 @@ type: object
 properties:
   name:
     type: string
-  fieldIds:
+  FieldIds:
     type: array
     items:
       type: integer
-  accountGroupId:
+  AccountGroupId:
     type: integer
-  datumIds:
+  DatumIds:
     type: array
     items:
       type: integer
-  tagIds:
+  TagIds:
     type: array
     items:
       type: integer
-  templateId:
+  TemplateId:
     type: integer

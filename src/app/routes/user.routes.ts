@@ -12,12 +12,12 @@ export function setUserRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/api-v1/user/:userId", [authJwt.verifyToken], controller.getUser);
+  app.get("/api-v1/user/:UserId", [authJwt.verifyToken], controller.getUser);
 
   app.post("/api-v1/user", [authJwt.verifyToken], controller.createUser);
 
   app.put(
-    "/api-v1/user/:userId",
+    "/api-v1/user/:UserId",
     [authJwt.verifyToken, authJwt.isSelf],
     controller.updateUser
   );

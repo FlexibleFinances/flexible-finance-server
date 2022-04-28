@@ -13,7 +13,7 @@ export function setFieldDatumRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/api-v1/fieldDatum/:fieldDatumId",
+    "/api-v1/fieldDatum/:FieldDatumId",
     [authJwt.verifyToken],
     controller.getFieldDatum
   );
@@ -25,7 +25,7 @@ export function setFieldDatumRoutes(app: express.Express): void {
   );
 
   app.put(
-    "/api-v1/fieldDatum/:fieldDatumId",
+    "/api-v1/fieldDatum/:FieldDatumId",
     [authJwt.verifyToken],
     controller.updateFieldDatum
   );

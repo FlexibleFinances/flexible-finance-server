@@ -38,7 +38,10 @@ export class Field extends Model<
   declare FieldTypeId: number;
   declare FieldType: NonAttribute<FieldType>;
 
+  declare DatumIds: NonAttribute<number[]>;
   declare Data: NonAttribute<FieldDatum[]>;
+
+  declare TemplateIds: NonAttribute<number[]>;
   declare Templates: NonAttribute<Template[]>;
 
   declare static associations: {

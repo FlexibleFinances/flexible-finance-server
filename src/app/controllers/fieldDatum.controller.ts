@@ -8,13 +8,13 @@ export async function getFieldDatum(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["fieldDatumId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["FieldDatumId"] })) {
     return;
   }
 
   const fieldDatum = await FieldDatum.findOne({
     where: {
-      id: req.params.fieldDatumId,
+      id: req.params.FieldDatumId,
     },
   });
   if (fieldDatum === null) {
@@ -37,22 +37,22 @@ export async function createFieldDatum(
     !hasRequestParameters(
       req,
       res,
-      { body: ["fieldId"] },
-      { body: ["accountId", "entityId", "transactionId"] }
+      { body: ["FieldId"] },
+      { body: ["AccountId", "EntityId", "TransactionId"] }
     )
   ) {
     return;
   }
 
   const createOptions: CreationAttributes<FieldDatum> = {
-    FieldId: req.body.fieldId,
+    FieldId: req.body.FieldId,
     stringValue: req.body.stringValue,
     intValue: req.body.intValue,
     dateValue: req.body.dateValue,
     boolValue: req.body.boolValue,
-    AccountId: req.body.accountId,
-    EntityId: req.body.entityId,
-    TransactionId: req.body.transactionId,
+    AccountId: req.body.AccountId,
+    EntityId: req.body.EntityId,
+    TransactionId: req.body.TransactionId,
   };
   const fieldDatum = await FieldDatum.create(createOptions);
   res
@@ -68,16 +68,16 @@ export async function updateFieldDatum(
     !hasRequestParameters(
       req,
       res,
-      { params: ["fieldDatumId"] },
+      { params: ["FieldDatumId"] },
       {
         body: [
           "stringValue",
           "intValue",
           "dateValue",
           "boolValue",
-          "accountId",
-          "entityId",
-          "transactionId",
+          "AccountId",
+          "EntityId",
+          "TransactionId",
         ],
       }
     )
@@ -87,7 +87,7 @@ export async function updateFieldDatum(
 
   const fieldDatum = await FieldDatum.findOne({
     where: {
-      id: req.params.fieldDatumId,
+      id: req.params.FieldDatumId,
     },
   });
   if (fieldDatum === null) {
@@ -97,14 +97,14 @@ export async function updateFieldDatum(
     return;
   }
   const updateOptions: CreationAttributes<FieldDatum> = {
-    FieldId: req.body.fieldId,
+    FieldId: req.body.FieldId,
     stringValue: req.body.stringValue,
     intValue: req.body.intValue,
     dateValue: req.body.dateValue,
     boolValue: req.body.boolValue,
-    AccountId: req.body.accountId,
-    EntityId: req.body.entityId,
-    TransactionId: req.body.transactionId,
+    AccountId: req.body.AccountId,
+    EntityId: req.body.EntityId,
+    TransactionId: req.body.TransactionId,
   };
   await fieldDatum.update(updateOptions);
   res.status(200).send({
@@ -143,30 +143,30 @@ export async function getFieldData(
       [Op.is]: req.body.boolValue,
     };
   }
-  if (req.query.fieldIds !== undefined) {
+  if (req.query.FieldIds !== undefined) {
     whereOptions.field = {
-      [Op.in]: (req.query.fieldIds as string[]).map((x) => {
+      [Op.in]: (req.query.FieldIds as string[]).map((x) => {
         return +x;
       }),
     };
   }
-  if (req.query.accountIds !== undefined) {
+  if (req.query.AccountIds !== undefined) {
     whereOptions.account = {
-      [Op.in]: (req.query.accountIds as string[]).map((x) => {
+      [Op.in]: (req.query.AccountIds as string[]).map((x) => {
         return +x;
       }),
     };
   }
-  if (req.query.entityIds !== undefined) {
+  if (req.query.EntityIds !== undefined) {
     whereOptions.entity = {
-      [Op.in]: (req.query.entityIds as string[]).map((x) => {
+      [Op.in]: (req.query.EntityIds as string[]).map((x) => {
         return +x;
       }),
     };
   }
-  if (req.query.transactionIds !== undefined) {
+  if (req.query.TransactionIds !== undefined) {
     whereOptions.transaction = {
-      [Op.in]: (req.query.transactionIds as string[]).map((x) => {
+      [Op.in]: (req.query.TransactionIds as string[]).map((x) => {
         return +x;
       }),
     };

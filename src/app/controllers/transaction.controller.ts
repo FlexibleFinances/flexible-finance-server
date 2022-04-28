@@ -8,13 +8,13 @@ export async function getTransaction(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["transactionId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["TransactionId"] })) {
     return;
   }
 
   const transaction = await Transaction.findOne({
     where: {
-      id: req.params.transactionId,
+      id: req.params.TransactionId,
     },
   });
   if (transaction === null) {
@@ -33,12 +33,12 @@ export async function createTransaction(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { body: ["name", "templateId"] })) {
+  if (!hasRequestParameters(req, res, { body: ["name", "TemplateId"] })) {
     return;
   }
   const createOptions: CreationAttributes<Transaction> = {
     name: req.body.name,
-    TemplateId: req.body.templateId,
+    TemplateId: req.body.TemplateId,
   };
   const transaction = await Transaction.create(createOptions);
   res
@@ -54,8 +54,8 @@ export async function updateTransaction(
     !hasRequestParameters(
       req,
       res,
-      { params: ["transactionId"] },
-      { body: ["name", "templateId"] }
+      { params: ["TransactionId"] },
+      { body: ["name", "TemplateId"] }
     )
   ) {
     return;
@@ -63,7 +63,7 @@ export async function updateTransaction(
 
   const transaction = await Transaction.findOne({
     where: {
-      id: req.params.transactionId,
+      id: req.params.TransactionId,
     },
   });
   if (transaction === null) {
@@ -74,7 +74,7 @@ export async function updateTransaction(
   }
   const updateOptions: CreationAttributes<Transaction> = {
     name: req.body.name,
-    TemplateId: req.body.templateId,
+    TemplateId: req.body.TemplateId,
   };
   await transaction.update(updateOptions);
   res.status(200).send({
@@ -107,9 +107,9 @@ export async function getTransactions(
       }),
     };
   }
-  if (req.query.tagIds !== undefined) {
+  if (req.query.TagIds !== undefined) {
     whereOptions.tags = {
-      [Op.in]: (req.query.tagIds as string[]).map((x) => {
+      [Op.in]: (req.query.TagIds as string[]).map((x) => {
         return +x;
       }),
     };

@@ -13,7 +13,7 @@ export function setTransactionRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/api-v1/transaction/:transactionId",
+    "/api-v1/transaction/:TransactionId",
     [authJwt.verifyToken],
     controller.getTransaction
   );
@@ -25,7 +25,7 @@ export function setTransactionRoutes(app: express.Express): void {
   );
 
   app.put(
-    "/api-v1/transaction/:transactionId",
+    "/api-v1/transaction/:TransactionId",
     [authJwt.verifyToken],
     controller.updateTransaction
   );

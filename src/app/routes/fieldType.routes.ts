@@ -13,7 +13,7 @@ export function setFieldTypeRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/api-v1/fieldType/:fieldTypeId",
+    "/api-v1/fieldType/:FieldTypeId",
     [authJwt.verifyToken],
     controller.getFieldType
   );
@@ -25,7 +25,7 @@ export function setFieldTypeRoutes(app: express.Express): void {
   );
 
   app.put(
-    "/api-v1/fieldType/:fieldTypeId",
+    "/api-v1/fieldType/:FieldTypeId",
     [authJwt.verifyToken],
     controller.updateFieldType
   );

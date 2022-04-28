@@ -20,7 +20,7 @@ TagRequests:
 TagIdRequests:
   get:
     parameters:
-      - name: tagId
+      - name: TagId
         in: path
         required: true
         schema:
@@ -38,7 +38,7 @@ TagIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: tagId
+      - name: TagId
         in: path
         required: true
         schema:
@@ -75,13 +75,13 @@ TagsRequests:
         in: query
         schema:
           type: string
-      - name: accountIds
+      - name: AccountIds
         in: query
         schema:
           type: array
           items:
             type: number
-      - name: entityIds
+      - name: EntityIds
         in: query
         schema:
           type: array
@@ -93,13 +93,13 @@ TagsRequests:
           type: array
           items:
             type: number
-      - name: templateIds
+      - name: TemplateIds
         in: query
         schema:
           type: array
           items:
             type: number
-      - name: transactionIds
+      - name: TransactionIds
         in: query
         schema:
           type: array

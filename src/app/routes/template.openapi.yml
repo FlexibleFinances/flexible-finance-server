@@ -20,7 +20,7 @@ TemplateRequests:
 TemplateIdRequests:
   get:
     parameters:
-      - name: templateId
+      - name: TemplateId
         in: path
         required: true
         schema:
@@ -36,7 +36,7 @@ TemplateIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: templateId
+      - name: TemplateId
         in: path
         required: true
         schema:
@@ -81,19 +81,19 @@ TemplatesRequests:
             - Account
             - Entity
             - Transaction
-      - name: accountIds
+      - name: AccountIds
         in: query
         schema:
           type: array
           items:
             type: number
-      - name: fieldIds
+      - name: FieldIds
         in: query
         schema:
           type: array
           items:
             type: number
-      - name: tagIds
+      - name: TagIds
         in: query
         schema:
           type: array

@@ -13,7 +13,7 @@ export function setAccountRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/api-v1/account/:accountId",
+    "/api-v1/account/:AccountId",
     [authJwt.verifyToken],
     controller.getAccount
   );
@@ -21,7 +21,7 @@ export function setAccountRoutes(app: express.Express): void {
   app.post("/api-v1/account/", [authJwt.verifyToken], controller.createAccount);
 
   app.put(
-    "/api-v1/account/:accountId",
+    "/api-v1/account/:AccountId",
     [authJwt.verifyToken],
     controller.updateAccount
   );

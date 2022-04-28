@@ -13,7 +13,7 @@ export function setEntityRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/api-v1/entity/:entityId",
+    "/api-v1/entity/:EntityId",
     [authJwt.verifyToken],
     controller.getEntity
   );
@@ -21,7 +21,7 @@ export function setEntityRoutes(app: express.Express): void {
   app.post("/api-v1/entity", [authJwt.verifyToken], controller.createEntity);
 
   app.put(
-    "/api-v1/entity/:entityId",
+    "/api-v1/entity/:EntityId",
     [authJwt.verifyToken],
     controller.updateEntity
   );

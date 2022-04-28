@@ -8,13 +8,13 @@ export async function getUser(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["userId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["UserId"] })) {
     return;
   }
 
   const user = await User.findOne({
     where: {
-      id: req.params.userId,
+      id: req.params.UserId,
     },
   });
   if (user === null) {
@@ -56,7 +56,7 @@ export async function updateUser(
     !hasRequestParameters(
       req,
       res,
-      { params: ["userId"] },
+      { params: ["UserId"] },
       { body: ["username", "email", "password"] }
     )
   ) {
@@ -65,7 +65,7 @@ export async function updateUser(
 
   const user = await User.findOne({
     where: {
-      id: req.params.userId,
+      id: req.params.UserId,
     },
   });
   if (user === null) {
@@ -101,9 +101,9 @@ export async function getUsers(
       [Op.iLike]: req.body.email,
     };
   }
-  if (req.query.roleIds !== undefined) {
+  if (req.query.RoleIds !== undefined) {
     whereOptions.roles = {
-      [Op.in]: (req.query.roleIds as string[]).map((x) => {
+      [Op.in]: (req.query.RoleIds as string[]).map((x) => {
         return +x;
       }),
     };

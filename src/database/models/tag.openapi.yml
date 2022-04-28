@@ -10,19 +10,19 @@ properties:
     format: date-time
   name:
     type: string
-  accountIds:
+  AccountIds:
     type: array
     items:
       type: integer
-  entityIds:
+  EntityIds:
     type: array
     items:
       type: integer
-  templateIds:
+  TemplateIds:
     type: array
     items:
       type: integer
-  transactionIds:
+  TransactionIds:
     type: array
     items:
       type: integer

@@ -10,13 +10,13 @@ properties:
     format: date-time
   name:
     type: string
-  datumIds:
+  DatumIds:
     type: array
     items:
       type: integer
-  fieldTypeId:
+  FieldTypeId:
     type: integer
-  templateIds:
+  TemplateIds:
     type: array
     items:
       type: integer

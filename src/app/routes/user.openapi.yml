@@ -20,7 +20,7 @@ UserRequests:
 UserIdRequests:
   get:
     parameters:
-      - name: userId
+      - name: UserId
         in: path
         required: true
         schema:
@@ -38,7 +38,7 @@ UserIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: userId
+      - name: UserId
         in: path
         required: true
         schema:
@@ -79,7 +79,7 @@ UsersRequests:
         in: query
         schema:
           type: string
-      - name: roleIds
+      - name: RoleIds
         in: query
         schema:
           type: array

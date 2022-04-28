@@ -8,13 +8,13 @@ export async function getStatus(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["statusId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["StatusId"] })) {
     return;
   }
 
   const status = await Status.findOne({
     where: {
-      id: req.params.statusId,
+      id: req.params.StatusId,
     },
   });
   if (status === null) {
@@ -52,7 +52,7 @@ export async function updateStatus(
     !hasRequestParameters(
       req,
       res,
-      { params: ["statusId"] },
+      { params: ["StatusId"] },
       { body: ["name"] }
     )
   ) {
@@ -61,7 +61,7 @@ export async function updateStatus(
 
   const status = await Status.findOne({
     where: {
-      id: req.params.statusId,
+      id: req.params.StatusId,
     },
   });
   if (status === null) {

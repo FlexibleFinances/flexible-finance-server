@@ -87,7 +87,7 @@ function isSelf(
     return;
   }
 
-  if (req.body.tokenUserId === req.params.userId) {
+  if (req.body.tokenUserId === req.params.UserId) {
     next();
     return;
   }

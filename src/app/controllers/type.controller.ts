@@ -8,13 +8,13 @@ export async function getType(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["typeId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["TypeId"] })) {
     return;
   }
 
   const type = await Type.findOne({
     where: {
-      id: req.params.typeId,
+      id: req.params.TypeId,
     },
   });
   if (type === null) {
@@ -49,14 +49,14 @@ export async function updateType(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(req, res, { params: ["typeId"] }, { body: ["name"] })
+    !hasRequestParameters(req, res, { params: ["TypeId"] }, { body: ["name"] })
   ) {
     return;
   }
 
   const type = await Type.findOne({
     where: {
-      id: req.params.typeId,
+      id: req.params.TypeId,
     },
   });
   if (type === null) {

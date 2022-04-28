@@ -8,13 +8,13 @@ export async function getField(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["fieldId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["FieldId"] })) {
     return;
   }
 
   const field = await Field.findOne({
     where: {
-      id: req.params.fieldId,
+      id: req.params.FieldId,
     },
   });
   if (field === null) {
@@ -33,13 +33,13 @@ export async function createField(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { body: ["name", "fieldTypeId"] })) {
+  if (!hasRequestParameters(req, res, { body: ["name", "FieldTypeId"] })) {
     return;
   }
 
   const createOptions: CreationAttributes<Field> = {
     name: req.body.name,
-    FieldTypeId: req.body.fieldTypeId,
+    FieldTypeId: req.body.FieldTypeId,
   };
   const field = await Field.create(createOptions);
   res.status(200).send({ message: "Field created.", field: field });
@@ -53,8 +53,8 @@ export async function updateField(
     !hasRequestParameters(
       req,
       res,
-      { params: ["fieldId"] },
-      { body: ["name", "fieldTypeId"] }
+      { params: ["FieldId"] },
+      { body: ["name", "FieldTypeId"] }
     )
   ) {
     return;
@@ -62,7 +62,7 @@ export async function updateField(
 
   const field = await Field.findOne({
     where: {
-      id: req.params.fieldId,
+      id: req.params.FieldId,
     },
   });
   if (field === null) {
@@ -73,7 +73,7 @@ export async function updateField(
   }
   const updateOptions: CreationAttributes<Field> = {
     name: req.body.name,
-    FieldTypeId: req.body.fieldTypeId,
+    FieldTypeId: req.body.FieldTypeId,
   };
   await field.update(updateOptions);
   res.status(200).send({
@@ -92,9 +92,9 @@ export async function getFields(
       [Op.iLike]: req.body.name,
     };
   }
-  if (req.query.fieldTypeIds !== undefined) {
+  if (req.query.FieldTypeIds !== undefined) {
     whereOptions.fieldType = {
-      [Op.in]: (req.query.fieldTypeIds as string[]).map((x) => {
+      [Op.in]: (req.query.FieldTypeIds as string[]).map((x) => {
         return +x;
       }),
     };
@@ -106,9 +106,9 @@ export async function getFields(
       }),
     };
   }
-  if (req.query.templateIds !== undefined) {
+  if (req.query.TemplateIds !== undefined) {
     whereOptions.templates = {
-      [Op.in]: (req.query.templateIds as string[]).map((x) => {
+      [Op.in]: (req.query.TemplateIds as string[]).map((x) => {
         return +x;
       }),
     };

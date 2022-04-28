@@ -8,13 +8,13 @@ export async function getTag(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["tagId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["TagId"] })) {
     return;
   }
 
   const tag = await Tag.findOne({
     where: {
-      id: req.params.tagId,
+      id: req.params.TagId,
     },
   });
   if (tag === null) {
@@ -49,14 +49,14 @@ export async function updateTag(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(req, res, { params: ["tagId"] }, { body: ["name"] })
+    !hasRequestParameters(req, res, { params: ["TagId"] }, { body: ["name"] })
   ) {
     return;
   }
 
   const tag = await Tag.findOne({
     where: {
-      id: req.params.tagId,
+      id: req.params.TagId,
     },
   });
   if (tag === null) {
@@ -85,16 +85,16 @@ export async function getTags(
       [Op.iLike]: req.body.name,
     };
   }
-  if (req.query.accountIds !== undefined) {
+  if (req.query.AccountIds !== undefined) {
     whereOptions.accounts = {
-      [Op.in]: (req.query.accountIds as string[]).map((x) => {
+      [Op.in]: (req.query.AccountIds as string[]).map((x) => {
         return +x;
       }),
     };
   }
-  if (req.query.entityIds !== undefined) {
+  if (req.query.EntityIds !== undefined) {
     whereOptions.entities = {
-      [Op.in]: (req.query.entityIds as string[]).map((x) => {
+      [Op.in]: (req.query.EntityIds as string[]).map((x) => {
         return +x;
       }),
     };
@@ -106,16 +106,16 @@ export async function getTags(
       }),
     };
   }
-  if (req.query.templateIds !== undefined) {
+  if (req.query.TemplateIds !== undefined) {
     whereOptions.templates = {
-      [Op.in]: (req.query.templateIds as string[]).map((x) => {
+      [Op.in]: (req.query.TemplateIds as string[]).map((x) => {
         return +x;
       }),
     };
   }
-  if (req.query.transactionIds !== undefined) {
+  if (req.query.TransactionIds !== undefined) {
     whereOptions.transactions = {
-      [Op.in]: (req.query.transactionIds as string[]).map((x) => {
+      [Op.in]: (req.query.TransactionIds as string[]).map((x) => {
         return +x;
       }),
     };

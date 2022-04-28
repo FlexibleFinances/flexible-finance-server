@@ -16,15 +16,15 @@ properties:
       - Account
       - Entity
       - Transaction
-  accountIds:
+  AccountIds:
     type: array
     items:
       type: integer
-  fieldIds:
+  FieldIds:
     type: array
     items:
       type: integer
-  tagIds:
+  TagIds:
     type: array
     items:
       type: integer

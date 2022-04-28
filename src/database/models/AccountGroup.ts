@@ -30,10 +30,11 @@ export class AccountGroup extends Model<
 
   declare name: string;
 
-  declare accounts: NonAttribute<Account[]>;
+  declare AccountIds: NonAttribute<number[]>;
+  declare Accounts: NonAttribute<Account[]>;
 
   declare static associations: {
-    accounts: Association<Account, AccountGroup>;
+    Accounts: Association<Account, AccountGroup>;
   };
 
   // Since TS cannot determine model association at compile time

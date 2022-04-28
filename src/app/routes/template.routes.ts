@@ -13,7 +13,7 @@ export function setTemplateRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/api-v1/template/:templateId",
+    "/api-v1/template/:TemplateId",
     [authJwt.verifyToken],
     controller.getTemplate
   );
@@ -25,7 +25,7 @@ export function setTemplateRoutes(app: express.Express): void {
   );
 
   app.put(
-    "/api-v1/template/:templateId",
+    "/api-v1/template/:TemplateId",
     [authJwt.verifyToken],
     controller.updateTemplate
   );

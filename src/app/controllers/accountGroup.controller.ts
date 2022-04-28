@@ -8,13 +8,13 @@ export async function getAccountGroup(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["accountGroupId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["AccountGroupId"] })) {
     return;
   }
 
   const accountGroup = await AccountGroup.findOne({
     where: {
-      id: req.params.accountGroupId,
+      id: req.params.AccountGroupId,
     },
   });
   if (accountGroup === null) {
@@ -55,7 +55,7 @@ export async function updateAccountGroup(
     !hasRequestParameters(
       req,
       res,
-      { params: ["accountGroupId"] },
+      { params: ["AccountGroupId"] },
       { body: ["name"] }
     )
   ) {
@@ -64,7 +64,7 @@ export async function updateAccountGroup(
 
   const accountGroup = await AccountGroup.findOne({
     where: {
-      id: req.params.accountGroupId,
+      id: req.params.AccountGroupId,
     },
   });
   if (accountGroup === null) {
@@ -93,9 +93,9 @@ export async function getAccountGroups(
       [Op.iLike]: req.body.name,
     };
   }
-  if (req.query.accountIds !== undefined) {
+  if (req.query.AccountIds !== undefined) {
     whereOptions.account = {
-      [Op.in]: (req.query.accountIds as string[]).map((x) => {
+      [Op.in]: (req.query.AccountIds as string[]).map((x) => {
         return +x;
       }),
     };

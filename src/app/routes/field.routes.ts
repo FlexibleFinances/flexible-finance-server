@@ -12,12 +12,12 @@ export function setFieldRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/api-v1/field/:fieldId", [authJwt.verifyToken], controller.getField);
+  app.get("/api-v1/field/:FieldId", [authJwt.verifyToken], controller.getField);
 
   app.post("/api-v1/field", [authJwt.verifyToken], controller.createField);
 
   app.put(
-    "/api-v1/field/:fieldId",
+    "/api-v1/field/:FieldId",
     [authJwt.verifyToken],
     controller.updateField
   );

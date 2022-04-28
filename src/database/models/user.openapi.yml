@@ -15,7 +15,7 @@ properties:
   password:
     type: string
     format: password
-  roleIds:
+  RoleIds:
     type: array
     items:
       type: integer

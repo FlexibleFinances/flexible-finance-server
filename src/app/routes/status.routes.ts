@@ -13,7 +13,7 @@ export function setStatusRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/api-v1/status/:statusId",
+    "/api-v1/status/:StatusId",
     [authJwt.verifyToken],
     controller.getStatus
   );
@@ -21,7 +21,7 @@ export function setStatusRoutes(app: express.Express): void {
   app.post("/api-v1/status", [authJwt.verifyToken], controller.createStatus);
 
   app.put(
-    "/api-v1/status/:statusId",
+    "/api-v1/status/:StatusId",
     [authJwt.verifyToken],
     controller.updateStatus
   );

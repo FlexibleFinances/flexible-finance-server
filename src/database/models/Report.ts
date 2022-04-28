@@ -30,10 +30,11 @@ export class Report extends Model<
 
   declare name: string;
 
-  declare tags: NonAttribute<Tag[]>;
+  declare TagIds: NonAttribute<number[]>;
+  declare Tags: NonAttribute<Tag[]>;
 
   declare static associations: {
-    tags: Association<Report, Tag>;
+    Tags: Association<Report, Tag>;
   };
 
   // Since TS cannot determine model association at compile time

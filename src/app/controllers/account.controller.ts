@@ -10,13 +10,13 @@ export async function getAccount(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["accountId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["AccountId"] })) {
     return;
   }
 
   const account = await Account.findOne({
     where: {
-      id: req.params.accountId,
+      id: req.params.AccountId,
     },
     include: [{ model: Template, include: [Field] }],
   });
@@ -39,7 +39,7 @@ export async function createAccount(
 ): Promise<void> {
   if (
     !hasRequestParameters(req, res, {
-      body: ["name", "templateId", "accountGroupId"],
+      body: ["name", "TemplateId", "AccountGroupId"],
     })
   ) {
     return;
@@ -47,8 +47,8 @@ export async function createAccount(
 
   const createOptions: CreationAttributes<Account> = {
     name: req.body.name,
-    TemplateId: req.body.templateId,
-    AccountGroupId: req.body.accountGroupId,
+    TemplateId: req.body.TemplateId,
+    AccountGroupId: req.body.AccountGroupId,
   };
   const account = await Account.create(createOptions);
   res.status(200).send({ message: "Account created.", account: account });
@@ -62,8 +62,8 @@ export async function updateAccount(
     !hasRequestParameters(
       req,
       res,
-      { params: ["accountId"] },
-      { body: ["name", "accountGroupId", "templateId"] }
+      { params: ["AccountId"] },
+      { body: ["name", "AccountGroupId", "TemplateId"] }
     )
   ) {
     return;
@@ -71,7 +71,7 @@ export async function updateAccount(
 
   const account = await Account.findOne({
     where: {
-      id: req.params.accountId,
+      id: req.params.AccountId,
     },
     include: Template,
   });
@@ -83,8 +83,8 @@ export async function updateAccount(
   }
   const updateOptions: CreationAttributes<Account> = {
     name: req.body.name,
-    AccountGroupId: req.body.accountGroupId,
-    TemplateId: req.body.templateId,
+    AccountGroupId: req.body.AccountGroupId,
+    TemplateId: req.body.TemplateId,
   };
   await account.update(updateOptions);
   res.status(200).send({
@@ -103,23 +103,23 @@ export async function getAccounts(
       [Op.iLike]: req.body.name,
     };
   }
-  if (req.query.accountGroupIds !== undefined) {
+  if (req.query.AccountGroupIds !== undefined) {
     whereOptions.accountGroup = {
-      [Op.in]: (req.query.accountGroupIds as string[]).map((x) => {
+      [Op.in]: (req.query.AccountGroupIds as string[]).map((x) => {
         return +x;
       }),
     };
   }
-  if (req.query.tagIds !== undefined) {
+  if (req.query.TagIds !== undefined) {
     whereOptions.tags = {
-      [Op.in]: (req.query.tagIds as string[]).map((x) => {
+      [Op.in]: (req.query.TagIds as string[]).map((x) => {
         return +x;
       }),
     };
   }
-  if (req.query.templateIds !== undefined) {
+  if (req.query.TemplateIds !== undefined) {
     whereOptions.template = {
-      [Op.in]: (req.query.templateIds as string[]).map((x) => {
+      [Op.in]: (req.query.TemplateIds as string[]).map((x) => {
         return +x;
       }),
     };

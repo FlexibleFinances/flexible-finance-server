@@ -33,22 +33,27 @@ export class Tag extends Model<
 
   declare name: string;
 
-  declare accounts: NonAttribute<Account[]>;
+  declare AccountIds: NonAttribute<number[]>;
+  declare Accounts: NonAttribute<Account[]>;
 
-  declare entities: NonAttribute<Entity[]>;
+  declare EntityIds: NonAttribute<number[]>;
+  declare Entities: NonAttribute<Entity[]>;
 
-  declare reports: NonAttribute<Report[]>;
+  declare ReportIds: NonAttribute<number[]>;
+  declare Reports: NonAttribute<Report[]>;
 
-  declare templates: NonAttribute<Template[]>;
+  declare TemplateIds: NonAttribute<number[]>;
+  declare Templates: NonAttribute<Template[]>;
 
-  declare transactions: NonAttribute<Transaction[]>;
+  declare TransactionIds: NonAttribute<number[]>;
+  declare Transactions: NonAttribute<Transaction[]>;
 
   declare static associations: {
-    accounts: Association<Account, Tag>;
-    entities: Association<Entity, Tag>;
-    reports: Association<Report, Tag>;
-    templates: Association<Template, Tag>;
-    transactions: Association<Transaction, Tag>;
+    Accounts: Association<Account, Tag>;
+    Entities: Association<Entity, Tag>;
+    Reports: Association<Report, Tag>;
+    Templates: Association<Template, Tag>;
+    Transactions: Association<Transaction, Tag>;
   };
 
   // Since TS cannot determine model association at compile time

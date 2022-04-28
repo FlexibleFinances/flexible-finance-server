@@ -8,13 +8,13 @@ export async function getRole(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["roleId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["RoleId"] })) {
     return;
   }
 
   const role = await Role.findOne({
     where: {
-      id: req.params.roleId,
+      id: req.params.RoleId,
     },
   });
   if (role === null) {
@@ -49,14 +49,14 @@ export async function updateRole(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(req, res, { params: ["roleId"] }, { body: ["name"] })
+    !hasRequestParameters(req, res, { params: ["RoleId"] }, { body: ["name"] })
   ) {
     return;
   }
 
   const role = await Role.findOne({
     where: {
-      id: req.params.roleId,
+      id: req.params.RoleId,
     },
   });
   if (role === null) {
@@ -85,9 +85,9 @@ export async function getRoles(
       [Op.iLike]: req.body.name,
     };
   }
-  if (req.query.userIds !== undefined) {
+  if (req.query.UserIds !== undefined) {
     whereOptions.users = {
-      [Op.in]: (req.query.userIds as string[]).map((x) => {
+      [Op.in]: (req.query.UserIds as string[]).map((x) => {
         return +x;
       }),
     };

@@ -23,7 +23,7 @@ TypeRequests:
 TypeIdRequests:
   get:
     parameters:
-      - name: typeId
+      - name: TypeId
         in: path
         required: true
         schema:
@@ -41,7 +41,7 @@ TypeIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: typeId
+      - name: TypeId
         in: path
         required: true
         schema:

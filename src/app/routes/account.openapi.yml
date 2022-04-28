@@ -20,7 +20,7 @@ AccountRequests:
 AccountIdRequests:
   get:
     parameters:
-      - name: accountId
+      - name: AccountId
         in: path
         required: true
         schema:
@@ -38,7 +38,7 @@ AccountIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: accountId
+      - name: AccountId
         in: path
         required: true
         schema:
@@ -75,19 +75,19 @@ AccountsRequests:
         in: query
         schema:
           type: string
-      - name: accountGroupIds
+      - name: AccountGroupIds
         in: query
         schema:
           type: array
           items:
             type: number
-      - name: tagIds
+      - name: TagIds
         in: query
         schema:
           type: array
           items:
             type: number
-      - name: templateIds
+      - name: TemplateIds
         in: query
         schema:
           type: array

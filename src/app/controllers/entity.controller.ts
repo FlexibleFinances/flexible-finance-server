@@ -8,13 +8,13 @@ export async function getEntity(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["entityId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["EntityId"] })) {
     return;
   }
 
   const entity = await Entity.findOne({
     where: {
-      id: req.params.entityId,
+      id: req.params.EntityId,
     },
   });
   if (entity === null) {
@@ -34,13 +34,13 @@ export async function createEntity(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { body: ["name", "templateId"] })) {
+  if (!hasRequestParameters(req, res, { body: ["name", "TemplateId"] })) {
     return;
   }
 
   const createOptions: CreationAttributes<Entity> = {
     name: req.body.name,
-    TemplateId: req.body.templateId,
+    TemplateId: req.body.TemplateId,
   };
 
   const entity = await Entity.create(createOptions);
@@ -55,8 +55,8 @@ export async function updateEntity(
     !hasRequestParameters(
       req,
       res,
-      { params: ["entityId"] },
-      { body: ["name", "templateId"] }
+      { params: ["EntityId"] },
+      { body: ["name", "TemplateId"] }
     )
   ) {
     return;
@@ -64,7 +64,7 @@ export async function updateEntity(
 
   const entity = await Entity.findOne({
     where: {
-      id: req.params.entityId,
+      id: req.params.EntityId,
     },
   });
   if (entity === null) {
@@ -75,7 +75,7 @@ export async function updateEntity(
   }
   const updateOptions: CreationAttributes<Entity> = {
     name: req.body.name,
-    TemplateId: req.body.templateId,
+    TemplateId: req.body.TemplateId,
   };
   await entity.update(updateOptions);
   res.status(200).send({
@@ -101,16 +101,16 @@ export async function getEntities(
       }),
     };
   }
-  if (req.query.tagIds !== undefined) {
+  if (req.query.TagIds !== undefined) {
     whereOptions.tags = {
-      [Op.in]: (req.query.tagIds as string[]).map((x) => {
+      [Op.in]: (req.query.TagIds as string[]).map((x) => {
         return +x;
       }),
     };
   }
-  if (req.query.templateIds !== undefined) {
+  if (req.query.TemplateIds !== undefined) {
     whereOptions.template = {
-      [Op.in]: (req.query.templateIds as string[]).map((x) => {
+      [Op.in]: (req.query.TemplateIds as string[]).map((x) => {
         return +x;
       }),
     };

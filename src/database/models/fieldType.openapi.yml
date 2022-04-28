@@ -22,11 +22,11 @@ properties:
   validator:
     type: string
     nullable: true
-  fieldTypeComponentIds:
+  FieldTypeComponentIds:
     type: array
     items:
       type: integer
-  fieldIds:
+  FieldIds:
     type: array
     items:
       type: integer

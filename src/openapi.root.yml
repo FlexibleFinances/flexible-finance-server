@@ -16,13 +16,13 @@ info:
 paths:
   /account:
     $ref: ./app/routes/account.openapi.yml#/AccountRequests
-  /account/{accountId}:
+  /account/{AccountId}:
     $ref: ./app/routes/account.openapi.yml#/AccountIdRequests
   /accounts:
     $ref: ./app/routes/account.openapi.yml#/AccountsRequests
   /accountGroup:
     $ref: ./app/routes/accountGroup.openapi.yml#/AccountGroupRequests
-  /accountGroup/{accountGroupId}:
+  /accountGroup/{AccountGroupId}:
     $ref: ./app/routes/accountGroup.openapi.yml#/AccountGroupIdRequests
   /accountGroups:
     $ref: ./app/routes/accountGroup.openapi.yml#/AccountGroupsRequests
@@ -42,43 +42,43 @@ paths:
                 type: string
   /entity:
     $ref: ./app/routes/entity.openapi.yml#/EntityRequests
-  /entity/{entityId}:
+  /entity/{EntityId}:
     $ref: ./app/routes/entity.openapi.yml#/EntityIdRequests
   /entities:
     $ref: ./app/routes/entity.openapi.yml#/EntitiesRequests
   /field:
     $ref: ./app/routes/field.openapi.yml#/FieldRequests
-  /field/{fieldId}:
+  /field/{FieldId}:
     $ref: ./app/routes/field.openapi.yml#/FieldIdRequests
   /fields:
     $ref: ./app/routes/field.openapi.yml#/FieldsRequests
   /fieldDatum:
     $ref: ./app/routes/fieldDatum.openapi.yml#/FieldDatumRequests
-  /fieldDatum/{fieldId}:
+  /fieldDatum/{FieldId}:
     $ref: ./app/routes/fieldDatum.openapi.yml#/FieldDatumIdRequests
   /fieldData:
     $ref: ./app/routes/fieldDatum.openapi.yml#/FieldDataRequests
   /fieldType:
     $ref: ./app/routes/fieldType.openapi.yml#/FieldTypeRequests
-  /fieldType/{fieldTypeId}:
+  /fieldType/{FieldTypeId}:
     $ref: ./app/routes/fieldType.openapi.yml#/FieldTypeIdRequests
   /fieldTypes:
     $ref: ./app/routes/fieldType.openapi.yml#/FieldTypesRequests
   /role:
     $ref: ./app/routes/role.openapi.yml#/RoleRequests
-  /role/{roleId}:
+  /role/{RoleId}:
     $ref: ./app/routes/role.openapi.yml#/RoleIdRequests
   /roles:
     $ref: ./app/routes/role.openapi.yml#/RolesRequests
   /status:
     $ref: ./app/routes/status.openapi.yml#/StatusRequests
-  /status/{statusId}:
+  /status/{StatusId}:
     $ref: ./app/routes/status.openapi.yml#/StatusIdRequests
   /statuses:
     $ref: ./app/routes/status.openapi.yml#/StatusesRequests
   /tag:
     $ref: ./app/routes/tag.openapi.yml#/TagRequests
-  /tag/{tagId}:
+  /tag/{TagId}:
     $ref: ./app/routes/tag.openapi.yml#/TagIdRequests
   /tags:
     $ref: ./app/routes/tag.openapi.yml#/TagsRequests
@@ -90,25 +90,25 @@ paths:
     $ref: ./app/routes/authTest.openapi.yml#/TestAdmin
   /template:
     $ref: ./app/routes/template.openapi.yml#/TemplateRequests
-  /template/{templateId}:
+  /template/{TemplateId}:
     $ref: ./app/routes/template.openapi.yml#/TemplateIdRequests
   /templates:
     $ref: ./app/routes/template.openapi.yml#/TemplatesRequests
   /transaction:
     $ref: ./app/routes/transaction.openapi.yml#/TransactionRequests
-  /transaction/{transactionId}:
+  /transaction/{TransactionId}:
     $ref: ./app/routes/transaction.openapi.yml#/TransactionIdRequests
   /transactions:
     $ref: ./app/routes/transaction.openapi.yml#/TransactionsRequests
   /type:
     $ref: ./app/routes/type.openapi.yml#/TypeRequests
-  /type/{typeId}:
+  /type/{TypeId}:
     $ref: ./app/routes/type.openapi.yml#/TypeIdRequests
   /types:
     $ref: ./app/routes/type.openapi.yml#/TypesRequests
   /user:
     $ref: ./app/routes/user.openapi.yml#/UserRequests
-  /user/{userId}:
+  /user/{UserId}:
     $ref: ./app/routes/user.openapi.yml#/UserIdRequests
   /users:
     $ref: ./app/routes/user.openapi.yml#/UsersRequests

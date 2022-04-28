@@ -12,7 +12,7 @@ export function setRoleRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/api-v1/role/:roleId", [authJwt.verifyToken], controller.getRole);
+  app.get("/api-v1/role/:RoleId", [authJwt.verifyToken], controller.getRole);
 
   app.post(
     "/api-v1/role",
@@ -21,7 +21,7 @@ export function setRoleRoutes(app: express.Express): void {
   );
 
   app.put(
-    "/api-v1/role/:roleId",
+    "/api-v1/role/:RoleId",
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.updateRole
   );

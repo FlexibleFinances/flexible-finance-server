@@ -30,10 +30,11 @@ export class File extends Model<
 
   declare name: string;
 
-  declare transactions: NonAttribute<Transaction[]>;
+  declare TransactionIds: NonAttribute<number[]>;
+  declare Transactions: NonAttribute<Transaction[]>;
 
   declare static associations: {
-    transactions: Association<File, Transaction>;
+    Transactions: Association<File, Transaction>;
   };
 
   // Since TS cannot determine model association at compile time

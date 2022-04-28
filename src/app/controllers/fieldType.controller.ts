@@ -9,13 +9,13 @@ export async function getFieldType(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { body: ["fieldTypeId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["FieldTypeId"] })) {
     return;
   }
 
   const fieldType = await FieldType.findOne({
     where: {
-      id: req.params.fieldTypeId,
+      id: req.params.FieldTypeId,
     },
   });
   if (fieldType === null) {
@@ -55,7 +55,7 @@ export async function updateFieldType(
     !hasRequestParameters(
       req,
       res,
-      { params: ["fieldTypeId"] },
+      { params: ["FieldTypeId"] },
       { body: ["name"] }
     )
   ) {
@@ -64,7 +64,7 @@ export async function updateFieldType(
 
   const fieldType = await FieldType.findOne({
     where: {
-      id: req.params.fieldTypeId,
+      id: req.params.FieldTypeId,
     },
   });
   if (fieldType === null) {
@@ -96,9 +96,9 @@ export async function getFieldTypes(
       [Op.iLike]: req.body.name,
     };
   }
-  if (req.query.fieldIds !== undefined) {
+  if (req.query.FieldIds !== undefined) {
     whereOptions.fields = {
-      [Op.in]: (req.query.fieldIds as string[]).map((x) => {
+      [Op.in]: (req.query.FieldIds as string[]).map((x) => {
         return +x;
       }),
     };

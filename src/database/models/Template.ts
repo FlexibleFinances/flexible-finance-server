@@ -34,8 +34,13 @@ export class Template extends Model<
   declare name: string;
   declare type: templateTypeEnum;
 
+  declare AccountIds: NonAttribute<number[]>;
   declare Accounts: NonAttribute<Account[]>;
+
+  declare FieldIds: NonAttribute<number[]>;
   declare Fields: NonAttribute<Field[]>;
+
+  declare TagIds: NonAttribute<number[]>;
   declare Tags: NonAttribute<Tag[]>;
 
   declare static associations: {

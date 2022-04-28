@@ -1,4 +1,6 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
+import Field from "../../database/models/Field";
+import Tag from "../../database/models/Tag";
 import Template from "../../database/models/Template";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
@@ -9,14 +11,15 @@ export async function getTemplate(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["templateId"] })) {
+  if (!hasRequestParameters(req, res, { params: ["TemplateId"] })) {
     return;
   }
 
   const template = await Template.findOne({
     where: {
-      id: req.params.templateId,
+      id: req.params.TemplateId,
     },
+    include: [Field, Tag],
   });
   if (template === null) {
     res.status(500).send({
@@ -24,6 +27,8 @@ export async function getTemplate(
     });
     return;
   }
+  template.FieldIds = template.Fields.map((field) => field.id);
+  template.TagIds = template.Tags.map((tag) => tag.id);
   res.status(200).send({
     message: "Template gotten.",
     template: template,
@@ -42,7 +47,19 @@ export async function createTemplate(
     type: req.body.type as templateTypeEnum,
   };
   const template = await Template.create(createOptions);
-  res.status(200).send({ message: "Template created.", template: template });
+  if (req.body.TagIds !== undefined) {
+    await template.addTags(req.body.TagIds);
+  }
+  if (req.body.FieldIds !== undefined) {
+    await template.addFields(req.body.FieldIds);
+  }
+  await template.reload({ include: [Field, Tag] });
+  template.FieldIds = template.Fields.map((field) => field.id);
+  template.TagIds = template.Tags.map((tag) => tag.id);
+  res.status(200).send({
+    message: "Template created.",
+    template: template,
+  });
 }
 
 export async function updateTemplate(
@@ -53,7 +70,7 @@ export async function updateTemplate(
     !hasRequestParameters(
       req,
       res,
-      { params: ["templateId"] },
+      { params: ["TemplateId"] },
       { body: ["name", "type"] }
     )
   ) {
@@ -62,7 +79,7 @@ export async function updateTemplate(
 
   const template = await Template.findOne({
     where: {
-      id: req.params.templateId,
+      id: req.params.TemplateId,
     },
   });
   if (template === null) {
@@ -73,9 +90,18 @@ export async function updateTemplate(
   }
   const updateOptions: CreationAttributes<Template> = {
     name: req.body.name,
-    type: req.body.typeId,
+    type: req.body.TypeId,
   };
   await template.update(updateOptions);
+  if (req.body.TagIds !== undefined) {
+    await template.setTags(req.body.TagIds);
+  }
+  if (req.body.FieldIds !== undefined) {
+    await template.setFields(req.body.FieldIds);
+  }
+  await template.reload({ include: [Field, Tag] });
+  template.FieldIds = template.Fields.map((field) => field.id);
+  template.TagIds = template.Tags.map((tag) => tag.id);
   res.status(200).send({
     message: "Template updated.",
     template: template,
@@ -95,23 +121,23 @@ export async function getTemplates(
   if (req.query.type !== undefined) {
     whereOptions.type = req.query.type as templateTypeEnum;
   }
-  if (req.query.accountIds !== undefined) {
+  if (req.query.AccountIds !== undefined) {
     whereOptions.accounts = {
-      [Op.in]: (req.query.accountIds as string[]).map((x) => {
+      [Op.in]: (req.query.AccountIds as string[]).map((x) => {
         return +x;
       }),
     };
   }
-  if (req.query.fieldIds !== undefined) {
+  if (req.query.FieldIds !== undefined) {
     whereOptions.fields = {
-      [Op.in]: (req.query.fieldIds as string[]).map((x) => {
+      [Op.in]: (req.query.FieldIds as string[]).map((x) => {
         return +x;
       }),
     };
   }
-  if (req.query.tagIds !== undefined) {
+  if (req.query.TagIds !== undefined) {
     whereOptions.tags = {
-      [Op.in]: (req.query.tagIds as string[]).map((x) => {
+      [Op.in]: (req.query.TagIds as string[]).map((x) => {
         return +x;
       }),
     };
@@ -120,8 +146,13 @@ export async function getTemplates(
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
     where: whereOptions,
+    include: [Field, Tag],
   };
   const templates = await Template.findAll(findOptions);
+  templates.forEach((template) => {
+    template.FieldIds = template.Fields.map((field) => field.id);
+    template.TagIds = template.Tags.map((tag) => tag.id);
+  });
   res.status(200).send({
     message: "Templates gotten.",
     templates: templates,

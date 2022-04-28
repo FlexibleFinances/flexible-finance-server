@@ -8,7 +8,7 @@ properties:
   updatedAt:
     type: string
     format: date-time
-  fieldId:
+  FieldId:
     type: integer
   stringValue:
     type: string
@@ -19,9 +19,9 @@ properties:
     format: date-time
   boolValue:
     type: boolean
-  accountId:
+  AccountId:
     type: integer
-  entityId:
+  EntityId:
     type: integer
-  transactionId:
+  TransactionId:
     type: integer

@@ -34,8 +34,10 @@ export class FieldType extends Model<
   declare type?: CreationOptional<fieldTypeTypeEnum>;
   declare validator?: CreationOptional<string>;
 
+  declare FieldTypeComponentIds?: NonAttribute<number[]>;
   declare FieldTypeComponents?: NonAttribute<FieldTypeComponent[]>;
 
+  declare FieldIds: NonAttribute<number[]>;
   declare Fields: NonAttribute<Field[]>;
 
   declare static associations: {

@@ -30,10 +30,11 @@ export class Role extends Model<
 
   declare name: string;
 
-  declare users: NonAttribute<User[]>;
+  declare UserIds: NonAttribute<number[]>;
+  declare Users: NonAttribute<User[]>;
 
   declare static associations: {
-    users: Association<User, Role>;
+    Users: Association<User, Role>;
   };
 
   // Since TS cannot determine model association at compile time

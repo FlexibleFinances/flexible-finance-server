@@ -38,8 +38,13 @@ export class Transaction extends Model<
   declare TemplateId: number;
   declare Template: NonAttribute<Template>;
 
+  declare DatumIds: NonAttribute<number[]>;
   declare Data: NonAttribute<FieldDatum[]>;
+
+  declare FileIds: NonAttribute<number[]>;
   declare Files: NonAttribute<File[]>;
+
+  declare TagIds: NonAttribute<number[]>;
   declare Tags: NonAttribute<Tag[]>;
 
   declare static associations: {

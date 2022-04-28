@@ -13,7 +13,7 @@ export function setAccountGroupRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/api-v1/accountGroup/:accountGroupId",
+    "/api-v1/accountGroup/:AccountGroupId",
     [authJwt.verifyToken],
     controller.getAccountGroup
   );
@@ -25,7 +25,7 @@ export function setAccountGroupRoutes(app: express.Express): void {
   );
 
   app.put(
-    "/api-v1/accountGroup/:accountGroupId",
+    "/api-v1/accountGroup/:AccountGroupId",
     [authJwt.verifyToken],
     controller.updateAccountGroup
   );
