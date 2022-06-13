@@ -1,6 +1,7 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Account from "../../database/models/Account";
 import Field from "../../database/models/Field";
+import FieldDatum from "../../database/models/FieldDatum";
 import Template from "../../database/models/Template";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
@@ -51,6 +52,9 @@ export async function createAccount(
     AccountGroupId: req.body.AccountGroupId,
   };
   const account = await Account.create(createOptions);
+
+  await FieldDatum.createFieldData(req.body.fieldValues, account.id);
+
   res.status(200).send({ message: "Account created.", account: account });
 }
 

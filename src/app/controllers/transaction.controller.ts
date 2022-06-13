@@ -1,4 +1,5 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
+import FieldDatum from "../../database/models/FieldDatum";
 import Transaction from "../../database/models/Transaction";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
@@ -41,6 +42,9 @@ export async function createTransaction(
     TemplateId: req.body.TemplateId,
   };
   const transaction = await Transaction.create(createOptions);
+
+  await FieldDatum.createFieldData(req.body.fieldValues, transaction.id);
+
   res
     .status(200)
     .send({ message: "Transaction created.", transaction: transaction });

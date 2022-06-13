@@ -1,5 +1,6 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Entity from "../../database/models/Entity";
+import FieldDatum from "../../database/models/FieldDatum";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
@@ -44,6 +45,9 @@ export async function createEntity(
   };
 
   const entity = await Entity.create(createOptions);
+
+  await FieldDatum.createFieldData(req.body.fieldValues, entity.id);
+
   res.status(200).send({ message: "Entity created.", entity: entity });
 }
 

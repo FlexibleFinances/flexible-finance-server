@@ -214,7 +214,6 @@ export async function up({
     },
     AccountId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
       references: {
         model: "Accounts",
         key: "id",
@@ -224,7 +223,6 @@ export async function up({
     },
     EntityId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
       references: {
         model: "Entities",
         key: "id",
@@ -234,7 +232,6 @@ export async function up({
     },
     TransactionId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
       references: {
         model: "Transactions",
         key: "id",
@@ -255,6 +252,7 @@ export async function up({
       type: DataTypes.BOOLEAN,
     },
   });
+
   await queryInterface.createTable("TemplateFields", {
     id: {
       type: DataTypes.INTEGER,

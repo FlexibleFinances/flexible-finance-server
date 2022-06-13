@@ -2,6 +2,7 @@ import {
   Association,
   BelongsToGetAssociationMixin,
   BelongsToSetAssociationMixin,
+  CreationAttributes,
   CreationOptional,
   DataTypes,
   InferAttributes,
@@ -59,6 +60,45 @@ export class FieldDatum extends Model<
 
   declare getTransaction: BelongsToGetAssociationMixin<Transaction>;
   declare setTransaction: BelongsToSetAssociationMixin<Transaction, number>;
+
+  public static async createFieldData(
+    fieldDatumInfo: FieldDatumInfo,
+    accountId?: number,
+    entityId?: number,
+    transactionId?: number
+  ): Promise<FieldDatum[]> {
+    if (
+      accountId === undefined &&
+      entityId === undefined &&
+      transactionId === undefined
+    ) {
+      throw new Error(
+        "Could not create fields. No account, entity, or transaction ID provided."
+      );
+    }
+    const fieldCreationPromises: Array<Promise<FieldDatum>> = [];
+    if (fieldDatumInfo !== undefined) {
+      Object.entries(fieldDatumInfo).forEach(
+        ([fieldId, fieldValue]: [string, string | number | Date | boolean]) => {
+          const fieldDatumCreateOptions: CreationAttributes<FieldDatum> = {
+            FieldId: +fieldId,
+            AccountId: accountId,
+            EntityId: entityId,
+            TransactionId: transactionId,
+            stringValue:
+              typeof fieldValue === "string" ? fieldValue : undefined,
+            intValue: typeof fieldValue === "number" ? fieldValue : undefined,
+            dateValue: fieldValue instanceof Date ? fieldValue : undefined,
+            boolValue: typeof fieldValue === "boolean" ? fieldValue : undefined,
+          };
+          fieldCreationPromises.push(
+            FieldDatum.create(fieldDatumCreateOptions)
+          );
+        }
+      );
+    }
+    return await Promise.all(fieldCreationPromises);
+  }
 }
 
 export function initializeFieldDatum(sequelize: Sequelize): void {
@@ -119,8 +159,32 @@ export function initializeFieldDatum(sequelize: Sequelize): void {
         singular: "FieldDatum",
         plural: "FieldData",
       },
+      validate: {
+        onlyOneObject() {
+          const objectList = [
+            this.AccountId,
+            this.EntityId,
+            this.TransactionId,
+          ];
+          const nonNullCount = objectList.reduce((prevValue, currValue) => {
+            if (currValue === null || currValue === undefined) {
+              prevValue = (prevValue as number) - 1;
+            }
+            return prevValue;
+          }, objectList.length);
+          if (nonNullCount !== 1) {
+            throw new Error(
+              "A FieldDatum record must be associated with exactly one of the following: Account, Entity, or Transaction."
+            );
+          }
+        },
+      },
     }
   );
+}
+
+export interface FieldDatumInfo {
+  [fieldId: number]: string | boolean | Date | number;
 }
 
 export default FieldDatum;
