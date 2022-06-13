@@ -1,6 +1,6 @@
 # Flexible Finance Server
 
-The backend to [Flexible Finance Client](https://gitlab.com/b2079/flexible-finance-client). Together, they form Flexible Finance, a money management app that aims to support the casual user by providing functionality and flexibility without the intensity of serious accounting apps.
+The backend to [Flexible Finance App](https://gitlab.com/b2079/flexible-finance-app). Together, they form Flexible Finance, a money management app that aims to support the casual user by providing functionality and flexibility without the intensity of serious accounting apps.
 
 ## Running Locally
 
@@ -50,4 +50,4 @@ There is support in the configuration files for automatic linting with Visual St
 
 There is a continuous deployment pipeline between the GitLab repository and the Heroku app. When a commit is pushed to `main`, GitLab will deploy that code to Heroku.
 
-The server app can be viewed at https://flexible-finance-server.herokuapp.com/. The client app can be viewed at https://flexible-finance-client.herokuapp.com/.
+The server app can be viewed at https://flexible-finance-server.herokuapp.com/. The client app can be viewed at https://flexible-finance-app.herokuapp.com/.
