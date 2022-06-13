@@ -51,3 +51,7 @@ There is support in the configuration files for automatic linting with Visual St
 There is a continuous deployment pipeline between the GitLab repository and the Heroku app. When a commit is pushed to `main`, GitLab will deploy that code to Heroku.
 
 The server app can be viewed at https://flexible-finance-server.herokuapp.com/. The client app can be viewed at https://flexible-finance-app.herokuapp.com/.
+
+## API Documentation
+
+The documentation for the public API for this server can be viewed at https://flexible-finance-server.herokuapp.com/api-v1/api-docs (or https://localhost:5000/api-v1/api-docs if running locally).
