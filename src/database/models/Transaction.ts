@@ -20,6 +20,7 @@ import {
   NonAttribute,
   Sequelize,
 } from "sequelize";
+import Field from "./Field";
 import FieldDatum from "./FieldDatum";
 import File from "./File";
 import Tag from "./Tag";
@@ -38,8 +39,11 @@ export class Transaction extends Model<
   declare TemplateId: number;
   declare Template: NonAttribute<Template>;
 
-  declare DatumIds: NonAttribute<number[]>;
-  declare Data: NonAttribute<FieldDatum[]>;
+  declare FieldIds: CreationOptional<number[]>;
+  declare Fields: NonAttribute<Field[]>;
+
+  declare FieldDatumIds: CreationOptional<number[]>;
+  declare FieldData: NonAttribute<FieldDatum[]>;
 
   declare FileIds: NonAttribute<number[]>;
   declare Files: NonAttribute<File[]>;
@@ -48,7 +52,8 @@ export class Transaction extends Model<
   declare Tags: NonAttribute<Tag[]>;
 
   declare static associations: {
-    Data: Association<Transaction, FieldDatum>;
+    Fields: Association<Transaction, Field>;
+    FieldData: Association<Transaction, FieldDatum>;
     Files: Association<Transaction, File>;
     Tags: Association<Transaction, Tag>;
     Template: Association<Transaction, Template>;
@@ -57,16 +62,16 @@ export class Transaction extends Model<
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  declare getData: HasManyGetAssociationsMixin<FieldDatum>;
-  declare addDatum: HasManyAddAssociationMixin<FieldDatum, number>;
-  declare addData: HasManyAddAssociationsMixin<FieldDatum, number>;
-  declare setData: HasManySetAssociationsMixin<FieldDatum, number>;
-  declare removeDatum: HasManyRemoveAssociationMixin<FieldDatum, number>;
-  declare removeData: HasManyRemoveAssociationsMixin<FieldDatum, number>;
-  declare hasDatum: HasManyHasAssociationMixin<FieldDatum, number>;
-  declare hasData: HasManyHasAssociationsMixin<FieldDatum, number>;
-  declare countData: HasManyCountAssociationsMixin;
-  declare createDatum: HasManyCreateAssociationMixin<
+  declare getFieldData: HasManyGetAssociationsMixin<FieldDatum>;
+  declare addFieldDatum: HasManyAddAssociationMixin<FieldDatum, number>;
+  declare addFieldData: HasManyAddAssociationsMixin<FieldDatum, number>;
+  declare setFieldData: HasManySetAssociationsMixin<FieldDatum, number>;
+  declare removeFieldDatum: HasManyRemoveAssociationMixin<FieldDatum, number>;
+  declare removeFieldData: HasManyRemoveAssociationsMixin<FieldDatum, number>;
+  declare hasFieldDatum: HasManyHasAssociationMixin<FieldDatum, number>;
+  declare hasFieldData: HasManyHasAssociationsMixin<FieldDatum, number>;
+  declare countFieldData: HasManyCountAssociationsMixin;
+  declare createFieldDatum: HasManyCreateAssociationMixin<
     FieldDatum,
     "TransactionId"
   >;
@@ -95,6 +100,21 @@ export class Transaction extends Model<
   declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
   declare countTags: HasManyCountAssociationsMixin;
   declare createTag: HasManyCreateAssociationMixin<Tag, "id">;
+
+  public async setFieldDatumAndFieldIds(): Promise<Transaction> {
+    this.setDataValue("FieldDatumIds", []);
+    this.setDataValue("FieldIds", []);
+    const accountData = await this.getFieldData();
+    accountData.forEach((datum) => {
+      const fieldDatumIds = this.getDataValue("FieldDatumIds");
+      fieldDatumIds.push(datum.id);
+      this.setDataValue("FieldDatumIds", fieldDatumIds);
+      const fieldIds = this.getDataValue("FieldIds");
+      fieldIds.push(datum.id);
+      this.setDataValue("FieldIds", fieldDatumIds);
+    });
+    return this;
+  }
 }
 
 export function initializeTransaction(sequelize: Sequelize): void {
@@ -120,6 +140,8 @@ export function initializeTransaction(sequelize: Sequelize): void {
           key: "id",
         },
       },
+      FieldIds: DataTypes.VIRTUAL,
+      FieldDatumIds: DataTypes.VIRTUAL,
     },
     {
       sequelize,

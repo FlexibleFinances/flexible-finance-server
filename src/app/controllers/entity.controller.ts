@@ -25,6 +25,8 @@ export async function getEntity(
     return;
   }
 
+  await entity.setFieldDatumAndFieldIds();
+
   res.status(200).send({
     message: "Entity gotten.",
     entity: entity,
@@ -47,6 +49,8 @@ export async function createEntity(
   const entity = await Entity.create(createOptions);
 
   await FieldDatum.createFieldData(req.body.fieldValues, entity.id);
+  await entity.reload();
+  await entity.setFieldDatumAndFieldIds();
 
   res.status(200).send({ message: "Entity created.", entity: entity });
 }
@@ -82,6 +86,9 @@ export async function updateEntity(
     TemplateId: req.body.TemplateId,
   };
   await entity.update(updateOptions);
+
+  await entity.setFieldDatumAndFieldIds();
+
   res.status(200).send({
     message: "Entity updated.",
     entity: entity,
@@ -96,13 +103,6 @@ export async function getEntities(
   if (req.query.name !== undefined) {
     whereOptions.name = {
       [Op.iLike]: req.body.name,
-    };
-  }
-  if (req.query.datumIds !== undefined) {
-    whereOptions.data = {
-      [Op.in]: (req.query.datumIds as string[]).map((x) => {
-        return +x;
-      }),
     };
   }
   if (req.query.TagIds !== undefined) {
@@ -125,8 +125,15 @@ export async function getEntities(
     where: whereOptions,
   };
   const entities = await Entity.findAll(findOptions);
+
+  const entityFieldPromises = entities.map(async (entity) => {
+    return await entity.setFieldDatumAndFieldIds();
+  });
+
+  const entitiesWithFields = await Promise.all(entityFieldPromises);
+
   res.status(200).send({
     message: "Entities gotten.",
-    entities: entities,
+    entities: entitiesWithFields,
   });
 }

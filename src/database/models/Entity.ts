@@ -20,6 +20,7 @@ import {
   NonAttribute,
   Sequelize,
 } from "sequelize";
+import Field from "./Field";
 import FieldDatum from "./FieldDatum";
 import Tag from "./Tag";
 import Template from "./Template";
@@ -37,14 +38,18 @@ export class Entity extends Model<
   declare TemplateId: number;
   declare Template: NonAttribute<Template>;
 
-  declare DatumIds: NonAttribute<number[]>;
-  declare Data: NonAttribute<FieldDatum[]>;
+  declare FieldIds: CreationOptional<number[]>;
+  declare Fields: NonAttribute<Field[]>;
+
+  declare FieldDatumIds: CreationOptional<number[]>;
+  declare FieldData: NonAttribute<FieldDatum[]>;
 
   declare TagIds: NonAttribute<number[]>;
   declare Tags: NonAttribute<Tag[]>;
 
   declare static associations: {
-    Data: Association<Entity, FieldDatum>;
+    Fields: Association<Entity, Field>;
+    FieldData: Association<Entity, FieldDatum>;
     Tags: Association<Entity, Tag>;
     Template: Association<Entity, Template>;
   };
@@ -55,16 +60,19 @@ export class Entity extends Model<
   declare getTemplate: BelongsToGetAssociationMixin<Template>;
   declare setTemplate: BelongsToSetAssociationMixin<Template, number>;
 
-  declare getData: HasManyGetAssociationsMixin<FieldDatum>;
-  declare addDatum: HasManyAddAssociationMixin<FieldDatum, number>;
-  declare addData: HasManyAddAssociationsMixin<FieldDatum, number>;
-  declare setData: HasManySetAssociationsMixin<FieldDatum, number>;
-  declare removeDatum: HasManyRemoveAssociationMixin<FieldDatum, number>;
-  declare removeData: HasManyRemoveAssociationsMixin<FieldDatum, number>;
-  declare hasDatum: HasManyHasAssociationMixin<FieldDatum, number>;
-  declare hasData: HasManyHasAssociationsMixin<FieldDatum, number>;
-  declare countData: HasManyCountAssociationsMixin;
-  declare createDatum: HasManyCreateAssociationMixin<FieldDatum, "EntityId">;
+  declare getFieldData: HasManyGetAssociationsMixin<FieldDatum>;
+  declare addFieldDatum: HasManyAddAssociationMixin<FieldDatum, number>;
+  declare addFieldData: HasManyAddAssociationsMixin<FieldDatum, number>;
+  declare setFieldData: HasManySetAssociationsMixin<FieldDatum, number>;
+  declare removeFieldDatum: HasManyRemoveAssociationMixin<FieldDatum, number>;
+  declare removeFieldData: HasManyRemoveAssociationsMixin<FieldDatum, number>;
+  declare hasFieldDatum: HasManyHasAssociationMixin<FieldDatum, number>;
+  declare hasFieldData: HasManyHasAssociationsMixin<FieldDatum, number>;
+  declare countFieldData: HasManyCountAssociationsMixin;
+  declare createFieldDatum: HasManyCreateAssociationMixin<
+    FieldDatum,
+    "EntityId"
+  >;
 
   declare getTags: HasManyGetAssociationsMixin<Tag>;
   declare addTag: HasManyAddAssociationMixin<Tag, number>;
@@ -76,6 +84,21 @@ export class Entity extends Model<
   declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
   declare countTags: HasManyCountAssociationsMixin;
   declare createTag: HasManyCreateAssociationMixin<Tag, "id">;
+
+  public async setFieldDatumAndFieldIds(): Promise<Entity> {
+    this.setDataValue("FieldDatumIds", []);
+    this.setDataValue("FieldIds", []);
+    const accountData = await this.getFieldData();
+    accountData.forEach((datum) => {
+      const fieldDatumIds = this.getDataValue("FieldDatumIds");
+      fieldDatumIds.push(datum.id);
+      this.setDataValue("FieldDatumIds", fieldDatumIds);
+      const fieldIds = this.getDataValue("FieldIds");
+      fieldIds.push(datum.id);
+      this.setDataValue("FieldIds", fieldDatumIds);
+    });
+    return this;
+  }
 }
 
 export function initializeEntity(sequelize: Sequelize): void {
@@ -101,6 +124,8 @@ export function initializeEntity(sequelize: Sequelize): void {
           key: "id",
         },
       },
+      FieldIds: DataTypes.VIRTUAL,
+      FieldDatumIds: DataTypes.VIRTUAL,
     },
     {
       sequelize,

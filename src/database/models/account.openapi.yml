@@ -1,14 +1,22 @@
 type: object
 properties:
+  id:
+    type: integer
+  createdAt:
+    type: string
+    format: date-time
+  updatedAt:
+    type: string
+    format: date-time
   name:
     type: string
-  FieldIds:
+  AccountGroupId:
+    type: integer
+  FieldDatumIds:
     type: array
     items:
       type: integer
-  AccountGroupId:
-    type: integer
-  DatumIds:
+  FieldIds:
     type: array
     items:
       type: integer

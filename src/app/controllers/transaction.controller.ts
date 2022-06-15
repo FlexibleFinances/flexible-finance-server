@@ -24,6 +24,9 @@ export async function getTransaction(
     });
     return;
   }
+
+  await transaction.setFieldDatumAndFieldIds();
+
   res.status(200).send({
     message: "Transaction gotten.",
     transaction: transaction,
@@ -44,6 +47,8 @@ export async function createTransaction(
   const transaction = await Transaction.create(createOptions);
 
   await FieldDatum.createFieldData(req.body.fieldValues, transaction.id);
+  await transaction.reload();
+  await transaction.setFieldDatumAndFieldIds();
 
   res
     .status(200)
@@ -81,6 +86,9 @@ export async function updateTransaction(
     TemplateId: req.body.TemplateId,
   };
   await transaction.update(updateOptions);
+
+  await transaction.setFieldDatumAndFieldIds();
+
   res.status(200).send({
     message: "Transaction updated.",
     transaction: transaction,
@@ -97,13 +105,6 @@ export async function getTransactions(
       [Op.iLike]: req.body.name,
     };
   }
-  if (req.query.datumIds !== undefined) {
-    whereOptions.data = {
-      [Op.in]: (req.query.datumIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
-  }
   if (req.query.fileIds !== undefined) {
     whereOptions.files = {
       [Op.in]: (req.query.fileIds as string[]).map((x) => {
@@ -118,14 +119,28 @@ export async function getTransactions(
       }),
     };
   }
+  if (req.query.TemplateIds !== undefined) {
+    whereOptions.template = {
+      [Op.in]: (req.query.TemplateIds as string[]).map((x) => {
+        return +x;
+      }),
+    };
+  }
   const findOptions: FindOptions = {
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
     where: whereOptions,
   };
   const transactions = await Transaction.findAll(findOptions);
+
+  const transactionFieldPromises = transactions.map(async (transaction) => {
+    return await transaction.setFieldDatumAndFieldIds();
+  });
+
+  const transactionsWithFields = await Promise.all(transactionFieldPromises);
+
   res.status(200).send({
     message: "Transactions gotten.",
-    transactions: transactions,
+    transactions: transactionsWithFields,
   });
 }

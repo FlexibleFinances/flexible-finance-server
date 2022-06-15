@@ -1,8 +1,6 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Account from "../../database/models/Account";
-import Field from "../../database/models/Field";
 import FieldDatum from "../../database/models/FieldDatum";
-import Template from "../../database/models/Template";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
@@ -19,7 +17,6 @@ export async function getAccount(
     where: {
       id: req.params.AccountId,
     },
-    include: [{ model: Template, include: [Field] }],
   });
   if (account === null) {
     res.status(500).send({
@@ -27,7 +24,9 @@ export async function getAccount(
     });
     return;
   }
-  account.Fields = account.Template.Fields ?? [];
+
+  await account.setFieldDatumAndFieldIds();
+
   res.status(200).send({
     message: "Account gotten.",
     account: account,
@@ -54,6 +53,8 @@ export async function createAccount(
   const account = await Account.create(createOptions);
 
   await FieldDatum.createFieldData(req.body.fieldValues, account.id);
+  await account.reload();
+  await account.setFieldDatumAndFieldIds();
 
   res.status(200).send({ message: "Account created.", account: account });
 }
@@ -77,7 +78,6 @@ export async function updateAccount(
     where: {
       id: req.params.AccountId,
     },
-    include: Template,
   });
   if (account === null) {
     res.status(500).send({
@@ -91,6 +91,9 @@ export async function updateAccount(
     TemplateId: req.body.TemplateId,
   };
   await account.update(updateOptions);
+
+  await account.setFieldDatumAndFieldIds();
+
   res.status(200).send({
     message: "Account updated.",
     account: account,
@@ -129,16 +132,18 @@ export async function getAccounts(
     };
   }
   const findOptions: FindOptions = {
-    include: [{ model: Template, include: [Field] }],
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
     where: whereOptions,
   };
   const accounts = await Account.findAll(findOptions);
-  const accountsWithFields = accounts.map((account) => {
-    account.Fields = account.Template.Fields ?? [];
-    return account;
+
+  const accountFieldPromises = accounts.map(async (account) => {
+    return await account.setFieldDatumAndFieldIds();
   });
+
+  const accountsWithFields = await Promise.all(accountFieldPromises);
+
   res.status(200).send({
     message: "Accounts gotten.",
     accounts: accountsWithFields,

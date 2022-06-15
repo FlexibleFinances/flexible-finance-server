@@ -4,6 +4,16 @@ import {
   BelongsToSetAssociationMixin,
   CreationOptional,
   DataTypes,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyGetAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManySetAssociationsMixin,
   InferAttributes,
   InferCreationAttributes,
   Model,
@@ -27,7 +37,11 @@ export class Account extends Model<
 
   declare name: string;
 
-  declare Fields: CreationOptional<Field[]>;
+  declare FieldIds: CreationOptional<number[]>;
+  declare Fields: NonAttribute<Field[]>;
+
+  declare FieldDatumIds: CreationOptional<number[]>;
+  declare FieldData: NonAttribute<FieldDatum[]>;
 
   declare AccountGroupId: number;
   declare AccountGroup: NonAttribute<AccountGroup>;
@@ -43,7 +57,8 @@ export class Account extends Model<
 
   declare static associations: {
     AccountGroup: Association<Account, AccountGroup>;
-    Data: Association<Account, FieldDatum>;
+    Fields: Association<Account, Field>;
+    FieldData: Association<Account, FieldDatum>;
     Tags: Association<Account, Tag>;
     Template: Association<Account, Template>;
   };
@@ -54,8 +69,37 @@ export class Account extends Model<
   declare getAccountGroup: BelongsToGetAssociationMixin<AccountGroup>;
   declare setAccountGroup: BelongsToSetAssociationMixin<AccountGroup, number>;
 
+  declare getFieldData: HasManyGetAssociationsMixin<FieldDatum>;
+  declare addFieldDatum: HasManyAddAssociationMixin<FieldDatum, number>;
+  declare addFieldData: HasManyAddAssociationsMixin<FieldDatum, number>;
+  declare setFieldData: HasManySetAssociationsMixin<FieldDatum, number>;
+  declare removeFieldDatum: HasManyRemoveAssociationMixin<FieldDatum, number>;
+  declare removeFieldData: HasManyRemoveAssociationsMixin<FieldDatum, number>;
+  declare hasFieldDatum: HasManyHasAssociationMixin<FieldDatum, number>;
+  declare hasFieldData: HasManyHasAssociationsMixin<FieldDatum, number>;
+  declare countFieldData: HasManyCountAssociationsMixin;
+  declare createFieldDatum: HasManyCreateAssociationMixin<
+    FieldDatum,
+    "AccountId"
+  >;
+
   declare getTemplate: BelongsToGetAssociationMixin<Template>;
   declare setTemplate: BelongsToSetAssociationMixin<Template, number>;
+
+  public async setFieldDatumAndFieldIds(): Promise<Account> {
+    this.setDataValue("FieldDatumIds", []);
+    this.setDataValue("FieldIds", []);
+    const accountData = await this.getFieldData();
+    accountData.forEach((datum) => {
+      const fieldDatumIds = this.getDataValue("FieldDatumIds");
+      fieldDatumIds.push(datum.id);
+      this.setDataValue("FieldDatumIds", fieldDatumIds);
+      const fieldIds = this.getDataValue("FieldIds");
+      fieldIds.push(datum.id);
+      this.setDataValue("FieldIds", fieldDatumIds);
+    });
+    return this;
+  }
 }
 
 export function initializeAccount(sequelize: Sequelize): void {
@@ -89,7 +133,8 @@ export function initializeAccount(sequelize: Sequelize): void {
           key: "id",
         },
       },
-      Fields: DataTypes.VIRTUAL,
+      FieldIds: DataTypes.VIRTUAL,
+      FieldDatumIds: DataTypes.VIRTUAL,
     },
     {
       sequelize,

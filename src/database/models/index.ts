@@ -129,6 +129,15 @@ export function initializeModels(sequelize: Sequelize): void {
   });
   Field.hasMany(FieldComponent);
 
+  FieldDatum.belongsTo(Account);
+  Account.hasMany(FieldDatum);
+
+  FieldDatum.belongsTo(Entity);
+  Entity.hasMany(FieldDatum);
+
+  FieldDatum.belongsTo(Transaction);
+  Transaction.hasMany(FieldDatum);
+
   Account.belongsToMany(Tag, { through: AccountTag });
   Tag.belongsToMany(Account, { through: AccountTag });
 
