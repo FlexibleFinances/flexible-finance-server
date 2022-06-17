@@ -79,7 +79,7 @@ FieldsRequests:
         in: query
         schema:
           type: integer
-      - name: datumIds
+      - name: FieldDatumIds
         in: query
         schema:
           type: array

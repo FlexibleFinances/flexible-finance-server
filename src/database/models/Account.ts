@@ -49,9 +49,6 @@ export class Account extends Model<
   declare TemplateId: number;
   declare Template: NonAttribute<Template>;
 
-  declare DatumIds: NonAttribute<number[]>;
-  declare Data: NonAttribute<FieldDatum[]>;
-
   declare TagIds: NonAttribute<number[]>;
   declare Tags: NonAttribute<Tag[]>;
 

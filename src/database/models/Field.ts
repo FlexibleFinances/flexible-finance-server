@@ -38,14 +38,14 @@ export class Field extends Model<
   declare FieldTypeId: number;
   declare FieldType: NonAttribute<FieldType>;
 
-  declare DatumIds: NonAttribute<number[]>;
-  declare Data: NonAttribute<FieldDatum[]>;
+  declare FieldDatumIds: CreationOptional<number[]>;
+  declare FieldData: NonAttribute<FieldDatum[]>;
 
   declare TemplateIds: NonAttribute<number[]>;
   declare Templates: NonAttribute<Template[]>;
 
   declare static associations: {
-    Data: Association<FieldDatum, Field>;
+    FieldData: Association<FieldDatum, Field>;
     Templates: Association<Template, Field>;
     FieldType: Association<FieldType, Field>;
   };
@@ -53,16 +53,19 @@ export class Field extends Model<
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  declare getData: HasManyGetAssociationsMixin<FieldDatum>;
-  declare addDatum: HasManyAddAssociationMixin<FieldDatum, number>;
-  declare addData: HasManyAddAssociationsMixin<FieldDatum, number>;
-  declare setData: HasManySetAssociationsMixin<FieldDatum, number>;
-  declare removeDatum: HasManyRemoveAssociationMixin<FieldDatum, number>;
-  declare removeData: HasManyRemoveAssociationsMixin<FieldDatum, number>;
-  declare hasDatum: HasManyHasAssociationMixin<FieldDatum, number>;
-  declare hasData: HasManyHasAssociationsMixin<FieldDatum, number>;
-  declare countData: HasManyCountAssociationsMixin;
-  declare createDatum: HasManyCreateAssociationMixin<FieldDatum, "FieldId">;
+  declare getFieldData: HasManyGetAssociationsMixin<FieldDatum>;
+  declare addFieldDatum: HasManyAddAssociationMixin<FieldDatum, number>;
+  declare addFieldData: HasManyAddAssociationsMixin<FieldDatum, number>;
+  declare setFieldData: HasManySetAssociationsMixin<FieldDatum, number>;
+  declare removeFieldDatum: HasManyRemoveAssociationMixin<FieldDatum, number>;
+  declare removeFieldData: HasManyRemoveAssociationsMixin<FieldDatum, number>;
+  declare hasFieldDatum: HasManyHasAssociationMixin<FieldDatum, number>;
+  declare hasFieldData: HasManyHasAssociationsMixin<FieldDatum, number>;
+  declare countFieldData: HasManyCountAssociationsMixin;
+  declare createFieldDatum: HasManyCreateAssociationMixin<
+    FieldDatum,
+    "FieldId"
+  >;
 
   declare getTemplates: HasManyGetAssociationsMixin<Template>;
   declare addTemplate: HasManyAddAssociationMixin<Template, number>;
@@ -107,6 +110,7 @@ export function initializeField(sequelize: Sequelize): void {
         allowNull: false,
         defaultValue: false,
       },
+      FieldDatumIds: DataTypes.VIRTUAL,
     },
     {
       sequelize,

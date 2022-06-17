@@ -99,9 +99,9 @@ export async function getFields(
       }),
     };
   }
-  if (req.query.datumIds !== undefined) {
+  if (req.query.FieldDatumIds !== undefined) {
     whereOptions.data = {
-      [Op.in]: (req.query.datumIds as string[]).map((x) => {
+      [Op.in]: (req.query.FieldDatumIds as string[]).map((x) => {
         return +x;
       }),
     };

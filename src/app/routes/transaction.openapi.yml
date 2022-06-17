@@ -75,7 +75,13 @@ TransactionsRequests:
         in: query
         schema:
           type: string
-      - name: datumIds
+      - name: FieldDatumIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+      - name: FieldIds
         in: query
         schema:
           type: array
