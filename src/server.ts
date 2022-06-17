@@ -36,8 +36,6 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-console.log(corsOptions);
-
 app
   .set("views", path.join(__dirname, "/views"))
   .set("view engine", "ejs")
