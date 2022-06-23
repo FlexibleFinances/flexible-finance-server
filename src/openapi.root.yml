@@ -54,7 +54,7 @@ paths:
     $ref: ./app/routes/field.openapi.yml#/FieldsRequests
   /fieldDatum:
     $ref: ./app/routes/fieldDatum.openapi.yml#/FieldDatumRequests
-  /fieldDatum/{FieldId}:
+  /fieldDatum/{FieldDatumId}:
     $ref: ./app/routes/fieldDatum.openapi.yml#/FieldDatumIdRequests
   /fieldData:
     $ref: ./app/routes/fieldDatum.openapi.yml#/FieldDataRequests
