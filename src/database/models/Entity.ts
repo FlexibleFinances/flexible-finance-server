@@ -88,8 +88,8 @@ export class Entity extends Model<
   public async setFieldDatumAndFieldIds(): Promise<Entity> {
     this.setDataValue("FieldDatumIds", []);
     this.setDataValue("FieldIds", []);
-    const accountData = await this.getFieldData();
-    accountData.forEach((datum) => {
+    const entityData = await this.getFieldData();
+    entityData.forEach((datum) => {
       const fieldDatumIds = this.getDataValue("FieldDatumIds");
       fieldDatumIds.push(datum.id);
       this.setDataValue("FieldDatumIds", fieldDatumIds);

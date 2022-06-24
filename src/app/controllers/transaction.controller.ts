@@ -46,7 +46,12 @@ export async function createTransaction(
   };
   const transaction = await Transaction.create(createOptions);
 
-  await FieldDatum.createFieldData(req.body.fieldValues, transaction.id);
+  await FieldDatum.createFieldData(
+    req.body.fieldValues,
+    undefined,
+    undefined,
+    transaction.id
+  );
   await transaction.reload();
   await transaction.setFieldDatumAndFieldIds();
 

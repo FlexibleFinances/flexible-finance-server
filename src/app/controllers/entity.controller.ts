@@ -48,7 +48,7 @@ export async function createEntity(
 
   const entity = await Entity.create(createOptions);
 
-  await FieldDatum.createFieldData(req.body.fieldValues, entity.id);
+  await FieldDatum.createFieldData(req.body.fieldValues, undefined, entity.id);
   await entity.reload();
   await entity.setFieldDatumAndFieldIds();
 
