@@ -92,12 +92,16 @@ export async function up({
     },
   });
 
-  await Role.create({
-    name: "user",
+  await Role.findOrCreate({
+    where: {
+      name: "user",
+    },
   });
 
-  await Role.create({
-    name: "admin",
+  await Role.findOrCreate({
+    where: {
+      name: "admin",
+    },
   });
   console.log("0001 up - finished");
 }
