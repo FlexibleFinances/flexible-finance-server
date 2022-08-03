@@ -5,7 +5,7 @@ AccountRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Account"
+            $ref: "../../openapi.root.yml#/components/schemas/Account_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Account"
@@ -48,7 +48,7 @@ AccountIdRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Account"
+            $ref: "../../openapi.root.yml#/components/schemas/Account_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Account"
@@ -112,7 +112,7 @@ AccountResponse:
           message:
             type: string
           account:
-            $ref: "../../openapi.root.yml#/components/schemas/Account"
+            $ref: "../../openapi.root.yml#/components/schemas/Account_ResponseSchema"
 AccountsResponse:
   description: Returns the accounts' info.
   content:
@@ -125,4 +125,4 @@ AccountsResponse:
           accounts:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Account"
+              $ref: "../../openapi.root.yml#/components/schemas/Account_ResponseSchema"

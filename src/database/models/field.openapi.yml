@@ -1,24 +1,34 @@
-type: object
-properties:
-  id:
-    type: integer
-  createdAt:
-    type: string
-    format: date-time
-  updatedAt:
-    type: string
-    format: date-time
-  name:
-    type: string
-  FieldDatumIds:
-    type: array
-    items:
+RequestSchema:
+  type: object
+  properties:
+    name:
+      type: string
+    FieldTypeId:
       type: integer
-  FieldTypeId:
-    type: integer
-  TemplateIds:
-    type: array
-    items:
+    isComponentOnly:
+      type: boolean
+ResponseSchema:
+  type: object
+  properties:
+    id:
       type: integer
-  isComponentOnly:
-    type: boolean
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    name:
+      type: string
+    FieldDatumIds:
+      type: array
+      items:
+        type: integer
+    FieldTypeId:
+      type: integer
+    TemplateIds:
+      type: array
+      items:
+        type: integer
+    isComponentOnly:
+      type: boolean

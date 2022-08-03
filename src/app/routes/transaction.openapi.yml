@@ -5,7 +5,7 @@ TransactionRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Transaction"
+            $ref: "../../openapi.root.yml#/components/schemas/Transaction_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transaction"
@@ -48,7 +48,7 @@ TransactionIdRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Transaction"
+            $ref: "../../openapi.root.yml#/components/schemas/Transaction_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transaction"
@@ -118,7 +118,7 @@ TransactionResponse:
           message:
             type: string
           transaction:
-            $ref: "../../openapi.root.yml#/components/schemas/Transaction"
+            $ref: "../../openapi.root.yml#/components/schemas/Transaction_ResponseSchema"
 TransactionsResponse:
   description: Returns the transactions' info.
   content:
@@ -131,4 +131,4 @@ TransactionsResponse:
           transactions:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Transaction"
+              $ref: "../../openapi.root.yml#/components/schemas/Transaction_ResponseSchema"

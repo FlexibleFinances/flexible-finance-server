@@ -1,32 +1,54 @@
-type: object
-properties:
-  id:
-    type: integer
-  createdAt:
-    type: string
-    format: date-time
-  updatedAt:
-    type: string
-    format: date-time
-  name:
-    type: string
-  type:
-    type: string
-    nullable: true
-    enum:
-      - Text
-      - Number
-      - Date
-      - Boolean
-      - null
-  validator:
-    type: string
-    nullable: true
-  FieldTypeComponentIds:
-    type: array
-    items:
+RequestSchema:
+  type: object
+  properties:
+    name:
+      type: string
+    type:
+      type: string
+      nullable: true
+      enum:
+        - Text
+        - Number
+        - Date
+        - Boolean
+        - null
+    validator:
+      type: string
+      nullable: true
+    FieldTypeComponentIds:
+      type: array
+      items:
+        type: integer
+ResponseSchema:
+  type: object
+  properties:
+    id:
       type: integer
-  FieldIds:
-    type: array
-    items:
-      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    name:
+      type: string
+    type:
+      type: string
+      nullable: true
+      enum:
+        - Text
+        - Number
+        - Date
+        - Boolean
+        - null
+    validator:
+      type: string
+      nullable: true
+    FieldTypeComponentIds:
+      type: array
+      items:
+        type: integer
+    FieldIds:
+      type: array
+      items:
+        type: integer

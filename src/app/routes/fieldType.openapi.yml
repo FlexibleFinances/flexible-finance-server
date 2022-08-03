@@ -5,7 +5,7 @@ FieldTypeRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/FieldType"
+            $ref: "../../openapi.root.yml#/components/schemas/FieldType_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldType"
@@ -48,7 +48,7 @@ FieldTypeIdRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/FieldType"
+            $ref: "../../openapi.root.yml#/components/schemas/FieldType_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldType"
@@ -100,7 +100,7 @@ FieldTypeResponse:
           message:
             type: string
           fieldType:
-            $ref: "../../openapi.root.yml#/components/schemas/FieldType"
+            $ref: "../../openapi.root.yml#/components/schemas/FieldType_ResponseSchema"
 FieldTypesResponse:
   description: Returns the field types' info.
   content:
@@ -113,4 +113,4 @@ FieldTypesResponse:
           fieldTypes:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/FieldType"
+              $ref: "../../openapi.root.yml#/components/schemas/FieldType_ResponseSchema"

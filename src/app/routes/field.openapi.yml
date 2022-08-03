@@ -5,7 +5,7 @@ FieldRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Field"
+            $ref: "../../openapi.root.yml#/components/schemas/Field_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Field"
@@ -48,7 +48,7 @@ FieldIdRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Field"
+            $ref: "../../openapi.root.yml#/components/schemas/Field_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Field"
@@ -110,7 +110,7 @@ FieldResponse:
           message:
             type: string
           field:
-            $ref: "../../openapi.root.yml#/components/schemas/Field"
+            $ref: "../../openapi.root.yml#/components/schemas/Field_ResponseSchema"
 FieldsResponse:
   description: Returns the fields' info.
   content:
@@ -123,4 +123,4 @@ FieldsResponse:
           fields:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Field"
+              $ref: "../../openapi.root.yml#/components/schemas/Field_ResponseSchema"

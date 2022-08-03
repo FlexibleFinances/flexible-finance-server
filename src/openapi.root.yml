@@ -178,32 +178,102 @@ components:
       properties:
         message:
           type: string
-    Account:
-      $ref: ./database/models/account.openapi.yml
-    AccountGroup:
-      $ref: ./database/models/accountGroup.openapi.yml
-    Entity:
-      $ref: ./database/models/entity.openapi.yml
-    Field:
-      $ref: ./database/models/field.openapi.yml
-    FieldDatum:
-      $ref: ./database/models/fieldDatum.openapi.yml
-    FieldType:
-      $ref: ./database/models/fieldType.openapi.yml
-    Role:
-      $ref: ./database/models/role.openapi.yml
-    Status:
-      $ref: ./database/models/status.openapi.yml
-    Tag:
-      $ref: ./database/models/tag.openapi.yml
-    Template:
-      $ref: ./database/models/template.openapi.yml
-    Transaction:
-      $ref: ./database/models/transaction.openapi.yml
-    Type:
-      $ref: ./database/models/type.openapi.yml
-    User:
-      $ref: ./database/models/user.openapi.yml
+    Account_RequestSchema:
+      $ref: ./database/models/account.openapi.yml#/RequestSchema
+    Account_ResponseSchema:
+      $ref: ./database/models/account.openapi.yml#/ResponseSchema
+    AccountGroup_RequestSchema:
+      $ref: ./database/models/accountGroup.openapi.yml#/RequestSchema
+    AccountGroup_ResponseSchema:
+      $ref: ./database/models/accountGroup.openapi.yml#/ResponseSchema
+    Entity_RequestSchema:
+      $ref: ./database/models/entity.openapi.yml#/RequestSchema
+    Entity_ResponseSchema:
+      $ref: ./database/models/entity.openapi.yml#/ResponseSchema
+    Field_RequestSchema:
+      $ref: ./database/models/field.openapi.yml#/RequestSchema
+    Field_ResponseSchema:
+      $ref: ./database/models/field.openapi.yml#/ResponseSchema
+    FieldDatum_BoolAccount_RequestSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/BoolAccount_RequestSchema
+    FieldDatum_BoolEntity_RequestSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/BoolEntity_RequestSchema
+    FieldDatum_BoolTransaction_RequestSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/BoolTransaction_RequestSchema
+    FieldDatum_DateAccount_RequestSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/DateAccount_RequestSchema
+    FieldDatum_DateEntity_RequestSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/DateEntity_RequestSchema
+    FieldDatum_DateTransaction_RequestSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/DateTransaction_RequestSchema
+    FieldDatum_IntAccount_RequestSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/IntAccount_RequestSchema
+    FieldDatum_IntEntity_RequestSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/IntEntity_RequestSchema
+    FieldDatum_IntTransaction_RequestSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/IntTransaction_RequestSchema
+    FieldDatum_StringAccount_RequestSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/StringAccount_RequestSchema
+    FieldDatum_StringEntity_RequestSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/StringEntity_RequestSchema
+    FieldDatum_StringTransaction_RequestSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/StringTransaction_RequestSchema
+    FieldDatum_BoolAccount_ResponseSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/BoolAccount_ResponseSchema
+    FieldDatum_BoolEntity_ResponseSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/BoolEntity_ResponseSchema
+    FieldDatum_BoolTransaction_ResponseSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/BoolTransaction_ResponseSchema
+    FieldDatum_DateAccount_ResponseSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/DateAccount_ResponseSchema
+    FieldDatum_DateEntity_ResponseSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/DateEntity_ResponseSchema
+    FieldDatum_DateTransaction_ResponseSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/DateTransaction_ResponseSchema
+    FieldDatum_IntAccount_ResponseSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/IntAccount_ResponseSchema
+    FieldDatum_IntEntity_ResponseSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/IntEntity_ResponseSchema
+    FieldDatum_IntTransaction_ResponseSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/IntTransaction_ResponseSchema
+    FieldDatum_StringAccount_ResponseSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/StringAccount_ResponseSchema
+    FieldDatum_StringEntity_ResponseSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/StringEntity_ResponseSchema
+    FieldDatum_StringTransaction_ResponseSchema:
+      $ref: ./database/models/fieldDatum.openapi.yml#/StringTransaction_ResponseSchema
+    FieldType_RequestSchema:
+      $ref: ./database/models/fieldType.openapi.yml#/RequestSchema
+    FieldType_ResponseSchema:
+      $ref: ./database/models/fieldType.openapi.yml#/ResponseSchema
+    Role_RequestSchema:
+      $ref: ./database/models/role.openapi.yml#/RequestSchema
+    Role_ResponseSchema:
+      $ref: ./database/models/role.openapi.yml#/ResponseSchema
+    Status_RequestSchema:
+      $ref: ./database/models/status.openapi.yml#/RequestSchema
+    Status_ResponseSchema:
+      $ref: ./database/models/status.openapi.yml#/ResponseSchema
+    Tag_RequestSchema:
+      $ref: ./database/models/tag.openapi.yml#/RequestSchema
+    Tag_ResponseSchema:
+      $ref: ./database/models/tag.openapi.yml#/ResponseSchema
+    Template_RequestSchema:
+      $ref: ./database/models/template.openapi.yml#/RequestSchema
+    Template_ResponseSchema:
+      $ref: ./database/models/template.openapi.yml#/ResponseSchema
+    Transaction_RequestSchema:
+      $ref: ./database/models/transaction.openapi.yml#/RequestSchema
+    Transaction_ResponseSchema:
+      $ref: ./database/models/transaction.openapi.yml#/ResponseSchema
+    Type_RequestSchema:
+      $ref: ./database/models/type.openapi.yml#/RequestSchema
+    Type_ResponseSchema:
+      $ref: ./database/models/type.openapi.yml#/ResponseSchema
+    User_RequestSchema:
+      $ref: ./database/models/user.openapi.yml#/RequestSchema
+    User_ResponseSchema:
+      $ref: ./database/models/user.openapi.yml#/ResponseSchema
   securitySchemes:
     bearerAuth:
       type: http

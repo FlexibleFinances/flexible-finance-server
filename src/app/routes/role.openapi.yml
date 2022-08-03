@@ -5,7 +5,7 @@ RoleRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Role"
+            $ref: "../../openapi.root.yml#/components/schemas/Role_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Role"
@@ -48,7 +48,7 @@ RoleIdRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Role"
+            $ref: "../../openapi.root.yml#/components/schemas/Role_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Role"
@@ -100,7 +100,7 @@ RoleResponse:
           message:
             type: string
           role:
-            $ref: "../../openapi.root.yml#/components/schemas/Role"
+            $ref: "../../openapi.root.yml#/components/schemas/Role_ResponseSchema"
 RolesResponse:
   description: Returns the roles' info.
   content:
@@ -113,4 +113,4 @@ RolesResponse:
           roles:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Role"
+              $ref: "../../openapi.root.yml#/components/schemas/Role_ResponseSchema"

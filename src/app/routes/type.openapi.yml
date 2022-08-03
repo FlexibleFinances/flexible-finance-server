@@ -5,10 +5,7 @@ TypeRequests:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              name:
-                type: string
+            $ref: "../../openapi.root.yml#/components/schemas/Type_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Type"
@@ -51,7 +48,7 @@ TypeIdRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Type"
+            $ref: "../../openapi.root.yml#/components/schemas/Type_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Type"
@@ -93,7 +90,7 @@ TypeResponse:
           message:
             type: string
           type:
-            $ref: "../../openapi.root.yml#/components/schemas/Type"
+            $ref: "../../openapi.root.yml#/components/schemas/Type_ResponseSchema"
 TypesResponse:
   description: Returns the types' info.
   content:
@@ -106,4 +103,4 @@ TypesResponse:
           types:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Type"
+              $ref: "../../openapi.root.yml#/components/schemas/Type_ResponseSchema"

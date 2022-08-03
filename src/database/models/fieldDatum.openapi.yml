@@ -1,27 +1,318 @@
-type: object
-properties:
-  id:
-    type: integer
-  createdAt:
-    type: string
-    format: date-time
-  updatedAt:
-    type: string
-    format: date-time
-  FieldId:
-    type: integer
-  stringValue:
-    type: string
-  intValue:
-    type: integer
-  dateValue:
-    type: string
-    format: date-time
-  boolValue:
-    type: boolean
-  AccountId:
-    type: integer
-  EntityId:
-    type: integer
-  TransactionId:
-    type: integer
+BoolAccount_RequestSchema:
+  type: object
+  properties:
+    FieldId:
+      type: integer
+    boolValue:
+      type: boolean
+    AccountId:
+      type: integer
+BoolEntity_RequestSchema:
+  type: object
+  properties:
+    FieldId:
+      type: integer
+    boolValue:
+      type: boolean
+    EntityId:
+      type: integer
+BoolTransaction_RequestSchema:
+  type: object
+  properties:
+    FieldId:
+      type: integer
+    boolValue:
+      type: boolean
+    TransactionId:
+      type: integer
+DateAccount_RequestSchema:
+  type: object
+  properties:
+    FieldId:
+      type: integer
+    dateValue:
+      type: string
+      format: date-time
+    AccountId:
+      type: integer
+DateEntity_RequestSchema:
+  type: object
+  properties:
+    FieldId:
+      type: integer
+    dateValue:
+      type: string
+      format: date-time
+    EntityId:
+      type: integer
+DateTransaction_RequestSchema:
+  type: object
+  properties:
+    FieldId:
+      type: integer
+    dateValue:
+      type: string
+      format: date-time
+    TransactionId:
+      type: integer
+IntAccount_RequestSchema:
+  type: object
+  properties:
+    FieldId:
+      type: integer
+    intValue:
+      type: integer
+    AccountId:
+      type: integer
+IntEntity_RequestSchema:
+  type: object
+  properties:
+    FieldId:
+      type: integer
+    intValue:
+      type: integer
+    EntityId:
+      type: integer
+IntTransaction_RequestSchema:
+  type: object
+  properties:
+    FieldId:
+      type: integer
+    intValue:
+      type: integer
+    TransactionId:
+      type: integer
+StringAccount_RequestSchema:
+  type: object
+  properties:
+    FieldId:
+      type: integer
+    stringValue:
+      type: string
+    AccountId:
+      type: integer
+StringEntity_RequestSchema:
+  type: object
+  properties:
+    FieldId:
+      type: integer
+    stringValue:
+      type: string
+    EntityId:
+      type: integer
+StringTransaction_RequestSchema:
+  type: object
+  properties:
+    FieldId:
+      type: integer
+    stringValue:
+      type: string
+    TransactionId:
+      type: integer
+BoolAccount_ResponseSchema:
+  type: object
+  properties:
+    id:
+      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    FieldId:
+      type: integer
+    boolValue:
+      type: boolean
+    AccountId:
+      type: integer
+BoolEntity_ResponseSchema:
+  type: object
+  properties:
+    id:
+      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    FieldId:
+      type: integer
+    boolValue:
+      type: boolean
+    EntityId:
+      type: integer
+BoolTransaction_ResponseSchema:
+  type: object
+  properties:
+    id:
+      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    FieldId:
+      type: integer
+    boolValue:
+      type: boolean
+    TransactionId:
+      type: integer
+DateAccount_ResponseSchema:
+  type: object
+  properties:
+    id:
+      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    FieldId:
+      type: integer
+    dateValue:
+      type: string
+      format: date-time
+    AccountId:
+      type: integer
+DateEntity_ResponseSchema:
+  type: object
+  properties:
+    id:
+      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    FieldId:
+      type: integer
+    dateValue:
+      type: string
+      format: date-time
+    EntityId:
+      type: integer
+DateTransaction_ResponseSchema:
+  type: object
+  properties:
+    id:
+      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    FieldId:
+      type: integer
+    dateValue:
+      type: string
+      format: date-time
+    TransactionId:
+      type: integer
+IntAccount_ResponseSchema:
+  type: object
+  properties:
+    id:
+      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    FieldId:
+      type: integer
+    intValue:
+      type: integer
+    AccountId:
+      type: integer
+IntEntity_ResponseSchema:
+  type: object
+  properties:
+    id:
+      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    FieldId:
+      type: integer
+    intValue:
+      type: integer
+    EntityId:
+      type: integer
+IntTransaction_ResponseSchema:
+  type: object
+  properties:
+    id:
+      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    FieldId:
+      type: integer
+    intValue:
+      type: integer
+    TransactionId:
+      type: integer
+StringAccount_ResponseSchema:
+  type: object
+  properties:
+    id:
+      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    FieldId:
+      type: integer
+    stringValue:
+      type: string
+    AccountId:
+      type: integer
+StringEntity_ResponseSchema:
+  type: object
+  properties:
+    id:
+      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    FieldId:
+      type: integer
+    stringValue:
+      type: string
+    EntityId:
+      type: integer
+StringTransaction_ResponseSchema:
+  type: object
+  properties:
+    id:
+      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    FieldId:
+      type: integer
+    stringValue:
+      type: string
+    TransactionId:
+      type: integer

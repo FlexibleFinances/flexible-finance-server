@@ -31,27 +31,27 @@ export function hasRequestParameters(
   if (
     minOneParameters?.body?.some((paramName: string) => {
       return req.body[paramName] !== undefined;
-    }) === true
+    }) === false
   ) {
-    message = `Missing at least one of [${minOneParameters.body.join(
+    message = `Need at least one of [${minOneParameters.body.join(
       ", "
     )}] in request body.`;
   }
   if (
     minOneParameters?.query?.some((paramName: string) => {
       return req.query[paramName] !== undefined;
-    }) === true
+    }) === false
   ) {
-    message = `Missing at least one of [${minOneParameters.query.join(
+    message = `Need at least one of [${minOneParameters.query.join(
       ", "
     )}] in request query.`;
   }
   if (
     minOneParameters?.params?.some((paramName: string) => {
       return req.params[paramName] !== undefined;
-    }) === true
+    }) === false
   ) {
-    message = `Missing at least one of [${minOneParameters.params.join(
+    message = `Need at least one of [${minOneParameters.params.join(
       ", "
     )}] in request params.`;
   }

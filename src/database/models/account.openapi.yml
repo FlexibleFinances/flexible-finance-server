@@ -1,28 +1,52 @@
-type: object
-properties:
-  id:
-    type: integer
-  createdAt:
-    type: string
-    format: date-time
-  updatedAt:
-    type: string
-    format: date-time
-  name:
-    type: string
-  AccountGroupId:
-    type: integer
-  FieldDatumIds:
-    type: array
-    items:
+RequestSchema:
+  type: object
+  properties:
+    name:
+      type: string
+    AccountGroupId:
       type: integer
-  FieldIds:
-    type: array
-    items:
+    FieldDatumIds:
+      type: array
+      items:
+        type: integer
+    FieldIds:
+      type: array
+      items:
+        type: integer
+    fieldValues:
+      type: object
+    TagIds:
+      type: array
+      items:
+        type: integer
+    TemplateId:
       type: integer
-  TagIds:
-    type: array
-    items:
+ResponseSchema:
+  type: object
+  properties:
+    id:
       type: integer
-  TemplateId:
-    type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    name:
+      type: string
+    AccountGroupId:
+      type: integer
+    FieldDatumIds:
+      type: array
+      items:
+        type: integer
+    FieldIds:
+      type: array
+      items:
+        type: integer
+    TagIds:
+      type: array
+      items:
+        type: integer
+    TemplateId:
+      type: integer

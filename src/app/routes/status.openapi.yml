@@ -5,10 +5,7 @@ StatusRequests:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              name:
-                type: string
+            $ref: "../../openapi.root.yml#/components/schemas/Status_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Status"
@@ -51,7 +48,7 @@ StatusIdRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Status"
+            $ref: "../../openapi.root.yml#/components/schemas/Status_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Status"
@@ -93,7 +90,7 @@ StatusResponse:
           message:
             type: string
           status:
-            $ref: "../../openapi.root.yml#/components/schemas/Status"
+            $ref: "../../openapi.root.yml#/components/schemas/Status_ResponseSchema"
 StatusesResponse:
   description: Returns the statuss' info.
   content:
@@ -106,4 +103,4 @@ StatusesResponse:
           statuses:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Status"
+              $ref: "../../openapi.root.yml#/components/schemas/Status_ResponseSchema"

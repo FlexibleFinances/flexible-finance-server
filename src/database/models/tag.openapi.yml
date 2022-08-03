@@ -1,28 +1,50 @@
-type: object
-properties:
-  id:
-    type: integer
-  createdAt:
-    type: string
-    format: date-time
-  updatedAt:
-    type: string
-    format: date-time
-  name:
-    type: string
-  AccountIds:
-    type: array
-    items:
+RequestSchema:
+  type: object
+  properties:
+    name:
+      type: string
+    AccountIds:
+      type: array
+      items:
+        type: integer
+    EntityIds:
+      type: array
+      items:
+        type: integer
+    TemplateIds:
+      type: array
+      items:
+        type: integer
+    TransactionIds:
+      type: array
+      items:
+        type: integer
+ResponseSchema:
+  type: object
+  properties:
+    id:
       type: integer
-  EntityIds:
-    type: array
-    items:
-      type: integer
-  TemplateIds:
-    type: array
-    items:
-      type: integer
-  TransactionIds:
-    type: array
-    items:
-      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    name:
+      type: string
+    AccountIds:
+      type: array
+      items:
+        type: integer
+    EntityIds:
+      type: array
+      items:
+        type: integer
+    TemplateIds:
+      type: array
+      items:
+        type: integer
+    TransactionIds:
+      type: array
+      items:
+        type: integer

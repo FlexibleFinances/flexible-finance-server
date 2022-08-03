@@ -5,7 +5,7 @@ TemplateRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Template"
+            $ref: "../../openapi.root.yml#/components/schemas/Template_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Template"
@@ -46,7 +46,7 @@ TemplateIdRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Template"
+            $ref: "../../openapi.root.yml#/components/schemas/Template_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Template"
@@ -118,7 +118,7 @@ TemplateResponse:
           message:
             type: string
           template:
-            $ref: "../../openapi.root.yml#/components/schemas/Template"
+            $ref: "../../openapi.root.yml#/components/schemas/Template_ResponseSchema"
 TemplatesResponse:
   description: Returns the templates' info.
   content:
@@ -131,4 +131,4 @@ TemplatesResponse:
           templates:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Template"
+              $ref: "../../openapi.root.yml#/components/schemas/Template_ResponseSchema"

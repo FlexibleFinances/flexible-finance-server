@@ -5,7 +5,7 @@ TagRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Tag"
+            $ref: "../../openapi.root.yml#/components/schemas/Tag_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Tag"
@@ -48,7 +48,7 @@ TagIdRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Tag"
+            $ref: "../../openapi.root.yml#/components/schemas/Tag_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Tag"
@@ -124,7 +124,7 @@ TagResponse:
           message:
             type: string
           tag:
-            $ref: "../../openapi.root.yml#/components/schemas/Tag"
+            $ref: "../../openapi.root.yml#/components/schemas/Tag_ResponseSchema"
 TagsResponse:
   description: Returns the tags' info.
   content:
@@ -137,4 +137,4 @@ TagsResponse:
           tags:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Tag"
+              $ref: "../../openapi.root.yml#/components/schemas/Tag_ResponseSchema"

@@ -5,7 +5,7 @@ AccountGroupRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/AccountGroup"
+            $ref: "../../openapi.root.yml#/components/schemas/AccountGroup_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/AccountGroup"
@@ -48,7 +48,7 @@ AccountGroupIdRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/AccountGroup"
+            $ref: "../../openapi.root.yml#/components/schemas/AccountGroup_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/AccountGroup"
@@ -100,7 +100,7 @@ AccountGroupResponse:
           message:
             type: string
           accountGroup:
-            $ref: "../../openapi.root.yml#/components/schemas/AccountGroup"
+            $ref: "../../openapi.root.yml#/components/schemas/AccountGroup_ResponseSchema"
 AccountGroupsResponse:
   description: Returns the account groups' info.
   content:
@@ -113,4 +113,4 @@ AccountGroupsResponse:
           accountGroups:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/AccountGroup"
+              $ref: "../../openapi.root.yml#/components/schemas/AccountGroup_ResponseSchema"

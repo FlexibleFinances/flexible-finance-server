@@ -5,7 +5,7 @@ UserRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/User"
+            $ref: "../../openapi.root.yml#/components/schemas/User_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/User"
@@ -48,7 +48,7 @@ UserIdRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/User"
+            $ref: "../../openapi.root.yml#/components/schemas/User_RequestSchema"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/User"
@@ -104,7 +104,7 @@ UserResponse:
           message:
             type: string
           user:
-            $ref: "../../openapi.root.yml#/components/schemas/User"
+            $ref: "../../openapi.root.yml#/components/schemas/User_ResponseSchema"
 UsersResponse:
   description: Returns the users' info.
   content:
@@ -117,4 +117,4 @@ UsersResponse:
           users:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/User"
+              $ref: "../../openapi.root.yml#/components/schemas/User_ResponseSchema"
