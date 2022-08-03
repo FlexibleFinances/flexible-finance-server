@@ -1,5 +1,5 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
-import FieldDatum from "../../database/models/FieldDatum";
+import FieldDatum, { FieldValues } from "../../database/models/FieldDatum";
 import Transaction from "../../database/models/Transaction";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
@@ -29,7 +29,7 @@ export async function getTransaction(
 
   res.status(200).send({
     message: "Transaction gotten.",
-    transaction: transaction,
+    transaction,
   });
 }
 
@@ -46,8 +46,8 @@ export async function createTransaction(
   };
   const transaction = await Transaction.create(createOptions);
 
-  await FieldDatum.createFieldData(
-    req.body.fieldValues,
+  await FieldDatum.upsertFieldData(
+    req.body.fieldValues as FieldValues,
     undefined,
     undefined,
     transaction.id
@@ -55,9 +55,7 @@ export async function createTransaction(
   await transaction.reload();
   await transaction.setFieldDatumAndFieldIds();
 
-  res
-    .status(200)
-    .send({ message: "Transaction created.", transaction: transaction });
+  res.status(200).send({ message: "Transaction created.", transaction });
 }
 
 export async function updateTransaction(
@@ -92,11 +90,18 @@ export async function updateTransaction(
   };
   await transaction.update(updateOptions);
 
+  await FieldDatum.upsertFieldData(
+    req.body.fieldValues as FieldValues,
+    undefined,
+    undefined,
+    transaction.id
+  );
+  await transaction.reload();
   await transaction.setFieldDatumAndFieldIds();
 
   res.status(200).send({
     message: "Transaction updated.",
-    transaction: transaction,
+    transaction,
   });
 }
 

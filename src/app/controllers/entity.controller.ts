@@ -1,6 +1,6 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
+import FieldDatum, { FieldValues } from "../../database/models/FieldDatum";
 import Entity from "../../database/models/Entity";
-import FieldDatum from "../../database/models/FieldDatum";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
@@ -29,7 +29,7 @@ export async function getEntity(
 
   res.status(200).send({
     message: "Entity gotten.",
-    entity: entity,
+    entity,
   });
 }
 
@@ -48,11 +48,15 @@ export async function createEntity(
 
   const entity = await Entity.create(createOptions);
 
-  await FieldDatum.createFieldData(req.body.fieldValues, undefined, entity.id);
+  await FieldDatum.upsertFieldData(
+    req.body.fieldValues as FieldValues,
+    undefined,
+    entity.id
+  );
   await entity.reload();
   await entity.setFieldDatumAndFieldIds();
 
-  res.status(200).send({ message: "Entity created.", entity: entity });
+  res.status(200).send({ message: "Entity created.", entity });
 }
 
 export async function updateEntity(
@@ -87,11 +91,17 @@ export async function updateEntity(
   };
   await entity.update(updateOptions);
 
+  await FieldDatum.upsertFieldData(
+    req.body.fieldValues as FieldValues,
+    undefined,
+    entity.id
+  );
+  await entity.reload();
   await entity.setFieldDatumAndFieldIds();
 
   res.status(200).send({
     message: "Entity updated.",
-    entity: entity,
+    entity,
   });
 }
 

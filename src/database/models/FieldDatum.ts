@@ -61,8 +61,8 @@ export class FieldDatum extends Model<
   declare getTransaction: BelongsToGetAssociationMixin<Transaction>;
   declare setTransaction: BelongsToSetAssociationMixin<Transaction, number>;
 
-  public static async createFieldData(
-    fieldDatumInfo: FieldDatumInfo,
+  public static async upsertFieldData(
+    fieldValues: FieldValues,
     accountId?: number,
     entityId?: number,
     transactionId?: number
@@ -73,31 +73,49 @@ export class FieldDatum extends Model<
       transactionId === undefined
     ) {
       throw new Error(
-        "Could not create fields. No account, entity, or transaction ID provided."
+        "Could not upsert field data. No account, entity, or transaction ID provided."
       );
     }
-    const fieldCreationPromises: Array<Promise<FieldDatum>> = [];
-    if (fieldDatumInfo !== undefined) {
-      Object.entries(fieldDatumInfo).forEach(
-        ([fieldId, fieldValue]: [string, string | number | Date | boolean]) => {
-          const fieldDatumCreateOptions: CreationAttributes<FieldDatum> = {
+    const upsertFieldDataPromises: Array<Promise<FieldDatum>> = [];
+    if (fieldValues !== undefined) {
+      Object.entries(fieldValues).forEach(
+        ([fieldId, fieldValueInfo]: [
+          string,
+          { value: string | number | Date | boolean; fieldDatumId: number }
+        ]) => {
+          const fieldDatumId = fieldValueInfo.fieldDatumId;
+          const upsertFieldDataOptions: CreationAttributes<FieldDatum> = {
             FieldId: +fieldId,
-            AccountId: accountId,
-            EntityId: entityId,
-            TransactionId: transactionId,
-            stringValue:
-              typeof fieldValue === "string" ? fieldValue : undefined,
-            intValue: typeof fieldValue === "number" ? fieldValue : undefined,
-            dateValue: fieldValue instanceof Date ? fieldValue : undefined,
-            boolValue: typeof fieldValue === "boolean" ? fieldValue : undefined,
           };
-          fieldCreationPromises.push(
-            FieldDatum.create(fieldDatumCreateOptions)
+          if (fieldDatumId !== undefined && !isNaN(+fieldDatumId)) {
+            upsertFieldDataOptions.id = +fieldDatumId;
+          }
+          if (accountId !== undefined) {
+            upsertFieldDataOptions.AccountId = accountId;
+          } else if (entityId !== undefined) {
+            upsertFieldDataOptions.EntityId = entityId;
+          } else if (transactionId !== undefined) {
+            upsertFieldDataOptions.TransactionId = transactionId;
+          }
+          const fieldDatumValue = fieldValueInfo.value;
+          if (typeof fieldDatumValue === "string") {
+            upsertFieldDataOptions.stringValue = fieldDatumValue;
+          } else if (typeof fieldDatumValue === "number") {
+            upsertFieldDataOptions.intValue = fieldDatumValue;
+          } else if (fieldDatumValue instanceof Date) {
+            upsertFieldDataOptions.dateValue = fieldDatumValue;
+          } else if (typeof fieldDatumValue === "boolean") {
+            upsertFieldDataOptions.boolValue = fieldDatumValue;
+          }
+          upsertFieldDataPromises.push(
+            FieldDatum.upsert(upsertFieldDataOptions).then(
+              (result) => result[0]
+            )
           );
         }
       );
     }
-    return await Promise.all(fieldCreationPromises);
+    return await Promise.all(upsertFieldDataPromises);
   }
 }
 
@@ -154,7 +172,7 @@ export function initializeFieldDatum(sequelize: Sequelize): void {
       },
     },
     {
-      sequelize: sequelize,
+      sequelize,
       name: {
         singular: "FieldDatum",
         plural: "FieldData",
@@ -183,8 +201,11 @@ export function initializeFieldDatum(sequelize: Sequelize): void {
   );
 }
 
-export interface FieldDatumInfo {
-  [fieldId: number]: string | boolean | Date | number;
+export interface FieldValues {
+  [fieldId: number]: {
+    value: string | boolean | Date | number;
+    fieldDatumId: number;
+  };
 }
 
 export default FieldDatum;

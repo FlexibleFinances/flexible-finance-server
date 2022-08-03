@@ -1,6 +1,6 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
+import FieldDatum, { FieldValues } from "../../database/models/FieldDatum";
 import Account from "../../database/models/Account";
-import FieldDatum from "../../database/models/FieldDatum";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
 import { hasRequestParameters } from "../utils/helperFunctions";
@@ -29,7 +29,7 @@ export async function getAccount(
 
   res.status(200).send({
     message: "Account gotten.",
-    account: account,
+    account,
   });
 }
 
@@ -52,11 +52,14 @@ export async function createAccount(
   };
   const account = await Account.create(createOptions);
 
-  await FieldDatum.createFieldData(req.body.fieldValues, account.id);
+  await FieldDatum.upsertFieldData(
+    req.body.fieldValues as FieldValues,
+    account.id
+  );
   await account.reload();
   await account.setFieldDatumAndFieldIds();
 
-  res.status(200).send({ message: "Account created.", account: account });
+  res.status(200).send({ message: "Account created.", account });
 }
 
 export async function updateAccount(
@@ -68,7 +71,7 @@ export async function updateAccount(
       req,
       res,
       { params: ["AccountId"] },
-      { body: ["name", "AccountGroupId", "TemplateId"] }
+      { body: ["name", "AccountGroupId", "TemplateId", "fieldValues"] }
     )
   ) {
     return;
@@ -92,11 +95,16 @@ export async function updateAccount(
   };
   await account.update(updateOptions);
 
+  await FieldDatum.upsertFieldData(
+    req.body.fieldValues as FieldValues,
+    account.id
+  );
+  await account.reload();
   await account.setFieldDatumAndFieldIds();
 
   res.status(200).send({
     message: "Account updated.",
-    account: account,
+    account,
   });
 }
 
