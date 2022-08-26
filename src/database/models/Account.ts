@@ -92,8 +92,8 @@ export class Account extends Model<
       fieldDatumIds.push(datum.id);
       this.setDataValue("FieldDatumIds", fieldDatumIds);
       const fieldIds = this.getDataValue("FieldIds");
-      fieldIds.push(datum.id);
-      this.setDataValue("FieldIds", fieldDatumIds);
+      fieldIds.push(datum.FieldId);
+      this.setDataValue("FieldIds", fieldIds);
     });
     return this;
   }
