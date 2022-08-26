@@ -1,4 +1,5 @@
 import { DataTypes, QueryInterface } from "sequelize";
+import TransactorType from "../models/TransactorType";
 import { templateTypeEnum } from "../../app/utils/enumerators";
 
 export async function up({
@@ -155,11 +156,77 @@ export async function up({
     },
   });
 
-  await queryInterface.createTable("Accounts", {
+  await queryInterface.createTable("TransactorTypes", {
+    id: {
+      type: DataTypes.SMALLINT,
+      primaryKey: true,
+      autoIncrement: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    name: {
+      type: DataTypes.STRING,
+    },
+  });
+  await TransactorType.findOrCreate({
+    where: {
+      id: 1,
+      name: "Account",
+    },
+  });
+  await TransactorType.findOrCreate({
+    where: {
+      id: 2,
+      name: "Entity",
+    },
+  });
+  await queryInterface.createTable("Transactors", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    TransactorTypeId: {
+      type: DataTypes.SMALLINT,
+      references: {
+        model: "TransactorTypes",
+        key: "id",
+      },
+    },
+  });
+  await queryInterface.createTable("Accounts", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: false,
+      references: {
+        model: "Transactors",
+        key: "id",
+      },
+    },
+    TransactorTypeId: {
+      type: "SMALLINT GENERATED ALWAYS AS (1) STORED",
+      set() {
+        throw new Error("generatedValue is read-only");
+      },
+      references: {
+        model: "TransactorTypes",
+        key: "id",
+      },
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -197,7 +264,21 @@ export async function up({
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
+      autoIncrement: false,
+      references: {
+        model: "Transactors",
+        key: "id",
+      },
+    },
+    TransactorTypeId: {
+      type: "SMALLINT GENERATED ALWAYS AS (2) STORED",
+      set() {
+        throw new Error("generatedValue is read-only");
+      },
+      references: {
+        model: "TransactorTypes",
+        key: "id",
+      },
     },
     createdAt: {
       type: DataTypes.DATE,

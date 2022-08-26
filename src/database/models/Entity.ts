@@ -24,12 +24,15 @@ import Field from "./Field";
 import FieldDatum from "./FieldDatum";
 import Tag from "./Tag";
 import Template from "./Template";
+import Transactor from "./Transactor";
+import TransactorType from "./TransactorType";
 
 export class Entity extends Model<
   InferAttributes<Entity>,
   InferCreationAttributes<Entity>
 > {
   declare id: CreationOptional<number>;
+  declare TransactorTypeId: CreationOptional<number>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
@@ -59,6 +62,9 @@ export class Entity extends Model<
   // these will not exist until `Model.init` was called.
   declare getTemplate: BelongsToGetAssociationMixin<Template>;
   declare setTemplate: BelongsToSetAssociationMixin<Template, number>;
+
+  declare getTransactorType: BelongsToGetAssociationMixin<TransactorType>;
+  declare getTransactor: BelongsToGetAssociationMixin<Transactor>;
 
   declare getFieldData: HasManyGetAssociationsMixin<FieldDatum>;
   declare addFieldDatum: HasManyAddAssociationMixin<FieldDatum, number>;
@@ -106,8 +112,22 @@ export function initializeEntity(sequelize: Sequelize): void {
     {
       id: {
         type: DataTypes.INTEGER,
-        autoIncrement: true,
         primaryKey: true,
+        autoIncrement: false,
+        references: {
+          model: "Transactors",
+          key: "id",
+        },
+      },
+      TransactorTypeId: {
+        type: "SMALLINT GENERATED ALWAYS AS (2) STORED",
+        set() {
+          throw new Error("generatedValue is read-only");
+        },
+        references: {
+          model: "TransactorTypes",
+          key: "id",
+        },
       },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,

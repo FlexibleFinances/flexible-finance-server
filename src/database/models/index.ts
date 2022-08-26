@@ -23,6 +23,8 @@ import TemplateTag, { initializeTemplateTag } from "./TemplateTag";
 import Transaction, { initializeTransaction } from "./Transaction";
 import TransactionFile, { initializeTransactionFile } from "./TransactionFile";
 import TransactionTag, { initializeTransactionTag } from "./TransactionTag";
+import Transactor, { initializeTransactor } from "./Transactor";
+import TransactorType, { initializeTransactorType } from "./TransactorType";
 import Type, { initializeType } from "./Type";
 import User, { initializeUser } from "./User";
 import UserRole, { initializeUserRole } from "./UserRole";
@@ -38,6 +40,7 @@ export async function syncAllModels(): Promise<void> {
     Status.sync(),
     Tag.sync(),
     Template.sync(),
+    TransactorType.sync(),
     Type.sync(),
     User.sync(),
   ]);
@@ -47,6 +50,7 @@ export async function syncAllModels(): Promise<void> {
     FieldTypeComponent.sync(),
     ReportTag.sync(),
     TemplateTag.sync(),
+    Transactor.sync(),
     UserRole.sync(),
   ]);
 
@@ -71,6 +75,7 @@ export function initializeModels(sequelize: Sequelize): void {
   initializeStatus(sequelize);
   initializeTag(sequelize);
   initializeTemplate(sequelize);
+  initializeTransactorType(sequelize);
   initializeType(sequelize);
   initializeUser(sequelize);
   console.log("initialized model set 1");
@@ -79,6 +84,7 @@ export function initializeModels(sequelize: Sequelize): void {
   initializeFieldTypeComponent(sequelize);
   initializeReportTag(sequelize);
   initializeTemplateTag(sequelize);
+  initializeTransactor(sequelize);
   initializeUserRole(sequelize);
   console.log("initialized model set 2");
 
@@ -104,6 +110,12 @@ export function initializeModels(sequelize: Sequelize): void {
 
   Account.belongsTo(Template);
   Template.hasMany(Account);
+
+  Account.belongsTo(Transactor);
+  Transactor.hasOne(Account);
+
+  Account.belongsTo(TransactorType);
+  TransactorType.hasMany(Account);
 
   FieldTypeComponent.belongsTo(FieldType);
   FieldType.hasMany(FieldTypeComponent);
@@ -144,6 +156,12 @@ export function initializeModels(sequelize: Sequelize): void {
   Entity.belongsTo(Template);
   Template.hasMany(Entity);
 
+  Entity.belongsTo(Transactor);
+  Transactor.hasOne(Entity);
+
+  Entity.belongsTo(TransactorType);
+  TransactorType.hasMany(Entity);
+
   Entity.belongsToMany(Tag, { through: EntityTag });
   Tag.belongsToMany(Entity, { through: EntityTag });
 
@@ -161,6 +179,9 @@ export function initializeModels(sequelize: Sequelize): void {
 
   Transaction.belongsToMany(Tag, { through: TransactionTag });
   Tag.belongsToMany(Transaction, { through: TransactionTag });
+
+  Transactor.belongsTo(TransactorType);
+  TransactorType.hasMany(Transactor);
 
   User.belongsToMany(Role, { through: UserRole });
   Role.belongsToMany(User, { through: UserRole });
