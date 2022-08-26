@@ -56,3 +56,13 @@ ResponseSchema:
       type: array
       items:
         type: integer
+    Fields:
+      type: array
+      items:
+        type:
+          $ref: ../../openapi.root.yml#/components/schemas/Field_ResponseSchema
+    Tags:
+      type: array
+      items:
+        type:
+          $ref: ../../openapi.root.yml#/components/schemas/Tag_ResponseSchema

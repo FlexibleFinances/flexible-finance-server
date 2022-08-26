@@ -19,8 +19,10 @@ import {
   Sequelize,
 } from "sequelize";
 import Account from "./Account";
+import Entity from "./Entity";
 import Field from "./Field";
 import Tag from "./Tag";
+import Transaction from "./Transaction";
 import { templateTypeEnum } from "../../app/utils/enumerators";
 
 export class Template extends Model<
@@ -34,13 +36,19 @@ export class Template extends Model<
   declare name: string;
   declare type: templateTypeEnum;
 
-  declare AccountIds: NonAttribute<number[]>;
+  declare AccountIds: CreationOptional<number[]>;
   declare Accounts: NonAttribute<Account[]>;
 
-  declare FieldIds: NonAttribute<number[]>;
+  declare EntityIds: CreationOptional<number[]>;
+  declare Entities: NonAttribute<Entity[]>;
+
+  declare TransactionIds: CreationOptional<number[]>;
+  declare Transactions: NonAttribute<Transaction[]>;
+
+  declare FieldIds: CreationOptional<number[]>;
   declare Fields: NonAttribute<Field[]>;
 
-  declare TagIds: NonAttribute<number[]>;
+  declare TagIds: CreationOptional<number[]>;
   declare Tags: NonAttribute<Tag[]>;
 
   declare static associations: {
@@ -83,6 +91,17 @@ export class Template extends Model<
   declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
   declare countTags: HasManyCountAssociationsMixin;
   declare createTag: HasManyCreateAssociationMixin<Tag, "id">;
+
+  public async setFieldIds(): Promise<Template> {
+    this.setDataValue("FieldIds", []);
+    const templateFields = await this.getFields();
+    templateFields.forEach((field) => {
+      const fieldIds = this.getDataValue("FieldIds");
+      fieldIds.push(field.id);
+      this.setDataValue("FieldIds", fieldIds);
+    });
+    return this;
+  }
 }
 
 export function initializeTemplate(sequelize: Sequelize): void {
@@ -104,6 +123,11 @@ export function initializeTemplate(sequelize: Sequelize): void {
         type: DataTypes.ENUM({ values: Object.keys(templateTypeEnum) }),
         allowNull: false,
       },
+      AccountIds: DataTypes.VIRTUAL,
+      EntityIds: DataTypes.VIRTUAL,
+      TransactionIds: DataTypes.VIRTUAL,
+      FieldIds: DataTypes.VIRTUAL,
+      TagIds: DataTypes.VIRTUAL,
     },
     {
       sequelize,

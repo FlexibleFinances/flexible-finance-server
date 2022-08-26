@@ -27,11 +27,17 @@ export async function getTemplate(
     });
     return;
   }
-  template.FieldIds = template.Fields.map((field) => field.id);
-  template.TagIds = template.Tags.map((tag) => tag.id);
+  template.setDataValue(
+    "FieldIds",
+    template.Fields.map((field) => field.id)
+  );
+  template.setDataValue(
+    "TagIds",
+    template.Tags.map((tag) => tag.id)
+  );
   res.status(200).send({
     message: "Template gotten.",
-    template: template,
+    template,
   });
 }
 
@@ -48,17 +54,23 @@ export async function createTemplate(
   };
   const template = await Template.create(createOptions);
   if (req.body.TagIds !== undefined) {
-    await template.addTags(req.body.TagIds);
+    await template.addTags(req.body.TagIds as number[]);
   }
   if (req.body.FieldIds !== undefined) {
-    await template.addFields(req.body.FieldIds);
+    await template.addFields(req.body.FieldIds as number[]);
   }
   await template.reload({ include: [Field, Tag] });
-  template.FieldIds = template.Fields.map((field) => field.id);
-  template.TagIds = template.Tags.map((tag) => tag.id);
+  template.setDataValue(
+    "FieldIds",
+    template.Fields.map((field) => field.id)
+  );
+  template.setDataValue(
+    "TagIds",
+    template.Tags.map((tag) => tag.id)
+  );
   res.status(200).send({
     message: "Template created.",
-    template: template,
+    template,
   });
 }
 
@@ -94,17 +106,23 @@ export async function updateTemplate(
   };
   await template.update(updateOptions);
   if (req.body.TagIds !== undefined) {
-    await template.setTags(req.body.TagIds);
+    await template.setTags(req.body.TagIds as number[]);
   }
   if (req.body.FieldIds !== undefined) {
-    await template.setFields(req.body.FieldIds);
+    await template.setFields(req.body.FieldIds as number[]);
   }
   await template.reload({ include: [Field, Tag] });
-  template.FieldIds = template.Fields.map((field) => field.id);
-  template.TagIds = template.Tags.map((tag) => tag.id);
+  template.setDataValue(
+    "FieldIds",
+    template.Fields.map((field) => field.id)
+  );
+  template.setDataValue(
+    "TagIds",
+    template.Tags.map((tag) => tag.id)
+  );
   res.status(200).send({
     message: "Template updated.",
-    template: template,
+    template,
   });
 }
 
@@ -150,11 +168,17 @@ export async function getTemplates(
   };
   const templates = await Template.findAll(findOptions);
   templates.forEach((template) => {
-    template.FieldIds = template.Fields.map((field) => field.id);
-    template.TagIds = template.Tags.map((tag) => tag.id);
+    template.setDataValue(
+      "FieldIds",
+      template.Fields.map((field) => field.id)
+    );
+    template.setDataValue(
+      "TagIds",
+      template.Tags.map((tag) => tag.id)
+    );
   });
   res.status(200).send({
     message: "Templates gotten.",
-    templates: templates,
+    templates,
   });
 }
