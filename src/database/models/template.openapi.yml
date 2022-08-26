@@ -59,10 +59,8 @@ ResponseSchema:
     Fields:
       type: array
       items:
-        type:
-          $ref: ../../openapi.root.yml#/components/schemas/Field_ResponseSchema
+        $ref: ../../openapi.root.yml#/components/schemas/Field_ResponseSchema
     Tags:
       type: array
       items:
-        type:
-          $ref: ../../openapi.root.yml#/components/schemas/Tag_ResponseSchema
+        $ref: ../../openapi.root.yml#/components/schemas/Tag_ResponseSchema
