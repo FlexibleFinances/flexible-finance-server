@@ -180,6 +180,16 @@ export function initializeModels(sequelize: Sequelize): void {
   Transaction.belongsToMany(Tag, { through: TransactionTag });
   Tag.belongsToMany(Transaction, { through: TransactionTag });
 
+  Transaction.belongsTo(Transactor, {
+    as: "SourceTransactor",
+    foreignKey: "SourceTransactorId",
+  });
+  Transaction.belongsTo(Transactor, {
+    as: "DestinationTransactor",
+    foreignKey: "DestinationTransactorId",
+  });
+  Transactor.hasMany(Transaction);
+
   Transactor.belongsTo(TransactorType);
   TransactorType.hasMany(Transactor);
 

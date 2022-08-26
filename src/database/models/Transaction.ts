@@ -1,5 +1,6 @@
 import {
   Association,
+  BelongsToCreateAssociationMixin,
   BelongsToGetAssociationMixin,
   BelongsToSetAssociationMixin,
   CreationOptional,
@@ -20,11 +21,14 @@ import {
   NonAttribute,
   Sequelize,
 } from "sequelize";
+import Account from "./Account";
+import Entity from "./Entity";
 import Field from "./Field";
 import FieldDatum from "./FieldDatum";
 import File from "./File";
 import Tag from "./Tag";
 import Template from "./Template";
+import Transactor from "./Transactor";
 
 export class Transaction extends Model<
   InferAttributes<Transaction>,
@@ -35,6 +39,11 @@ export class Transaction extends Model<
   declare updatedAt: CreationOptional<Date>;
 
   declare name: string;
+
+  declare SourceTransactorId: CreationOptional<number>;
+  declare SourceTransactor: NonAttribute<Account | Entity>;
+  declare DestinationTransactorId: CreationOptional<number>;
+  declare DestinationTransactor: NonAttribute<Account | Entity>;
 
   declare TemplateId: number;
   declare Template: NonAttribute<Template>;
@@ -62,15 +71,15 @@ export class Transaction extends Model<
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  declare getFieldData: HasManyGetAssociationsMixin<FieldDatum>;
   declare addFieldDatum: HasManyAddAssociationMixin<FieldDatum, number>;
   declare addFieldData: HasManyAddAssociationsMixin<FieldDatum, number>;
-  declare setFieldData: HasManySetAssociationsMixin<FieldDatum, number>;
-  declare removeFieldDatum: HasManyRemoveAssociationMixin<FieldDatum, number>;
-  declare removeFieldData: HasManyRemoveAssociationsMixin<FieldDatum, number>;
+  declare countFieldData: HasManyCountAssociationsMixin;
+  declare getFieldData: HasManyGetAssociationsMixin<FieldDatum>;
   declare hasFieldDatum: HasManyHasAssociationMixin<FieldDatum, number>;
   declare hasFieldData: HasManyHasAssociationsMixin<FieldDatum, number>;
-  declare countFieldData: HasManyCountAssociationsMixin;
+  declare removeFieldDatum: HasManyRemoveAssociationMixin<FieldDatum, number>;
+  declare removeFieldData: HasManyRemoveAssociationsMixin<FieldDatum, number>;
+  declare setFieldData: HasManySetAssociationsMixin<FieldDatum, number>;
   declare createFieldDatum: HasManyCreateAssociationMixin<
     FieldDatum,
     "TransactionId"
@@ -79,27 +88,38 @@ export class Transaction extends Model<
   declare getTemplate: BelongsToGetAssociationMixin<Template>;
   declare setTemplate: BelongsToSetAssociationMixin<Template, number>;
 
-  declare getFiles: HasManyGetAssociationsMixin<File>;
   declare addFile: HasManyAddAssociationMixin<File, number>;
   declare addFiles: HasManyAddAssociationsMixin<File, number>;
-  declare setFiles: HasManySetAssociationsMixin<File, number>;
-  declare removeFile: HasManyRemoveAssociationMixin<File, number>;
-  declare removeFiles: HasManyRemoveAssociationsMixin<File, number>;
-  declare hasFile: HasManyHasAssociationMixin<File, number>;
-  declare hasFiles: HasManyHasAssociationsMixin<File, number>;
   declare countFiles: HasManyCountAssociationsMixin;
   declare createFile: HasManyCreateAssociationMixin<File, "id">;
+  declare getFiles: HasManyGetAssociationsMixin<File>;
+  declare hasFile: HasManyHasAssociationMixin<File, number>;
+  declare hasFiles: HasManyHasAssociationsMixin<File, number>;
+  declare removeFile: HasManyRemoveAssociationMixin<File, number>;
+  declare removeFiles: HasManyRemoveAssociationsMixin<File, number>;
+  declare setFiles: HasManySetAssociationsMixin<File, number>;
 
-  declare getTags: HasManyGetAssociationsMixin<Tag>;
   declare addTag: HasManyAddAssociationMixin<Tag, number>;
   declare addTags: HasManyAddAssociationsMixin<Tag, number>;
-  declare setTags: HasManySetAssociationsMixin<Tag, number>;
-  declare removeTag: HasManyRemoveAssociationMixin<Tag, number>;
-  declare removeTags: HasManyRemoveAssociationsMixin<Tag, number>;
-  declare hasTag: HasManyHasAssociationMixin<Tag, number>;
-  declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
   declare countTags: HasManyCountAssociationsMixin;
   declare createTag: HasManyCreateAssociationMixin<Tag, "id">;
+  declare getTags: HasManyGetAssociationsMixin<Tag>;
+  declare hasTag: HasManyHasAssociationMixin<Tag, number>;
+  declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
+  declare removeTag: HasManyRemoveAssociationMixin<Tag, number>;
+  declare removeTags: HasManyRemoveAssociationsMixin<Tag, number>;
+  declare setTags: HasManySetAssociationsMixin<Tag, number>;
+
+  declare createSourceTransactor: BelongsToCreateAssociationMixin<Transactor>;
+  declare getSourceTransactor: BelongsToGetAssociationMixin<Transactor>;
+  declare setSourceTransactor: BelongsToSetAssociationMixin<Transactor, number>;
+
+  declare createDestinationTransactor: BelongsToCreateAssociationMixin<Transactor>;
+  declare getDestinationTransactor: BelongsToGetAssociationMixin<Transactor>;
+  declare setDestinationTransactor: BelongsToSetAssociationMixin<
+    Transactor,
+    number
+  >;
 
   public async setFieldDatumAndFieldIds(): Promise<Transaction> {
     this.setDataValue("FieldDatumIds", []);
@@ -137,6 +157,22 @@ export function initializeTransaction(sequelize: Sequelize): void {
         allowNull: false,
         references: {
           model: "Template",
+          key: "id",
+        },
+      },
+      SourceTransactorId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Transactors",
+          key: "id",
+        },
+      },
+      DestinationTransactorId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Transactors",
           key: "id",
         },
       },

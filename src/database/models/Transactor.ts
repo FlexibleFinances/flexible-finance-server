@@ -3,12 +3,22 @@ import {
   BelongsToSetAssociationMixin,
   CreationOptional,
   DataTypes,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  HasManyGetAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManySetAssociationsMixin,
   HasOneGetAssociationMixin,
   InferAttributes,
   InferCreationAttributes,
   Model,
   NonAttribute,
   Sequelize,
+  Transaction,
 } from "sequelize";
 import { getAccount, getEntity } from "../../app/controllers";
 import Account from "./Account";
@@ -37,6 +47,19 @@ export class Transactor extends Model<
 
   declare getAccount: HasOneGetAssociationMixin<Account>;
   declare getEntity: HasOneGetAssociationMixin<Entity>;
+
+  declare addTransaction: HasManyAddAssociationMixin<Transaction, number>;
+  declare addTransactions: HasManyAddAssociationsMixin<Transaction, number>;
+  declare countTransactions: HasManyCountAssociationsMixin;
+  declare getTransactions: HasManyGetAssociationsMixin<Transaction>;
+  declare hasTransaction: HasManyHasAssociationMixin<Transaction, number>;
+  declare hasTransactions: HasManyHasAssociationsMixin<Transaction, number>;
+  declare removeTransaction: HasManyRemoveAssociationMixin<Transaction, number>;
+  declare setTransactions: HasManySetAssociationsMixin<Transaction, number>;
+  declare removeTransactions: HasManyRemoveAssociationsMixin<
+    Transaction,
+    number
+  >;
 
   public getExtensionGetter(): Function {
     switch (TransactorType.name) {

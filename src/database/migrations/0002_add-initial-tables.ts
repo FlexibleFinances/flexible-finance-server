@@ -333,6 +333,22 @@ export async function up({
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
+    SourceTransactorId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Transactors",
+        key: "id",
+      },
+    },
+    DestinationTransactorId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Transactors",
+        key: "id",
+      },
+    },
   });
 
   await queryInterface.createTable("AccountTags", {
