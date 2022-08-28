@@ -1,5 +1,6 @@
 import {
   Association,
+  BelongsToCreateAssociationMixin,
   BelongsToGetAssociationMixin,
   BelongsToSetAssociationMixin,
   CreationOptional,
@@ -28,6 +29,7 @@ import Tag from "./Tag";
 import Template from "./Template";
 import Transactor from "./Transactor";
 import TransactorType from "./TransactorType";
+import { transactorTypeEnum } from "../../app/utils/enumerators";
 
 export class Account extends Model<
   InferAttributes<Account>,
@@ -61,6 +63,8 @@ export class Account extends Model<
     FieldData: Association<Account, FieldDatum>;
     Tags: Association<Account, Tag>;
     Template: Association<Account, Template>;
+    Transactor: Association<Account, Transactor>;
+    TransactorType: Association<Account, TransactorType>;
   };
 
   // Since TS cannot determine model association at compile time
@@ -70,7 +74,10 @@ export class Account extends Model<
   declare setAccountGroup: BelongsToSetAssociationMixin<AccountGroup, number>;
 
   declare getTransactorType: BelongsToGetAssociationMixin<TransactorType>;
+
+  declare createTransactor: BelongsToCreateAssociationMixin<Transactor>;
   declare getTransactor: BelongsToGetAssociationMixin<Transactor>;
+  declare setTransactor: BelongsToSetAssociationMixin<Transactor, number>;
 
   declare getFieldData: HasManyGetAssociationsMixin<FieldDatum>;
   declare addFieldDatum: HasManyAddAssociationMixin<FieldDatum, number>;
@@ -154,6 +161,14 @@ export function initializeAccount(sequelize: Sequelize): void {
       FieldDatumIds: DataTypes.VIRTUAL,
     },
     {
+      hooks: {
+        beforeCreate: async (account, options) => {
+          const newTransactor = await Transactor.create({
+            TransactorTypeId: transactorTypeEnum.Account,
+          });
+          account.id = newTransactor.id;
+        },
+      },
       sequelize,
     }
   );

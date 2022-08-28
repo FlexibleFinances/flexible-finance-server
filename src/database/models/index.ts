@@ -111,8 +111,8 @@ export function initializeModels(sequelize: Sequelize): void {
   Account.belongsTo(Template);
   Template.hasMany(Account);
 
-  Account.belongsTo(Transactor);
-  Transactor.hasOne(Account);
+  Account.belongsTo(Transactor, { foreignKey: "id" });
+  Transactor.hasOne(Account, { foreignKey: "id" });
 
   Account.belongsTo(TransactorType);
   TransactorType.hasMany(Account);
@@ -156,8 +156,8 @@ export function initializeModels(sequelize: Sequelize): void {
   Entity.belongsTo(Template);
   Template.hasMany(Entity);
 
-  Entity.belongsTo(Transactor);
-  Transactor.hasOne(Entity);
+  Entity.belongsTo(Transactor, { foreignKey: "id" });
+  Transactor.hasOne(Entity, { foreignKey: "id" });
 
   Entity.belongsTo(TransactorType);
   TransactorType.hasMany(Entity);
