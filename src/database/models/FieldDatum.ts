@@ -83,11 +83,15 @@ export class FieldDatum extends Model<
           string,
           { value: string | number | Date | boolean; fieldDatumId: number }
         ]) => {
-          const fieldDatumId = fieldValueInfo.fieldDatumId;
           const upsertFieldDataOptions: CreationAttributes<FieldDatum> = {
             FieldId: +fieldId,
           };
-          if (fieldDatumId !== undefined && !isNaN(+fieldDatumId)) {
+          const fieldDatumId = fieldValueInfo.fieldDatumId;
+          if (
+            fieldDatumId !== undefined &&
+            fieldDatumId !== null &&
+            !isNaN(+fieldDatumId)
+          ) {
             upsertFieldDataOptions.id = +fieldDatumId;
           }
           if (accountId !== undefined) {
@@ -133,7 +137,7 @@ export function initializeFieldDatum(sequelize: Sequelize): void {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "Field",
+          model: "Fields",
           key: "id",
         },
       },
@@ -152,21 +156,21 @@ export function initializeFieldDatum(sequelize: Sequelize): void {
       AccountId: {
         type: DataTypes.INTEGER,
         references: {
-          model: Account,
+          model: "Accounts",
           key: "id",
         },
       },
       EntityId: {
         type: DataTypes.INTEGER,
         references: {
-          model: Entity,
+          model: "Entities",
           key: "id",
         },
       },
       TransactionId: {
         type: DataTypes.INTEGER,
         references: {
-          model: Transaction,
+          model: "Transactions",
           key: "id",
         },
       },
