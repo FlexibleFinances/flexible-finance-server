@@ -1,6 +1,9 @@
 import { DataTypes, QueryInterface } from "sequelize";
+import {
+  templateTypeEnum,
+  transactorTypeEnum,
+} from "../../app/utils/enumerators";
 import TransactorType from "../models/TransactorType";
-import { templateTypeEnum } from "../../app/utils/enumerators";
 
 export async function up({
   context: queryInterface,
@@ -176,13 +179,13 @@ export async function up({
   });
   await TransactorType.findOrCreate({
     where: {
-      id: 1,
+      id: transactorTypeEnum.Account,
       name: "Account",
     },
   });
   await TransactorType.findOrCreate({
     where: {
-      id: 2,
+      id: transactorTypeEnum.Entity,
       name: "Entity",
     },
   });
@@ -580,5 +583,7 @@ export async function down({
   await queryInterface.dropTable("Templates", {});
   await queryInterface.dropTable("Statuses", {});
   await queryInterface.dropTable("Types", {});
+  await queryInterface.dropTable("Transactors", {});
+  await queryInterface.dropTable("TransactorTypes", {});
   console.log("0002 down - finished");
 }

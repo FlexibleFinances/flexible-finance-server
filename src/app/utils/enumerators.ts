@@ -10,3 +10,8 @@ export enum fieldTypeTypeEnum {
   Date = "Date",
   Boolean = "Boolean",
 }
+
+export enum transactorTypeEnum {
+  Account = 1,
+  Entity = 2,
+}
