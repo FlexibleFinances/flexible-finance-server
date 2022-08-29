@@ -184,11 +184,13 @@ export function initializeModels(sequelize: Sequelize): void {
     as: "SourceTransactor",
     foreignKey: "SourceTransactorId",
   });
+  Transactor.hasMany(Transaction, { foreignKey: "SourceTransactorId" });
+
   Transaction.belongsTo(Transactor, {
-    as: "DestinationTransactor",
-    foreignKey: "DestinationTransactorId",
+    as: "RecipientTransactor",
+    foreignKey: "RecipientTransactorId",
   });
-  Transactor.hasMany(Transaction);
+  Transactor.hasMany(Transaction, { foreignKey: "RecipientTransactorId" });
 
   Transactor.belongsTo(TransactorType);
   TransactorType.hasMany(Transactor);

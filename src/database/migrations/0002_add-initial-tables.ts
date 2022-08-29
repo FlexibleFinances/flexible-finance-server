@@ -344,7 +344,7 @@ export async function up({
         key: "id",
       },
     },
-    DestinationTransactorId: {
+    RecipientTransactorId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {

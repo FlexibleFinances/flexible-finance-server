@@ -42,8 +42,8 @@ export class Transaction extends Model<
 
   declare SourceTransactorId: CreationOptional<number>;
   declare SourceTransactor: NonAttribute<Account | Entity>;
-  declare DestinationTransactorId: CreationOptional<number>;
-  declare DestinationTransactor: NonAttribute<Account | Entity>;
+  declare RecipientTransactorId: CreationOptional<number>;
+  declare RecipientTransactor: NonAttribute<Account | Entity>;
 
   declare TemplateId: number;
   declare Template: NonAttribute<Template>;
@@ -66,6 +66,8 @@ export class Transaction extends Model<
     Files: Association<Transaction, File>;
     Tags: Association<Transaction, Tag>;
     Template: Association<Transaction, Template>;
+    SourceTransactor: Association<Transaction, Transactor>;
+    RecipientTransactor: Association<Transaction, Transactor>;
   };
 
   // Since TS cannot determine model association at compile time
@@ -114,9 +116,9 @@ export class Transaction extends Model<
   declare getSourceTransactor: BelongsToGetAssociationMixin<Transactor>;
   declare setSourceTransactor: BelongsToSetAssociationMixin<Transactor, number>;
 
-  declare createDestinationTransactor: BelongsToCreateAssociationMixin<Transactor>;
-  declare getDestinationTransactor: BelongsToGetAssociationMixin<Transactor>;
-  declare setDestinationTransactor: BelongsToSetAssociationMixin<
+  declare createRecipientTransactor: BelongsToCreateAssociationMixin<Transactor>;
+  declare getRecipientTransactor: BelongsToGetAssociationMixin<Transactor>;
+  declare setRecipientTransactor: BelongsToSetAssociationMixin<
     Transactor,
     number
   >;
@@ -168,7 +170,7 @@ export function initializeTransaction(sequelize: Sequelize): void {
           key: "id",
         },
       },
-      DestinationTransactorId: {
+      RecipientTransactorId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
