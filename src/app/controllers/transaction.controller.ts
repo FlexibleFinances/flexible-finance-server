@@ -37,7 +37,16 @@ export async function createTransaction(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { body: ["name", "TemplateId"] })) {
+  if (
+    !hasRequestParameters(req, res, {
+      body: [
+        "name",
+        "TemplateId",
+        "SourceTransactorId",
+        "RecipientTransactorId",
+      ],
+    })
+  ) {
     return;
   }
   const createOptions: CreationAttributes<Transaction> = {
@@ -67,7 +76,14 @@ export async function updateTransaction(
       req,
       res,
       { params: ["TransactionId"] },
-      { body: ["name", "TemplateId"] }
+      {
+        body: [
+          "name",
+          "TemplateId",
+          "SourceTransactorId",
+          "RecipientTransactorId",
+        ],
+      }
     )
   ) {
     return;
@@ -87,6 +103,8 @@ export async function updateTransaction(
   const updateOptions: CreationAttributes<Transaction> = {
     name: req.body.name,
     TemplateId: req.body.TemplateId,
+    SourceTransactorId: req.body.SourceTransactorId,
+    RecipientTransactorId: req.body.RecipientTransactorId,
   };
   await transaction.update(updateOptions);
 
@@ -129,9 +147,23 @@ export async function getTransactions(
       }),
     };
   }
-  if (req.query.TemplateIds !== undefined) {
+  if (req.query.TemplateId !== undefined) {
     whereOptions.template = {
-      [Op.in]: (req.query.TemplateIds as string[]).map((x) => {
+      [Op.eq]: (req.query.TemplateId as string[]).map((x) => {
+        return +x;
+      }),
+    };
+  }
+  if (req.query.SourceTransactorId !== undefined) {
+    whereOptions.sourceTransactor = {
+      [Op.eq]: (req.query.SourceTransactorId as string[]).map((x) => {
+        return +x;
+      }),
+    };
+  }
+  if (req.query.RecipientTransactorId !== undefined) {
+    whereOptions.recipientTransactor = {
+      [Op.eq]: (req.query.RecipientTransactorId as string[]).map((x) => {
         return +x;
       }),
     };

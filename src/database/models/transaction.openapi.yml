@@ -19,6 +19,10 @@ RequestSchema:
         type: integer
     TemplateId:
       type: integer
+    SourceTransactorId:
+      type: integer
+    RecipientTransactorId:
+      type: integer
 ResponseSchema:
   type: object
   properties:
@@ -45,4 +49,8 @@ ResponseSchema:
       items:
         type: integer
     TemplateId:
+      type: integer
+    SourceTransactorId:
+      type: integer
+    RecipientTransactorId:
       type: integer
