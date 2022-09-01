@@ -23,6 +23,7 @@ import {
 } from "sequelize";
 import Field from "./Field";
 import FieldDatum from "./FieldDatum";
+import Group from "./Group";
 import Tag from "./Tag";
 import Template from "./Template";
 import Transactor from "./Transactor";
@@ -49,12 +50,16 @@ export class Entity extends Model<
   declare FieldDatumIds: CreationOptional<number[]>;
   declare FieldData: NonAttribute<FieldDatum[]>;
 
+  declare GroupId: number;
+  declare Group: NonAttribute<Group>;
+
   declare TagIds: NonAttribute<number[]>;
   declare Tags: NonAttribute<Tag[]>;
 
   declare static associations: {
     Fields: Association<Entity, Field>;
     FieldData: Association<Entity, FieldDatum>;
+    Group: Association<Entity, Group>;
     Tags: Association<Entity, Tag>;
     Template: Association<Entity, Template>;
     Transactor: Association<Entity, Transactor>;
@@ -64,6 +69,9 @@ export class Entity extends Model<
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
+  declare getGroup: BelongsToGetAssociationMixin<Group>;
+  declare setGroup: BelongsToSetAssociationMixin<Group, number>;
+
   declare getTemplate: BelongsToGetAssociationMixin<Template>;
   declare setTemplate: BelongsToSetAssociationMixin<Template, number>;
 
@@ -148,6 +156,14 @@ export function initializeEntity(sequelize: Sequelize): void {
         allowNull: false,
         references: {
           model: "Template",
+          key: "id",
+        },
+      },
+      GroupId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Group",
           key: "id",
         },
       },

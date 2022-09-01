@@ -39,7 +39,7 @@ export async function createAccount(
 ): Promise<void> {
   if (
     !hasRequestParameters(req, res, {
-      body: ["name", "TemplateId", "AccountGroupId"],
+      body: ["name", "TemplateId", "GroupId"],
     })
   ) {
     return;
@@ -48,7 +48,7 @@ export async function createAccount(
   const createOptions: CreationAttributes<Account> = {
     name: req.body.name,
     TemplateId: req.body.TemplateId,
-    AccountGroupId: req.body.AccountGroupId,
+    GroupId: req.body.GroupId,
   };
   const account = await Account.create(createOptions);
 
@@ -71,7 +71,7 @@ export async function updateAccount(
       req,
       res,
       { params: ["AccountId"] },
-      { body: ["name", "AccountGroupId", "TemplateId", "fieldValues"] }
+      { body: ["name", "GroupId", "TemplateId", "fieldValues"] }
     )
   ) {
     return;
@@ -90,7 +90,7 @@ export async function updateAccount(
   }
   const updateOptions: CreationAttributes<Account> = {
     name: req.body.name,
-    AccountGroupId: req.body.AccountGroupId,
+    GroupId: req.body.GroupId,
     TemplateId: req.body.TemplateId,
   };
   await account.update(updateOptions);
@@ -118,9 +118,9 @@ export async function getAccounts(
       [Op.iLike]: req.body.name,
     };
   }
-  if (req.query.AccountGroupIds !== undefined) {
-    whereOptions.accountGroup = {
-      [Op.in]: (req.query.AccountGroupIds as string[]).map((x) => {
+  if (req.query.GroupIds !== undefined) {
+    whereOptions.group = {
+      [Op.in]: (req.query.GroupIds as string[]).map((x) => {
         return +x;
       }),
     };

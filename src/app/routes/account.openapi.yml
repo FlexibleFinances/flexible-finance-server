@@ -75,7 +75,7 @@ AccountsRequests:
         in: query
         schema:
           type: string
-      - name: AccountGroupIds
+      - name: GroupIds
         in: query
         schema:
           type: array

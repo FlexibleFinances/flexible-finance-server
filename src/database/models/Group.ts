@@ -20,9 +20,9 @@ import {
 } from "sequelize";
 import Account from "./Account";
 
-export class AccountGroup extends Model<
-  InferAttributes<AccountGroup>,
-  InferCreationAttributes<AccountGroup>
+export class Group extends Model<
+  InferAttributes<Group>,
+  InferCreationAttributes<Group>
 > {
   declare id: CreationOptional<number>;
   declare createdAt: CreationOptional<Date>;
@@ -34,7 +34,7 @@ export class AccountGroup extends Model<
   declare Accounts: NonAttribute<Account[]>;
 
   declare static associations: {
-    Accounts: Association<Account, AccountGroup>;
+    Accounts: Association<Account, Group>;
   };
 
   // Since TS cannot determine model association at compile time
@@ -49,14 +49,11 @@ export class AccountGroup extends Model<
   declare hasAccount: HasManyHasAssociationMixin<Account, number>;
   declare hasAccounts: HasManyHasAssociationsMixin<Account, number>;
   declare countAccounts: HasManyCountAssociationsMixin;
-  declare createAccounts: HasManyCreateAssociationMixin<
-    Account,
-    "AccountGroupId"
-  >;
+  declare createAccounts: HasManyCreateAssociationMixin<Account, "GroupId">;
 }
 
-export function initializeAccountGroup(sequelize: Sequelize): void {
-  AccountGroup.init(
+export function initializeGroup(sequelize: Sequelize): void {
+  Group.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -77,4 +74,4 @@ export function initializeAccountGroup(sequelize: Sequelize): void {
   );
 }
 
-export default AccountGroup;
+export default Group;

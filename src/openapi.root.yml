@@ -20,12 +20,12 @@ paths:
     $ref: ./app/routes/account.openapi.yml#/AccountIdRequests
   /accounts:
     $ref: ./app/routes/account.openapi.yml#/AccountsRequests
-  /accountGroup:
-    $ref: ./app/routes/accountGroup.openapi.yml#/AccountGroupRequests
-  /accountGroup/{AccountGroupId}:
-    $ref: ./app/routes/accountGroup.openapi.yml#/AccountGroupIdRequests
-  /accountGroups:
-    $ref: ./app/routes/accountGroup.openapi.yml#/AccountGroupsRequests
+  /group:
+    $ref: ./app/routes/group.openapi.yml#/GroupRequests
+  /group/{GroupId}:
+    $ref: ./app/routes/group.openapi.yml#/GroupIdRequests
+  /groups:
+    $ref: ./app/routes/group.openapi.yml#/GroupsRequests
   /auth/signup:
     $ref: ./app/routes/auth.openapi.yml#/SignUp
   /auth/signin:
@@ -124,10 +124,10 @@ components:
       $ref: ./app/routes/account.openapi.yml#/AccountResponse
     Accounts:
       $ref: ./app/routes/account.openapi.yml#/AccountsResponse
-    AccountGroup:
-      $ref: ./app/routes/accountGroup.openapi.yml#/AccountGroupResponse
-    AccountGroups:
-      $ref: ./app/routes/accountGroup.openapi.yml#/AccountGroupsResponse
+    Group:
+      $ref: ./app/routes/group.openapi.yml#/GroupResponse
+    Groups:
+      $ref: ./app/routes/group.openapi.yml#/GroupsResponse
     Entity:
       $ref: ./app/routes/entity.openapi.yml#/EntityResponse
     Entities:
@@ -182,10 +182,10 @@ components:
       $ref: ./database/models/account.openapi.yml#/RequestSchema
     Account_ResponseSchema:
       $ref: ./database/models/account.openapi.yml#/ResponseSchema
-    AccountGroup_RequestSchema:
-      $ref: ./database/models/accountGroup.openapi.yml#/RequestSchema
-    AccountGroup_ResponseSchema:
-      $ref: ./database/models/accountGroup.openapi.yml#/ResponseSchema
+    Group_RequestSchema:
+      $ref: ./database/models/group.openapi.yml#/RequestSchema
+    Group_ResponseSchema:
+      $ref: ./database/models/group.openapi.yml#/ResponseSchema
     Entity_RequestSchema:
       $ref: ./database/models/entity.openapi.yml#/RequestSchema
     Entity_ResponseSchema:

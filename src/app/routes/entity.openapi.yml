@@ -75,6 +75,12 @@ EntitiesRequests:
         in: query
         schema:
           type: string
+      - name: GroupIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
       - name: FieldDatumIds
         in: query
         schema:

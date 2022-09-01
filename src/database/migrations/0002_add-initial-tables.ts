@@ -11,7 +11,7 @@ export async function up({
   context: QueryInterface;
 }): Promise<void> {
   console.log("0002 up - starting");
-  await queryInterface.createTable("AccountGroups", {
+  await queryInterface.createTable("Groups", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -253,10 +253,10 @@ export async function up({
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
-    AccountGroupId: {
+    GroupId: {
       type: DataTypes.INTEGER,
       references: {
-        model: "AccountGroups",
+        model: "Groups",
         key: "id",
       },
       onUpdate: "CASCADE",
@@ -301,6 +301,15 @@ export async function up({
       allowNull: false,
       references: {
         model: "Templates",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    GroupId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Groups",
         key: "id",
       },
       onUpdate: "CASCADE",
@@ -576,7 +585,7 @@ export async function down({
   await queryInterface.dropTable("Accounts", {});
   await queryInterface.dropTable("Entities", {});
   await queryInterface.dropTable("Transactions", {});
-  await queryInterface.dropTable("AccountGroups", {});
+  await queryInterface.dropTable("Groups", {});
   await queryInterface.dropTable("Files", {});
   await queryInterface.dropTable("Reports", {});
   await queryInterface.dropTable("Tags", {});

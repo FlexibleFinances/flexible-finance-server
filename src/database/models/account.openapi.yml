@@ -3,7 +3,7 @@ RequestSchema:
   properties:
     name:
       type: string
-    AccountGroupId:
+    GroupId:
       type: integer
     FieldDatumIds:
       type: array
@@ -34,7 +34,7 @@ ResponseSchema:
       format: date-time
     name:
       type: string
-    AccountGroupId:
+    GroupId:
       type: integer
     FieldDatumIds:
       type: array

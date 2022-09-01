@@ -20,11 +20,10 @@ import {
   Model,
   NonAttribute,
   Sequelize,
-  WhereAttributeHash,
 } from "sequelize";
-import AccountGroup from "./AccountGroup";
 import Field from "./Field";
 import FieldDatum from "./FieldDatum";
+import Group from "./Group";
 import Tag from "./Tag";
 import Template from "./Template";
 import Transactor from "./Transactor";
@@ -48,8 +47,8 @@ export class Account extends Model<
   declare FieldDatumIds: CreationOptional<number[]>;
   declare FieldData: NonAttribute<FieldDatum[]>;
 
-  declare AccountGroupId: number;
-  declare AccountGroup: NonAttribute<AccountGroup>;
+  declare GroupId: number;
+  declare Group: NonAttribute<Group>;
 
   declare TemplateId: number;
   declare Template: NonAttribute<Template>;
@@ -58,7 +57,7 @@ export class Account extends Model<
   declare Tags: NonAttribute<Tag[]>;
 
   declare static associations: {
-    AccountGroup: Association<Account, AccountGroup>;
+    Group: Association<Account, Group>;
     Fields: Association<Account, Field>;
     FieldData: Association<Account, FieldDatum>;
     Tags: Association<Account, Tag>;
@@ -70,8 +69,8 @@ export class Account extends Model<
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  declare getAccountGroup: BelongsToGetAssociationMixin<AccountGroup>;
-  declare setAccountGroup: BelongsToSetAssociationMixin<AccountGroup, number>;
+  declare getGroup: BelongsToGetAssociationMixin<Group>;
+  declare setGroup: BelongsToSetAssociationMixin<Group, number>;
 
   declare getTransactorType: BelongsToGetAssociationMixin<TransactorType>;
 
@@ -149,11 +148,11 @@ export function initializeAccount(sequelize: Sequelize): void {
           key: "id",
         },
       },
-      AccountGroupId: {
+      GroupId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "AccountGroup",
+          model: "Group",
           key: "id",
         },
       },
@@ -175,7 +174,3 @@ export function initializeAccount(sequelize: Sequelize): void {
 }
 
 export default Account;
-
-export interface AccountWhereAttributes extends WhereAttributeHash {
-  accountGroup: number;
-}

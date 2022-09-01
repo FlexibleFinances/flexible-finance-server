@@ -1,14 +1,14 @@
-AccountGroupRequests:
+GroupRequests:
   post:
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/AccountGroup_RequestSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Group_RequestSchema"
     responses:
       200:
-        $ref: "../../openapi.root.yml#/components/responses/AccountGroup"
+        $ref: "../../openapi.root.yml#/components/responses/Group"
       400:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       401:
@@ -17,17 +17,17 @@ AccountGroupRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       500:
         $ref: "../../openapi.root.yml#/components/responses/Message"
-AccountGroupIdRequests:
+GroupIdRequests:
   get:
     parameters:
-      - name: AccountGroupId
+      - name: GroupId
         in: path
         required: true
         schema:
           type: integer
     responses:
       200:
-        $ref: "../../openapi.root.yml#/components/responses/AccountGroup"
+        $ref: "../../openapi.root.yml#/components/responses/Group"
       400:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       401:
@@ -38,7 +38,7 @@ AccountGroupIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: AccountGroupId
+      - name: GroupId
         in: path
         required: true
         schema:
@@ -48,10 +48,10 @@ AccountGroupIdRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/AccountGroup_RequestSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Group_RequestSchema"
     responses:
       200:
-        $ref: "../../openapi.root.yml#/components/responses/AccountGroup"
+        $ref: "../../openapi.root.yml#/components/responses/Group"
       400:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       401:
@@ -60,7 +60,7 @@ AccountGroupIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       500:
         $ref: "../../openapi.root.yml#/components/responses/Message"
-AccountGroupsRequests:
+GroupsRequests:
   get:
     parameters:
       - name: offset
@@ -83,14 +83,14 @@ AccountGroupsRequests:
             type: number
     responses:
       200:
-        $ref: "../../openapi.root.yml#/components/responses/AccountGroups"
+        $ref: "../../openapi.root.yml#/components/responses/Groups"
       401:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       403:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       500:
         $ref: "../../openapi.root.yml#/components/responses/Message"
-AccountGroupResponse:
+GroupResponse:
   description: Returns the account group's info.
   content:
     application/json:
@@ -99,9 +99,9 @@ AccountGroupResponse:
         properties:
           message:
             type: string
-          accountGroup:
-            $ref: "../../openapi.root.yml#/components/schemas/AccountGroup_ResponseSchema"
-AccountGroupsResponse:
+          group:
+            $ref: "../../openapi.root.yml#/components/schemas/Group_ResponseSchema"
+GroupsResponse:
   description: Returns the account groups' info.
   content:
     application/json:
@@ -110,7 +110,7 @@ AccountGroupsResponse:
         properties:
           message:
             type: string
-          accountGroups:
+          groups:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/AccountGroup_ResponseSchema"
+              $ref: "../../openapi.root.yml#/components/schemas/Group_ResponseSchema"

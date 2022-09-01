@@ -1,5 +1,4 @@
 import Account, { initializeAccount } from "./Account";
-import AccountGroup, { initializeAccountGroup } from "./AccountGroup";
 import AccountTag, { initializeAccountTag } from "./AccountTag";
 import Entity, { initializeEntity } from "./Entity";
 import EntityTag, { initializeEntityTag } from "./EntityTag";
@@ -12,6 +11,7 @@ import FieldTypeComponent, {
   initializeFieldTypeComponent,
 } from "./FieldTypeComponent";
 import File, { initializeFile } from "./File";
+import Group, { initializeGroup } from "./Group";
 import Report, { initializeReport } from "./Report";
 import ReportTag, { initializeReportTag } from "./ReportTag";
 import Role, { initializeRole } from "./Role";
@@ -32,9 +32,9 @@ import { Sequelize } from "sequelize/types";
 
 export async function syncAllModels(): Promise<void> {
   await Promise.all([
-    AccountGroup.sync(),
     FieldType.sync(),
     File.sync(),
+    Group.sync(),
     Report.sync(),
     Role.sync(),
     Status.sync(),
@@ -67,9 +67,9 @@ export async function syncAllModels(): Promise<void> {
 }
 
 export function initializeModels(sequelize: Sequelize): void {
-  initializeAccountGroup(sequelize);
   initializeFieldType(sequelize);
   initializeFile(sequelize);
+  initializeGroup(sequelize);
   initializeReport(sequelize);
   initializeRole(sequelize);
   initializeStatus(sequelize);
@@ -105,8 +105,8 @@ export function initializeModels(sequelize: Sequelize): void {
   initializeFieldDatum(sequelize);
   console.log("initialized model set 5");
 
-  Account.belongsTo(AccountGroup);
-  AccountGroup.hasMany(Account);
+  Account.belongsTo(Group);
+  Group.hasMany(Account);
 
   Account.belongsTo(Template);
   Template.hasMany(Account);
@@ -152,6 +152,9 @@ export function initializeModels(sequelize: Sequelize): void {
 
   Account.belongsToMany(Tag, { through: AccountTag });
   Tag.belongsToMany(Account, { through: AccountTag });
+
+  Entity.belongsTo(Group);
+  Group.hasMany(Entity);
 
   Entity.belongsTo(Template);
   Template.hasMany(Entity);

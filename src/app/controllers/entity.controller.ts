@@ -37,13 +37,16 @@ export async function createEntity(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { body: ["name", "TemplateId"] })) {
+  if (
+    !hasRequestParameters(req, res, { body: ["name", "TemplateId", "GroupId"] })
+  ) {
     return;
   }
 
   const createOptions: CreationAttributes<Entity> = {
     name: req.body.name,
     TemplateId: req.body.TemplateId,
+    GroupId: req.body.GroupId,
   };
 
   const entity = await Entity.create(createOptions);
@@ -68,7 +71,7 @@ export async function updateEntity(
       req,
       res,
       { params: ["EntityId"] },
-      { body: ["name", "TemplateId"] }
+      { body: ["name", "fieldValues", "GroupId", "TemplateId"] }
     )
   ) {
     return;
@@ -87,6 +90,7 @@ export async function updateEntity(
   }
   const updateOptions: CreationAttributes<Entity> = {
     name: req.body.name,
+    GroupId: req.body.GroupId,
     TemplateId: req.body.TemplateId,
   };
   await entity.update(updateOptions);
@@ -113,6 +117,13 @@ export async function getEntities(
   if (req.query.name !== undefined) {
     whereOptions.name = {
       [Op.iLike]: req.body.name,
+    };
+  }
+  if (req.query.GroupIds !== undefined) {
+    whereOptions.group = {
+      [Op.in]: (req.query.GroupIds as string[]).map((x) => {
+        return +x;
+      }),
     };
   }
   if (req.query.TagIds !== undefined) {

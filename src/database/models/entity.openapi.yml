@@ -3,6 +3,8 @@ RequestSchema:
   properties:
     name:
       type: string
+    GroupId:
+      type: integer
     FieldDatumIds:
       type: array
       items:
@@ -32,6 +34,8 @@ ResponseSchema:
       format: date-time
     name:
       type: string
+    GroupId:
+      type: integer
     FieldDatumIds:
       type: array
       items:
