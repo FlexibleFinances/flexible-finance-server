@@ -19,6 +19,7 @@ import {
   Sequelize,
 } from "sequelize";
 import Account from "./Account";
+import Entity from "./Entity";
 
 export class Group extends Model<
   InferAttributes<Group>,
@@ -33,8 +34,12 @@ export class Group extends Model<
   declare AccountIds: NonAttribute<number[]>;
   declare Accounts: NonAttribute<Account[]>;
 
+  declare EntityIds: NonAttribute<number[]>;
+  declare Entities: NonAttribute<Entity[]>;
+
   declare static associations: {
     Accounts: Association<Account, Group>;
+    Entities: Association<Entity, Group>;
   };
 
   // Since TS cannot determine model association at compile time
@@ -50,6 +55,17 @@ export class Group extends Model<
   declare hasAccounts: HasManyHasAssociationsMixin<Account, number>;
   declare countAccounts: HasManyCountAssociationsMixin;
   declare createAccounts: HasManyCreateAssociationMixin<Account, "GroupId">;
+
+  declare getEntities: HasManyGetAssociationsMixin<Entity>;
+  declare addEntity: HasManyAddAssociationMixin<Entity, number>;
+  declare addEntities: HasManyAddAssociationsMixin<Entity, number>;
+  declare setEntities: HasManySetAssociationsMixin<Entity, number>;
+  declare removeEntity: HasManyRemoveAssociationMixin<Entity, number>;
+  declare removeEntities: HasManyRemoveAssociationsMixin<Entity, number>;
+  declare hasEntity: HasManyHasAssociationMixin<Entity, number>;
+  declare hasEntities: HasManyHasAssociationsMixin<Entity, number>;
+  declare countEntities: HasManyCountAssociationsMixin;
+  declare createEntitys: HasManyCreateAssociationMixin<Entity, "GroupId">;
 }
 
 export function initializeGroup(sequelize: Sequelize): void {

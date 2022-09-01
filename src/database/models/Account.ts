@@ -47,7 +47,7 @@ export class Account extends Model<
   declare FieldDatumIds: CreationOptional<number[]>;
   declare FieldData: NonAttribute<FieldDatum[]>;
 
-  declare GroupId: number;
+  declare GroupId: CreationOptional<number>;
   declare Group: NonAttribute<Group>;
 
   declare TemplateId: number;
