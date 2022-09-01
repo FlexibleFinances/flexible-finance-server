@@ -161,7 +161,6 @@ export function initializeEntity(sequelize: Sequelize): void {
       },
       GroupId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
           model: "Group",
           key: "id",
