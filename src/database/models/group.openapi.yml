@@ -7,6 +7,10 @@ RequestSchema:
       type: array
       items:
         type: integer
+    EntityIds:
+      type: array
+      items:
+        type: integer
 ResponseSchema:
   type: object
   properties:
@@ -21,6 +25,10 @@ ResponseSchema:
     name:
       type: string
     AccountIds:
+      type: array
+      items:
+        type: integer
+    EntityIds:
       type: array
       items:
         type: integer

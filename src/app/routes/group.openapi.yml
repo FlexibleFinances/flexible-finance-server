@@ -81,6 +81,12 @@ GroupsRequests:
           type: array
           items:
             type: number
+      - name: EntityIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Groups"
@@ -91,7 +97,7 @@ GroupsRequests:
       500:
         $ref: "../../openapi.root.yml#/components/responses/Message"
 GroupResponse:
-  description: Returns the account group's info.
+  description: Returns the group's info.
   content:
     application/json:
       schema:
@@ -102,7 +108,7 @@ GroupResponse:
           group:
             $ref: "../../openapi.root.yml#/components/schemas/Group_ResponseSchema"
 GroupsResponse:
-  description: Returns the account groups' info.
+  description: Returns the groups' info.
   content:
     application/json:
       schema:

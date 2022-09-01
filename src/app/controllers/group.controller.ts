@@ -19,12 +19,12 @@ export async function getGroup(
   });
   if (group === null) {
     res.status(500).send({
-      message: "Account Group not found.",
+      message: "Group not found.",
     });
     return;
   }
   res.status(200).send({
-    message: "Account Group gotten.",
+    message: "Group gotten.",
     group,
   });
 }
@@ -42,7 +42,7 @@ export async function createGroup(
   };
   const group = await Group.create(createOptions);
   res.status(200).send({
-    message: "Account Group created.",
+    message: "Group created.",
     group,
   });
 }
@@ -64,7 +64,7 @@ export async function updateGroup(
   });
   if (group === null) {
     res.status(500).send({
-      message: "Account Group not found.",
+      message: "Group not found.",
     });
     return;
   }
@@ -73,7 +73,7 @@ export async function updateGroup(
   };
   await group.update(updateOptions);
   res.status(200).send({
-    message: "Account Group updated.",
+    message: "Group updated.",
     group,
   });
 }
@@ -95,6 +95,13 @@ export async function getGroups(
       }),
     };
   }
+  if (req.query.EntityIds !== undefined) {
+    whereOptions.entity = {
+      [Op.in]: (req.query.EntityIds as string[]).map((x) => {
+        return +x;
+      }),
+    };
+  }
   const findOptions: FindOptions = {
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
@@ -102,7 +109,7 @@ export async function getGroups(
   };
   const groups = await Group.findAll(findOptions);
   res.status(200).send({
-    message: "Account Groups gotten.",
+    message: "Groups gotten.",
     groups,
   });
 }
