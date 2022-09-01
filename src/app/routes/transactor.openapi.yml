@@ -1,0 +1,128 @@
+TransactorRequests:
+  post:
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Transactor_RequestSchema"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/Transactor"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+TransactorIdRequests:
+  get:
+    parameters:
+      - name: TransactorId
+        in: path
+        required: true
+        schema:
+          type: integer
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/Transactor"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+  put:
+    parameters:
+      - name: TransactorId
+        in: path
+        required: true
+        schema:
+          type: integer
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Transactor_RequestSchema"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/Transactor"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+TransactorsRequests:
+  get:
+    parameters:
+      - name: offset
+        in: query
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        schema:
+          type: integer
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: GroupIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+      - name: TagIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+      - name: TemplateIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/Transactors"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+TransactorResponse:
+  description: Returns the transactor's info.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          transactor:
+            $ref: "../../openapi.root.yml#/components/schemas/Transactor_ResponseSchema"
+TransactorsResponse:
+  description: Returns the transactors' info.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          transactors:
+            type: array
+            items:
+              $ref: "../../openapi.root.yml#/components/schemas/Transactor_ResponseSchema"
