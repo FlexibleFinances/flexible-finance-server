@@ -1,4 +1,6 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
+import Account from "../../database/models/Account";
+import Entity from "../../database/models/Entity";
 import Transactor from "../../database/models/Transactor";
 import { defaultLimit } from "../utils/constants";
 import express from "express";
@@ -110,6 +112,7 @@ export async function getTransactors(
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
     where: whereOptions,
+    include: [Account, Entity],
   };
   const transactors = await Transactor.findAll(findOptions);
 

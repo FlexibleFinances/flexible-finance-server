@@ -1,0 +1,30 @@
+RequestSchema:
+  type: object
+  properties:
+    name:
+      type: string
+    RecipientTransactorId:
+      type: integer
+ResponseSchema:
+  type: object
+  properties:
+    id:
+      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+    name:
+      type: string
+    TransactorTypeId:
+      type: integer
+    Accounts:
+      type: array
+      items:
+        $ref: ../../openapi.root.yml#/components/schemas/Account_ResponseSchema
+    Entities:
+      type: array
+      items:
+        $ref: ../../openapi.root.yml#/components/schemas/Entity_ResponseSchema

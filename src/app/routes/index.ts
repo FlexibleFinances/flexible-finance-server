@@ -10,6 +10,7 @@ import { setGroupRoutes } from "./group.routes";
 import { setTagRoutes } from "./tag.routes";
 import { setTemplateRoutes } from "./template.routes";
 import { setTransactionRoutes } from "./transaction.routes";
+import { setTransactorRoutes } from "./transactor.routes";
 import { setUserRoutes } from "./user.routes";
 
 export default function setAllRoutes(app: express.Express): void {
@@ -23,6 +24,7 @@ export default function setAllRoutes(app: express.Express): void {
   setTagRoutes(app);
   setTemplateRoutes(app);
   setTransactionRoutes(app);
+  setTransactorRoutes(app);
   setUserRoutes(app);
   setAuthTestRoutes(app);
 }

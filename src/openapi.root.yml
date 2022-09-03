@@ -20,12 +20,6 @@ paths:
     $ref: ./app/routes/account.openapi.yml#/AccountIdRequests
   /accounts:
     $ref: ./app/routes/account.openapi.yml#/AccountsRequests
-  /group:
-    $ref: ./app/routes/group.openapi.yml#/GroupRequests
-  /group/{GroupId}:
-    $ref: ./app/routes/group.openapi.yml#/GroupIdRequests
-  /groups:
-    $ref: ./app/routes/group.openapi.yml#/GroupsRequests
   /auth/signup:
     $ref: ./app/routes/auth.openapi.yml#/SignUp
   /auth/signin:
@@ -64,6 +58,12 @@ paths:
     $ref: ./app/routes/fieldType.openapi.yml#/FieldTypeIdRequests
   /fieldTypes:
     $ref: ./app/routes/fieldType.openapi.yml#/FieldTypesRequests
+  /group:
+    $ref: ./app/routes/group.openapi.yml#/GroupRequests
+  /group/{GroupId}:
+    $ref: ./app/routes/group.openapi.yml#/GroupIdRequests
+  /groups:
+    $ref: ./app/routes/group.openapi.yml#/GroupsRequests
   /role:
     $ref: ./app/routes/role.openapi.yml#/RoleRequests
   /role/{RoleId}:
@@ -100,6 +100,12 @@ paths:
     $ref: ./app/routes/transaction.openapi.yml#/TransactionIdRequests
   /transactions:
     $ref: ./app/routes/transaction.openapi.yml#/TransactionsRequests
+  /transactor:
+    $ref: ./app/routes/transactor.openapi.yml#/TransactorRequests
+  /transactor/{TransactorId}:
+    $ref: ./app/routes/transactor.openapi.yml#/TransactorIdRequests
+  /transactors:
+    $ref: ./app/routes/transactor.openapi.yml#/TransactorsRequests
   /type:
     $ref: ./app/routes/type.openapi.yml#/TypeRequests
   /type/{TypeId}:
@@ -124,10 +130,6 @@ components:
       $ref: ./app/routes/account.openapi.yml#/AccountResponse
     Accounts:
       $ref: ./app/routes/account.openapi.yml#/AccountsResponse
-    Group:
-      $ref: ./app/routes/group.openapi.yml#/GroupResponse
-    Groups:
-      $ref: ./app/routes/group.openapi.yml#/GroupsResponse
     Entity:
       $ref: ./app/routes/entity.openapi.yml#/EntityResponse
     Entities:
@@ -144,6 +146,10 @@ components:
       $ref: ./app/routes/fieldType.openapi.yml#/FieldTypeResponse
     FieldTypes:
       $ref: ./app/routes/fieldType.openapi.yml#/FieldTypesResponse
+    Group:
+      $ref: ./app/routes/group.openapi.yml#/GroupResponse
+    Groups:
+      $ref: ./app/routes/group.openapi.yml#/GroupsResponse
     Role:
       $ref: ./app/routes/role.openapi.yml#/RoleResponse
     Roles:
@@ -164,6 +170,10 @@ components:
       $ref: ./app/routes/transaction.openapi.yml#/TransactionResponse
     Transactions:
       $ref: ./app/routes/transaction.openapi.yml#/TransactionsResponse
+    Transactor:
+      $ref: ./app/routes/transactor.openapi.yml#/TransactorResponse
+    Transactors:
+      $ref: ./app/routes/transactor.openapi.yml#/TransactorsResponse
     Type:
       $ref: ./app/routes/type.openapi.yml#/TypeResponse
     Types:
@@ -182,10 +192,6 @@ components:
       $ref: ./database/models/account.openapi.yml#/RequestSchema
     Account_ResponseSchema:
       $ref: ./database/models/account.openapi.yml#/ResponseSchema
-    Group_RequestSchema:
-      $ref: ./database/models/group.openapi.yml#/RequestSchema
-    Group_ResponseSchema:
-      $ref: ./database/models/group.openapi.yml#/ResponseSchema
     Entity_RequestSchema:
       $ref: ./database/models/entity.openapi.yml#/RequestSchema
     Entity_ResponseSchema:
@@ -246,6 +252,10 @@ components:
       $ref: ./database/models/fieldType.openapi.yml#/RequestSchema
     FieldType_ResponseSchema:
       $ref: ./database/models/fieldType.openapi.yml#/ResponseSchema
+    Group_RequestSchema:
+      $ref: ./database/models/group.openapi.yml#/RequestSchema
+    Group_ResponseSchema:
+      $ref: ./database/models/group.openapi.yml#/ResponseSchema
     Role_RequestSchema:
       $ref: ./database/models/role.openapi.yml#/RequestSchema
     Role_ResponseSchema:
@@ -266,6 +276,10 @@ components:
       $ref: ./database/models/transaction.openapi.yml#/RequestSchema
     Transaction_ResponseSchema:
       $ref: ./database/models/transaction.openapi.yml#/ResponseSchema
+    Transactor_RequestSchema:
+      $ref: ./database/models/transactor.openapi.yml#/RequestSchema
+    Transactor_ResponseSchema:
+      $ref: ./database/models/transactor.openapi.yml#/ResponseSchema
     Type_RequestSchema:
       $ref: ./database/models/type.openapi.yml#/RequestSchema
     Type_ResponseSchema:
