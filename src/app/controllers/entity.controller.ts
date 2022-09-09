@@ -41,7 +41,7 @@ export async function createEntity(
     !hasRequestParameters(
       req,
       res,
-      { body: ["name", "GroupId"] },
+      { body: ["name"] },
       { body: ["TemplateId", "isTemplate"] }
     )
   ) {

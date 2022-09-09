@@ -41,7 +41,7 @@ export async function createAccount(
     !hasRequestParameters(
       req,
       res,
-      { body: ["name", "GroupId"] },
+      { body: ["name"] },
       { body: ["TemplateId", "isTemplate"] }
     )
   ) {
