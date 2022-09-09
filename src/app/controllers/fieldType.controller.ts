@@ -1,9 +1,9 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import FieldType from "../../database/models/FieldType";
-import { defaultLimit } from "../utils/constants";
+import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { fieldTypeTypeEnum } from "../utils/enumerators";
-import { hasRequestParameters } from "../utils/helperFunctions";
+import { fieldTypeTypeEnum } from "../../utils/enumerators";
+import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getFieldType(
   req: express.Request,
@@ -26,7 +26,7 @@ export async function getFieldType(
   }
   res.status(200).send({
     message: "FieldType gotten.",
-    fieldType: fieldType,
+    fieldType,
   });
 }
 
@@ -44,7 +44,7 @@ export async function createFieldType(
     validator: req.body.validator,
   };
   const fieldType = await FieldType.create(createOptions);
-  res.status(200).send({ message: "FieldType created.", fieldType: fieldType });
+  res.status(200).send({ message: "FieldType created.", fieldType });
 }
 
 export async function updateFieldType(
@@ -82,7 +82,7 @@ export async function updateFieldType(
   await fieldType.update(updateOptions);
   res.status(200).send({
     message: "FieldType updated.",
-    fieldType: fieldType,
+    fieldType,
   });
 }
 
@@ -111,6 +111,6 @@ export async function getFieldTypes(
   const fieldTypes = await FieldType.findAll(findOptions);
   res.status(200).send({
     message: "FieldTypes gotten.",
-    fieldTypes: fieldTypes,
+    fieldTypes,
   });
 }

@@ -20,7 +20,6 @@ import {
 import Account from "./Account";
 import Entity from "./Entity";
 import Report from "./Report";
-import Template from "./Template";
 import Transaction from "./Transaction";
 
 export class Tag extends Model<
@@ -42,9 +41,6 @@ export class Tag extends Model<
   declare ReportIds: NonAttribute<number[]>;
   declare Reports: NonAttribute<Report[]>;
 
-  declare TemplateIds: NonAttribute<number[]>;
-  declare Templates: NonAttribute<Template[]>;
-
   declare TransactionIds: NonAttribute<number[]>;
   declare Transactions: NonAttribute<Transaction[]>;
 
@@ -52,7 +48,6 @@ export class Tag extends Model<
     Accounts: Association<Account, Tag>;
     Entities: Association<Entity, Tag>;
     Reports: Association<Report, Tag>;
-    Templates: Association<Template, Tag>;
     Transactions: Association<Transaction, Tag>;
   };
 
@@ -88,16 +83,6 @@ export class Tag extends Model<
   declare hasReport: HasManyHasAssociationMixin<Report, number>;
   declare hasReports: HasManyHasAssociationsMixin<Report, number>;
   declare countReports: HasManyCountAssociationsMixin;
-
-  declare getTemplates: HasManyGetAssociationsMixin<Template>;
-  declare addTemplate: HasManyAddAssociationMixin<Template, number>;
-  declare addTemplates: HasManyAddAssociationsMixin<Template, number>;
-  declare setTemplates: HasManySetAssociationsMixin<Template, number>;
-  declare removeTemplate: HasManyRemoveAssociationMixin<Template, number>;
-  declare removeTemplates: HasManyRemoveAssociationsMixin<Template, number>;
-  declare hasTemplate: HasManyHasAssociationMixin<Template, number>;
-  declare hasTemplates: HasManyHasAssociationsMixin<Template, number>;
-  declare countTemplates: HasManyCountAssociationsMixin;
 
   declare getTransactions: HasManyGetAssociationsMixin<Transaction>;
   declare addTransaction: HasManyAddAssociationMixin<Transaction, number>;

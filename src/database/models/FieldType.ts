@@ -20,7 +20,7 @@ import {
 } from "sequelize";
 import Field from "./Field";
 import FieldTypeComponent from "./FieldTypeComponent";
-import { fieldTypeTypeEnum } from "../../app/utils/enumerators";
+import { fieldTypeTypeEnum } from "../../utils/enumerators";
 
 export class FieldType extends Model<
   InferAttributes<FieldType>,

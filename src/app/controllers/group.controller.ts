@@ -1,8 +1,8 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Group from "../../database/models/Group";
-import { defaultLimit } from "../utils/constants";
+import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../utils/helperFunctions";
+import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getGroup(
   req: express.Request,

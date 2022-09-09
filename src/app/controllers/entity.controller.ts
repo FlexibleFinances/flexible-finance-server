@@ -1,9 +1,9 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import FieldDatum, { FieldValues } from "../../database/models/FieldDatum";
 import Entity from "../../database/models/Entity";
-import { defaultLimit } from "../utils/constants";
+import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../utils/helperFunctions";
+import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getEntity(
   req: express.Request,
@@ -38,7 +38,12 @@ export async function createEntity(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(req, res, { body: ["name", "TemplateId", "GroupId"] })
+    !hasRequestParameters(
+      req,
+      res,
+      { body: ["name", "GroupId"] },
+      { body: ["TemplateId", "isTemplate"] }
+    )
   ) {
     return;
   }
@@ -46,6 +51,7 @@ export async function createEntity(
   const createOptions: CreationAttributes<Entity> = {
     name: req.body.name,
     TemplateId: req.body.TemplateId,
+    isTemplate: req.body.isTemplate,
     GroupId: req.body.GroupId,
   };
 
@@ -92,6 +98,7 @@ export async function updateEntity(
     name: req.body.name,
     GroupId: req.body.GroupId,
     TemplateId: req.body.TemplateId,
+    isTemplate: entity.isTemplate,
   };
   await entity.update(updateOptions);
 

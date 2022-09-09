@@ -85,7 +85,19 @@ FieldsRequests:
           type: array
           items:
             type: number
-      - name: TemplateIds
+      - name: AccountIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+      - name: EntityIds
+        in: query
+        schema:
+          type: array
+          items:
+            type: number
+      - name: TransactionIds
         in: query
         schema:
           type: array

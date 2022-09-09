@@ -1,8 +1,8 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Tag from "../../database/models/Tag";
-import { defaultLimit } from "../utils/constants";
+import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../utils/helperFunctions";
+import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getTag(
   req: express.Request,
@@ -25,7 +25,7 @@ export async function getTag(
   }
   res.status(200).send({
     message: "Tag gotten.",
-    tag: tag,
+    tag,
   });
 }
 
@@ -41,7 +41,7 @@ export async function createTag(
     name: req.body.name,
   };
   const tag = await Tag.create(createOptions);
-  res.status(200).send({ message: "Tag created.", tag: tag });
+  res.status(200).send({ message: "Tag created.", tag });
 }
 
 export async function updateTag(
@@ -71,7 +71,7 @@ export async function updateTag(
   await tag.update(updateOptions);
   res.status(200).send({
     message: "Tag updated.",
-    tag: tag,
+    tag,
   });
 }
 
@@ -106,13 +106,6 @@ export async function getTags(
       }),
     };
   }
-  if (req.query.TemplateIds !== undefined) {
-    whereOptions.templates = {
-      [Op.in]: (req.query.TemplateIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
-  }
   if (req.query.TransactionIds !== undefined) {
     whereOptions.transactions = {
       [Op.in]: (req.query.TransactionIds as string[]).map((x) => {
@@ -128,6 +121,6 @@ export async function getTags(
   const tags = await Tag.findAll(findOptions);
   res.status(200).send({
     message: "Tags gotten.",
-    tags: tags,
+    tags,
   });
 }

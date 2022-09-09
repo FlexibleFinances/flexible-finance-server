@@ -26,7 +26,15 @@ ResponseSchema:
         type: integer
     FieldTypeId:
       type: integer
-    TemplateIds:
+    AccountIds:
+      type: array
+      items:
+        type: integer
+    EntityIds:
+      type: array
+      items:
+        type: integer
+    TransactionIds:
       type: array
       items:
         type: integer

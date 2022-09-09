@@ -54,7 +54,7 @@ function checkRolesExisted(
 ): void {
   if (req.body.roles !== undefined && req.body.roles !== null) {
     for (let i = 0; i < req.body.roles.length; i++) {
-      if (!ROLES.includes(req.body.roles[i])) {
+      if (!ROLES.includes(req.body.roles[i] as string)) {
         res.status(400).send({
           message:
             "Failed! Role does not exist = " + (req.body.roles[i] as string),
@@ -68,6 +68,6 @@ function checkRolesExisted(
 }
 
 export const verifySignUp = {
-  checkDuplicateUsernameOrEmail: checkDuplicateUsernameOrEmail,
-  checkRolesExisted: checkRolesExisted,
+  checkDuplicateUsernameOrEmail,
+  checkRolesExisted,
 };

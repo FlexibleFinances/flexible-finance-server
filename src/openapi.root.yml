@@ -88,12 +88,6 @@ paths:
     $ref: ./app/routes/authTest.openapi.yml#/TestUser
   /test/admin:
     $ref: ./app/routes/authTest.openapi.yml#/TestAdmin
-  /template:
-    $ref: ./app/routes/template.openapi.yml#/TemplateRequests
-  /template/{TemplateId}:
-    $ref: ./app/routes/template.openapi.yml#/TemplateIdRequests
-  /templates:
-    $ref: ./app/routes/template.openapi.yml#/TemplatesRequests
   /transaction:
     $ref: ./app/routes/transaction.openapi.yml#/TransactionRequests
   /transaction/{TransactionId}:
@@ -162,10 +156,6 @@ components:
       $ref: ./app/routes/tag.openapi.yml#/TagResponse
     Tags:
       $ref: ./app/routes/tag.openapi.yml#/TagsResponse
-    Template:
-      $ref: ./app/routes/template.openapi.yml#/TemplateResponse
-    Templates:
-      $ref: ./app/routes/template.openapi.yml#/TemplatesResponse
     Transaction:
       $ref: ./app/routes/transaction.openapi.yml#/TransactionResponse
     Transactions:
@@ -268,10 +258,6 @@ components:
       $ref: ./database/models/tag.openapi.yml#/RequestSchema
     Tag_ResponseSchema:
       $ref: ./database/models/tag.openapi.yml#/ResponseSchema
-    Template_RequestSchema:
-      $ref: ./database/models/template.openapi.yml#/RequestSchema
-    Template_ResponseSchema:
-      $ref: ./database/models/template.openapi.yml#/ResponseSchema
     Transaction_RequestSchema:
       $ref: ./database/models/transaction.openapi.yml#/RequestSchema
     Transaction_ResponseSchema:

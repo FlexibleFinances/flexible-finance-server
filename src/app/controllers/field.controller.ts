@@ -1,8 +1,8 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Field from "../../database/models/Field";
-import { defaultLimit } from "../utils/constants";
+import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../utils/helperFunctions";
+import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getField(
   req: express.Request,
@@ -25,7 +25,7 @@ export async function getField(
   }
   res.status(200).send({
     message: "Field gotten.",
-    field: field,
+    field,
   });
 }
 
@@ -42,7 +42,7 @@ export async function createField(
     FieldTypeId: req.body.FieldTypeId,
   };
   const field = await Field.create(createOptions);
-  res.status(200).send({ message: "Field created.", field: field });
+  res.status(200).send({ message: "Field created.", field });
 }
 
 export async function updateField(
@@ -78,7 +78,7 @@ export async function updateField(
   await field.update(updateOptions);
   res.status(200).send({
     message: "Field updated.",
-    field: field,
+    field,
   });
 }
 
@@ -106,9 +106,23 @@ export async function getFields(
       }),
     };
   }
-  if (req.query.TemplateIds !== undefined) {
-    whereOptions.templates = {
-      [Op.in]: (req.query.TemplateIds as string[]).map((x) => {
+  if (req.query.AccountIds !== undefined) {
+    whereOptions.accounts = {
+      [Op.in]: (req.query.AccountIds as string[]).map((x) => {
+        return +x;
+      }),
+    };
+  }
+  if (req.query.EntityIds !== undefined) {
+    whereOptions.entities = {
+      [Op.in]: (req.query.EntityIds as string[]).map((x) => {
+        return +x;
+      }),
+    };
+  }
+  if (req.query.TransactionIds !== undefined) {
+    whereOptions.transactions = {
+      [Op.in]: (req.query.TransactionIds as string[]).map((x) => {
         return +x;
       }),
     };
@@ -121,6 +135,6 @@ export async function getFields(
   const fields = await Field.findAll(findOptions);
   res.status(200).send({
     message: "Fields gotten.",
-    fields: fields,
+    fields,
   });
 }

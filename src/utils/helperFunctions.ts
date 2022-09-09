@@ -56,8 +56,20 @@ export function hasRequestParameters(
     )}] in request params.`;
   }
   if (message !== "") {
-    res.status(400).send({ message: message });
+    res.status(400).send({ message });
     return false;
+  }
+  return true;
+}
+
+export function isTemplatedObject(
+  requiredProperties: Array<number | null>,
+  isTemplate: boolean
+): boolean {
+  if (requiredProperties.includes(null) && !isTemplate) {
+    throw new Error(
+      "A templated object must be a template or have all the required fields."
+    );
   }
   return true;
 }

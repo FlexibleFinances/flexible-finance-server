@@ -20,9 +20,11 @@ import {
   NonAttribute,
   Sequelize,
 } from "sequelize";
+import Account from "./Account";
+import Entity from "./Entity";
 import FieldDatum from "./FieldDatum";
 import FieldType from "./FieldType";
-import Template from "./Template";
+import Transaction from "./Transaction";
 
 export class Field extends Model<
   InferAttributes<Field>,
@@ -41,13 +43,21 @@ export class Field extends Model<
   declare FieldDatumIds: CreationOptional<number[]>;
   declare FieldData: NonAttribute<FieldDatum[]>;
 
-  declare TemplateIds: NonAttribute<number[]>;
-  declare Templates: NonAttribute<Template[]>;
+  declare AccountIds: NonAttribute<number[]>;
+  declare Accounts: NonAttribute<Account[]>;
+
+  declare EntityIds: NonAttribute<number[]>;
+  declare Entities: NonAttribute<Entity[]>;
+
+  declare TransactionIds: NonAttribute<number[]>;
+  declare Transactions: NonAttribute<Transaction[]>;
 
   declare static associations: {
-    FieldData: Association<FieldDatum, Field>;
-    Templates: Association<Template, Field>;
-    FieldType: Association<FieldType, Field>;
+    FieldData: Association<Field, FieldDatum>;
+    FieldType: Association<Field, FieldType>;
+    Accounts: Association<Field, Account>;
+    Entities: Association<Field, Entity>;
+    Transactions: Association<Field, Transaction>;
   };
 
   // Since TS cannot determine model association at compile time
@@ -67,19 +77,44 @@ export class Field extends Model<
     "FieldId"
   >;
 
-  declare getTemplates: HasManyGetAssociationsMixin<Template>;
-  declare addTemplate: HasManyAddAssociationMixin<Template, number>;
-  declare addTemplates: HasManyAddAssociationsMixin<Template, number>;
-  declare setTemplates: HasManySetAssociationsMixin<Template, number>;
-  declare removeTemplate: HasManyRemoveAssociationMixin<Template, number>;
-  declare removeTemplates: HasManyRemoveAssociationsMixin<Template, number>;
-  declare hasTemplate: HasManyHasAssociationMixin<Template, number>;
-  declare hasTemplates: HasManyHasAssociationsMixin<Template, number>;
-  declare countTemplates: HasManyCountAssociationsMixin;
-  declare createTemplate: HasManyCreateAssociationMixin<Template, "id">;
-
   declare getFieldType: BelongsToGetAssociationMixin<FieldType>;
   declare setFieldType: BelongsToSetAssociationMixin<FieldType, number>;
+
+  declare getAccounts: HasManyGetAssociationsMixin<Account>;
+  declare addAccount: HasManyAddAssociationMixin<Account, number>;
+  declare addAccounts: HasManyAddAssociationsMixin<Account, number>;
+  declare setAccounts: HasManySetAssociationsMixin<Account, number>;
+  declare removeAccount: HasManyRemoveAssociationMixin<Account, number>;
+  declare removeAccounts: HasManyRemoveAssociationsMixin<Account, number>;
+  declare hasAccount: HasManyHasAssociationMixin<Account, number>;
+  declare hasAccounts: HasManyHasAssociationsMixin<Account, number>;
+  declare countAccounts: HasManyCountAssociationsMixin;
+  declare createAccount: HasManyCreateAssociationMixin<Account, "id">;
+
+  declare getEntities: HasManyGetAssociationsMixin<Entity>;
+  declare addEntity: HasManyAddAssociationMixin<Entity, number>;
+  declare addEntities: HasManyAddAssociationsMixin<Entity, number>;
+  declare setEntities: HasManySetAssociationsMixin<Entity, number>;
+  declare removeEntity: HasManyRemoveAssociationMixin<Entity, number>;
+  declare removeEntities: HasManyRemoveAssociationsMixin<Entity, number>;
+  declare hasEntity: HasManyHasAssociationMixin<Entity, number>;
+  declare hasEntities: HasManyHasAssociationsMixin<Entity, number>;
+  declare countEntities: HasManyCountAssociationsMixin;
+  declare createEntity: HasManyCreateAssociationMixin<Entity, "id">;
+
+  declare getTransactions: HasManyGetAssociationsMixin<Transaction>;
+  declare addTransaction: HasManyAddAssociationMixin<Transaction, number>;
+  declare addTransactions: HasManyAddAssociationsMixin<Transaction, number>;
+  declare setTransactions: HasManySetAssociationsMixin<Transaction, number>;
+  declare removeTransaction: HasManyRemoveAssociationMixin<Transaction, number>;
+  declare hasTransaction: HasManyHasAssociationMixin<Transaction, number>;
+  declare hasTransactions: HasManyHasAssociationsMixin<Transaction, number>;
+  declare countTransactions: HasManyCountAssociationsMixin;
+  declare createTransaction: HasManyCreateAssociationMixin<Transaction, "id">;
+  declare removeTransactions: HasManyRemoveAssociationsMixin<
+    Transaction,
+    number
+  >;
 }
 
 export function initializeField(sequelize: Sequelize): void {

@@ -1,8 +1,8 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Role from "../../database/models/Role";
-import { defaultLimit } from "../utils/constants";
+import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../utils/helperFunctions";
+import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getRole(
   req: express.Request,
@@ -25,7 +25,7 @@ export async function getRole(
   }
   res.status(200).send({
     message: "Role gotten.",
-    role: role,
+    role,
   });
 }
 
@@ -41,7 +41,7 @@ export async function createRole(
     name: req.body.name,
   };
   const role = await Role.create(createOptions);
-  res.status(200).send({ message: "Role created.", role: role });
+  res.status(200).send({ message: "Role created.", role });
 }
 
 export async function updateRole(
@@ -71,7 +71,7 @@ export async function updateRole(
   await role.update(updateOptions);
   res.status(200).send({
     message: "Role updated.",
-    role: role,
+    role,
   });
 }
 
@@ -100,6 +100,6 @@ export async function getRoles(
   const roles = await Role.findAll(findOptions);
   res.status(200).send({
     message: "Roles gotten.",
-    roles: roles,
+    roles,
   });
 }

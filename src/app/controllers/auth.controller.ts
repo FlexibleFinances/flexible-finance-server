@@ -4,7 +4,7 @@ import User from "../../database/models/User";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import express from "express";
-import { hasRequestParameters } from "../utils/helperFunctions";
+import { hasRequestParameters } from "../../utils/helperFunctions";
 import jwt from "jsonwebtoken";
 
 dotenv.config();
@@ -22,7 +22,7 @@ export function signup(req: express.Request, res: express.Response): void {
   User.create({
     username: req.body.username,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8),
+    password: bcrypt.hashSync(req.body.password as string, 8),
   })
     .then((user) => {
       console.log("user: ", user);
@@ -79,7 +79,7 @@ export function signin(req: express.Request, res: express.Response): void {
       }
 
       const passwordIsValid = bcrypt.compareSync(
-        req.body.password,
+        req.body.password as string,
         user.password
       );
 

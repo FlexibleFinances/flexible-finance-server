@@ -25,10 +25,10 @@ import Field from "./Field";
 import FieldDatum from "./FieldDatum";
 import Group from "./Group";
 import Tag from "./Tag";
-import Template from "./Template";
 import Transactor from "./Transactor";
 import TransactorType from "./TransactorType";
-import { transactorTypeEnum } from "../../app/utils/enumerators";
+import { isTemplatedObject } from "../../utils/helperFunctions";
+import { transactorTypeEnum } from "../../utils/enumerators";
 
 export class Account extends Model<
   InferAttributes<Account>,
@@ -50,8 +50,10 @@ export class Account extends Model<
   declare GroupId: CreationOptional<number>;
   declare Group: NonAttribute<Group>;
 
-  declare TemplateId: number;
-  declare Template: NonAttribute<Template>;
+  declare TemplateId: number | null;
+  declare Template: NonAttribute<Account>;
+
+  declare isTemplate: boolean;
 
   declare TagIds: NonAttribute<number[]>;
   declare Tags: NonAttribute<Tag[]>;
@@ -61,7 +63,7 @@ export class Account extends Model<
     Fields: Association<Account, Field>;
     FieldData: Association<Account, FieldDatum>;
     Tags: Association<Account, Tag>;
-    Template: Association<Account, Template>;
+    Template: Association<Account, Account>;
     Transactor: Association<Account, Transactor>;
     TransactorType: Association<Account, TransactorType>;
   };
@@ -92,8 +94,8 @@ export class Account extends Model<
     "AccountId"
   >;
 
-  declare getTemplate: BelongsToGetAssociationMixin<Template>;
-  declare setTemplate: BelongsToSetAssociationMixin<Template, number>;
+  declare getTemplate: BelongsToGetAssociationMixin<Account>;
+  declare setTemplate: BelongsToSetAssociationMixin<Account, number>;
 
   public async setFieldDatumAndFieldIds(): Promise<Account> {
     this.setDataValue("FieldDatumIds", []);
@@ -142,11 +144,15 @@ export function initializeAccount(sequelize: Sequelize): void {
       },
       TemplateId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
-          model: "Template",
+          model: "Account",
           key: "id",
         },
+      },
+      isTemplate: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
       },
       GroupId: {
         type: DataTypes.INTEGER,
@@ -168,6 +174,14 @@ export function initializeAccount(sequelize: Sequelize): void {
         },
       },
       sequelize,
+      validate: {
+        validateModel() {
+          isTemplatedObject(
+            [this.TemplateId as number],
+            this.isTemplate as boolean
+          );
+        },
+      },
     }
   );
 }

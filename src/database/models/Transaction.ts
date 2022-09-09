@@ -27,8 +27,8 @@ import Field from "./Field";
 import FieldDatum from "./FieldDatum";
 import File from "./File";
 import Tag from "./Tag";
-import Template from "./Template";
 import Transactor from "./Transactor";
+import { isTemplatedObject } from "../../utils/helperFunctions";
 
 export class Transaction extends Model<
   InferAttributes<Transaction>,
@@ -40,13 +40,15 @@ export class Transaction extends Model<
 
   declare name: string;
 
-  declare SourceTransactorId: CreationOptional<number>;
+  declare SourceTransactorId: number | null;
   declare SourceTransactor: NonAttribute<Account | Entity>;
-  declare RecipientTransactorId: CreationOptional<number>;
+  declare RecipientTransactorId: number | null;
   declare RecipientTransactor: NonAttribute<Account | Entity>;
 
-  declare TemplateId: number;
-  declare Template: NonAttribute<Template>;
+  declare TemplateId: number | null;
+  declare Template: NonAttribute<Transaction>;
+
+  declare isTemplate: boolean;
 
   declare FieldIds: CreationOptional<number[]>;
   declare Fields: NonAttribute<Field[]>;
@@ -65,7 +67,7 @@ export class Transaction extends Model<
     FieldData: Association<Transaction, FieldDatum>;
     Files: Association<Transaction, File>;
     Tags: Association<Transaction, Tag>;
-    Template: Association<Transaction, Template>;
+    Template: Association<Transaction, Transaction>;
     SourceTransactor: Association<Transaction, Transactor>;
     RecipientTransactor: Association<Transaction, Transactor>;
   };
@@ -87,8 +89,8 @@ export class Transaction extends Model<
     "TransactionId"
   >;
 
-  declare getTemplate: BelongsToGetAssociationMixin<Template>;
-  declare setTemplate: BelongsToSetAssociationMixin<Template, number>;
+  declare getTemplate: BelongsToGetAssociationMixin<Transaction>;
+  declare setTemplate: BelongsToSetAssociationMixin<Transaction, number>;
 
   declare addFile: HasManyAddAssociationMixin<File, number>;
   declare addFiles: HasManyAddAssociationsMixin<File, number>;
@@ -156,15 +158,17 @@ export function initializeTransaction(sequelize: Sequelize): void {
       },
       TemplateId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
-          model: "Template",
+          model: "Transaction",
           key: "id",
         },
       },
+      isTemplate: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
       SourceTransactorId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
           model: "Transactors",
           key: "id",
@@ -172,7 +176,6 @@ export function initializeTransaction(sequelize: Sequelize): void {
       },
       RecipientTransactorId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
           model: "Transactors",
           key: "id",
@@ -183,6 +186,18 @@ export function initializeTransaction(sequelize: Sequelize): void {
     },
     {
       sequelize,
+      validate: {
+        validateModel() {
+          isTemplatedObject(
+            [
+              this.TemplateId as number,
+              this.SourceTransactorId as number,
+              this.RecipientTransactorId as number,
+            ],
+            this.isTemplate as boolean
+          );
+        },
+      },
     }
   );
 }

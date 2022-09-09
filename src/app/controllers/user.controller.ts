@@ -1,8 +1,8 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import User from "../../database/models/User";
-import { defaultLimit } from "../utils/constants";
+import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../utils/helperFunctions";
+import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getUser(
   req: express.Request,
@@ -25,7 +25,7 @@ export async function getUser(
   }
   res.status(200).send({
     message: "User gotten.",
-    user: user,
+    user,
   });
 }
 
@@ -45,7 +45,7 @@ export async function createUser(
     password: req.body.password,
   };
   const user = await User.create(createOptions);
-  res.status(200).send({ message: "User created.", user: user });
+  res.status(200).send({ message: "User created.", user });
 }
 
 export async function updateUser(
@@ -82,7 +82,7 @@ export async function updateUser(
   await user.update(updateOptions);
   res.status(200).send({
     message: "User updated.",
-    user: user,
+    user,
   });
 }
 
@@ -116,6 +116,6 @@ export async function getUsers(
   const users = await User.findAll(findOptions);
   res.status(200).send({
     message: "Users gotten.",
-    users: users,
+    users,
   });
 }

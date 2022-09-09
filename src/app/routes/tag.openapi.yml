@@ -93,12 +93,6 @@ TagsRequests:
           type: array
           items:
             type: number
-      - name: TemplateIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
       - name: TransactionIds
         in: query
         schema:

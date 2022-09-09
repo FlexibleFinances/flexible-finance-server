@@ -25,10 +25,10 @@ import Field from "./Field";
 import FieldDatum from "./FieldDatum";
 import Group from "./Group";
 import Tag from "./Tag";
-import Template from "./Template";
 import Transactor from "./Transactor";
 import TransactorType from "./TransactorType";
-import { transactorTypeEnum } from "../../app/utils/enumerators";
+import { isTemplatedObject } from "../../utils/helperFunctions";
+import { transactorTypeEnum } from "../../utils/enumerators";
 
 export class Entity extends Model<
   InferAttributes<Entity>,
@@ -41,8 +41,10 @@ export class Entity extends Model<
 
   declare name: string;
 
-  declare TemplateId: number;
-  declare Template: NonAttribute<Template>;
+  declare TemplateId: number | null;
+  declare Template: NonAttribute<Entity>;
+
+  declare isTemplate: boolean;
 
   declare FieldIds: CreationOptional<number[]>;
   declare Fields: NonAttribute<Field[]>;
@@ -61,7 +63,7 @@ export class Entity extends Model<
     FieldData: Association<Entity, FieldDatum>;
     Group: Association<Entity, Group>;
     Tags: Association<Entity, Tag>;
-    Template: Association<Entity, Template>;
+    Template: Association<Entity, Entity>;
     Transactor: Association<Entity, Transactor>;
     TransactorType: Association<Entity, TransactorType>;
   };
@@ -72,8 +74,8 @@ export class Entity extends Model<
   declare getGroup: BelongsToGetAssociationMixin<Group>;
   declare setGroup: BelongsToSetAssociationMixin<Group, number>;
 
-  declare getTemplate: BelongsToGetAssociationMixin<Template>;
-  declare setTemplate: BelongsToSetAssociationMixin<Template, number>;
+  declare getTemplate: BelongsToGetAssociationMixin<Entity>;
+  declare setTemplate: BelongsToSetAssociationMixin<Entity, number>;
 
   declare getTransactorType: BelongsToGetAssociationMixin<TransactorType>;
 
@@ -153,11 +155,14 @@ export function initializeEntity(sequelize: Sequelize): void {
       },
       TemplateId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
-          model: "Template",
+          model: "Entity",
           key: "id",
         },
+      },
+      isTemplate: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
       },
       GroupId: {
         type: DataTypes.INTEGER,
@@ -179,6 +184,14 @@ export function initializeEntity(sequelize: Sequelize): void {
         },
       },
       sequelize,
+      validate: {
+        validateModel() {
+          isTemplatedObject(
+            [this.TemplateId as number],
+            this.isTemplate as boolean
+          );
+        },
+      },
     }
   );
 }

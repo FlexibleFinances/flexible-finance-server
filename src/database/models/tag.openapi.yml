@@ -11,10 +11,6 @@ RequestSchema:
       type: array
       items:
         type: integer
-    TemplateIds:
-      type: array
-      items:
-        type: integer
     TransactionIds:
       type: array
       items:
@@ -37,10 +33,6 @@ ResponseSchema:
       items:
         type: integer
     EntityIds:
-      type: array
-      items:
-        type: integer
-    TemplateIds:
       type: array
       items:
         type: integer

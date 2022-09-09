@@ -1,9 +1,9 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import FieldDatum, { FieldValues } from "../../database/models/FieldDatum";
 import Account from "../../database/models/Account";
-import { defaultLimit } from "../utils/constants";
+import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../utils/helperFunctions";
+import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getAccount(
   req: express.Request,
@@ -38,9 +38,12 @@ export async function createAccount(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(req, res, {
-      body: ["name", "TemplateId", "GroupId"],
-    })
+    !hasRequestParameters(
+      req,
+      res,
+      { body: ["name", "GroupId"] },
+      { body: ["TemplateId", "isTemplate"] }
+    )
   ) {
     return;
   }
@@ -48,6 +51,7 @@ export async function createAccount(
   const createOptions: CreationAttributes<Account> = {
     name: req.body.name,
     TemplateId: req.body.TemplateId,
+    isTemplate: req.body.isTemplate,
     GroupId: req.body.GroupId,
   };
   const account = await Account.create(createOptions);
@@ -92,6 +96,7 @@ export async function updateAccount(
     name: req.body.name,
     GroupId: req.body.GroupId,
     TemplateId: req.body.TemplateId,
+    isTemplate: account.isTemplate,
   };
   await account.update(updateOptions);
 

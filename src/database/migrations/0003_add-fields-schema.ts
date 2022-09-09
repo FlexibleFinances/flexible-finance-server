@@ -1,5 +1,5 @@
 import { DataTypes, QueryInterface } from "sequelize";
-import { fieldTypeTypeEnum } from "../../app/utils/enumerators";
+import { fieldTypeTypeEnum } from "../../utils/enumerators";
 
 export async function up({
   context: queryInterface,
@@ -116,6 +116,108 @@ export async function up({
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
+    },
+  });
+
+  await queryInterface.createTable("AccountFields", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    AccountId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Accounts",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    FieldId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Fields",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+  });
+
+  await queryInterface.createTable("EntityFields", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    AccountId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Entities",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    FieldId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Fields",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+  });
+
+  await queryInterface.createTable("TransactionFields", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    TransactionId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Transactions",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    FieldId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Fields",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
   });
 
@@ -253,40 +355,6 @@ export async function up({
     },
   });
 
-  await queryInterface.createTable("TemplateFields", {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    TemplateId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: "Templates",
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
-    },
-    FieldId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: "Fields",
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
-    },
-  });
-
   console.log("0003 up - finished");
 }
 
@@ -296,10 +364,12 @@ export async function down({
   context: QueryInterface;
 }): Promise<void> {
   console.log("0003 down - starting");
-  await queryInterface.dropTable("TemplateFields", {});
   await queryInterface.dropTable("FieldData", {});
   await queryInterface.dropTable("FieldComponents", {});
   await queryInterface.dropTable("FieldChoices", {});
+  await queryInterface.dropTable("TransactionFields");
+  await queryInterface.dropTable("EntityFields");
+  await queryInterface.dropTable("AccountFields");
   await queryInterface.dropTable("Fields", {});
   await queryInterface.dropTable("FieldTypeComponents", {});
   await queryInterface.dropTable("FieldTypes", {});

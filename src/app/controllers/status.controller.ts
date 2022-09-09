@@ -1,8 +1,8 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Status from "../../database/models/Status";
-import { defaultLimit } from "../utils/constants";
+import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../utils/helperFunctions";
+import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getStatus(
   req: express.Request,
@@ -25,7 +25,7 @@ export async function getStatus(
   }
   res.status(200).send({
     message: "Status gotten.",
-    status: status,
+    status,
   });
 }
 
@@ -41,7 +41,7 @@ export async function createStatus(
     name: req.body.name,
   };
   const status = await Status.create(createOptions);
-  res.status(200).send({ message: "Status created.", status: status });
+  res.status(200).send({ message: "Status created.", status });
 }
 
 export async function updateStatus(
@@ -76,7 +76,7 @@ export async function updateStatus(
   await status.update(updateOptions);
   res.status(200).send({
     message: "Status updated.",
-    status: status,
+    status,
   });
 }
 
@@ -98,6 +98,6 @@ export async function getStatuses(
   const statuses = await Status.findAll(findOptions);
   res.status(200).send({
     message: "Statuses gotten.",
-    statuses: statuses,
+    statuses,
   });
 }

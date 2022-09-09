@@ -64,7 +64,7 @@ app
       next: express.NextFunction
     ) => {
       console.log(err);
-      res.status(err.status ?? 500).json({
+      res.status((err.status as number) ?? 500).json({
         error: {
           message: err.message,
           errors: err.errors,

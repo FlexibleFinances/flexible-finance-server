@@ -7,26 +7,26 @@ import {
   NonAttribute,
   Sequelize,
 } from "sequelize";
-import Tag from "./Tag";
-import Template from "./Template";
+import Field from "./Field";
+import Transaction from "./Transaction";
 
-export class TemplateTag extends Model<
-  InferAttributes<TemplateTag>,
-  InferCreationAttributes<TemplateTag>
+export class TransactionField extends Model<
+  InferAttributes<TransactionField>,
+  InferCreationAttributes<TransactionField>
 > {
   declare id: CreationOptional<number>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
-  declare TemplateId: number;
-  declare Template: NonAttribute<Template>;
+  declare TransactionId: number;
+  declare Transaction: NonAttribute<Transaction>;
 
-  declare TagId: number;
-  declare Tag: NonAttribute<Tag>;
+  declare FieldId: number;
+  declare Field: NonAttribute<Field>;
 }
 
-export function initializeTemplateTag(sequelize: Sequelize): void {
-  TemplateTag.init(
+export function initializeTransactionField(sequelize: Sequelize): void {
+  TransactionField.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -35,19 +35,19 @@ export function initializeTemplateTag(sequelize: Sequelize): void {
       },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
-      TemplateId: {
+      TransactionId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "Template",
+          model: "Transaction",
           key: "id",
         },
       },
-      TagId: {
+      FieldId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "Tag",
+          model: "Field",
           key: "id",
         },
       },
@@ -58,4 +58,4 @@ export function initializeTemplateTag(sequelize: Sequelize): void {
   );
 }
 
-export default TemplateTag;
+export default TransactionField;

@@ -7,26 +7,26 @@ import {
   NonAttribute,
   Sequelize,
 } from "sequelize";
+import Entity from "./Entity";
 import Field from "./Field";
-import Template from "./Template";
 
-export class TemplateField extends Model<
-  InferAttributes<TemplateField>,
-  InferCreationAttributes<TemplateField>
+export class EntityField extends Model<
+  InferAttributes<EntityField>,
+  InferCreationAttributes<EntityField>
 > {
   declare id: CreationOptional<number>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
-  declare TemplateId: number;
-  declare Template: NonAttribute<Template>;
+  declare EntityId: number;
+  declare Entity: NonAttribute<Entity>;
 
   declare FieldId: number;
   declare Field: NonAttribute<Field>;
 }
 
-export function initializeTemplateField(sequelize: Sequelize): void {
-  TemplateField.init(
+export function initializeEntityField(sequelize: Sequelize): void {
+  EntityField.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -35,11 +35,11 @@ export function initializeTemplateField(sequelize: Sequelize): void {
       },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
-      TemplateId: {
+      EntityId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "Template",
+          model: "Entity",
           key: "id",
         },
       },
@@ -58,4 +58,4 @@ export function initializeTemplateField(sequelize: Sequelize): void {
   );
 }
 
-export default TemplateField;
+export default EntityField;

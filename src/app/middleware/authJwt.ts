@@ -1,3 +1,4 @@
+import { Identifier } from "sequelize/types";
 import User from "../../database/models/User";
 import dotenv from "dotenv";
 import express from "express";
@@ -47,11 +48,11 @@ function verifyToken(
   );
 }
 
-function isAdmin(
+async function isAdmin(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
-): void {
+): Promise<void> {
   if (req.body.tokenUserId === undefined) {
     res
       .status(500)
@@ -59,27 +60,27 @@ function isAdmin(
     return;
   }
 
-  void User.findByPk(req.body.tokenUserId).then((user) => {
-    user?.getRoles().then((roles) => {
-      for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "admin") {
-          next();
-          return;
-        }
+  const user = await User.findByPk(req.body.tokenUserId as Identifier);
+  if (user != null) {
+    const roles = await user.getRoles();
+    for (let i = 0; i < roles.length; i++) {
+      if (roles[i].name === "admin") {
+        next();
+        return;
       }
+    }
+  }
 
-      res.status(403).send({
-        message: "Require Admin Role!",
-      });
-    });
+  res.status(403).send({
+    message: "Require Admin Role!",
   });
 }
 
-function isSelf(
+async function isSelf(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
-): void {
+): Promise<void> {
   if (req.body.tokenUserId === undefined) {
     res
       .status(500)
@@ -92,11 +93,11 @@ function isSelf(
     return;
   }
 
-  isAdmin(req, res, next);
+  await isAdmin(req, res, next);
 }
 
 export const authJwt = {
-  verifyToken: verifyToken,
-  isAdmin: isAdmin,
-  isSelf: isSelf,
+  verifyToken,
+  isAdmin,
+  isSelf,
 };

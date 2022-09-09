@@ -1,9 +1,9 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import FieldDatum, { FieldValues } from "../../database/models/FieldDatum";
 import Transaction from "../../database/models/Transaction";
-import { defaultLimit } from "../utils/constants";
+import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../utils/helperFunctions";
+import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getTransaction(
   req: express.Request,
@@ -38,20 +38,21 @@ export async function createTransaction(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(req, res, {
-      body: [
-        "name",
-        "TemplateId",
-        "SourceTransactorId",
-        "RecipientTransactorId",
-      ],
-    })
+    !hasRequestParameters(
+      req,
+      res,
+      { body: ["name", "SourceTransactorId", "RecipientTransactorId"] },
+      { body: ["TemplateId", "isTemplate"] }
+    )
   ) {
     return;
   }
   const createOptions: CreationAttributes<Transaction> = {
     name: req.body.name,
     TemplateId: req.body.TemplateId,
+    isTemplate: req.body.isTemplate,
+    SourceTransactorId: req.body.SourceTransactorId,
+    RecipientTransactorId: req.body.RecipientTransactorId,
   };
   const transaction = await Transaction.create(createOptions);
 
@@ -103,6 +104,7 @@ export async function updateTransaction(
   const updateOptions: CreationAttributes<Transaction> = {
     name: req.body.name,
     TemplateId: req.body.TemplateId,
+    isTemplate: transaction.isTemplate,
     SourceTransactorId: req.body.SourceTransactorId,
     RecipientTransactorId: req.body.RecipientTransactorId,
   };

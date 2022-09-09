@@ -1,9 +1,6 @@
 import { DataTypes, QueryInterface } from "sequelize";
-import {
-  templateTypeEnum,
-  transactorTypeEnum,
-} from "../../app/utils/enumerators";
 import TransactorType from "../models/TransactorType";
+import { transactorTypeEnum } from "../../utils/enumerators";
 
 export async function up({
   context: queryInterface,
@@ -109,33 +106,6 @@ export async function up({
       type: DataTypes.STRING(128),
       allowNull: false,
       unique: true,
-    },
-  });
-  await queryInterface.createTable("Templates", {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    name: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-      unique: true,
-    },
-    type: {
-      type: DataTypes.ENUM({ values: Object.keys(templateTypeEnum) }),
-      allowNull: false,
-      validate: {
-        isIn: [Object.keys(templateTypeEnum)],
-      },
     },
   });
   await queryInterface.createTable("Types", {
@@ -247,7 +217,7 @@ export async function up({
     TemplateId: {
       type: DataTypes.INTEGER,
       references: {
-        model: "Templates",
+        model: "Accounts",
         key: "id",
       },
       onUpdate: "CASCADE",
@@ -300,7 +270,7 @@ export async function up({
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Templates",
+        model: "Entities",
         key: "id",
       },
       onUpdate: "CASCADE",
@@ -339,7 +309,7 @@ export async function up({
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Templates",
+        model: "Transactions",
         key: "id",
       },
       onUpdate: "CASCADE",
@@ -465,40 +435,6 @@ export async function up({
     },
   });
 
-  await queryInterface.createTable("TemplateTags", {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    TemplateId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: "Templates",
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
-    },
-    TagId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: "Tags",
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
-    },
-  });
-
   await queryInterface.createTable("TransactionFiles", {
     id: {
       type: DataTypes.INTEGER,
@@ -579,7 +515,6 @@ export async function down({
   await queryInterface.dropTable("AccountTags", {});
   await queryInterface.dropTable("EntityTags", {});
   await queryInterface.dropTable("ReportTags", {});
-  await queryInterface.dropTable("TemplateTags", {});
   await queryInterface.dropTable("TransactionFiles", {});
   await queryInterface.dropTable("TransactionTags", {});
   await queryInterface.dropTable("Accounts", {});
@@ -589,7 +524,6 @@ export async function down({
   await queryInterface.dropTable("Files", {});
   await queryInterface.dropTable("Reports", {});
   await queryInterface.dropTable("Tags", {});
-  await queryInterface.dropTable("Templates", {});
   await queryInterface.dropTable("Statuses", {});
   await queryInterface.dropTable("Types", {});
   await queryInterface.dropTable("Transactors", {});

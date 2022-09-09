@@ -1,8 +1,8 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Type from "../../database/models/Type";
-import { defaultLimit } from "../utils/constants";
+import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../utils/helperFunctions";
+import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getType(
   req: express.Request,
@@ -25,7 +25,7 @@ export async function getType(
   }
   res.status(200).send({
     message: "Type gotten.",
-    type: type,
+    type,
   });
 }
 
@@ -41,7 +41,7 @@ export async function createType(
     name: req.body.name,
   };
   const type = await Type.create(createOptions);
-  res.status(200).send({ message: "Type created.", type: type });
+  res.status(200).send({ message: "Type created.", type });
 }
 
 export async function updateType(
@@ -71,7 +71,7 @@ export async function updateType(
   await type.update(updateOptions);
   res.status(200).send({
     message: "Type updated.",
-    type: type,
+    type,
   });
 }
 
@@ -93,6 +93,6 @@ export async function getTypes(
   const types = await Type.findAll(findOptions);
   res.status(200).send({
     message: "Types gotten.",
-    types: types,
+    types,
   });
 }

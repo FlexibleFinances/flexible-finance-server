@@ -2,9 +2,9 @@ import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Account from "../../database/models/Account";
 import Entity from "../../database/models/Entity";
 import Transactor from "../../database/models/Transactor";
-import { defaultLimit } from "../utils/constants";
+import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../utils/helperFunctions";
+import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getTransactor(
   req: express.Request,

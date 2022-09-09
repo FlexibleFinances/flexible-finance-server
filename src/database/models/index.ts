@@ -1,6 +1,8 @@
 import Account, { initializeAccount } from "./Account";
+import AccountField, { initializeAccountField } from "./AccountField";
 import AccountTag, { initializeAccountTag } from "./AccountTag";
 import Entity, { initializeEntity } from "./Entity";
+import EntityField, { initializeEntityField } from "./EntityField";
 import EntityTag, { initializeEntityTag } from "./EntityTag";
 import Field, { initializeField } from "./Field";
 import FieldChoice, { initializeFieldChoice } from "./FieldChoice";
@@ -17,10 +19,10 @@ import ReportTag, { initializeReportTag } from "./ReportTag";
 import Role, { initializeRole } from "./Role";
 import Status, { initializeStatus } from "./Status";
 import Tag, { initializeTag } from "./Tag";
-import Template, { initializeTemplate } from "./Template";
-import TemplateField, { initializeTemplateField } from "./TemplateField";
-import TemplateTag, { initializeTemplateTag } from "./TemplateTag";
 import Transaction, { initializeTransaction } from "./Transaction";
+import TransactionField, {
+  initializeTransactionField,
+} from "./TransactionField";
 import TransactionFile, { initializeTransactionFile } from "./TransactionFile";
 import TransactionTag, { initializeTransactionTag } from "./TransactionTag";
 import Transactor, { initializeTransactor } from "./Transactor";
@@ -39,7 +41,6 @@ export async function syncAllModels(): Promise<void> {
     Role.sync(),
     Status.sync(),
     Tag.sync(),
-    Template.sync(),
     TransactorType.sync(),
     Type.sync(),
     User.sync(),
@@ -49,17 +50,15 @@ export async function syncAllModels(): Promise<void> {
     Field.sync(),
     FieldTypeComponent.sync(),
     ReportTag.sync(),
-    TemplateTag.sync(),
     Transactor.sync(),
     UserRole.sync(),
   ]);
 
-  await Promise.all([FieldDatum.sync(), TemplateField.sync()]);
+  await Promise.all([FieldDatum.sync()]);
 
-  await Promise.all([Entity.sync(), Transaction.sync()]);
+  await Promise.all([Account.sync(), Entity.sync(), Transaction.sync()]);
 
   await Promise.all([
-    Account.sync(),
     EntityTag.sync(),
     TransactionFile.sync(),
     TransactionTag.sync(),
@@ -74,7 +73,6 @@ export function initializeModels(sequelize: Sequelize): void {
   initializeRole(sequelize);
   initializeStatus(sequelize);
   initializeTag(sequelize);
-  initializeTemplate(sequelize);
   initializeTransactorType(sequelize);
   initializeType(sequelize);
   initializeUser(sequelize);
@@ -83,14 +81,12 @@ export function initializeModels(sequelize: Sequelize): void {
   initializeField(sequelize);
   initializeFieldTypeComponent(sequelize);
   initializeReportTag(sequelize);
-  initializeTemplateTag(sequelize);
   initializeTransactor(sequelize);
   initializeUserRole(sequelize);
   console.log("initialized model set 2");
 
   initializeFieldChoice(sequelize);
   initializeFieldComponent(sequelize);
-  initializeTemplateField(sequelize);
   initializeEntity(sequelize);
   initializeTransaction(sequelize);
   console.log("initialized model set 3");
@@ -103,19 +99,85 @@ export function initializeModels(sequelize: Sequelize): void {
 
   initializeAccountTag(sequelize);
   initializeFieldDatum(sequelize);
+  initializeAccountField(sequelize);
+  initializeEntityField(sequelize);
+  initializeTransactionField(sequelize);
   console.log("initialized model set 5");
 
   Account.belongsTo(Group);
   Group.hasMany(Account);
 
-  Account.belongsTo(Template);
-  Template.hasMany(Account);
+  Account.belongsTo(Account, { foreignKey: "TemplateId" });
+  Account.hasMany(Account, { foreignKey: "TemplateId" });
 
   Account.belongsTo(Transactor, { foreignKey: "id" });
   Transactor.hasOne(Account, { foreignKey: "id" });
 
   Account.belongsTo(TransactorType);
   TransactorType.hasMany(Account);
+
+  FieldDatum.belongsTo(Account);
+  Account.hasMany(FieldDatum);
+
+  Account.belongsToMany(Tag, { through: AccountTag });
+  Tag.belongsToMany(Account, { through: AccountTag });
+
+  Account.belongsToMany(Field, { through: AccountField });
+  Field.belongsToMany(Account, { through: AccountField });
+
+  Entity.belongsTo(Group);
+  Group.hasMany(Entity);
+
+  Entity.belongsTo(Entity, { foreignKey: "TemplateId" });
+  Entity.hasMany(Entity, { foreignKey: "TemplateId" });
+
+  Entity.belongsTo(Transactor, { foreignKey: "id" });
+  Transactor.hasOne(Entity, { foreignKey: "id" });
+
+  Entity.belongsTo(TransactorType);
+  TransactorType.hasMany(Entity);
+
+  FieldDatum.belongsTo(Entity);
+  Entity.hasMany(FieldDatum);
+
+  Entity.belongsToMany(Tag, { through: EntityTag });
+  Tag.belongsToMany(Entity, { through: EntityTag });
+
+  Entity.belongsToMany(Field, { through: EntityField });
+  Field.belongsToMany(Entity, { through: EntityField });
+
+  Transaction.belongsTo(Transaction, { foreignKey: "TemplateId" });
+  Transaction.hasMany(Transaction, { foreignKey: "TemplateId" });
+
+  FieldDatum.belongsTo(Transaction);
+  Transaction.hasMany(FieldDatum);
+
+  Transaction.belongsToMany(File, { through: TransactionFile });
+  File.belongsToMany(Transaction, { through: TransactionFile });
+
+  Transaction.belongsToMany(Tag, { through: TransactionTag });
+  Tag.belongsToMany(Transaction, { through: TransactionTag });
+
+  Transaction.belongsToMany(Field, { through: TransactionField });
+  Field.belongsToMany(Transaction, { through: TransactionField });
+
+  Transaction.belongsTo(Transactor, {
+    as: "SourceTransactor",
+    foreignKey: "SourceTransactorId",
+  });
+  Transactor.hasMany(Transaction, { foreignKey: "SourceTransactorId" });
+
+  Transaction.belongsTo(Transactor, {
+    as: "RecipientTransactor",
+    foreignKey: "RecipientTransactorId",
+  });
+  Transactor.hasMany(Transaction, { foreignKey: "RecipientTransactorId" });
+
+  Transactor.belongsTo(TransactorType);
+  TransactorType.hasMany(Transactor);
+
+  Report.belongsToMany(Tag, { through: ReportTag });
+  Tag.belongsToMany(Report, { through: ReportTag });
 
   FieldTypeComponent.belongsTo(FieldType);
   FieldType.hasMany(FieldTypeComponent);
@@ -140,63 +202,6 @@ export function initializeModels(sequelize: Sequelize): void {
     foreignKey: "ParentFieldId",
   });
   Field.hasMany(FieldComponent);
-
-  FieldDatum.belongsTo(Account);
-  Account.hasMany(FieldDatum);
-
-  FieldDatum.belongsTo(Entity);
-  Entity.hasMany(FieldDatum);
-
-  FieldDatum.belongsTo(Transaction);
-  Transaction.hasMany(FieldDatum);
-
-  Account.belongsToMany(Tag, { through: AccountTag });
-  Tag.belongsToMany(Account, { through: AccountTag });
-
-  Entity.belongsTo(Group);
-  Group.hasMany(Entity);
-
-  Entity.belongsTo(Template);
-  Template.hasMany(Entity);
-
-  Entity.belongsTo(Transactor, { foreignKey: "id" });
-  Transactor.hasOne(Entity, { foreignKey: "id" });
-
-  Entity.belongsTo(TransactorType);
-  TransactorType.hasMany(Entity);
-
-  Entity.belongsToMany(Tag, { through: EntityTag });
-  Tag.belongsToMany(Entity, { through: EntityTag });
-
-  Report.belongsToMany(Tag, { through: ReportTag });
-  Tag.belongsToMany(Report, { through: ReportTag });
-
-  Template.belongsToMany(Field, { through: TemplateField });
-  Field.belongsToMany(Template, { through: TemplateField });
-
-  Template.belongsToMany(Tag, { through: TemplateTag });
-  Tag.belongsToMany(Template, { through: TemplateTag });
-
-  Transaction.belongsToMany(File, { through: TransactionFile });
-  File.belongsToMany(Transaction, { through: TransactionFile });
-
-  Transaction.belongsToMany(Tag, { through: TransactionTag });
-  Tag.belongsToMany(Transaction, { through: TransactionTag });
-
-  Transaction.belongsTo(Transactor, {
-    as: "SourceTransactor",
-    foreignKey: "SourceTransactorId",
-  });
-  Transactor.hasMany(Transaction, { foreignKey: "SourceTransactorId" });
-
-  Transaction.belongsTo(Transactor, {
-    as: "RecipientTransactor",
-    foreignKey: "RecipientTransactorId",
-  });
-  Transactor.hasMany(Transaction, { foreignKey: "RecipientTransactorId" });
-
-  Transactor.belongsTo(TransactorType);
-  TransactorType.hasMany(Transactor);
 
   User.belongsToMany(Role, { through: UserRole });
   Role.belongsToMany(User, { through: UserRole });

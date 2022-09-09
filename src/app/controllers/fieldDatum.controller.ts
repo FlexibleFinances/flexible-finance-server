@@ -1,8 +1,8 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import FieldDatum from "../../database/models/FieldDatum";
-import { defaultLimit } from "../utils/constants";
+import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../utils/helperFunctions";
+import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getFieldDatum(
   req: express.Request,
@@ -25,7 +25,7 @@ export async function getFieldDatum(
   }
   res.status(200).send({
     message: "FieldDatum gotten.",
-    fieldDatum: fieldDatum,
+    fieldDatum,
   });
 }
 
@@ -55,9 +55,7 @@ export async function createFieldDatum(
     TransactionId: req.body.TransactionId,
   };
   const fieldDatum = await FieldDatum.create(createOptions);
-  res
-    .status(200)
-    .send({ message: "FieldDatum created.", fieldDatum: fieldDatum });
+  res.status(200).send({ message: "FieldDatum created.", fieldDatum });
 }
 
 export async function updateFieldDatum(
@@ -109,7 +107,7 @@ export async function updateFieldDatum(
   await fieldDatum.update(updateOptions);
   res.status(200).send({
     message: "FieldDatum updated.",
-    fieldDatum: fieldDatum,
+    fieldDatum,
   });
 }
 
@@ -179,6 +177,6 @@ export async function getFieldData(
   const fieldData = await FieldDatum.findAll(findOptions);
   res.status(200).send({
     message: "FieldData gotten.",
-    fieldData: fieldData,
+    fieldData,
   });
 }
