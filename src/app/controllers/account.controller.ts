@@ -144,6 +144,11 @@ export async function getAccounts(
       }),
     };
   }
+  if (req.query.isTemplate !== undefined) {
+    whereOptions.isTemplate = {
+      [Op.eq]: req.query.isTemplate as unknown as boolean,
+    };
+  }
   const findOptions: FindOptions = {
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
@@ -157,8 +162,15 @@ export async function getAccounts(
 
   const accountsWithFields = await Promise.all(accountFieldPromises);
 
-  res.status(200).send({
-    message: "Accounts gotten.",
-    accounts: accountsWithFields,
-  });
+  if (req.query.isTemplate as unknown as boolean) {
+    res.status(200).send({
+      message: "Account Templates gotten.",
+      templates: accountsWithFields,
+    });
+  } else {
+    res.status(200).send({
+      message: "Accounts gotten.",
+      accounts: accountsWithFields,
+    });
+  }
 }

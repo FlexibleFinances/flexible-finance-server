@@ -156,6 +156,11 @@ export async function getTransactions(
       }),
     };
   }
+  if (req.query.isTemplate !== undefined) {
+    whereOptions.isTemplate = {
+      [Op.eq]: req.query.isTemplate as unknown as boolean,
+    };
+  }
   if (req.query.SourceTransactorId !== undefined) {
     whereOptions.sourceTransactor = {
       [Op.eq]: (req.query.SourceTransactorId as string[]).map((x) => {
@@ -183,8 +188,15 @@ export async function getTransactions(
 
   const transactionsWithFields = await Promise.all(transactionFieldPromises);
 
-  res.status(200).send({
-    message: "Transactions gotten.",
-    transactions: transactionsWithFields,
-  });
+  if (req.query.isTemplate as unknown as boolean) {
+    res.status(200).send({
+      message: "Transaction Templates gotten.",
+      templates: transactionsWithFields,
+    });
+  } else {
+    res.status(200).send({
+      message: "Transactions gotten.",
+      transactions: transactionsWithFields,
+    });
+  }
 }

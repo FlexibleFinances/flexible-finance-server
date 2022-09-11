@@ -155,6 +155,7 @@ export function initializeEntity(sequelize: Sequelize): void {
       },
       TemplateId: {
         type: DataTypes.INTEGER,
+        allowNull: true,
         references: {
           model: "Entity",
           key: "id",

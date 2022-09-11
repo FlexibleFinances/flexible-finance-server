@@ -93,6 +93,10 @@ AccountsRequests:
           type: array
           items:
             type: number
+      - name: isTemplate
+        in: query
+        schema:
+          type: boolean
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Accounts"
@@ -124,5 +128,11 @@ AccountsResponse:
             type: string
           accounts:
             type: array
+            nullable: true
+            items:
+              $ref: "../../openapi.root.yml#/components/schemas/Account_ResponseSchema"
+          templates:
+            type: array
+            nullable: true
             items:
               $ref: "../../openapi.root.yml#/components/schemas/Account_ResponseSchema"

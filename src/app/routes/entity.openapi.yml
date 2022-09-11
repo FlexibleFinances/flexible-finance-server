@@ -105,6 +105,10 @@ EntitiesRequests:
           type: array
           items:
             type: number
+      - name: isTemplate
+        in: query
+        schema:
+          type: boolean
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Entities"
@@ -136,5 +140,11 @@ EntitiesResponse:
             type: string
           entities:
             type: array
+            nullable: true
+            items:
+              $ref: "../../openapi.root.yml#/components/schemas/Entity_ResponseSchema"
+          templates:
+            type: array
+            nullable: true
             items:
               $ref: "../../openapi.root.yml#/components/schemas/Entity_ResponseSchema"

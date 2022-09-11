@@ -147,6 +147,11 @@ export async function getEntities(
       }),
     };
   }
+  if (req.query.isTemplate !== undefined) {
+    whereOptions.isTemplate = {
+      [Op.eq]: req.query.isTemplate as unknown as boolean,
+    };
+  }
   const findOptions: FindOptions = {
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
@@ -160,8 +165,15 @@ export async function getEntities(
 
   const entitiesWithFields = await Promise.all(entityFieldPromises);
 
-  res.status(200).send({
-    message: "Entities gotten.",
-    entities: entitiesWithFields,
-  });
+  if (req.query.isTemplate as unknown as boolean) {
+    res.status(200).send({
+      message: "Entity Templates gotten.",
+      templates: entitiesWithFields,
+    });
+  } else {
+    res.status(200).send({
+      message: "Entities gotten.",
+      entities: entitiesWithFields,
+    });
+  }
 }

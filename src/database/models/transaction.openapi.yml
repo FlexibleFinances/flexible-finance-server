@@ -19,6 +19,8 @@ RequestSchema:
         type: integer
     TemplateId:
       type: integer
+    isTemplate:
+      type: boolean
     SourceTransactorId:
       type: integer
     RecipientTransactorId:
@@ -50,6 +52,7 @@ ResponseSchema:
         type: integer
     TemplateId:
       type: integer
+      nullable: true
     SourceTransactorId:
       type: integer
     RecipientTransactorId:

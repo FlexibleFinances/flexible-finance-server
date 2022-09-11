@@ -216,6 +216,7 @@ export async function up({
     },
     TemplateId: {
       type: DataTypes.INTEGER,
+      allowNull: true,
       references: {
         model: "Accounts",
         key: "id",
@@ -231,6 +232,10 @@ export async function up({
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
+    },
+    isTemplate: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
     },
   });
   await queryInterface.createTable("Entities", {
@@ -268,7 +273,7 @@ export async function up({
     },
     TemplateId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: "Entities",
         key: "id",
@@ -284,6 +289,10 @@ export async function up({
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
+    },
+    isTemplate: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
     },
   });
   await queryInterface.createTable("Transactions", {
@@ -307,13 +316,17 @@ export async function up({
     },
     TemplateId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: "Transactions",
         key: "id",
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
+    },
+    isTemplate: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
     },
     SourceTransactorId: {
       type: DataTypes.INTEGER,

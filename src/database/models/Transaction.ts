@@ -158,6 +158,7 @@ export function initializeTransaction(sequelize: Sequelize): void {
       },
       TemplateId: {
         type: DataTypes.INTEGER,
+        allowNull: true,
         references: {
           model: "Transaction",
           key: "id",

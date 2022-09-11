@@ -99,6 +99,10 @@ TransactionsRequests:
           type: array
           items:
             type: number
+      - name: isTemplate
+        in: query
+        schema:
+          type: boolean
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transactions"
@@ -130,5 +134,11 @@ TransactionsResponse:
             type: string
           transactions:
             type: array
+            nullable: true
+            items:
+              $ref: "../../openapi.root.yml#/components/schemas/Transaction_ResponseSchema"
+          templates:
+            type: array
+            nullable: true
             items:
               $ref: "../../openapi.root.yml#/components/schemas/Transaction_ResponseSchema"
