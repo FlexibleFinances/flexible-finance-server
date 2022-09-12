@@ -1,9 +1,14 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import FieldDatum, { FieldValues } from "../../database/models/FieldDatum";
+import {
+  hasRequestParameters,
+  minimizeAssociationsToIds,
+} from "../../utils/helperFunctions";
+import Field from "../../database/models/Field";
+import Tag from "../../database/models/Tag";
 import Transaction from "../../database/models/Transaction";
 import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getTransaction(
   req: express.Request,
@@ -17,6 +22,7 @@ export async function getTransaction(
     where: {
       id: req.params.TransactionId,
     },
+    include: [Field, FieldDatum, Tag],
   });
   if (transaction === null) {
     res.status(500).send({
@@ -25,7 +31,7 @@ export async function getTransaction(
     return;
   }
 
-  await transaction.setFieldDatumAndFieldIds();
+  minimizeAssociationsToIds(transaction);
 
   res.status(200).send({
     message: "Transaction gotten.",
@@ -56,14 +62,20 @@ export async function createTransaction(
   };
   const transaction = await Transaction.create(createOptions);
 
-  await FieldDatum.upsertFieldData(
-    req.body.fieldValues as FieldValues,
-    undefined,
-    undefined,
-    transaction.id
-  );
-  await transaction.reload();
-  await transaction.setFieldDatumAndFieldIds();
+  if (createOptions.isTemplate) {
+    if (req.body.FieldIds !== undefined) {
+      await transaction.addFields(req.body.FieldIds as number[]);
+    }
+  } else {
+    await FieldDatum.upsertFieldData(
+      req.body.fieldValues as FieldValues,
+      undefined,
+      undefined,
+      transaction.id
+    );
+  }
+
+  await transaction.loadAssociatedIds();
 
   res.status(200).send({ message: "Transaction created.", transaction });
 }
@@ -110,14 +122,20 @@ export async function updateTransaction(
   };
   await transaction.update(updateOptions);
 
-  await FieldDatum.upsertFieldData(
-    req.body.fieldValues as FieldValues,
-    undefined,
-    undefined,
-    transaction.id
-  );
-  await transaction.reload();
-  await transaction.setFieldDatumAndFieldIds();
+  if (updateOptions.isTemplate) {
+    if (req.body.FieldIds !== undefined) {
+      await transaction.setFields(req.body.FieldIds as number[]);
+    }
+  } else {
+    await FieldDatum.upsertFieldData(
+      req.body.fieldValues as FieldValues,
+      undefined,
+      undefined,
+      transaction.id
+    );
+  }
+
+  await transaction.loadAssociatedIds();
 
   res.status(200).send({
     message: "Transaction updated.",
@@ -135,9 +153,21 @@ export async function getTransactions(
       [Op.iLike]: req.body.name,
     };
   }
-  if (req.query.fileIds !== undefined) {
-    whereOptions.files = {
-      [Op.in]: (req.query.fileIds as string[]).map((x) => {
+  if (req.query.isTemplate !== undefined) {
+    whereOptions.isTemplate = {
+      [Op.eq]: req.query.isTemplate as unknown as boolean,
+    };
+  }
+  if (req.query.RecipientTransactorId !== undefined) {
+    whereOptions.recipientTransactor = {
+      [Op.eq]: (req.query.RecipientTransactorId as string[]).map((x) => {
+        return +x;
+      }),
+    };
+  }
+  if (req.query.SourceTransactorId !== undefined) {
+    whereOptions.sourceTransactor = {
+      [Op.eq]: (req.query.SourceTransactorId as string[]).map((x) => {
         return +x;
       }),
     };
@@ -156,25 +186,7 @@ export async function getTransactions(
       }),
     };
   }
-  if (req.query.isTemplate !== undefined) {
-    whereOptions.isTemplate = {
-      [Op.eq]: req.query.isTemplate as unknown as boolean,
-    };
-  }
-  if (req.query.SourceTransactorId !== undefined) {
-    whereOptions.sourceTransactor = {
-      [Op.eq]: (req.query.SourceTransactorId as string[]).map((x) => {
-        return +x;
-      }),
-    };
-  }
-  if (req.query.RecipientTransactorId !== undefined) {
-    whereOptions.recipientTransactor = {
-      [Op.eq]: (req.query.RecipientTransactorId as string[]).map((x) => {
-        return +x;
-      }),
-    };
-  }
+
   const findOptions: FindOptions = {
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
@@ -182,21 +194,20 @@ export async function getTransactions(
   };
   const transactions = await Transaction.findAll(findOptions);
 
-  const transactionFieldPromises = transactions.map(async (transaction) => {
-    return await transaction.setFieldDatumAndFieldIds();
+  const minimizedTransactions: Transaction[] = [];
+  transactions.forEach((transaction) => {
+    minimizedTransactions.push(minimizeAssociationsToIds(transaction));
   });
-
-  const transactionsWithFields = await Promise.all(transactionFieldPromises);
 
   if (req.query.isTemplate as unknown as boolean) {
     res.status(200).send({
       message: "Transaction Templates gotten.",
-      templates: transactionsWithFields,
+      templates: minimizedTransactions,
     });
   } else {
     res.status(200).send({
       message: "Transactions gotten.",
-      transactions: transactionsWithFields,
+      transactions: minimizedTransactions,
     });
   }
 }

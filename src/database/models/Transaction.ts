@@ -21,14 +21,18 @@ import {
   NonAttribute,
   Sequelize,
 } from "sequelize";
+import {
+  getFieldDatumIds,
+  getFieldIds,
+  getTagIds,
+  isTemplatedObject,
+} from "../../utils/helperFunctions";
 import Account from "./Account";
 import Entity from "./Entity";
 import Field from "./Field";
 import FieldDatum from "./FieldDatum";
-import File from "./File";
 import Tag from "./Tag";
 import Transactor from "./Transactor";
-import { isTemplatedObject } from "../../utils/helperFunctions";
 
 export class Transaction extends Model<
   InferAttributes<Transaction>,
@@ -38,15 +42,7 @@ export class Transaction extends Model<
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
-  declare name: string;
-
-  declare SourceTransactorId: number | null;
-  declare SourceTransactor: NonAttribute<Account | Entity>;
-  declare RecipientTransactorId: number | null;
-  declare RecipientTransactor: NonAttribute<Account | Entity>;
-
-  declare TemplateId: number | null;
-  declare Template: NonAttribute<Transaction>;
+  declare name: CreationOptional<string>;
 
   declare isTemplate: boolean;
 
@@ -56,25 +52,52 @@ export class Transaction extends Model<
   declare FieldDatumIds: CreationOptional<number[]>;
   declare FieldData: NonAttribute<FieldDatum[]>;
 
-  declare FileIds: NonAttribute<number[]>;
-  declare Files: NonAttribute<File[]>;
+  declare RecipientTransactorId: number | null;
+  declare RecipientTransactor: NonAttribute<Account | Entity>;
 
-  declare TagIds: NonAttribute<number[]>;
+  declare SourceTransactorId: number | null;
+  declare SourceTransactor: NonAttribute<Account | Entity>;
+
+  declare TagIds: CreationOptional<number[]>;
   declare Tags: NonAttribute<Tag[]>;
+
+  declare TemplateId: number | null;
+  declare Template: NonAttribute<Transaction>;
 
   declare static associations: {
     Fields: Association<Transaction, Field>;
     FieldData: Association<Transaction, FieldDatum>;
-    Files: Association<Transaction, File>;
+    RecipientTransactor: Association<Transaction, Transactor>;
+    SourceTransactor: Association<Transaction, Transactor>;
     Tags: Association<Transaction, Tag>;
     Template: Association<Transaction, Transaction>;
-    SourceTransactor: Association<Transaction, Transactor>;
-    RecipientTransactor: Association<Transaction, Transactor>;
   };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
+  declare createSourceTransactor: BelongsToCreateAssociationMixin<Transactor>;
+  declare getSourceTransactor: BelongsToGetAssociationMixin<Transactor>;
+  declare setSourceTransactor: BelongsToSetAssociationMixin<Transactor, number>;
+
+  declare createRecipientTransactor: BelongsToCreateAssociationMixin<Transactor>;
+  declare getRecipientTransactor: BelongsToGetAssociationMixin<Transactor>;
+  declare setRecipientTransactor: BelongsToSetAssociationMixin<
+    Transactor,
+    number
+  >;
+
+  declare getFields: HasManyGetAssociationsMixin<Field>;
+  declare addField: HasManyAddAssociationMixin<Field, number>;
+  declare addFields: HasManyAddAssociationsMixin<Field, number>;
+  declare setFields: HasManySetAssociationsMixin<Field, number>;
+  declare removeField: HasManyRemoveAssociationMixin<Field, number>;
+  declare removeFields: HasManyRemoveAssociationsMixin<Field, number>;
+  declare hasField: HasManyHasAssociationMixin<Field, number>;
+  declare hasFields: HasManyHasAssociationsMixin<Field, number>;
+  declare countFields: HasManyCountAssociationsMixin;
+  declare createField: HasManyCreateAssociationMixin<Field, "id">;
+
   declare addFieldDatum: HasManyAddAssociationMixin<FieldDatum, number>;
   declare addFieldData: HasManyAddAssociationsMixin<FieldDatum, number>;
   declare countFieldData: HasManyCountAssociationsMixin;
@@ -89,20 +112,6 @@ export class Transaction extends Model<
     "TransactionId"
   >;
 
-  declare getTemplate: BelongsToGetAssociationMixin<Transaction>;
-  declare setTemplate: BelongsToSetAssociationMixin<Transaction, number>;
-
-  declare addFile: HasManyAddAssociationMixin<File, number>;
-  declare addFiles: HasManyAddAssociationsMixin<File, number>;
-  declare countFiles: HasManyCountAssociationsMixin;
-  declare createFile: HasManyCreateAssociationMixin<File, "id">;
-  declare getFiles: HasManyGetAssociationsMixin<File>;
-  declare hasFile: HasManyHasAssociationMixin<File, number>;
-  declare hasFiles: HasManyHasAssociationsMixin<File, number>;
-  declare removeFile: HasManyRemoveAssociationMixin<File, number>;
-  declare removeFiles: HasManyRemoveAssociationsMixin<File, number>;
-  declare setFiles: HasManySetAssociationsMixin<File, number>;
-
   declare addTag: HasManyAddAssociationMixin<Tag, number>;
   declare addTags: HasManyAddAssociationsMixin<Tag, number>;
   declare countTags: HasManyCountAssociationsMixin;
@@ -114,30 +123,32 @@ export class Transaction extends Model<
   declare removeTags: HasManyRemoveAssociationsMixin<Tag, number>;
   declare setTags: HasManySetAssociationsMixin<Tag, number>;
 
-  declare createSourceTransactor: BelongsToCreateAssociationMixin<Transactor>;
-  declare getSourceTransactor: BelongsToGetAssociationMixin<Transactor>;
-  declare setSourceTransactor: BelongsToSetAssociationMixin<Transactor, number>;
+  declare getTemplate: BelongsToGetAssociationMixin<Transaction>;
+  declare setTemplate: BelongsToSetAssociationMixin<Transaction, number>;
 
-  declare createRecipientTransactor: BelongsToCreateAssociationMixin<Transactor>;
-  declare getRecipientTransactor: BelongsToGetAssociationMixin<Transactor>;
-  declare setRecipientTransactor: BelongsToSetAssociationMixin<
-    Transactor,
-    number
-  >;
+  public async loadFieldIds(): Promise<void> {
+    const fieldIds = await getFieldIds(this);
+    this.setDataValue("FieldIds", fieldIds);
+  }
 
-  public async setFieldDatumAndFieldIds(): Promise<Transaction> {
-    this.setDataValue("FieldDatumIds", []);
-    this.setDataValue("FieldIds", []);
-    const accountData = await this.getFieldData();
-    accountData.forEach((datum) => {
-      const fieldDatumIds = this.getDataValue("FieldDatumIds");
-      fieldDatumIds.push(datum.id);
-      this.setDataValue("FieldDatumIds", fieldDatumIds);
-      const fieldIds = this.getDataValue("FieldIds");
-      fieldIds.push(datum.FieldId);
-      this.setDataValue("FieldIds", fieldIds);
-    });
-    return this;
+  public async loadFieldDatumIds(): Promise<void> {
+    const fieldDatumIds = await getFieldDatumIds(this);
+    this.setDataValue("FieldDatumIds", fieldDatumIds);
+  }
+
+  public async loadTagIds(): Promise<void> {
+    const tagIds = await getTagIds(this);
+    this.setDataValue("TagIds", tagIds);
+  }
+
+  public async loadAssociatedIds(): Promise<void> {
+    const loadPromises = [this.loadTagIds()];
+    if (this.isTemplate) {
+      loadPromises.push(this.loadFieldIds());
+    } else {
+      loadPromises.push(this.loadFieldDatumIds());
+    }
+    await Promise.all(loadPromises);
   }
 }
 
@@ -153,8 +164,26 @@ export function initializeTransaction(sequelize: Sequelize): void {
       updatedAt: DataTypes.DATE,
       name: {
         type: DataTypes.STRING(128),
-        allowNull: false,
+        allowNull: true,
         unique: true,
+      },
+      isTemplate: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      RecipientTransactorId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Transactors",
+          key: "id",
+        },
+      },
+      SourceTransactorId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Transactors",
+          key: "id",
+        },
       },
       TemplateId: {
         type: DataTypes.INTEGER,
@@ -164,26 +193,9 @@ export function initializeTransaction(sequelize: Sequelize): void {
           key: "id",
         },
       },
-      isTemplate: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-      },
-      SourceTransactorId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: "Transactors",
-          key: "id",
-        },
-      },
-      RecipientTransactorId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: "Transactors",
-          key: "id",
-        },
-      },
       FieldIds: DataTypes.VIRTUAL,
       FieldDatumIds: DataTypes.VIRTUAL,
+      TagIds: DataTypes.VIRTUAL,
     },
     {
       sequelize,

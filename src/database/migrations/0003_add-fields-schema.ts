@@ -167,7 +167,7 @@ export async function up({
       type: DataTypes.DATE,
       allowNull: false,
     },
-    AccountId: {
+    EntityId: {
       type: DataTypes.INTEGER,
       references: {
         model: "Entities",

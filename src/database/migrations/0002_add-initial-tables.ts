@@ -191,16 +191,6 @@ export async function up({
         key: "id",
       },
     },
-    TransactorTypeId: {
-      type: "SMALLINT GENERATED ALWAYS AS (1) STORED",
-      set() {
-        throw new Error("generatedValue is read-only");
-      },
-      references: {
-        model: "TransactorTypes",
-        key: "id",
-      },
-    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -214,15 +204,9 @@ export async function up({
       allowNull: false,
       unique: true,
     },
-    TemplateId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: "Accounts",
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
+    isTemplate: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
     },
     GroupId: {
       type: DataTypes.INTEGER,
@@ -233,9 +217,25 @@ export async function up({
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
-    isTemplate: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
+    TemplateId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: "Accounts",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    TransactorTypeId: {
+      type: "SMALLINT GENERATED ALWAYS AS (1) STORED",
+      set() {
+        throw new Error("generatedValue is read-only");
+      },
+      references: {
+        model: "TransactorTypes",
+        key: "id",
+      },
     },
   });
   await queryInterface.createTable("Entities", {
@@ -248,16 +248,6 @@ export async function up({
         key: "id",
       },
     },
-    TransactorTypeId: {
-      type: "SMALLINT GENERATED ALWAYS AS (2) STORED",
-      set() {
-        throw new Error("generatedValue is read-only");
-      },
-      references: {
-        model: "TransactorTypes",
-        key: "id",
-      },
-    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -271,15 +261,9 @@ export async function up({
       allowNull: false,
       unique: true,
     },
-    TemplateId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: "Entities",
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
+    isTemplate: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
     },
     GroupId: {
       type: DataTypes.INTEGER,
@@ -290,9 +274,25 @@ export async function up({
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
-    isTemplate: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
+    TemplateId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: "Entities",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    TransactorTypeId: {
+      type: "SMALLINT GENERATED ALWAYS AS (2) STORED",
+      set() {
+        throw new Error("generatedValue is read-only");
+      },
+      references: {
+        model: "TransactorTypes",
+        key: "id",
+      },
     },
   });
   await queryInterface.createTable("Transactions", {
@@ -311,8 +311,28 @@ export async function up({
     },
     name: {
       type: DataTypes.STRING(128),
-      allowNull: false,
+      allowNull: true,
       unique: true,
+    },
+    isTemplate: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    RecipientTransactorId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Transactors",
+        key: "id",
+      },
+    },
+    SourceTransactorId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Transactors",
+        key: "id",
+      },
     },
     TemplateId: {
       type: DataTypes.INTEGER,
@@ -323,26 +343,6 @@ export async function up({
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
-    },
-    isTemplate: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-    },
-    SourceTransactorId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "Transactors",
-        key: "id",
-      },
-    },
-    RecipientTransactorId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "Transactors",
-        key: "id",
-      },
     },
   });
 

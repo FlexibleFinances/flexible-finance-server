@@ -21,13 +21,18 @@ import {
   NonAttribute,
   Sequelize,
 } from "sequelize";
+import {
+  getFieldDatumIds,
+  getFieldIds,
+  getTagIds,
+  isTemplatedObject,
+} from "../../utils/helperFunctions";
 import Field from "./Field";
 import FieldDatum from "./FieldDatum";
 import Group from "./Group";
 import Tag from "./Tag";
 import Transactor from "./Transactor";
 import TransactorType from "./TransactorType";
-import { isTemplatedObject } from "../../utils/helperFunctions";
 import { transactorTypeEnum } from "../../utils/enumerators";
 
 export class Account extends Model<
@@ -35,11 +40,12 @@ export class Account extends Model<
   InferCreationAttributes<Account>
 > {
   declare id: CreationOptional<number>;
-  declare TransactorTypeId: CreationOptional<number>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
   declare name: string;
+
+  declare isTemplate: boolean;
 
   declare FieldIds: CreationOptional<number[]>;
   declare Fields: NonAttribute<Field[]>;
@@ -50,18 +56,18 @@ export class Account extends Model<
   declare GroupId: CreationOptional<number>;
   declare Group: NonAttribute<Group>;
 
+  declare TagIds: CreationOptional<number[]>;
+  declare Tags: NonAttribute<Tag[]>;
+
   declare TemplateId: number | null;
   declare Template: NonAttribute<Account>;
 
-  declare isTemplate: boolean;
-
-  declare TagIds: NonAttribute<number[]>;
-  declare Tags: NonAttribute<Tag[]>;
+  declare TransactorTypeId: CreationOptional<number>;
 
   declare static associations: {
-    Group: Association<Account, Group>;
     Fields: Association<Account, Field>;
     FieldData: Association<Account, FieldDatum>;
+    Group: Association<Account, Group>;
     Tags: Association<Account, Tag>;
     Template: Association<Account, Account>;
     Transactor: Association<Account, Transactor>;
@@ -71,14 +77,16 @@ export class Account extends Model<
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  declare getGroup: BelongsToGetAssociationMixin<Group>;
-  declare setGroup: BelongsToSetAssociationMixin<Group, number>;
-
-  declare getTransactorType: BelongsToGetAssociationMixin<TransactorType>;
-
-  declare createTransactor: BelongsToCreateAssociationMixin<Transactor>;
-  declare getTransactor: BelongsToGetAssociationMixin<Transactor>;
-  declare setTransactor: BelongsToSetAssociationMixin<Transactor, number>;
+  declare getFields: HasManyGetAssociationsMixin<Field>;
+  declare addField: HasManyAddAssociationMixin<Field, number>;
+  declare addFields: HasManyAddAssociationsMixin<Field, number>;
+  declare setFields: HasManySetAssociationsMixin<Field, number>;
+  declare removeField: HasManyRemoveAssociationMixin<Field, number>;
+  declare removeFields: HasManyRemoveAssociationsMixin<Field, number>;
+  declare hasField: HasManyHasAssociationMixin<Field, number>;
+  declare hasFields: HasManyHasAssociationsMixin<Field, number>;
+  declare countFields: HasManyCountAssociationsMixin;
+  declare createField: HasManyCreateAssociationMixin<Field, "id">;
 
   declare getFieldData: HasManyGetAssociationsMixin<FieldDatum>;
   declare addFieldDatum: HasManyAddAssociationMixin<FieldDatum, number>;
@@ -94,22 +102,52 @@ export class Account extends Model<
     "AccountId"
   >;
 
+  declare getGroup: BelongsToGetAssociationMixin<Group>;
+  declare setGroup: BelongsToSetAssociationMixin<Group, number>;
+
+  declare getTags: HasManyGetAssociationsMixin<Tag>;
+  declare addTag: HasManyAddAssociationMixin<Tag, number>;
+  declare addTags: HasManyAddAssociationsMixin<Tag, number>;
+  declare setTags: HasManySetAssociationsMixin<Tag, number>;
+  declare removeTag: HasManyRemoveAssociationMixin<Tag, number>;
+  declare removeTags: HasManyRemoveAssociationsMixin<Tag, number>;
+  declare hasTag: HasManyHasAssociationMixin<Tag, number>;
+  declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
+  declare countTags: HasManyCountAssociationsMixin;
+  declare createTag: HasManyCreateAssociationMixin<Tag, "id">;
+
   declare getTemplate: BelongsToGetAssociationMixin<Account>;
   declare setTemplate: BelongsToSetAssociationMixin<Account, number>;
 
-  public async setFieldDatumAndFieldIds(): Promise<Account> {
-    this.setDataValue("FieldDatumIds", []);
-    this.setDataValue("FieldIds", []);
-    const accountData = await this.getFieldData();
-    accountData.forEach((datum) => {
-      const fieldDatumIds = this.getDataValue("FieldDatumIds");
-      fieldDatumIds.push(datum.id);
-      this.setDataValue("FieldDatumIds", fieldDatumIds);
-      const fieldIds = this.getDataValue("FieldIds");
-      fieldIds.push(datum.FieldId);
-      this.setDataValue("FieldIds", fieldIds);
-    });
-    return this;
+  declare createTransactor: BelongsToCreateAssociationMixin<Transactor>;
+  declare getTransactor: BelongsToGetAssociationMixin<Transactor>;
+  declare setTransactor: BelongsToSetAssociationMixin<Transactor, number>;
+
+  declare getTransactorType: BelongsToGetAssociationMixin<TransactorType>;
+
+  public async loadFieldIds(): Promise<void> {
+    const fieldIds = await getFieldIds(this);
+    this.setDataValue("FieldIds", fieldIds);
+  }
+
+  public async loadFieldDatumIds(): Promise<void> {
+    const fieldDatumIds = await getFieldDatumIds(this);
+    this.setDataValue("FieldDatumIds", fieldDatumIds);
+  }
+
+  public async loadTagIds(): Promise<void> {
+    const tagIds = await getTagIds(this);
+    this.setDataValue("TagIds", tagIds);
+  }
+
+  public async loadAssociatedIds(): Promise<void> {
+    const loadPromises = [this.loadTagIds()];
+    if (this.isTemplate) {
+      loadPromises.push(this.loadFieldIds());
+    } else {
+      loadPromises.push(this.loadFieldDatumIds());
+    }
+    await Promise.all(loadPromises);
   }
 }
 
@@ -125,30 +163,12 @@ export function initializeAccount(sequelize: Sequelize): void {
           key: "id",
         },
       },
-      TransactorTypeId: {
-        type: "SMALLINT GENERATED ALWAYS AS (1) STORED",
-        set() {
-          throw new Error("generatedValue is read-only");
-        },
-        references: {
-          model: "TransactorTypes",
-          key: "id",
-        },
-      },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
       name: {
         type: DataTypes.STRING(128),
         allowNull: false,
         unique: true,
-      },
-      TemplateId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-          model: "Account",
-          key: "id",
-        },
       },
       isTemplate: {
         type: DataTypes.BOOLEAN,
@@ -161,8 +181,27 @@ export function initializeAccount(sequelize: Sequelize): void {
           key: "id",
         },
       },
+      TemplateId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: "Account",
+          key: "id",
+        },
+      },
+      TransactorTypeId: {
+        type: "SMALLINT GENERATED ALWAYS AS (1) STORED",
+        set() {
+          throw new Error("generatedValue is read-only");
+        },
+        references: {
+          model: "TransactorTypes",
+          key: "id",
+        },
+      },
       FieldIds: DataTypes.VIRTUAL,
       FieldDatumIds: DataTypes.VIRTUAL,
+      TagIds: DataTypes.VIRTUAL,
     },
     {
       hooks: {

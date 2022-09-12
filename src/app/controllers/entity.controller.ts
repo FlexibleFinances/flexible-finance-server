@@ -1,9 +1,14 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import FieldDatum, { FieldValues } from "../../database/models/FieldDatum";
+import {
+  hasRequestParameters,
+  minimizeAssociationsToIds,
+} from "../../utils/helperFunctions";
 import Entity from "../../database/models/Entity";
+import Field from "../../database/models/Field";
+import Tag from "../../database/models/Tag";
 import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getEntity(
   req: express.Request,
@@ -17,6 +22,7 @@ export async function getEntity(
     where: {
       id: req.params.EntityId,
     },
+    include: [Field, FieldDatum, Tag],
   });
   if (entity === null) {
     res.status(500).send({
@@ -25,7 +31,7 @@ export async function getEntity(
     return;
   }
 
-  await entity.setFieldDatumAndFieldIds();
+  minimizeAssociationsToIds(entity);
 
   res.status(200).send({
     message: "Entity gotten.",
@@ -57,13 +63,19 @@ export async function createEntity(
 
   const entity = await Entity.create(createOptions);
 
-  await FieldDatum.upsertFieldData(
-    req.body.fieldValues as FieldValues,
-    undefined,
-    entity.id
-  );
-  await entity.reload();
-  await entity.setFieldDatumAndFieldIds();
+  if (createOptions.isTemplate) {
+    if (req.body.FieldIds !== undefined) {
+      await entity.addFields(req.body.FieldIds as number[]);
+    }
+  } else {
+    await FieldDatum.upsertFieldData(
+      req.body.fieldValues as FieldValues,
+      undefined,
+      entity.id
+    );
+  }
+
+  await entity.loadAssociatedIds();
 
   res.status(200).send({ message: "Entity created.", entity });
 }
@@ -102,13 +114,19 @@ export async function updateEntity(
   };
   await entity.update(updateOptions);
 
-  await FieldDatum.upsertFieldData(
-    req.body.fieldValues as FieldValues,
-    undefined,
-    entity.id
-  );
-  await entity.reload();
-  await entity.setFieldDatumAndFieldIds();
+  if (updateOptions.isTemplate) {
+    if (req.body.FieldIds !== undefined) {
+      await entity.setFields(req.body.FieldIds as number[]);
+    }
+  } else {
+    await FieldDatum.upsertFieldData(
+      req.body.fieldValues as FieldValues,
+      undefined,
+      entity.id
+    );
+  }
+
+  await entity.loadAssociatedIds();
 
   res.status(200).send({
     message: "Entity updated.",
@@ -124,6 +142,11 @@ export async function getEntities(
   if (req.query.name !== undefined) {
     whereOptions.name = {
       [Op.iLike]: req.body.name,
+    };
+  }
+  if (req.query.isTemplate !== undefined) {
+    whereOptions.isTemplate = {
+      [Op.eq]: req.query.isTemplate as unknown as boolean,
     };
   }
   if (req.query.GroupIds !== undefined) {
@@ -147,33 +170,29 @@ export async function getEntities(
       }),
     };
   }
-  if (req.query.isTemplate !== undefined) {
-    whereOptions.isTemplate = {
-      [Op.eq]: req.query.isTemplate as unknown as boolean,
-    };
-  }
+
   const findOptions: FindOptions = {
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
     where: whereOptions,
+    include: [Field, FieldDatum, Tag],
   };
   const entities = await Entity.findAll(findOptions);
 
-  const entityFieldPromises = entities.map(async (entity) => {
-    return await entity.setFieldDatumAndFieldIds();
+  const minimizedEntities: Entity[] = [];
+  entities.forEach((entity) => {
+    minimizedEntities.push(minimizeAssociationsToIds(entity));
   });
-
-  const entitiesWithFields = await Promise.all(entityFieldPromises);
 
   if (req.query.isTemplate as unknown as boolean) {
     res.status(200).send({
       message: "Entity Templates gotten.",
-      templates: entitiesWithFields,
+      templates: minimizedEntities,
     });
   } else {
     res.status(200).send({
       message: "Entities gotten.",
-      entities: entitiesWithFields,
+      entities: minimizedEntities,
     });
   }
 }

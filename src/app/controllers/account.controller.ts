@@ -1,9 +1,14 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import FieldDatum, { FieldValues } from "../../database/models/FieldDatum";
+import {
+  hasRequestParameters,
+  minimizeAssociationsToIds,
+} from "../../utils/helperFunctions";
 import Account from "../../database/models/Account";
+import Field from "../../database/models/Field";
+import Tag from "../../database/models/Tag";
 import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../../utils/helperFunctions";
 
 export async function getAccount(
   req: express.Request,
@@ -17,6 +22,7 @@ export async function getAccount(
     where: {
       id: req.params.AccountId,
     },
+    include: [Field, FieldDatum, Tag],
   });
   if (account === null) {
     res.status(500).send({
@@ -25,7 +31,7 @@ export async function getAccount(
     return;
   }
 
-  await account.setFieldDatumAndFieldIds();
+  minimizeAssociationsToIds(account);
 
   res.status(200).send({
     message: "Account gotten.",
@@ -56,12 +62,18 @@ export async function createAccount(
   };
   const account = await Account.create(createOptions);
 
-  await FieldDatum.upsertFieldData(
-    req.body.fieldValues as FieldValues,
-    account.id
-  );
-  await account.reload();
-  await account.setFieldDatumAndFieldIds();
+  if (createOptions.isTemplate) {
+    if (req.body.FieldIds !== undefined) {
+      await account.addFields(req.body.FieldIds as number[]);
+    }
+  } else {
+    await FieldDatum.upsertFieldData(
+      req.body.fieldValues as FieldValues,
+      account.id
+    );
+  }
+
+  await account.loadAssociatedIds();
 
   res.status(200).send({ message: "Account created.", account });
 }
@@ -100,12 +112,18 @@ export async function updateAccount(
   };
   await account.update(updateOptions);
 
-  await FieldDatum.upsertFieldData(
-    req.body.fieldValues as FieldValues,
-    account.id
-  );
-  await account.reload();
-  await account.setFieldDatumAndFieldIds();
+  if (updateOptions.isTemplate) {
+    if (req.body.FieldIds !== undefined) {
+      await account.setFields(req.body.FieldIds as number[]);
+    }
+  } else {
+    await FieldDatum.upsertFieldData(
+      req.body.fieldValues as FieldValues,
+      account.id
+    );
+  }
+
+  await account.loadAssociatedIds();
 
   res.status(200).send({
     message: "Account updated.",
@@ -121,6 +139,11 @@ export async function getAccounts(
   if (req.query.name !== undefined) {
     whereOptions.name = {
       [Op.iLike]: req.body.name,
+    };
+  }
+  if (req.query.isTemplate !== undefined) {
+    whereOptions.isTemplate = {
+      [Op.eq]: req.query.isTemplate as unknown as boolean,
     };
   }
   if (req.query.GroupIds !== undefined) {
@@ -144,11 +167,7 @@ export async function getAccounts(
       }),
     };
   }
-  if (req.query.isTemplate !== undefined) {
-    whereOptions.isTemplate = {
-      [Op.eq]: req.query.isTemplate as unknown as boolean,
-    };
-  }
+
   const findOptions: FindOptions = {
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
@@ -156,21 +175,20 @@ export async function getAccounts(
   };
   const accounts = await Account.findAll(findOptions);
 
-  const accountFieldPromises = accounts.map(async (account) => {
-    return await account.setFieldDatumAndFieldIds();
+  const minimizedAccounts: Account[] = [];
+  accounts.forEach((account) => {
+    minimizedAccounts.push(minimizeAssociationsToIds(account));
   });
-
-  const accountsWithFields = await Promise.all(accountFieldPromises);
 
   if (req.query.isTemplate as unknown as boolean) {
     res.status(200).send({
       message: "Account Templates gotten.",
-      templates: accountsWithFields,
+      templates: minimizedAccounts,
     });
   } else {
     res.status(200).send({
       message: "Accounts gotten.",
-      accounts: accountsWithFields,
+      accounts: minimizedAccounts,
     });
   }
 }

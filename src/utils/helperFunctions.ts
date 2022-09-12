@@ -1,3 +1,9 @@
+import Account from "../database/models/Account";
+import Entity from "../database/models/Entity";
+import Field from "../database/models/Field";
+import FieldDatum from "../database/models/FieldDatum";
+import Tag from "../database/models/Tag";
+import Transaction from "../database/models/Transaction";
 import express from "express";
 
 interface paramObject {
@@ -72,4 +78,68 @@ export function isTemplatedObject(
     );
   }
   return true;
+}
+
+export async function getFieldIds(
+  object: Account | Entity | Transaction
+): Promise<number[]> {
+  const fields = await object.getFields();
+  return fields.map((field: Field) => field.id);
+}
+
+export async function getFieldDatumIds(
+  object: Account | Entity | Transaction
+): Promise<number[]> {
+  const fieldData = await object.getFieldData();
+  return fieldData.map((fieldDatum: FieldDatum) => fieldDatum.id);
+}
+
+export async function getTagIds(
+  object: Account | Entity | Transaction
+): Promise<number[]> {
+  const tags = await object.getTags();
+  return tags.map((tag: Tag) => tag.id);
+}
+
+export function minimizeAssociationsToIds<
+  T extends Account | Entity | Transaction
+>(object: T): T {
+  let miniObject;
+  if (object instanceof Account) {
+    miniObject = new Account();
+    miniObject.GroupId = object.GroupId;
+  } else if (object instanceof Entity) {
+    miniObject = new Entity();
+    miniObject.GroupId = object.GroupId;
+  } else if (object instanceof Transaction) {
+    miniObject = new Transaction();
+    miniObject.SourceTransactorId = object.SourceTransactorId;
+    miniObject.RecipientTransactorId = object.RecipientTransactorId;
+  } else {
+    throw new Error("unknown type");
+  }
+
+  miniObject.id = object.id;
+  miniObject.createdAt = object.createdAt;
+  miniObject.updatedAt = object.updatedAt;
+  miniObject.name = object.name;
+  miniObject.isTemplate = object.isTemplate;
+  miniObject.TemplateId = object.TemplateId;
+
+  if (object.isTemplate) {
+    if (object.Fields !== undefined) {
+      miniObject.FieldIds = object.Fields.map((field: Field) => field.id);
+    }
+  } else {
+    if (object.FieldData !== undefined) {
+      miniObject.FieldDatumIds = object.FieldData.map(
+        (fieldDatum: FieldDatum) => fieldDatum.id
+      );
+    }
+  }
+  if (object.Tags !== undefined) {
+    miniObject.TagIds = object.Tags.map((tag: Tag) => tag.id);
+  }
+
+  return miniObject as T;
 }
