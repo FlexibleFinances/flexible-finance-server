@@ -52,10 +52,10 @@ export class Transaction extends Model<
   declare FieldDatumIds: CreationOptional<number[]>;
   declare FieldData: NonAttribute<FieldDatum[]>;
 
-  declare RecipientTransactorId: number | null;
+  declare RecipientTransactorId: CreationOptional<number>;
   declare RecipientTransactor: NonAttribute<Account | Entity>;
 
-  declare SourceTransactorId: number | null;
+  declare SourceTransactorId: CreationOptional<number>;
   declare SourceTransactor: NonAttribute<Account | Entity>;
 
   declare TagIds: CreationOptional<number[]>;

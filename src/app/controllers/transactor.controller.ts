@@ -4,13 +4,13 @@ import Entity from "../../database/models/Entity";
 import Transactor from "../../database/models/Transactor";
 import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../../utils/helperFunctions";
+import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getTransactor(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["TransactorId"] })) {
+  if (!hasRequestArguments(req, res, { params: ["TransactorId"] })) {
     return;
   }
 
@@ -37,7 +37,7 @@ export async function createTransactor(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(req, res, {
+    !hasRequestArguments(req, res, {
       body: ["TransactorTypeId"],
     })
   ) {
@@ -57,7 +57,7 @@ export async function updateTransactor(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(
+    !hasRequestArguments(
       req,
       res,
       { params: ["TransactorId"] },

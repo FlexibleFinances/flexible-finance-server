@@ -2,13 +2,13 @@ import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import FieldDatum from "../../database/models/FieldDatum";
 import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../../utils/helperFunctions";
+import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getFieldDatum(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["FieldDatumId"] })) {
+  if (!hasRequestArguments(req, res, { params: ["FieldDatumId"] })) {
     return;
   }
 
@@ -34,7 +34,7 @@ export async function createFieldDatum(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(
+    !hasRequestArguments(
       req,
       res,
       { body: ["FieldId"] },
@@ -63,7 +63,7 @@ export async function updateFieldDatum(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(
+    !hasRequestArguments(
       req,
       res,
       { params: ["FieldDatumId"] },

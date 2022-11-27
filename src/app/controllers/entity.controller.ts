@@ -1,7 +1,7 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import FieldDatum, { FieldValues } from "../../database/models/FieldDatum";
 import {
-  hasRequestParameters,
+  hasRequestArguments,
   minimizeAssociationsToIds,
 } from "../../utils/helperFunctions";
 import Entity from "../../database/models/Entity";
@@ -14,7 +14,7 @@ export async function getEntity(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["EntityId"] })) {
+  if (!hasRequestArguments(req, res, { params: ["EntityId"] })) {
     return;
   }
 
@@ -44,7 +44,7 @@ export async function createEntity(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(
+    !hasRequestArguments(
       req,
       res,
       { body: ["name"] },
@@ -85,7 +85,7 @@ export async function updateEntity(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(
+    !hasRequestArguments(
       req,
       res,
       { params: ["EntityId"] },

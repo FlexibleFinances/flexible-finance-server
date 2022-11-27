@@ -1,7 +1,7 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import FieldDatum, { FieldValues } from "../../database/models/FieldDatum";
 import {
-  hasRequestParameters,
+  hasRequestArguments,
   minimizeAssociationsToIds,
 } from "../../utils/helperFunctions";
 import Account from "../../database/models/Account";
@@ -14,7 +14,7 @@ export async function getAccount(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["AccountId"] })) {
+  if (!hasRequestArguments(req, res, { params: ["AccountId"] })) {
     return;
   }
 
@@ -44,7 +44,7 @@ export async function createAccount(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(
+    !hasRequestArguments(
       req,
       res,
       { body: ["name"] },
@@ -83,7 +83,7 @@ export async function updateAccount(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(
+    !hasRequestArguments(
       req,
       res,
       { params: ["AccountId"] },
@@ -172,6 +172,7 @@ export async function getAccounts(
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
     where: whereOptions,
+    include: [Field, FieldDatum, Tag],
   };
   const accounts = await Account.findAll(findOptions);
 

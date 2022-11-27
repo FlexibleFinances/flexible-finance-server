@@ -320,7 +320,7 @@ export async function up({
     },
     RecipientTransactorId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: "Transactors",
         key: "id",
@@ -328,7 +328,7 @@ export async function up({
     },
     SourceTransactorId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: "Transactors",
         key: "id",

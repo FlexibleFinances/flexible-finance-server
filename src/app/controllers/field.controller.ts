@@ -2,13 +2,13 @@ import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Field from "../../database/models/Field";
 import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../../utils/helperFunctions";
+import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getField(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["FieldId"] })) {
+  if (!hasRequestArguments(req, res, { params: ["FieldId"] })) {
     return;
   }
 
@@ -33,7 +33,7 @@ export async function createField(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { body: ["name", "FieldTypeId"] })) {
+  if (!hasRequestArguments(req, res, { body: ["name", "FieldTypeId"] })) {
     return;
   }
 
@@ -50,7 +50,7 @@ export async function updateField(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(
+    !hasRequestArguments(
       req,
       res,
       { params: ["FieldId"] },

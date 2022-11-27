@@ -2,13 +2,13 @@ import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import User from "../../database/models/User";
 import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../../utils/helperFunctions";
+import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getUser(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["UserId"] })) {
+  if (!hasRequestArguments(req, res, { params: ["UserId"] })) {
     return;
   }
 
@@ -34,7 +34,7 @@ export async function createUser(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(req, res, { body: ["username", "email", "password"] })
+    !hasRequestArguments(req, res, { body: ["username", "email", "password"] })
   ) {
     return;
   }
@@ -53,7 +53,7 @@ export async function updateUser(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(
+    !hasRequestArguments(
       req,
       res,
       { params: ["UserId"] },

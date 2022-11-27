@@ -1,7 +1,7 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import FieldDatum, { FieldValues } from "../../database/models/FieldDatum";
 import {
-  hasRequestParameters,
+  hasRequestArguments,
   minimizeAssociationsToIds,
 } from "../../utils/helperFunctions";
 import Field from "../../database/models/Field";
@@ -14,7 +14,7 @@ export async function getTransaction(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["TransactionId"] })) {
+  if (!hasRequestArguments(req, res, { params: ["TransactionId"] })) {
     return;
   }
 
@@ -44,10 +44,11 @@ export async function createTransaction(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(
+    !hasRequestArguments(
       req,
       res,
-      { body: ["name", "SourceTransactorId", "RecipientTransactorId"] },
+      { body: ["name"] },
+      {},
       { body: ["TemplateId", "isTemplate"] }
     )
   ) {
@@ -57,9 +58,13 @@ export async function createTransaction(
     name: req.body.name,
     TemplateId: req.body.TemplateId,
     isTemplate: req.body.isTemplate,
-    SourceTransactorId: req.body.SourceTransactorId,
-    RecipientTransactorId: req.body.RecipientTransactorId,
   };
+  if (req.body.SourceTransactorId !== undefined) {
+    createOptions.SourceTransactorId = req.body.SourceTransactorId;
+  }
+  if (req.body.RecipientTransactorId !== undefined) {
+    createOptions.RecipientTransactorId = req.body.RecipientTransactorId;
+  }
   const transaction = await Transaction.create(createOptions);
 
   if (createOptions.isTemplate) {
@@ -85,7 +90,7 @@ export async function updateTransaction(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(
+    !hasRequestArguments(
       req,
       res,
       { params: ["TransactionId"] },
@@ -191,6 +196,7 @@ export async function getTransactions(
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
     where: whereOptions,
+    include: [Field, FieldDatum, Tag],
   };
   const transactions = await Transaction.findAll(findOptions);
 

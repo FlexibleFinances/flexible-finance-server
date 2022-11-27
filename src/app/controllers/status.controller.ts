@@ -2,13 +2,13 @@ import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Status from "../../database/models/Status";
 import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../../utils/helperFunctions";
+import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getStatus(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["StatusId"] })) {
+  if (!hasRequestArguments(req, res, { params: ["StatusId"] })) {
     return;
   }
 
@@ -33,7 +33,7 @@ export async function createStatus(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { body: ["name"] })) {
+  if (!hasRequestArguments(req, res, { body: ["name"] })) {
     return;
   }
 
@@ -49,12 +49,7 @@ export async function updateStatus(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(
-      req,
-      res,
-      { params: ["StatusId"] },
-      { body: ["name"] }
-    )
+    !hasRequestArguments(req, res, { params: ["StatusId"] }, { body: ["name"] })
   ) {
     return;
   }

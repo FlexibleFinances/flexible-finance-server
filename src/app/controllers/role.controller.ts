@@ -2,13 +2,13 @@ import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Role from "../../database/models/Role";
 import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../../utils/helperFunctions";
+import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getRole(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["RoleId"] })) {
+  if (!hasRequestArguments(req, res, { params: ["RoleId"] })) {
     return;
   }
 
@@ -33,7 +33,7 @@ export async function createRole(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { body: ["name"] })) {
+  if (!hasRequestArguments(req, res, { body: ["name"] })) {
     return;
   }
 
@@ -49,7 +49,7 @@ export async function updateRole(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(req, res, { params: ["RoleId"] }, { body: ["name"] })
+    !hasRequestArguments(req, res, { params: ["RoleId"] }, { body: ["name"] })
   ) {
     return;
   }

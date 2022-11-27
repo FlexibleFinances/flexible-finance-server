@@ -3,6 +3,8 @@ RequestSchema:
   properties:
     name:
       type: string
+    isTemplate:
+      type: boolean
     FieldDatumIds:
       type: array
       items:
@@ -19,8 +21,6 @@ RequestSchema:
         type: integer
     TemplateId:
       type: integer
-    isTemplate:
-      type: boolean
     SourceTransactorId:
       type: integer
     RecipientTransactorId:
@@ -38,6 +38,8 @@ ResponseSchema:
       format: date-time
     name:
       type: string
+    isTemplate:
+      type: boolean
     FieldDatumIds:
       type: array
       items:
@@ -55,5 +57,7 @@ ResponseSchema:
       nullable: true
     SourceTransactorId:
       type: integer
+      nullable: true
     RecipientTransactorId:
       type: integer
+      nullable: true

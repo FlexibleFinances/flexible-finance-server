@@ -3,13 +3,13 @@ import FieldType from "../../database/models/FieldType";
 import { defaultLimit } from "../../utils/constants";
 import express from "express";
 import { fieldTypeTypeEnum } from "../../utils/enumerators";
-import { hasRequestParameters } from "../../utils/helperFunctions";
+import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getFieldType(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["FieldTypeId"] })) {
+  if (!hasRequestArguments(req, res, { params: ["FieldTypeId"] })) {
     return;
   }
 
@@ -34,7 +34,7 @@ export async function createFieldType(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { body: ["name"] })) {
+  if (!hasRequestArguments(req, res, { body: ["name"] })) {
     return;
   }
 
@@ -52,7 +52,7 @@ export async function updateFieldType(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(
+    !hasRequestArguments(
       req,
       res,
       { params: ["FieldTypeId"] },

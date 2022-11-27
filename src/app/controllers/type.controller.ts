@@ -2,13 +2,13 @@ import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Type from "../../database/models/Type";
 import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../../utils/helperFunctions";
+import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getType(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["TypeId"] })) {
+  if (!hasRequestArguments(req, res, { params: ["TypeId"] })) {
     return;
   }
 
@@ -33,7 +33,7 @@ export async function createType(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { body: ["name"] })) {
+  if (!hasRequestArguments(req, res, { body: ["name"] })) {
     return;
   }
 
@@ -49,7 +49,7 @@ export async function updateType(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(req, res, { params: ["TypeId"] }, { body: ["name"] })
+    !hasRequestArguments(req, res, { params: ["TypeId"] }, { body: ["name"] })
   ) {
     return;
   }

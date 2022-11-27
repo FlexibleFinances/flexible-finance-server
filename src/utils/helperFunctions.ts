@@ -6,60 +6,100 @@ import Tag from "../database/models/Tag";
 import Transaction from "../database/models/Transaction";
 import express from "express";
 
-interface paramObject {
+interface argObject {
   body?: string[];
   query?: string[];
   params?: string[];
 }
 
-export function hasRequestParameters(
+export function hasRequestArguments(
   req: express.Request,
   res: express.Response,
-  requiredParameters: paramObject,
-  minOneParameters?: paramObject
+  requiredArguments: argObject,
+  minOneArguments?: argObject,
+  exactlyOneArguments?: argObject
 ): boolean {
   let message = "";
-  requiredParameters.body?.forEach((paramName: string) => {
-    if (req.body[paramName] === undefined) {
-      message = `Missing ${paramName} in request body.`;
+  requiredArguments.body?.forEach((argName: string) => {
+    if (req.body[argName] === undefined) {
+      message = `Missing ${argName} in request body.`;
     }
   });
-  requiredParameters.query?.forEach((paramName: string) => {
-    if (req.query[paramName] === undefined) {
-      message = `Missing ${paramName} in request query.`;
+  requiredArguments.query?.forEach((argName: string) => {
+    if (req.query[argName] === undefined) {
+      message = `Missing ${argName} in request query.`;
     }
   });
-  requiredParameters.params?.forEach((paramName: string) => {
-    if (req.params[paramName] === undefined) {
-      message = `Missing ${paramName} in request params.`;
+  requiredArguments.params?.forEach((argName: string) => {
+    if (req.params[argName] === undefined) {
+      message = `Missing ${argName} in request params.`;
     }
   });
   if (
-    minOneParameters?.body?.some((paramName: string) => {
-      return req.body[paramName] !== undefined;
+    minOneArguments?.body?.some((argName: string) => {
+      return req.body[argName] !== undefined;
     }) === false
   ) {
-    message = `Need at least one of [${minOneParameters.body.join(
+    message = `Need at least one of [${minOneArguments.body.join(
       ", "
     )}] in request body.`;
   }
   if (
-    minOneParameters?.query?.some((paramName: string) => {
-      return req.query[paramName] !== undefined;
+    minOneArguments?.query?.some((argName: string) => {
+      return req.query[argName] !== undefined;
     }) === false
   ) {
-    message = `Need at least one of [${minOneParameters.query.join(
+    message = `Need at least one of [${minOneArguments.query.join(
       ", "
     )}] in request query.`;
   }
   if (
-    minOneParameters?.params?.some((paramName: string) => {
-      return req.params[paramName] !== undefined;
+    minOneArguments?.params?.some((argName: string) => {
+      return req.params[argName] !== undefined;
     }) === false
   ) {
-    message = `Need at least one of [${minOneParameters.params.join(
+    message = `Need at least one of [${minOneArguments.params.join(
       ", "
     )}] in request params.`;
+  }
+  if (exactlyOneArguments?.body !== undefined) {
+    let paramCount = 0;
+    exactlyOneArguments.body.forEach((argName: string) => {
+      if (req.body[argName] !== undefined) {
+        paramCount++;
+      }
+    });
+    if (paramCount > 1) {
+      message = `Can't have more than one of [${exactlyOneArguments.body.join(
+        ", "
+      )}] in request body.`;
+    }
+  }
+  if (exactlyOneArguments?.params !== undefined) {
+    let paramCount = 0;
+    exactlyOneArguments.params.forEach((argName: string) => {
+      if (req.body[argName] !== undefined) {
+        paramCount++;
+      }
+    });
+    if (paramCount > 1) {
+      message = `Can't have more than one of [${exactlyOneArguments.params.join(
+        ", "
+      )}] in request params.`;
+    }
+  }
+  if (exactlyOneArguments?.query !== undefined) {
+    let paramCount = 0;
+    exactlyOneArguments.query.forEach((argName: string) => {
+      if (req.body[argName] !== undefined) {
+        paramCount++;
+      }
+    });
+    if (paramCount > 1) {
+      message = `Can't have more than one of [${exactlyOneArguments.query.join(
+        ", "
+      )}] in request query.`;
+    }
   }
   if (message !== "") {
     res.status(400).send({ message });

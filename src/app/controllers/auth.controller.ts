@@ -4,7 +4,7 @@ import User from "../../database/models/User";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import express from "express";
-import { hasRequestParameters } from "../../utils/helperFunctions";
+import { hasRequestArguments } from "../../utils/helperFunctions";
 import jwt from "jsonwebtoken";
 
 dotenv.config();
@@ -13,7 +13,7 @@ const Op = Sequelize.Op;
 
 export function signup(req: express.Request, res: express.Response): void {
   if (
-    !hasRequestParameters(req, res, { body: ["username", "email", "password"] })
+    !hasRequestArguments(req, res, { body: ["username", "email", "password"] })
   ) {
     return;
   }
@@ -64,7 +64,7 @@ export function signup(req: express.Request, res: express.Response): void {
 }
 
 export function signin(req: express.Request, res: express.Response): void {
-  if (!hasRequestParameters(req, res, { body: ["username", "password"] })) {
+  if (!hasRequestArguments(req, res, { body: ["username", "password"] })) {
     return;
   }
 

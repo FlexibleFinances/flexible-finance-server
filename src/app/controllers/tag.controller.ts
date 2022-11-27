@@ -2,13 +2,13 @@ import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Tag from "../../database/models/Tag";
 import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../../utils/helperFunctions";
+import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getTag(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["TagId"] })) {
+  if (!hasRequestArguments(req, res, { params: ["TagId"] })) {
     return;
   }
 
@@ -33,7 +33,7 @@ export async function createTag(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { body: ["name"] })) {
+  if (!hasRequestArguments(req, res, { body: ["name"] })) {
     return;
   }
 
@@ -49,7 +49,7 @@ export async function updateTag(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(req, res, { params: ["TagId"] }, { body: ["name"] })
+    !hasRequestArguments(req, res, { params: ["TagId"] }, { body: ["name"] })
   ) {
     return;
   }

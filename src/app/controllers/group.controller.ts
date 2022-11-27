@@ -2,13 +2,13 @@ import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import Group from "../../database/models/Group";
 import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestParameters } from "../../utils/helperFunctions";
+import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getGroup(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { params: ["GroupId"] })) {
+  if (!hasRequestArguments(req, res, { params: ["GroupId"] })) {
     return;
   }
 
@@ -33,7 +33,7 @@ export async function createGroup(
   req: express.Request,
   res: express.Response
 ): Promise<void> {
-  if (!hasRequestParameters(req, res, { body: ["name"] })) {
+  if (!hasRequestArguments(req, res, { body: ["name"] })) {
     return;
   }
 
@@ -52,7 +52,7 @@ export async function updateGroup(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestParameters(req, res, { params: ["GroupId"] }, { body: ["name"] })
+    !hasRequestArguments(req, res, { params: ["GroupId"] }, { body: ["name"] })
   ) {
     return;
   }
