@@ -2,6 +2,7 @@ import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import FieldDatum, { FieldValues } from "../../database/models/FieldDatum";
 import {
   hasRequestArguments,
+  isTemplatedUpsertRequest,
   minimizeAssociationsToIds,
 } from "../../utils/helperFunctions";
 import Entity from "../../database/models/Entity";
@@ -44,11 +45,12 @@ export async function createEntity(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestArguments(
+    !isTemplatedUpsertRequest(
       req,
       res,
-      { body: ["name"] },
-      { body: ["TemplateId", "isTemplate"] }
+      req.body?.isTemplate as boolean | undefined,
+      req.body?.TemplateId as number | undefined,
+      { body: ["name"] }
     )
   ) {
     return;

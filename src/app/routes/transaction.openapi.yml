@@ -71,10 +71,6 @@ TransactionsRequests:
         in: query
         schema:
           type: integer
-      - name: name
-        in: query
-        schema:
-          type: string
       - name: FieldDatumIds
         in: query
         schema:

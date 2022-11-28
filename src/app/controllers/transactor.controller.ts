@@ -1,10 +1,16 @@
 import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
+import {
+  hasRequestArguments,
+  minimizeAssociationsToIds,
+} from "../../utils/helperFunctions";
 import Account from "../../database/models/Account";
 import Entity from "../../database/models/Entity";
+import Field from "../../database/models/Field";
+import FieldDatum from "../../database/models/FieldDatum";
+import Tag from "../../database/models/Tag";
 import Transactor from "../../database/models/Transactor";
 import { defaultLimit } from "../../utils/constants";
 import express from "express";
-import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getTransactor(
   req: express.Request,
@@ -94,11 +100,9 @@ export async function getTransactors(
   res: express.Response
 ): Promise<void> {
   const whereOptions: WhereOptions = {};
-  if (req.query.TransactorIds !== undefined) {
-    whereOptions.id = {
-      [Op.in]: (req.query.TransactorIds as string[]).map((x) => {
-        return +x;
-      }),
+  if (req.query.name !== undefined) {
+    whereOptions.name = {
+      [Op.iLike]: req.body.name,
     };
   }
   if (req.query.TransactorTypeIds !== undefined) {
@@ -108,16 +112,62 @@ export async function getTransactors(
       }),
     };
   }
+  const childWhereOptions: WhereOptions = {};
+  if (req.query.isTemplate !== undefined) {
+    childWhereOptions.isTemplate = {
+      [Op.eq]: req.query.isTemplate as unknown as boolean,
+    };
+  }
+  if (req.query.GroupIds !== undefined) {
+    childWhereOptions.group = {
+      [Op.in]: (req.query.GroupIds as string[]).map((x) => {
+        return +x;
+      }),
+    };
+  }
+  if (req.query.TagIds !== undefined) {
+    childWhereOptions.tags = {
+      [Op.in]: (req.query.TagIds as string[]).map((x) => {
+        return +x;
+      }),
+    };
+  }
+  if (req.query.TemplateIds !== undefined) {
+    childWhereOptions.template = {
+      [Op.in]: (req.query.TemplateIds as string[]).map((x) => {
+        return +x;
+      }),
+    };
+  }
+
   const findOptions: FindOptions = {
     offset: +(req.query.offset ?? 0),
     limit: +(req.query.limit ?? defaultLimit),
     where: whereOptions,
-    include: [Account, Entity],
+    include: [
+      {
+        model: Account,
+        where: childWhereOptions,
+        include: [Field, FieldDatum, Tag],
+        required: false,
+      },
+      {
+        model: Entity,
+        where: childWhereOptions,
+        include: [Field, FieldDatum, Tag],
+        required: false,
+      },
+    ],
   };
   const transactors = await Transactor.findAll(findOptions);
+  const children = await Promise.all(
+    transactors
+      .filter((t) => t.Account?.id === t.id || t.Entity?.id === t.id)
+      .map(async (t) => minimizeAssociationsToIds(await t.getChildObject()))
+  );
 
   res.status(200).send({
     message: "Transactors gotten.",
-    transactors,
+    transactors: children,
   });
 }

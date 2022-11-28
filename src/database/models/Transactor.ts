@@ -1,4 +1,5 @@
 import {
+  Association,
   BelongsToGetAssociationMixin,
   BelongsToSetAssociationMixin,
   CreationOptional,
@@ -20,7 +21,6 @@ import {
   Sequelize,
   Transaction,
 } from "sequelize";
-import { getAccount, getEntity } from "../../app/controllers";
 import Account from "./Account";
 import Entity from "./Entity";
 import TransactorType from "./TransactorType";
@@ -35,6 +35,14 @@ export class Transactor extends Model<
 
   declare TransactorTypeId: number;
   declare TransactorType: NonAttribute<TransactorType>;
+
+  declare Account: NonAttribute<Account>;
+  declare Entity: NonAttribute<Entity>;
+
+  declare static associations: {
+    Account: Association<Transactor, Account>;
+    Entity: Association<Transactor, Entity>;
+  };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
@@ -61,12 +69,18 @@ export class Transactor extends Model<
     number
   >;
 
-  public getExtensionGetter(): Function {
-    switch (TransactorType.name) {
+  public async loadTransactorType(): Promise<void> {
+    const transactorType = await this.getTransactorType();
+    this.TransactorType = transactorType;
+  }
+
+  public async getChildObject(): Promise<Account | Entity> {
+    await this.loadTransactorType();
+    switch (this.TransactorType.name) {
       case "Account":
-        return getAccount;
+        return this.Account;
       case "Entity":
-        return getEntity;
+        return this.Entity;
       default:
         throw new Error("Unknown Transactor Type.");
     }

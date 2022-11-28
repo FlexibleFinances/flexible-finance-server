@@ -108,6 +108,32 @@ export function hasRequestArguments(
   return true;
 }
 
+export function isTemplatedUpsertRequest(
+  req: express.Request,
+  res: express.Response,
+  isTemplate: boolean | undefined,
+  templateId: number | undefined,
+  requiredArguments?: argObject
+): boolean {
+  let message = "";
+  if (isTemplate !== undefined && isTemplate) {
+    if (templateId !== undefined) {
+      message = "Cannot both be a Template and have a Template.";
+    }
+  } else {
+    if (templateId === undefined) {
+      message = "Must either be a Template or have a Template.";
+    } else if (requiredArguments !== undefined) {
+      return hasRequestArguments(req, res, requiredArguments);
+    }
+  }
+  if (message !== "") {
+    res.status(400).send({ message });
+    return false;
+  }
+  return true;
+}
+
 export function isTemplatedObject(
   requiredProperties: Array<number | null>,
   isTemplate: boolean
@@ -156,7 +182,7 @@ export function minimizeAssociationsToIds<
     miniObject.SourceTransactorId = object.SourceTransactorId;
     miniObject.RecipientTransactorId = object.RecipientTransactorId;
   } else {
-    throw new Error("unknown type");
+    throw new Error("can't minimize; unknown type");
   }
 
   miniObject.id = object.id;

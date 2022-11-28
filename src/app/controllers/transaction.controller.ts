@@ -2,6 +2,7 @@ import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
 import FieldDatum, { FieldValues } from "../../database/models/FieldDatum";
 import {
   hasRequestArguments,
+  isTemplatedUpsertRequest,
   minimizeAssociationsToIds,
 } from "../../utils/helperFunctions";
 import Field from "../../database/models/Field";
@@ -44,12 +45,12 @@ export async function createTransaction(
   res: express.Response
 ): Promise<void> {
   if (
-    !hasRequestArguments(
+    !isTemplatedUpsertRequest(
       req,
       res,
-      { body: ["name"] },
-      {},
-      { body: ["TemplateId", "isTemplate"] }
+      req.body?.isTemplate as boolean | undefined,
+      req.body?.TemplateId as number | undefined,
+      { body: ["SourceTransactorId", "RecipientTransactorId"] }
     )
   ) {
     return;
@@ -95,12 +96,7 @@ export async function updateTransaction(
       res,
       { params: ["TransactionId"] },
       {
-        body: [
-          "name",
-          "TemplateId",
-          "SourceTransactorId",
-          "RecipientTransactorId",
-        ],
+        body: ["TemplateId", "SourceTransactorId", "RecipientTransactorId"],
       }
     )
   ) {

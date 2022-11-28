@@ -3,7 +3,9 @@ RequestSchema:
   properties:
     name:
       type: string
-    RecipientTransactorId:
+    isTemplate:
+      type: boolean
+    TransactorTypeId:
       type: integer
 ResponseSchema:
   type: object

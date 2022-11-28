@@ -75,6 +75,10 @@ TransactorsRequests:
         in: query
         schema:
           type: string
+      - name: isTemplate
+        in: query
+        schema:
+          type: boolean
       - name: GroupIds
         in: query
         schema:

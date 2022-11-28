@@ -1,8 +1,6 @@
 RequestSchema:
   type: object
   properties:
-    name:
-      type: string
     isTemplate:
       type: boolean
     FieldDatumIds:
@@ -36,8 +34,6 @@ ResponseSchema:
     updatedAt:
       type: string
       format: date-time
-    name:
-      type: string
     isTemplate:
       type: boolean
     FieldDatumIds:
