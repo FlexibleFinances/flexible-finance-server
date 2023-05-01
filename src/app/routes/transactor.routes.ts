@@ -13,26 +13,22 @@ export function setTransactorRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/api-v1/transactor/:TransactorId",
+    "/v1/transactor/:TransactorId",
     [authJwt.verifyToken],
     controller.getTransactor
   );
 
   app.post(
-    "/api-v1/transactor/",
+    "/v1/transactor/",
     [authJwt.verifyToken],
     controller.createTransactor
   );
 
   app.put(
-    "/api-v1/transactor/:TransactorId",
+    "/v1/transactor/:TransactorId",
     [authJwt.verifyToken],
     controller.updateTransactor
   );
 
-  app.get(
-    "/api-v1/transactors",
-    [authJwt.verifyToken],
-    controller.getTransactors
-  );
+  app.get("/v1/transactors", [authJwt.verifyToken], controller.getTransactors);
 }

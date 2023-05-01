@@ -54,4 +54,4 @@ The server app can be viewed at https://flexible-finance-server.herokuapp.com/. 
 
 ## API Documentation
 
-The documentation for the public API for this server can be viewed at https://flexible-finance-server.herokuapp.com/api-v1/api-docs (or https://localhost:5000/api-v1/api-docs if running locally).
+The documentation for the public API for this server can be viewed at https://flexible-finance-server.herokuapp.com/v1/api-docs (or https://localhost:5000/v1/api-docs if running locally).

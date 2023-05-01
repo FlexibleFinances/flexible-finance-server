@@ -12,19 +12,15 @@ export function setStatusRoutes(app: express.Express): void {
     next();
   });
 
-  app.get(
-    "/api-v1/status/:StatusId",
-    [authJwt.verifyToken],
-    controller.getStatus
-  );
+  app.get("/v1/status/:StatusId", [authJwt.verifyToken], controller.getStatus);
 
-  app.post("/api-v1/status", [authJwt.verifyToken], controller.createStatus);
+  app.post("/v1/status", [authJwt.verifyToken], controller.createStatus);
 
   app.put(
-    "/api-v1/status/:StatusId",
+    "/v1/status/:StatusId",
     [authJwt.verifyToken],
     controller.updateStatus
   );
 
-  app.get("/api-v1/statuses", [authJwt.verifyToken], controller.getStatuses);
+  app.get("/v1/statuses", [authJwt.verifyToken], controller.getStatuses);
 }

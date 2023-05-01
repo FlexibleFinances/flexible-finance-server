@@ -12,11 +12,11 @@ export function setTagRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/api-v1/tag/:TagId", [authJwt.verifyToken], controller.getTag);
+  app.get("/v1/tag/:TagId", [authJwt.verifyToken], controller.getTag);
 
-  app.post("/api-v1/tag", [authJwt.verifyToken], controller.createTag);
+  app.post("/v1/tag", [authJwt.verifyToken], controller.createTag);
 
-  app.put("/api-v1/tag/:TagId", [authJwt.verifyToken], controller.updateTag);
+  app.put("/v1/tag/:TagId", [authJwt.verifyToken], controller.updateTag);
 
-  app.get("/api-v1/tags", [authJwt.verifyToken], controller.getTags);
+  app.get("/v1/tags", [authJwt.verifyToken], controller.getTags);
 }

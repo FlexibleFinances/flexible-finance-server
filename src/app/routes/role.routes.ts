@@ -12,19 +12,19 @@ export function setRoleRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/api-v1/role/:RoleId", [authJwt.verifyToken], controller.getRole);
+  app.get("/v1/role/:RoleId", [authJwt.verifyToken], controller.getRole);
 
   app.post(
-    "/api-v1/role",
+    "/v1/role",
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.createRole
   );
 
   app.put(
-    "/api-v1/role/:RoleId",
+    "/v1/role/:RoleId",
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.updateRole
   );
 
-  app.get("/api-v1/roles", [authJwt.verifyToken], controller.getRoles);
+  app.get("/v1/roles", [authJwt.verifyToken], controller.getRoles);
 }

@@ -13,26 +13,18 @@ export function setFieldTypeRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/api-v1/fieldType/:FieldTypeId",
+    "/v1/fieldType/:FieldTypeId",
     [authJwt.verifyToken],
     controller.getFieldType
   );
 
-  app.post(
-    "/api-v1/fieldType",
-    [authJwt.verifyToken],
-    controller.createFieldType
-  );
+  app.post("/v1/fieldType", [authJwt.verifyToken], controller.createFieldType);
 
   app.put(
-    "/api-v1/fieldType/:FieldTypeId",
+    "/v1/fieldType/:FieldTypeId",
     [authJwt.verifyToken],
     controller.updateFieldType
   );
 
-  app.get(
-    "/api-v1/fieldTypes",
-    [authJwt.verifyToken],
-    controller.getFieldTypes
-  );
+  app.get("/v1/fieldTypes", [authJwt.verifyToken], controller.getFieldTypes);
 }

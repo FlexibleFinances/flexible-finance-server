@@ -47,7 +47,7 @@ app
   .use(express.json({ limit: "1kb" }))
   .use(express.urlencoded({ extended: true, limit: "1kb" }))
   .use(OpenApiValidator.middleware(validatorOptions))
-  .use("/api-v1/api-docs", swaggerUi.serve, swaggerUi.setup(apiDoc))
+  .use("/v1/api-docs", swaggerUi.serve, swaggerUi.setup(apiDoc))
   .use(function (req, res, next) {
     if (toobusy()) {
       // log if you see necessary

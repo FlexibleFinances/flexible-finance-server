@@ -12,19 +12,15 @@ export function setEntityRoutes(app: express.Express): void {
     next();
   });
 
-  app.get(
-    "/api-v1/entity/:EntityId",
-    [authJwt.verifyToken],
-    controller.getEntity
-  );
+  app.get("/v1/entity/:EntityId", [authJwt.verifyToken], controller.getEntity);
 
-  app.post("/api-v1/entity", [authJwt.verifyToken], controller.createEntity);
+  app.post("/v1/entity", [authJwt.verifyToken], controller.createEntity);
 
   app.put(
-    "/api-v1/entity/:EntityId",
+    "/v1/entity/:EntityId",
     [authJwt.verifyToken],
     controller.updateEntity
   );
 
-  app.get("/api-v1/entities", [authJwt.verifyToken], controller.getEntities);
+  app.get("/v1/entities", [authJwt.verifyToken], controller.getEntities);
 }

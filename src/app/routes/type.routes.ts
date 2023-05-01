@@ -12,11 +12,11 @@ export function setTypeRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/api-v1/type/:TypeId", [authJwt.verifyToken], controller.getType);
+  app.get("/v1/type/:TypeId", [authJwt.verifyToken], controller.getType);
 
-  app.post("/api-v1/type", [authJwt.verifyToken], controller.createType);
+  app.post("/v1/type", [authJwt.verifyToken], controller.createType);
 
-  app.put("/api-v1/type/:TypeId", [authJwt.verifyToken], controller.updateType);
+  app.put("/v1/type/:TypeId", [authJwt.verifyToken], controller.updateType);
 
-  app.get("/api-v1/types", [authJwt.verifyToken], controller.getTypes);
+  app.get("/v1/types", [authJwt.verifyToken], controller.getTypes);
 }

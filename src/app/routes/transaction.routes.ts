@@ -13,25 +13,25 @@ export function setTransactionRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/api-v1/transaction/:TransactionId",
+    "/v1/transaction/:TransactionId",
     [authJwt.verifyToken],
     controller.getTransaction
   );
 
   app.post(
-    "/api-v1/transaction",
+    "/v1/transaction",
     [authJwt.verifyToken],
     controller.createTransaction
   );
 
   app.put(
-    "/api-v1/transaction/:TransactionId",
+    "/v1/transaction/:TransactionId",
     [authJwt.verifyToken],
     controller.updateTransaction
   );
 
   app.get(
-    "/api-v1/transactions",
+    "/v1/transactions",
     [authJwt.verifyToken],
     controller.getTransactions
   );

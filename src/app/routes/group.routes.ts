@@ -12,15 +12,11 @@ export function setGroupRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/api-v1/group/:GroupId", [authJwt.verifyToken], controller.getGroup);
+  app.get("/v1/group/:GroupId", [authJwt.verifyToken], controller.getGroup);
 
-  app.post("/api-v1/group/", [authJwt.verifyToken], controller.createGroup);
+  app.post("/v1/group/", [authJwt.verifyToken], controller.createGroup);
 
-  app.put(
-    "/api-v1/group/:GroupId",
-    [authJwt.verifyToken],
-    controller.updateGroup
-  );
+  app.put("/v1/group/:GroupId", [authJwt.verifyToken], controller.updateGroup);
 
-  app.get("/api-v1/groups", [authJwt.verifyToken], controller.getGroups);
+  app.get("/v1/groups", [authJwt.verifyToken], controller.getGroups);
 }
