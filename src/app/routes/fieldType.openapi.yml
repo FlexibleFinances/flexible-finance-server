@@ -1,22 +1,3 @@
-FieldTypeRequests:
-  post:
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.root.yml#/components/schemas/FieldType_RequestSchema"
-    responses:
-      200:
-        $ref: "../../openapi.root.yml#/components/responses/FieldType"
-      400:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      401:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      403:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      500:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
 FieldTypeIdRequests:
   get:
     parameters:
@@ -84,6 +65,24 @@ FieldTypesRequests:
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldTypes"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+  post:
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/FieldType_RequestSchema"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/FieldType"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
       401:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       403:

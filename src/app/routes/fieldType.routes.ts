@@ -3,6 +3,8 @@ import { authJwt } from "../middleware/authJwt";
 import express from "express";
 
 export function setFieldTypeRoutes(app: express.Express): void {
+  var endpointName = "fieldTypes";
+
   app.use(function (
     req: express.Request,
     res: express.Response,
@@ -13,18 +15,26 @@ export function setFieldTypeRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/v1/fieldType/:FieldTypeId",
+    "/v1/" + endpointName + "/:FieldTypeId",
     [authJwt.verifyToken],
     controller.getFieldType
   );
 
-  app.post("/v1/fieldType", [authJwt.verifyToken], controller.createFieldType);
-
   app.put(
-    "/v1/fieldType/:FieldTypeId",
+    "/v1/" + endpointName + "/:FieldTypeId",
     [authJwt.verifyToken],
     controller.updateFieldType
   );
 
-  app.get("/v1/fieldTypes", [authJwt.verifyToken], controller.getFieldTypes);
+  app.post(
+    "/v1/" + endpointName,
+    [authJwt.verifyToken],
+    controller.createFieldType
+  );
+
+  app.get(
+    "/v1/" + endpointName,
+    [authJwt.verifyToken],
+    controller.getFieldTypes
+  );
 }
