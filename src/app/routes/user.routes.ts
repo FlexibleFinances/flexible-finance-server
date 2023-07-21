@@ -3,8 +3,6 @@ import { authJwt } from "../middleware/authJwt";
 import express from "express";
 
 export function setUserRoutes(app: express.Express): void {
-  var endpointName = "users";
-
   app.use(function (
     req: express.Request,
     res: express.Response,
@@ -14,15 +12,15 @@ export function setUserRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/v1/" + endpointName + "/:UserId", [authJwt.verifyToken], controller.getUser);
+  app.get("/v1/user/:UserId", [authJwt.verifyToken], controller.getUser);
 
-  app.post("/v1/" + endpointName, [authJwt.verifyToken], controller.createUser);
+  app.post("/v1/user", [authJwt.verifyToken], controller.createUser);
 
   app.put(
-    "/v1/" + endpointName + "/:UserId",
+    "/v1/user/:UserId",
     [authJwt.verifyToken, authJwt.isSelf],
     controller.updateUser
   );
 
-  app.get("/v1/" + endpointName, [authJwt.verifyToken], controller.getUsers);
+  app.get("/v1/users", [authJwt.verifyToken], controller.getUsers);
 }

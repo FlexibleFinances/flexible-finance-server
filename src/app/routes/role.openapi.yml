@@ -1,3 +1,22 @@
+RoleRequests:
+  post:
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Role_RequestSchema"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/Role"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
 RoleIdRequests:
   get:
     parameters:
@@ -65,24 +84,6 @@ RolesRequests:
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Roles"
-      401:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      403:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      500:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-  post:
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Role_RequestSchema"
-    responses:
-      200:
-        $ref: "../../openapi.root.yml#/components/responses/Role"
-      400:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
       401:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       403:

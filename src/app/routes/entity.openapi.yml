@@ -1,3 +1,22 @@
+EntityRequests:
+  post:
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Entity_RequestSchema"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/Entity"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
 EntityIdRequests:
   get:
     parameters:
@@ -93,24 +112,6 @@ EntitiesRequests:
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Entities"
-      401:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      403:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      500:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-  post:
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Entity_RequestSchema"
-    responses:
-      200:
-        $ref: "../../openapi.root.yml#/components/responses/Entity"
-      400:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
       401:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       403:

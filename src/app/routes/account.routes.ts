@@ -3,7 +3,6 @@ import { authJwt } from "../middleware/authJwt";
 import express from "express";
 
 export function setAccountRoutes(app: express.Express): void {
-  var endpointName = "accounts";
   app.use(function (
     req: express.Request,
     res: express.Response,
@@ -14,18 +13,18 @@ export function setAccountRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/v1/"+ endpointName +"/:AccountId",
+    "/v1/account/:AccountId",
     [authJwt.verifyToken],
     controller.getAccount
   );
 
-  app.post("/v1/"+ endpointName, [authJwt.verifyToken], controller.createAccount);
+  app.post("/v1/account/", [authJwt.verifyToken], controller.createAccount);
 
   app.put(
-    "/v1/"+ endpointName +"/:AccountId",
+    "/v1/account/:AccountId",
     [authJwt.verifyToken],
     controller.updateAccount
   );
 
-  app.get("/v1/" + endpointName, [authJwt.verifyToken], controller.getAccounts);
+  app.get("/v1/accounts", [authJwt.verifyToken], controller.getAccounts);
 }

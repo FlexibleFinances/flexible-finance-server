@@ -1,3 +1,22 @@
+AccountRequests:
+  post:
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Account_RequestSchema"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/Account"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
 AccountIdRequests:
   get:
     parameters:
@@ -81,24 +100,6 @@ AccountsRequests:
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Accounts"
-      401:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      403:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      500:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-  post:
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Account_RequestSchema"
-    responses:
-      200:
-        $ref: "../../openapi.root.yml#/components/responses/Account"
-      400:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
       401:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       403:

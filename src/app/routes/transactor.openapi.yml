@@ -1,3 +1,22 @@
+TransactorRequests:
+  post:
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Transactor_RequestSchema"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/Transactor"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
 TransactorIdRequests:
   get:
     parameters:
@@ -81,24 +100,6 @@ TransactorsRequests:
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transactors"
-      401:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      403:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-      500:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
-  post:
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Transactor_RequestSchema"
-    responses:
-      200:
-        $ref: "../../openapi.root.yml#/components/responses/Transactor"
-      400:
-        $ref: "../../openapi.root.yml#/components/responses/Message"
       401:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       403:
