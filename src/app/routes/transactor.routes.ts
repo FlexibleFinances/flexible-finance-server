@@ -3,6 +3,8 @@ import { authJwt } from "../middleware/authJwt";
 import express from "express";
 
 export function setTransactorRoutes(app: express.Express): void {
+  var endpointName = "transactors";
+
   app.use(function (
     req: express.Request,
     res: express.Response,
@@ -13,22 +15,22 @@ export function setTransactorRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/v1/transactor/:TransactorId",
+    "/v1/" + endpointName + "/:TransactorId",
     [authJwt.verifyToken],
     controller.getTransactor
   );
 
   app.post(
-    "/v1/transactor/",
+    "/v1/" + endpointName,
     [authJwt.verifyToken],
     controller.createTransactor
   );
 
   app.put(
-    "/v1/transactor/:TransactorId",
+    "/v1/" + endpointName + "/:TransactorId",
     [authJwt.verifyToken],
     controller.updateTransactor
   );
 
-  app.get("/v1/transactors", [authJwt.verifyToken], controller.getTransactors);
+  app.get("/v1/" + endpointName, [authJwt.verifyToken], controller.getTransactors);
 }

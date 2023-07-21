@@ -3,6 +3,8 @@ import { authJwt } from "../middleware/authJwt";
 import express from "express";
 
 export function setFieldDatumRoutes(app: express.Express): void {
+  var endpointName = "fieldData";
+
   app.use(function (
     req: express.Request,
     res: express.Response,
@@ -13,22 +15,22 @@ export function setFieldDatumRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/v1/fieldDatum/:FieldDatumId",
+    "/v1/" + endpointName + "/:FieldDatumId",
     [authJwt.verifyToken],
     controller.getFieldDatum
   );
 
   app.post(
-    "/v1/fieldDatum",
+    "/v1/" + endpointName,
     [authJwt.verifyToken],
     controller.createFieldDatum
   );
 
   app.put(
-    "/v1/fieldDatum/:FieldDatumId",
+    "/v1/" + endpointName + "/:FieldDatumId",
     [authJwt.verifyToken],
     controller.updateFieldDatum
   );
 
-  app.get("/v1/fieldData", [authJwt.verifyToken], controller.getFieldData);
+  app.get("/v1/" + endpointName, [authJwt.verifyToken], controller.getFieldData);
 }

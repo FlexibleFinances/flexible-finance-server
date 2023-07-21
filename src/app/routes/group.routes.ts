@@ -3,6 +3,9 @@ import { authJwt } from "../middleware/authJwt";
 import express from "express";
 
 export function setGroupRoutes(app: express.Express): void {
+  var endpointName = "groups";
+
+
   app.use(function (
     req: express.Request,
     res: express.Response,
@@ -12,11 +15,11 @@ export function setGroupRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/v1/group/:GroupId", [authJwt.verifyToken], controller.getGroup);
+  app.get("/v1/"+ endpointName + "/:GroupId", [authJwt.verifyToken], controller.getGroup);
 
-  app.post("/v1/group/", [authJwt.verifyToken], controller.createGroup);
+  app.post("/v1/" + endpointName, [authJwt.verifyToken], controller.createGroup);
 
-  app.put("/v1/group/:GroupId", [authJwt.verifyToken], controller.updateGroup);
+  app.put("/v1/"+ endpointName + "/:GroupId", [authJwt.verifyToken], controller.updateGroup);
 
-  app.get("/v1/groups", [authJwt.verifyToken], controller.getGroups);
+  app.get("/v1/" + endpointName, [authJwt.verifyToken], controller.getGroups);
 }
