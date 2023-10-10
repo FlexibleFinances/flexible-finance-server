@@ -219,9 +219,9 @@ components:
     FieldDatum_StringTransaction_ResponseSchema:
       $ref: ./database/models/fieldDatum.openapi.yml#/StringTransaction_ResponseSchema
     FieldType_RequestSchema:
-      $ref: ./database/models/fieldType.openapi.yml#/RequestSchema
+      $ref: ./app/models/fieldType.openapi.yml#/RequestSchema
     FieldType_ResponseSchema:
-      $ref: ./database/models/fieldType.openapi.yml#/ResponseSchema
+      $ref: ./app/models/fieldType.openapi.yml#/ResponseSchema
     Group_RequestSchema:
       $ref: ./database/models/group.openapi.yml#/RequestSchema
     Group_ResponseSchema:
