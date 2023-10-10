@@ -1,4 +1,4 @@
-import { QueryInterface, Sequelize } from "sequelize";
+import { type QueryInterface, Sequelize } from "sequelize";
 import { SequelizeStorage, Umzug } from "umzug";
 import dotenv from "dotenv";
 import path from "path";

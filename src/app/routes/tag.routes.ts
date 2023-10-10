@@ -1,6 +1,6 @@
 import * as controller from "../controllers/tag.controller";
 import { authJwt } from "../middleware/authJwt";
-import express from "express";
+import type express from "express";
 
 export function setTagRoutes(app: express.Express): void {
   app.use(function (

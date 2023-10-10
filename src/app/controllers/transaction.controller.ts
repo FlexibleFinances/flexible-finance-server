@@ -1,5 +1,10 @@
-import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
-import FieldDatum, { FieldValues } from "../../database/models/FieldDatum";
+import {
+  type CreationAttributes,
+  type FindOptions,
+  Op,
+  type WhereOptions,
+} from "sequelize";
+import FieldDatum, { type FieldValues } from "../../database/models/FieldDatum";
 import {
   hasRequestArguments,
   isTemplatedUpsertRequest,
@@ -9,7 +14,7 @@ import Field from "../../database/models/Field";
 import Tag from "../../database/models/Tag";
 import Transaction from "../../database/models/Transaction";
 import { defaultLimit } from "../../utils/constants";
-import express from "express";
+import type express from "express";
 
 export async function getTransaction(
   req: express.Request,

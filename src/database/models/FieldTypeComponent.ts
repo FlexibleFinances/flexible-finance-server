@@ -1,16 +1,16 @@
 import {
-  Association,
-  BelongsToGetAssociationMixin,
-  BelongsToSetAssociationMixin,
-  CreationOptional,
+  type Association,
+  type BelongsToGetAssociationMixin,
+  type BelongsToSetAssociationMixin,
+  type CreationOptional,
   DataTypes,
-  InferAttributes,
-  InferCreationAttributes,
+  type InferAttributes,
+  type InferCreationAttributes,
   Model,
-  NonAttribute,
-  Sequelize,
+  type NonAttribute,
+  type Sequelize,
 } from "sequelize";
-import FieldType from "./FieldType";
+import type FieldType from "./FieldType";
 
 export class FieldTypeComponent extends Model<
   InferAttributes<FieldTypeComponent>,
@@ -25,7 +25,7 @@ export class FieldTypeComponent extends Model<
   declare ParentFieldTypeId: number;
   declare ParentFieldType: NonAttribute<FieldType>;
   declare order: number;
-  declare isRequired: Boolean;
+  declare isRequired: boolean;
   declare validator?: CreationOptional<string>;
 
   declare static associations: {

@@ -1,10 +1,10 @@
 import {
-  CreationOptional,
+  type CreationOptional,
   DataTypes,
-  InferAttributes,
-  InferCreationAttributes,
+  type InferAttributes,
+  type InferCreationAttributes,
   Model,
-  Sequelize,
+  type Sequelize,
 } from "sequelize";
 
 export class Status extends Model<

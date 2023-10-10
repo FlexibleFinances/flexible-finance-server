@@ -1,6 +1,6 @@
 import * as controller from "../controllers/fieldType.controller";
 import { authJwt } from "../middleware/authJwt";
-import express from "express";
+import type express from "express";
 
 export function setFieldTypeRoutes(app: express.Express): void {
   var endpointName = "fieldTypes";

@@ -1,14 +1,14 @@
 import {
-  CreationOptional,
+  type CreationOptional,
   DataTypes,
-  InferAttributes,
-  InferCreationAttributes,
+  type InferAttributes,
+  type InferCreationAttributes,
   Model,
-  NonAttribute,
-  Sequelize,
+  type NonAttribute,
+  type Sequelize,
 } from "sequelize";
-import Report from "./Report";
-import Tag from "./Tag";
+import type Report from "./Report";
+import type Tag from "./Tag";
 
 export class ReportTag extends Model<
   InferAttributes<ReportTag>,

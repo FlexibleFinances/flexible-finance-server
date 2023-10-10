@@ -1,5 +1,5 @@
 import * as controller from "../controllers/auth.controller";
-import express from "express";
+import type express from "express";
 import { verifySignUp } from "../middleware/verifySignUp";
 
 export function setAuthRoutes(app: express.Express): void {

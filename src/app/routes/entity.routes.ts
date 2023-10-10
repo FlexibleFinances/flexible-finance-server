@@ -1,6 +1,6 @@
 import * as controller from "../controllers/entity.controller";
 import { authJwt } from "../middleware/authJwt";
-import express from "express";
+import type express from "express";
 
 export function setEntityRoutes(app: express.Express): void {
   app.use(function (

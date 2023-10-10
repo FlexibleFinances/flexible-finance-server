@@ -1,6 +1,6 @@
 import * as controller from "../controllers/transaction.controller";
 import { authJwt } from "../middleware/authJwt";
-import express from "express";
+import type express from "express";
 
 export function setTransactionRoutes(app: express.Express): void {
   app.use(function (

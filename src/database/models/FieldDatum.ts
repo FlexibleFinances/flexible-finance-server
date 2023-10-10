@@ -1,20 +1,20 @@
 import {
-  Association,
-  BelongsToGetAssociationMixin,
-  BelongsToSetAssociationMixin,
-  CreationAttributes,
-  CreationOptional,
+  type Association,
+  type BelongsToGetAssociationMixin,
+  type BelongsToSetAssociationMixin,
+  type CreationAttributes,
+  type CreationOptional,
   DataTypes,
-  InferAttributes,
-  InferCreationAttributes,
+  type InferAttributes,
+  type InferCreationAttributes,
   Model,
-  NonAttribute,
-  Sequelize,
+  type NonAttribute,
+  type Sequelize,
 } from "sequelize";
-import Account from "./Account";
-import Entity from "./Entity";
-import Field from "./Field";
-import Transaction from "./Transaction";
+import type Account from "./Account";
+import type Entity from "./Entity";
+import type Field from "./Field";
+import type Transaction from "./Transaction";
 
 export class FieldDatum extends Model<
   InferAttributes<FieldDatum>,
@@ -205,11 +205,12 @@ export function initializeFieldDatum(sequelize: Sequelize): void {
   );
 }
 
-export interface FieldValues {
-  [fieldId: number]: {
+export type FieldValues = Record<
+  number,
+  {
     value: string | boolean | Date | number;
     fieldDatumId: number;
-  };
-}
+  }
+>;
 
 export default FieldDatum;
