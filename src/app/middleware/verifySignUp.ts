@@ -1,6 +1,6 @@
 import { ROLES } from "../../database/index";
 import User from "../../database/models/User";
-import express from "express";
+import type express from "express";
 
 function checkDuplicateUsernameOrEmail(
   req: express.Request,

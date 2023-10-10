@@ -1,14 +1,14 @@
 import {
-  CreationOptional,
+  type CreationOptional,
   DataTypes,
-  InferAttributes,
-  InferCreationAttributes,
+  type InferAttributes,
+  type InferCreationAttributes,
   Model,
-  NonAttribute,
-  Sequelize,
+  type NonAttribute,
+  type Sequelize,
 } from "sequelize";
-import Field from "./Field";
-import Transaction from "./Transaction";
+import type Field from "./Field";
+import type Transaction from "./Transaction";
 
 export class TransactionField extends Model<
   InferAttributes<TransactionField>,

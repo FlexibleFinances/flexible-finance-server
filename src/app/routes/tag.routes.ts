@@ -1,8 +1,11 @@
 import * as controller from "../controllers/tag.controller";
+import asyncHandler from "express-async-handler";
 import { authJwt } from "../middleware/authJwt";
-import express from "express";
+import type express from "express";
 
 export function setTagRoutes(app: express.Express): void {
+  const endpointName = "tags";
+
   app.use(function (
     req: express.Request,
     res: express.Response,
@@ -12,11 +15,27 @@ export function setTagRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/v1/tag/:TagId", [authJwt.verifyToken], controller.getTag);
+  app.get(
+    "/v1/" + endpointName,
+    [authJwt.verifyToken],
+    asyncHandler(controller.getTags)
+  );
 
-  app.post("/v1/tag", [authJwt.verifyToken], controller.createTag);
+  app.post(
+    "/v1/" + endpointName,
+    [authJwt.verifyToken],
+    asyncHandler(controller.createTag)
+  );
 
-  app.put("/v1/tag/:TagId", [authJwt.verifyToken], controller.updateTag);
+  app.get(
+    "/v1/" + endpointName + "/:TagId",
+    [authJwt.verifyToken],
+    asyncHandler(controller.getTag)
+  );
 
-  app.get("/v1/tags", [authJwt.verifyToken], controller.getTags);
+  app.put(
+    "/v1/" + endpointName + "/:TagId",
+    [authJwt.verifyToken],
+    asyncHandler(controller.updateTag)
+  );
 }

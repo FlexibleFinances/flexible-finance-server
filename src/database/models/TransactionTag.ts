@@ -1,14 +1,14 @@
 import {
-  CreationOptional,
+  type CreationOptional,
   DataTypes,
-  InferAttributes,
-  InferCreationAttributes,
+  type InferAttributes,
+  type InferCreationAttributes,
   Model,
-  NonAttribute,
-  Sequelize,
+  type NonAttribute,
+  type Sequelize,
 } from "sequelize";
-import Tag from "./Tag";
-import Transaction from "./Transaction";
+import type Tag from "./Tag";
+import type Transaction from "./Transaction";
 
 export class TransactionTag extends Model<
   InferAttributes<TransactionTag>,

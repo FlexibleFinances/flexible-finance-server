@@ -1,4 +1,4 @@
-import express from "express";
+import type express from "express";
 import { setAccountRoutes } from "./account.routes";
 import { setAuthRoutes } from "./auth.routes";
 import { setAuthTestRoutes } from "./authTest.routes";

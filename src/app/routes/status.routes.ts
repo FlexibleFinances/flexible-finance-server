@@ -1,8 +1,11 @@
 import * as controller from "../controllers/status.controller";
+import asyncHandler from "express-async-handler";
 import { authJwt } from "../middleware/authJwt";
-import express from "express";
+import type express from "express";
 
 export function setStatusRoutes(app: express.Express): void {
+  const endpointName = "statuses";
+
   app.use(function (
     req: express.Request,
     res: express.Response,
@@ -12,15 +15,27 @@ export function setStatusRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/v1/status/:StatusId", [authJwt.verifyToken], controller.getStatus);
-
-  app.post("/v1/status", [authJwt.verifyToken], controller.createStatus);
-
-  app.put(
-    "/v1/status/:StatusId",
+  app.get(
+    "/v1/" + endpointName,
     [authJwt.verifyToken],
-    controller.updateStatus
+    asyncHandler(controller.getStatuses)
   );
 
-  app.get("/v1/statuses", [authJwt.verifyToken], controller.getStatuses);
+  app.post(
+    "/v1/" + endpointName,
+    [authJwt.verifyToken],
+    asyncHandler(controller.createStatus)
+  );
+
+  app.get(
+    "/v1/" + endpointName + "/:StatusId",
+    [authJwt.verifyToken],
+    asyncHandler(controller.getStatus)
+  );
+
+  app.put(
+    "/v1/" + endpointName + "/:StatusId",
+    [authJwt.verifyToken],
+    asyncHandler(controller.updateStatus)
+  );
 }

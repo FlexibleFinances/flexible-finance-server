@@ -1,30 +1,30 @@
 import {
-  Association,
-  BelongsToGetAssociationMixin,
-  BelongsToSetAssociationMixin,
-  CreationOptional,
+  type Association,
+  type BelongsToGetAssociationMixin,
+  type BelongsToSetAssociationMixin,
+  type CreationOptional,
   DataTypes,
-  HasManyAddAssociationMixin,
-  HasManyAddAssociationsMixin,
-  HasManyCountAssociationsMixin,
-  HasManyCreateAssociationMixin,
-  HasManyGetAssociationsMixin,
-  HasManyHasAssociationMixin,
-  HasManyHasAssociationsMixin,
-  HasManyRemoveAssociationMixin,
-  HasManyRemoveAssociationsMixin,
-  HasManySetAssociationsMixin,
-  InferAttributes,
-  InferCreationAttributes,
+  type HasManyAddAssociationMixin,
+  type HasManyAddAssociationsMixin,
+  type HasManyCountAssociationsMixin,
+  type HasManyCreateAssociationMixin,
+  type HasManyGetAssociationsMixin,
+  type HasManyHasAssociationMixin,
+  type HasManyHasAssociationsMixin,
+  type HasManyRemoveAssociationMixin,
+  type HasManyRemoveAssociationsMixin,
+  type HasManySetAssociationsMixin,
+  type InferAttributes,
+  type InferCreationAttributes,
   Model,
-  NonAttribute,
-  Sequelize,
+  type NonAttribute,
+  type Sequelize,
 } from "sequelize";
-import Account from "./Account";
-import Entity from "./Entity";
-import FieldDatum from "./FieldDatum";
-import FieldType from "./FieldType";
-import Transaction from "./Transaction";
+import type Account from "./Account";
+import type Entity from "./Entity";
+import type FieldDatum from "./FieldDatum";
+import type FieldType from "./FieldType";
+import type Transaction from "./Transaction";
 
 export class Field extends Model<
   InferAttributes<Field>,
@@ -35,7 +35,7 @@ export class Field extends Model<
   declare updatedAt: CreationOptional<Date>;
 
   declare name: string;
-  declare isComponentOnly: CreationOptional<Boolean>;
+  declare isComponentOnly: CreationOptional<boolean>;
 
   declare FieldTypeId: number;
   declare FieldType: NonAttribute<FieldType>;

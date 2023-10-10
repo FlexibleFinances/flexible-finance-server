@@ -1,16 +1,16 @@
 import {
-  Association,
-  BelongsToGetAssociationMixin,
-  BelongsToSetAssociationMixin,
-  CreationOptional,
+  type Association,
+  type BelongsToGetAssociationMixin,
+  type BelongsToSetAssociationMixin,
+  type CreationOptional,
   DataTypes,
-  InferAttributes,
-  InferCreationAttributes,
+  type InferAttributes,
+  type InferCreationAttributes,
   Model,
-  NonAttribute,
-  Sequelize,
+  type NonAttribute,
+  type Sequelize,
 } from "sequelize";
-import Field from "./Field";
+import type Field from "./Field";
 
 export class FieldComponent extends Model<
   InferAttributes<FieldComponent>,

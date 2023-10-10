@@ -1,4 +1,4 @@
-import { DataTypes, QueryInterface } from "sequelize";
+import { DataTypes, type QueryInterface } from "sequelize";
 import Role from "../models/Role";
 
 export async function up({

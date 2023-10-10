@@ -1,25 +1,25 @@
 import {
-  Association,
-  CreationOptional,
+  type Association,
+  type CreationOptional,
   DataTypes,
-  HasManyAddAssociationMixin,
-  HasManyAddAssociationsMixin,
-  HasManyCountAssociationsMixin,
-  HasManyCreateAssociationMixin,
-  HasManyGetAssociationsMixin,
-  HasManyHasAssociationMixin,
-  HasManyHasAssociationsMixin,
-  HasManyRemoveAssociationMixin,
-  HasManyRemoveAssociationsMixin,
-  HasManySetAssociationsMixin,
-  InferAttributes,
-  InferCreationAttributes,
+  type HasManyAddAssociationMixin,
+  type HasManyAddAssociationsMixin,
+  type HasManyCountAssociationsMixin,
+  type HasManyCreateAssociationMixin,
+  type HasManyGetAssociationsMixin,
+  type HasManyHasAssociationMixin,
+  type HasManyHasAssociationsMixin,
+  type HasManyRemoveAssociationMixin,
+  type HasManyRemoveAssociationsMixin,
+  type HasManySetAssociationsMixin,
+  type InferAttributes,
+  type InferCreationAttributes,
   Model,
-  NonAttribute,
-  Sequelize,
+  type NonAttribute,
+  type Sequelize,
 } from "sequelize";
-import Account from "./Account";
-import Entity from "./Entity";
+import type Account from "./Account";
+import type Entity from "./Entity";
 
 export class Group extends Model<
   InferAttributes<Group>,

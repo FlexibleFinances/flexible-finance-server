@@ -30,7 +30,7 @@ import TransactorType, { initializeTransactorType } from "./TransactorType";
 import Type, { initializeType } from "./Type";
 import User, { initializeUser } from "./User";
 import UserRole, { initializeUserRole } from "./UserRole";
-import { Sequelize } from "sequelize/types";
+import { type Sequelize } from "sequelize/types";
 
 export async function syncAllModels(): Promise<void> {
   await Promise.all([

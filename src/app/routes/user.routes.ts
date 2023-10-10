@@ -1,28 +1,41 @@
 import * as controller from "../controllers/user.controller";
+import asyncHandler from "express-async-handler";
 import { authJwt } from "../middleware/authJwt";
-import express from "express";
+import type express from "express";
 
 export function setUserRoutes(app: express.Express): void {
-  var endpointName = "users";
+  const endpointName = "users";
 
   app.use(function (
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
   ) {
-    res.header("Access-Control-Allow-Headers", "Origin, Content-User, Accept");
+    res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
     next();
   });
 
-  app.get("/v1/" + endpointName + "/:UserId", [authJwt.verifyToken], controller.getUser);
+  app.get(
+    "/v1/" + endpointName,
+    [authJwt.verifyToken],
+    asyncHandler(controller.getUsers)
+  );
 
-  app.post("/v1/" + endpointName, [authJwt.verifyToken], controller.createUser);
+  app.post(
+    "/v1/" + endpointName,
+    [authJwt.verifyToken],
+    asyncHandler(controller.createUser)
+  );
+
+  app.get(
+    "/v1/" + endpointName + "/:UserId",
+    [authJwt.verifyToken],
+    asyncHandler(controller.getUser)
+  );
 
   app.put(
     "/v1/" + endpointName + "/:UserId",
     [authJwt.verifyToken, authJwt.isSelf],
-    controller.updateUser
+    asyncHandler(controller.updateUser)
   );
-
-  app.get("/v1/" + endpointName, [authJwt.verifyToken], controller.getUsers);
 }

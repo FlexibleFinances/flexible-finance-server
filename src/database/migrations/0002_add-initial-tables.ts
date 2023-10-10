@@ -1,4 +1,4 @@
-import { DataTypes, QueryInterface } from "sequelize";
+import { DataTypes, type QueryInterface } from "sequelize";
 import TransactorType from "../models/TransactorType";
 import { transactorTypeEnum } from "../../utils/enumerators";
 
