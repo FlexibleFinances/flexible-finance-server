@@ -1,14 +1,14 @@
 import {
-  CreationOptional,
+  type CreationOptional,
   DataTypes,
-  InferAttributes,
-  InferCreationAttributes,
+  type InferAttributes,
+  type InferCreationAttributes,
   Model,
-  NonAttribute,
-  Sequelize,
+  type NonAttribute,
+  type Sequelize,
 } from "sequelize";
-import Account from "./Account";
-import Field from "./Field";
+import type Account from "./Account";
+import type Field from "./Field";
 
 export class AccountField extends Model<
   InferAttributes<AccountField>,

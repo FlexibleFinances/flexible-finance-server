@@ -1,7 +1,7 @@
-import { Identifier } from "sequelize/types";
+import { type Identifier } from "sequelize/types";
 import User from "../../database/models/User";
 import dotenv from "dotenv";
-import express from "express";
+import type express from "express";
 import jwt from "jsonwebtoken";
 
 dotenv.config();

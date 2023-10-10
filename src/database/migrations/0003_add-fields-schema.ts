@@ -1,4 +1,4 @@
-import { DataTypes, QueryInterface } from "sequelize";
+import { DataTypes, type QueryInterface } from "sequelize";
 import { fieldTypeTypeEnum } from "../../utils/enumerators";
 
 export async function up({

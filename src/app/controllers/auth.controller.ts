@@ -3,7 +3,7 @@ import Sequelize from "sequelize";
 import User from "../../database/models/User";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
-import express from "express";
+import type express from "express";
 import { hasRequestArguments } from "../../utils/helperFunctions";
 import jwt from "jsonwebtoken";
 

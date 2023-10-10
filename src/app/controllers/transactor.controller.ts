@@ -1,4 +1,9 @@
-import { CreationAttributes, FindOptions, Op, WhereOptions } from "sequelize";
+import {
+  type CreationAttributes,
+  type FindOptions,
+  Op,
+  type WhereOptions,
+} from "sequelize";
 import {
   hasRequestArguments,
   minimizeAssociationsToIds,
@@ -10,7 +15,7 @@ import FieldDatum from "../../database/models/FieldDatum";
 import Tag from "../../database/models/Tag";
 import Transactor from "../../database/models/Transactor";
 import { defaultLimit } from "../../utils/constants";
-import express from "express";
+import type express from "express";
 
 export async function getTransactor(
   req: express.Request,

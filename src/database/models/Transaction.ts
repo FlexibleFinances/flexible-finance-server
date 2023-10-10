@@ -1,25 +1,25 @@
 import {
-  Association,
-  BelongsToCreateAssociationMixin,
-  BelongsToGetAssociationMixin,
-  BelongsToSetAssociationMixin,
-  CreationOptional,
+  type Association,
+  type BelongsToCreateAssociationMixin,
+  type BelongsToGetAssociationMixin,
+  type BelongsToSetAssociationMixin,
+  type CreationOptional,
   DataTypes,
-  HasManyAddAssociationMixin,
-  HasManyAddAssociationsMixin,
-  HasManyCountAssociationsMixin,
-  HasManyCreateAssociationMixin,
-  HasManyGetAssociationsMixin,
-  HasManyHasAssociationMixin,
-  HasManyHasAssociationsMixin,
-  HasManyRemoveAssociationMixin,
-  HasManyRemoveAssociationsMixin,
-  HasManySetAssociationsMixin,
-  InferAttributes,
-  InferCreationAttributes,
+  type HasManyAddAssociationMixin,
+  type HasManyAddAssociationsMixin,
+  type HasManyCountAssociationsMixin,
+  type HasManyCreateAssociationMixin,
+  type HasManyGetAssociationsMixin,
+  type HasManyHasAssociationMixin,
+  type HasManyHasAssociationsMixin,
+  type HasManyRemoveAssociationMixin,
+  type HasManyRemoveAssociationsMixin,
+  type HasManySetAssociationsMixin,
+  type InferAttributes,
+  type InferCreationAttributes,
   Model,
-  NonAttribute,
-  Sequelize,
+  type NonAttribute,
+  type Sequelize,
 } from "sequelize";
 import {
   getFieldDatumIds,
@@ -27,12 +27,12 @@ import {
   getTagIds,
   isTemplatedObject,
 } from "../../utils/helperFunctions";
-import Account from "./Account";
-import Entity from "./Entity";
-import Field from "./Field";
-import FieldDatum from "./FieldDatum";
-import Tag from "./Tag";
-import Transactor from "./Transactor";
+import type Account from "./Account";
+import type Entity from "./Entity";
+import type Field from "./Field";
+import type FieldDatum from "./FieldDatum";
+import type Tag from "./Tag";
+import type Transactor from "./Transactor";
 
 export class Transaction extends Model<
   InferAttributes<Transaction>,

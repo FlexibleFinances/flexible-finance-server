@@ -1,9 +1,10 @@
 import * as controller from "../controllers/fieldDatum.controller";
+import asyncHandler from "express-async-handler";
 import { authJwt } from "../middleware/authJwt";
-import express from "express";
+import type express from "express";
 
 export function setFieldDatumRoutes(app: express.Express): void {
-  var endpointName = "fieldData";
+  const endpointName = "fieldData";
 
   app.use(function (
     req: express.Request,
@@ -15,22 +16,26 @@ export function setFieldDatumRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/v1/" + endpointName + "/:FieldDatumId",
+    "/v1/" + endpointName,
     [authJwt.verifyToken],
-    controller.getFieldDatum
+    asyncHandler(controller.getFieldData)
   );
 
   app.post(
     "/v1/" + endpointName,
     [authJwt.verifyToken],
-    controller.createFieldDatum
+    asyncHandler(controller.createFieldDatum)
+  );
+
+  app.get(
+    "/v1/" + endpointName + "/:FieldDatumId",
+    [authJwt.verifyToken],
+    asyncHandler(controller.getFieldDatum)
   );
 
   app.put(
     "/v1/" + endpointName + "/:FieldDatumId",
     [authJwt.verifyToken],
-    controller.updateFieldDatum
+    asyncHandler(controller.updateFieldDatum)
   );
-
-  app.get("/v1/" + endpointName, [authJwt.verifyToken], controller.getFieldData);
 }

@@ -1,14 +1,14 @@
 import {
-  CreationOptional,
+  type CreationOptional,
   DataTypes,
-  InferAttributes,
-  InferCreationAttributes,
+  type InferAttributes,
+  type InferCreationAttributes,
   Model,
-  NonAttribute,
-  Sequelize,
+  type NonAttribute,
+  type Sequelize,
 } from "sequelize";
-import Role from "./Role";
-import User from "./User";
+import type Role from "./Role";
+import type User from "./User";
 
 export class UserRole extends Model<
   InferAttributes<UserRole>,

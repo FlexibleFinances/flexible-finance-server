@@ -1,10 +1,10 @@
 import Account from "../database/models/Account";
 import Entity from "../database/models/Entity";
-import Field from "../database/models/Field";
-import FieldDatum from "../database/models/FieldDatum";
-import Tag from "../database/models/Tag";
+import type Field from "../database/models/Field";
+import type FieldDatum from "../database/models/FieldDatum";
+import type Tag from "../database/models/Tag";
 import Transaction from "../database/models/Transaction";
-import express from "express";
+import type express from "express";
 
 interface argObject {
   body?: string[];

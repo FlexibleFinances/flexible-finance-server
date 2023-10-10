@@ -1,14 +1,14 @@
 import {
-  CreationOptional,
+  type CreationOptional,
   DataTypes,
-  InferAttributes,
-  InferCreationAttributes,
+  type InferAttributes,
+  type InferCreationAttributes,
   Model,
-  NonAttribute,
-  Sequelize,
+  type NonAttribute,
+  type Sequelize,
 } from "sequelize";
-import File from "./File";
-import Transaction from "./Transaction";
+import type File from "./File";
+import type Transaction from "./Transaction";
 
 export class TransactionFile extends Model<
   InferAttributes<TransactionFile>,

@@ -1,9 +1,10 @@
 import * as controller from "../controllers/entity.controller";
+import asyncHandler from "express-async-handler";
 import { authJwt } from "../middleware/authJwt";
-import express from "express";
+import type express from "express";
 
 export function setEntityRoutes(app: express.Express): void {
-  var endpointName = "entities";
+  const endpointName = "entities";
 
   app.use(function (
     req: express.Request,
@@ -14,15 +15,27 @@ export function setEntityRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/v1/" + endpointName + "/:EntityId", [authJwt.verifyToken], controller.getEntity);
+  app.get(
+    "/v1/" + endpointName,
+    [authJwt.verifyToken],
+    asyncHandler(controller.getEntities)
+  );
 
-  app.post("/v1/"+ endpointName, [authJwt.verifyToken], controller.createEntity);
+  app.post(
+    "/v1/" + endpointName,
+    [authJwt.verifyToken],
+    asyncHandler(controller.createEntity)
+  );
+
+  app.get(
+    "/v1/" + endpointName + "/:EntityId",
+    [authJwt.verifyToken],
+    asyncHandler(controller.getEntity)
+  );
 
   app.put(
     "/v1/" + endpointName + "/:EntityId",
     [authJwt.verifyToken],
-    controller.updateEntity
+    asyncHandler(controller.updateEntity)
   );
-
-  app.get("/v1/" + endpointName, [authJwt.verifyToken], controller.getEntities);
 }

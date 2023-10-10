@@ -1,20 +1,20 @@
 import {
-  Association,
-  CreationOptional,
+  type Association,
+  type CreationOptional,
   DataTypes,
-  HasManyCountAssociationsMixin,
-  HasManyGetAssociationsMixin,
-  HasManyHasAssociationMixin,
-  HasManyHasAssociationsMixin,
-  InferAttributes,
-  InferCreationAttributes,
+  type HasManyCountAssociationsMixin,
+  type HasManyGetAssociationsMixin,
+  type HasManyHasAssociationMixin,
+  type HasManyHasAssociationsMixin,
+  type InferAttributes,
+  type InferCreationAttributes,
   Model,
-  NonAttribute,
-  Sequelize,
+  type NonAttribute,
+  type Sequelize,
 } from "sequelize";
-import Account from "./Account";
-import Entity from "./Entity";
-import Transactor from "./Transactor";
+import type Account from "./Account";
+import type Entity from "./Entity";
+import type Transactor from "./Transactor";
 
 export class TransactorType extends Model<
   InferAttributes<TransactorType>,
