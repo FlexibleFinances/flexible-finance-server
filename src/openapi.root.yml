@@ -14,12 +14,10 @@ info:
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 #tags:
 paths:
-  /account:
-    $ref: ./app/routes/account.openapi.yml#/AccountRequests
-  /account/{AccountId}:
-    $ref: ./app/routes/account.openapi.yml#/AccountIdRequests
   /accounts:
     $ref: ./app/routes/account.openapi.yml#/AccountsRequests
+  /accounts/{AccountId}:
+    $ref: ./app/routes/account.openapi.yml#/AccountIdRequests
   /auth/signup:
     $ref: ./app/routes/auth.openapi.yml#/SignUp
   /auth/signin:
@@ -34,82 +32,60 @@ paths:
             text/html:
               schema:
                 type: string
-  /entity:
-    $ref: ./app/routes/entity.openapi.yml#/EntityRequests
-  /entity/{EntityId}:
-    $ref: ./app/routes/entity.openapi.yml#/EntityIdRequests
   /entities:
     $ref: ./app/routes/entity.openapi.yml#/EntitiesRequests
-  /field:
-    $ref: ./app/routes/field.openapi.yml#/FieldRequests
-  /field/{FieldId}:
-    $ref: ./app/routes/field.openapi.yml#/FieldIdRequests
+  /entities/{EntityId}:
+    $ref: ./app/routes/entity.openapi.yml#/EntityIdRequests
   /fields:
     $ref: ./app/routes/field.openapi.yml#/FieldsRequests
-  /fieldDatum:
-    $ref: ./app/routes/fieldDatum.openapi.yml#/FieldDatumRequests
-  /fieldDatum/{FieldDatumId}:
-    $ref: ./app/routes/fieldDatum.openapi.yml#/FieldDatumIdRequests
+  /fields/{FieldId}:
+    $ref: ./app/routes/field.openapi.yml#/FieldIdRequests
   /fieldData:
     $ref: ./app/routes/fieldDatum.openapi.yml#/FieldDataRequests
-  /fieldTypes/{FieldTypeId}:
-    $ref: ./app/routes/fieldType.openapi.yml#/FieldTypeIdRequests
+  /fieldData/{FieldDatumId}:
+    $ref: ./app/routes/fieldDatum.openapi.yml#/FieldDatumIdRequests
   /fieldTypes:
     $ref: ./app/routes/fieldType.openapi.yml#/FieldTypesRequests
-  /group:
-    $ref: ./app/routes/group.openapi.yml#/GroupRequests
-  /group/{GroupId}:
-    $ref: ./app/routes/group.openapi.yml#/GroupIdRequests
+  /fieldTypes/{FieldTypeId}:
+    $ref: ./app/routes/fieldType.openapi.yml#/FieldTypeIdRequests
   /groups:
     $ref: ./app/routes/group.openapi.yml#/GroupsRequests
-  /role:
-    $ref: ./app/routes/role.openapi.yml#/RoleRequests
-  /role/{RoleId}:
-    $ref: ./app/routes/role.openapi.yml#/RoleIdRequests
+  /groups/{GroupId}:
+    $ref: ./app/routes/group.openapi.yml#/GroupIdRequests
   /roles:
     $ref: ./app/routes/role.openapi.yml#/RolesRequests
-  /status:
-    $ref: ./app/routes/status.openapi.yml#/StatusRequests
-  /status/{StatusId}:
-    $ref: ./app/routes/status.openapi.yml#/StatusIdRequests
+  /roles/{RoleId}:
+    $ref: ./app/routes/role.openapi.yml#/RoleIdRequests
   /statuses:
     $ref: ./app/routes/status.openapi.yml#/StatusesRequests
-  /tag:
-    $ref: ./app/routes/tag.openapi.yml#/TagRequests
-  /tag/{TagId}:
-    $ref: ./app/routes/tag.openapi.yml#/TagIdRequests
+  /statuses/{StatusId}:
+    $ref: ./app/routes/status.openapi.yml#/StatusIdRequests
   /tags:
     $ref: ./app/routes/tag.openapi.yml#/TagsRequests
+  /tags/{TagId}:
+    $ref: ./app/routes/tag.openapi.yml#/TagIdRequests
   /test/all:
     $ref: ./app/routes/authTest.openapi.yml#/TestAll
   /test/user:
     $ref: ./app/routes/authTest.openapi.yml#/TestUser
   /test/admin:
     $ref: ./app/routes/authTest.openapi.yml#/TestAdmin
-  /transaction:
-    $ref: ./app/routes/transaction.openapi.yml#/TransactionRequests
-  /transaction/{TransactionId}:
-    $ref: ./app/routes/transaction.openapi.yml#/TransactionIdRequests
   /transactions:
     $ref: ./app/routes/transaction.openapi.yml#/TransactionsRequests
-  /transactor:
-    $ref: ./app/routes/transactor.openapi.yml#/TransactorRequests
-  /transactor/{TransactorId}:
-    $ref: ./app/routes/transactor.openapi.yml#/TransactorIdRequests
+  /transactions/{TransactionId}:
+    $ref: ./app/routes/transaction.openapi.yml#/TransactionIdRequests
   /transactors:
     $ref: ./app/routes/transactor.openapi.yml#/TransactorsRequests
-  /type:
-    $ref: ./app/routes/type.openapi.yml#/TypeRequests
-  /type/{TypeId}:
-    $ref: ./app/routes/type.openapi.yml#/TypeIdRequests
+  /transactors/{TransactorId}:
+    $ref: ./app/routes/transactor.openapi.yml#/TransactorIdRequests
   /types:
     $ref: ./app/routes/type.openapi.yml#/TypesRequests
-  /user:
-    $ref: ./app/routes/user.openapi.yml#/UserRequests
-  /user/{UserId}:
-    $ref: ./app/routes/user.openapi.yml#/UserIdRequests
+  /types/{TypeId}:
+    $ref: ./app/routes/type.openapi.yml#/TypeIdRequests
   /users:
     $ref: ./app/routes/user.openapi.yml#/UsersRequests
+  /users/{UserId}:
+    $ref: ./app/routes/user.openapi.yml#/UserIdRequests
 components:
   responses:
     Message:
