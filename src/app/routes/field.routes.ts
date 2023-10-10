@@ -1,8 +1,11 @@
 import * as controller from "../controllers/field.controller";
+import asyncHandler from "express-async-handler";
 import { authJwt } from "../middleware/authJwt";
 import type express from "express";
 
 export function setFieldRoutes(app: express.Express): void {
+  const endpointName = "fields";
+
   app.use(function (
     req: express.Request,
     res: express.Response,
@@ -12,11 +15,27 @@ export function setFieldRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/v1/field/:FieldId", [authJwt.verifyToken], controller.getField);
+  app.get(
+    "/v1/" + endpointName,
+    [authJwt.verifyToken],
+    asyncHandler(controller.getFields)
+  );
 
-  app.post("/v1/field", [authJwt.verifyToken], controller.createField);
+  app.post(
+    "/v1/" + endpointName,
+    [authJwt.verifyToken],
+    asyncHandler(controller.createField)
+  );
 
-  app.put("/v1/field/:FieldId", [authJwt.verifyToken], controller.updateField);
+  app.get(
+    "/v1/" + endpointName + "/:FieldId",
+    [authJwt.verifyToken],
+    asyncHandler(controller.getField)
+  );
 
-  app.get("/v1/fields", [authJwt.verifyToken], controller.getFields);
+  app.put(
+    "/v1/" + endpointName + "/:FieldId",
+    [authJwt.verifyToken],
+    asyncHandler(controller.updateField)
+  );
 }

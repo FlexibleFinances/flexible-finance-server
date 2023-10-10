@@ -1,8 +1,11 @@
 import * as controller from "../controllers/transactor.controller";
+import asyncHandler from "express-async-handler";
 import { authJwt } from "../middleware/authJwt";
 import type express from "express";
 
 export function setTransactorRoutes(app: express.Express): void {
+  const endpointName = "transactors";
+
   app.use(function (
     req: express.Request,
     res: express.Response,
@@ -13,22 +16,26 @@ export function setTransactorRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/v1/transactor/:TransactorId",
+    "/v1/" + endpointName,
     [authJwt.verifyToken],
-    controller.getTransactor
+    asyncHandler(controller.getTransactors)
   );
 
   app.post(
-    "/v1/transactor/",
+    "/v1/" + endpointName,
     [authJwt.verifyToken],
-    controller.createTransactor
+    asyncHandler(controller.createTransactor)
+  );
+
+  app.get(
+    "/v1/" + endpointName + "/:TransactorId",
+    [authJwt.verifyToken],
+    asyncHandler(controller.getTransactor)
   );
 
   app.put(
-    "/v1/transactor/:TransactorId",
+    "/v1/" + endpointName + "/:TransactorId",
     [authJwt.verifyToken],
-    controller.updateTransactor
+    asyncHandler(controller.updateTransactor)
   );
-
-  app.get("/v1/transactors", [authJwt.verifyToken], controller.getTransactors);
 }

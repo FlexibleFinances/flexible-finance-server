@@ -1,8 +1,11 @@
 import * as controller from "../controllers/transaction.controller";
+import asyncHandler from "express-async-handler";
 import { authJwt } from "../middleware/authJwt";
 import type express from "express";
 
 export function setTransactionRoutes(app: express.Express): void {
+  const endpointName = "transactions";
+
   app.use(function (
     req: express.Request,
     res: express.Response,
@@ -13,26 +16,26 @@ export function setTransactionRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/v1/transaction/:TransactionId",
+    "/v1/" + endpointName,
     [authJwt.verifyToken],
-    controller.getTransaction
+    asyncHandler(controller.getTransactions)
   );
 
   app.post(
-    "/v1/transaction",
+    "/v1/" + endpointName,
     [authJwt.verifyToken],
-    controller.createTransaction
-  );
-
-  app.put(
-    "/v1/transaction/:TransactionId",
-    [authJwt.verifyToken],
-    controller.updateTransaction
+    asyncHandler(controller.createTransaction)
   );
 
   app.get(
-    "/v1/transactions",
+    "/v1/" + endpointName + "/:TransactionId",
     [authJwt.verifyToken],
-    controller.getTransactions
+    asyncHandler(controller.getTransaction)
+  );
+
+  app.put(
+    "/v1/" + endpointName + "/:TransactionId",
+    [authJwt.verifyToken],
+    asyncHandler(controller.updateTransaction)
   );
 }

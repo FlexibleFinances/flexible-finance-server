@@ -1,8 +1,11 @@
 import * as controller from "../controllers/account.controller";
+import asyncHandler from "express-async-handler";
 import { authJwt } from "../middleware/authJwt";
 import type express from "express";
 
 export function setAccountRoutes(app: express.Express): void {
+  const endpointName = "accounts";
+
   app.use(function (
     req: express.Request,
     res: express.Response,
@@ -13,18 +16,26 @@ export function setAccountRoutes(app: express.Express): void {
   });
 
   app.get(
-    "/v1/account/:AccountId",
+    "/v1/" + endpointName,
     [authJwt.verifyToken],
-    controller.getAccount
+    asyncHandler(controller.getAccounts)
   );
 
-  app.post("/v1/account/", [authJwt.verifyToken], controller.createAccount);
+  app.post(
+    "/v1/" + endpointName,
+    [authJwt.verifyToken],
+    asyncHandler(controller.createAccount)
+  );
+
+  app.get(
+    "/v1/" + endpointName + "/:AccountId",
+    [authJwt.verifyToken],
+    asyncHandler(controller.getAccount)
+  );
 
   app.put(
-    "/v1/account/:AccountId",
+    "/v1/" + endpointName + "/:AccountId",
     [authJwt.verifyToken],
-    controller.updateAccount
+    asyncHandler(controller.updateAccount)
   );
-
-  app.get("/v1/accounts", [authJwt.verifyToken], controller.getAccounts);
 }

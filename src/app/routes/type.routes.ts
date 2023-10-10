@@ -1,8 +1,11 @@
 import * as controller from "../controllers/type.controller";
+import asyncHandler from "express-async-handler";
 import { authJwt } from "../middleware/authJwt";
 import type express from "express";
 
 export function setTypeRoutes(app: express.Express): void {
+  const endpointName = "types";
+
   app.use(function (
     req: express.Request,
     res: express.Response,
@@ -12,11 +15,27 @@ export function setTypeRoutes(app: express.Express): void {
     next();
   });
 
-  app.get("/v1/type/:TypeId", [authJwt.verifyToken], controller.getType);
+  app.get(
+    "/v1/" + endpointName,
+    [authJwt.verifyToken],
+    asyncHandler(controller.getTypes)
+  );
 
-  app.post("/v1/type", [authJwt.verifyToken], controller.createType);
+  app.post(
+    "/v1/" + endpointName,
+    [authJwt.verifyToken],
+    asyncHandler(controller.createType)
+  );
 
-  app.put("/v1/type/:TypeId", [authJwt.verifyToken], controller.updateType);
+  app.get(
+    "/v1/" + endpointName + "/:TypeId",
+    [authJwt.verifyToken],
+    asyncHandler(controller.getType)
+  );
 
-  app.get("/v1/types", [authJwt.verifyToken], controller.getTypes);
+  app.put(
+    "/v1/" + endpointName + "/:TypeId",
+    [authJwt.verifyToken],
+    asyncHandler(controller.updateType)
+  );
 }
