@@ -5,6 +5,7 @@ import {
   type WhereOptions,
 } from "sequelize";
 import Role from "../../database/models/Role";
+import { RoleResponseDto } from "../apiDtos/RoleDtos";
 import { defaultLimit } from "../../utils/constants";
 import type express from "express";
 import { hasRequestArguments } from "../../utils/helperFunctions";
@@ -30,7 +31,7 @@ export async function getRole(
   }
   res.status(200).send({
     message: "Role gotten.",
-    role,
+    role: new RoleResponseDto(role),
   });
 }
 
@@ -46,7 +47,9 @@ export async function createRole(
     name: req.body.name,
   };
   const role = await Role.create(createOptions);
-  res.status(200).send({ message: "Role created.", role });
+  res
+    .status(200)
+    .send({ message: "Role created.", role: new RoleResponseDto(role) });
 }
 
 export async function updateRole(
@@ -76,7 +79,7 @@ export async function updateRole(
   await role.update(updateOptions);
   res.status(200).send({
     message: "Role updated.",
-    role,
+    role: new RoleResponseDto(role),
   });
 }
 
@@ -103,8 +106,9 @@ export async function getRoles(
     where: whereOptions,
   };
   const roles = await Role.findAll(findOptions);
+  const roleResponseDtos = roles.map((role) => new RoleResponseDto(role));
   res.status(200).send({
     message: "Roles gotten.",
-    roles,
+    roles: roleResponseDtos,
   });
 }

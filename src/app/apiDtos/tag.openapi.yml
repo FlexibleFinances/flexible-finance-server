@@ -3,7 +3,15 @@ RequestSchema:
   properties:
     name:
       type: string
-    UserIds:
+    AccountIds:
+      type: array
+      items:
+        type: integer
+    EntityIds:
+      type: array
+      items:
+        type: integer
+    TransactionIds:
       type: array
       items:
         type: integer
@@ -20,7 +28,15 @@ ResponseSchema:
       format: date-time
     name:
       type: string
-    UserIds:
+    accountIds:
+      type: array
+      items:
+        type: integer
+    entityIds:
+      type: array
+      items:
+        type: integer
+    transactionIds:
       type: array
       items:
         type: integer

@@ -10,7 +10,7 @@ properties:
     format: date-time
   name:
     type: string
-  TagIds:
+  tagIds:
     type: array
     items:
       type: integer

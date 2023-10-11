@@ -11,6 +11,7 @@ import {
   minimizeAssociationsToIds,
 } from "../../utils/helperFunctions";
 import Entity from "../../database/models/Entity";
+import { EntityResponseDto } from "../apiDtos/EntityDtos";
 import Field from "../../database/models/Field";
 import Tag from "../../database/models/Tag";
 import { defaultLimit } from "../../utils/constants";
@@ -41,7 +42,7 @@ export async function getEntity(
 
   res.status(200).send({
     message: "Entity gotten.",
-    entity,
+    entity: new EntityResponseDto(entity),
   });
 }
 
@@ -84,7 +85,10 @@ export async function createEntity(
 
   await entity.loadAssociatedIds();
 
-  res.status(200).send({ message: "Entity created.", entity });
+  res.status(200).send({
+    message: "Entity created.",
+    entity: new EntityResponseDto(entity),
+  });
 }
 
 export async function updateEntity(
@@ -137,7 +141,7 @@ export async function updateEntity(
 
   res.status(200).send({
     message: "Entity updated.",
-    entity,
+    entity: new EntityResponseDto(entity),
   });
 }
 
@@ -186,9 +190,11 @@ export async function getEntities(
   };
   const entities = await Entity.findAll(findOptions);
 
-  const minimizedEntities: Entity[] = [];
+  const minimizedEntities: EntityResponseDto[] = [];
   entities.forEach((entity) => {
-    minimizedEntities.push(minimizeAssociationsToIds(entity));
+    minimizedEntities.push(
+      new EntityResponseDto(minimizeAssociationsToIds(entity))
+    );
   });
 
   if (req.query.isTemplate as unknown as boolean) {

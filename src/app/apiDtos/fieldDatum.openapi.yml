@@ -1,29 +1,29 @@
 BoolAccount_RequestSchema:
   type: object
   properties:
-    FieldId:
+    fieldId:
       type: integer
     boolValue:
       type: boolean
-    AccountId:
+    accountId:
       type: integer
 BoolEntity_RequestSchema:
   type: object
   properties:
-    FieldId:
+    fieldId:
       type: integer
     boolValue:
       type: boolean
-    EntityId:
+    entityId:
       type: integer
 BoolTransaction_RequestSchema:
   type: object
   properties:
-    FieldId:
+    fieldId:
       type: integer
     boolValue:
       type: boolean
-    TransactionId:
+    transactionId:
       type: integer
 DateAccount_RequestSchema:
   type: object
@@ -33,81 +33,81 @@ DateAccount_RequestSchema:
     dateValue:
       type: string
       format: date-time
-    AccountId:
+    accountId:
       type: integer
 DateEntity_RequestSchema:
   type: object
   properties:
-    FieldId:
+    fieldId:
       type: integer
     dateValue:
       type: string
       format: date-time
-    EntityId:
+    entityId:
       type: integer
 DateTransaction_RequestSchema:
   type: object
   properties:
-    FieldId:
+    fieldId:
       type: integer
     dateValue:
       type: string
       format: date-time
-    TransactionId:
+    transactionId:
       type: integer
 IntAccount_RequestSchema:
   type: object
   properties:
-    FieldId:
+    fieldId:
       type: integer
     intValue:
       type: integer
-    AccountId:
+    accountId:
       type: integer
 IntEntity_RequestSchema:
   type: object
   properties:
-    FieldId:
+    fieldId:
       type: integer
     intValue:
       type: integer
-    EntityId:
+    entityId:
       type: integer
 IntTransaction_RequestSchema:
   type: object
   properties:
-    FieldId:
+    fieldId:
       type: integer
     intValue:
       type: integer
-    TransactionId:
+    transactionId:
       type: integer
 StringAccount_RequestSchema:
   type: object
   properties:
-    FieldId:
+    fieldId:
       type: integer
     stringValue:
       type: string
-    AccountId:
+    accountId:
       type: integer
 StringEntity_RequestSchema:
   type: object
   properties:
-    FieldId:
+    fieldId:
       type: integer
     stringValue:
       type: string
-    EntityId:
+    entityId:
       type: integer
 StringTransaction_RequestSchema:
   type: object
   properties:
-    FieldId:
+    fieldId:
       type: integer
     stringValue:
       type: string
-    TransactionId:
+    transactionId:
       type: integer
 BoolAccount_ResponseSchema:
   type: object
@@ -120,11 +120,11 @@ BoolAccount_ResponseSchema:
     updatedAt:
       type: string
       format: date-time
-    FieldId:
+    fieldId:
       type: integer
     boolValue:
       type: boolean
-    AccountId:
+    accountId:
       type: integer
 BoolEntity_ResponseSchema:
   type: object
@@ -137,11 +137,11 @@ BoolEntity_ResponseSchema:
     updatedAt:
       type: string
       format: date-time
-    FieldId:
+    fieldId:
       type: integer
     boolValue:
       type: boolean
-    EntityId:
+    entityId:
       type: integer
 BoolTransaction_ResponseSchema:
   type: object
@@ -154,11 +154,11 @@ BoolTransaction_ResponseSchema:
     updatedAt:
       type: string
       format: date-time
-    FieldId:
+    fieldId:
       type: integer
     boolValue:
       type: boolean
-    TransactionId:
+    transactionId:
       type: integer
 DateAccount_ResponseSchema:
   type: object
@@ -171,12 +171,12 @@ DateAccount_ResponseSchema:
     updatedAt:
       type: string
       format: date-time
-    FieldId:
+    fieldId:
       type: integer
     dateValue:
       type: string
       format: date-time
-    AccountId:
+    accountId:
       type: integer
 DateEntity_ResponseSchema:
   type: object
@@ -189,12 +189,12 @@ DateEntity_ResponseSchema:
     updatedAt:
       type: string
       format: date-time
-    FieldId:
+    fieldId:
       type: integer
     dateValue:
       type: string
       format: date-time
-    EntityId:
+    entityId:
       type: integer
 DateTransaction_ResponseSchema:
   type: object
@@ -207,12 +207,12 @@ DateTransaction_ResponseSchema:
     updatedAt:
       type: string
       format: date-time
-    FieldId:
+    fieldId:
       type: integer
     dateValue:
       type: string
       format: date-time
-    TransactionId:
+    transactionId:
       type: integer
 IntAccount_ResponseSchema:
   type: object
@@ -225,11 +225,11 @@ IntAccount_ResponseSchema:
     updatedAt:
       type: string
       format: date-time
-    FieldId:
+    fieldId:
       type: integer
     intValue:
       type: integer
-    AccountId:
+    accountId:
       type: integer
 IntEntity_ResponseSchema:
   type: object
@@ -242,11 +242,11 @@ IntEntity_ResponseSchema:
     updatedAt:
       type: string
       format: date-time
-    FieldId:
+    fieldId:
       type: integer
     intValue:
       type: integer
-    EntityId:
+    entityId:
       type: integer
 IntTransaction_ResponseSchema:
   type: object
@@ -259,11 +259,11 @@ IntTransaction_ResponseSchema:
     updatedAt:
       type: string
       format: date-time
-    FieldId:
+    fieldId:
       type: integer
     intValue:
       type: integer
-    TransactionId:
+    transactionId:
       type: integer
 StringAccount_ResponseSchema:
   type: object
@@ -276,11 +276,11 @@ StringAccount_ResponseSchema:
     updatedAt:
       type: string
       format: date-time
-    FieldId:
+    fieldId:
       type: integer
     stringValue:
       type: string
-    AccountId:
+    accountId:
       type: integer
 StringEntity_ResponseSchema:
   type: object
@@ -293,11 +293,11 @@ StringEntity_ResponseSchema:
     updatedAt:
       type: string
       format: date-time
-    FieldId:
+    fieldId:
       type: integer
     stringValue:
       type: string
-    EntityId:
+    entityId:
       type: integer
 StringTransaction_ResponseSchema:
   type: object
@@ -310,9 +310,9 @@ StringTransaction_ResponseSchema:
     updatedAt:
       type: string
       format: date-time
-    FieldId:
+    fieldId:
       type: integer
     stringValue:
       type: string
-    TransactionId:
+    transactionId:
       type: integer

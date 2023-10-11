@@ -1,6 +1,6 @@
 import type FieldType from "../../database/models/FieldType";
 
-export class FieldTypeResponse {
+export class FieldTypeResponseDto {
   id: number;
   createdAt: string;
   updatedAt: string;

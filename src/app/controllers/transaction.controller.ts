@@ -13,6 +13,7 @@ import {
 import Field from "../../database/models/Field";
 import Tag from "../../database/models/Tag";
 import Transaction from "../../database/models/Transaction";
+import { TransactionResponseDto } from "../apiDtos/TransactionDtos";
 import { defaultLimit } from "../../utils/constants";
 import type express from "express";
 
@@ -41,7 +42,7 @@ export async function getTransaction(
 
   res.status(200).send({
     message: "Transaction gotten.",
-    transaction,
+    transaction: new TransactionResponseDto(transaction),
   });
 }
 
@@ -88,7 +89,10 @@ export async function createTransaction(
 
   await transaction.loadAssociatedIds();
 
-  res.status(200).send({ message: "Transaction created.", transaction });
+  res.status(200).send({
+    message: "Transaction created.",
+    transaction: new TransactionResponseDto(transaction),
+  });
 }
 
 export async function updateTransaction(
@@ -145,7 +149,7 @@ export async function updateTransaction(
 
   res.status(200).send({
     message: "Transaction updated.",
-    transaction,
+    transaction: new TransactionResponseDto(transaction),
   });
 }
 
@@ -201,9 +205,11 @@ export async function getTransactions(
   };
   const transactions = await Transaction.findAll(findOptions);
 
-  const minimizedTransactions: Transaction[] = [];
+  const minimizedTransactions: TransactionResponseDto[] = [];
   transactions.forEach((transaction) => {
-    minimizedTransactions.push(minimizeAssociationsToIds(transaction));
+    minimizedTransactions.push(
+      new TransactionResponseDto(minimizeAssociationsToIds(transaction))
+    );
   });
 
   if (req.query.isTemplate as unknown as boolean) {
