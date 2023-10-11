@@ -44,11 +44,11 @@ ResponseSchema:
     validator:
       type: string
       nullable: true
-    FieldTypeComponentIds:
+    fieldTypeComponentIds:
       type: array
       items:
         type: integer
-    FieldIds:
+    fieldIds:
       type: array
       items:
         type: integer

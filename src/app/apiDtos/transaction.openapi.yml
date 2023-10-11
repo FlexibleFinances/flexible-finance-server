@@ -36,24 +36,24 @@ ResponseSchema:
       format: date-time
     isTemplate:
       type: boolean
-    FieldDatumIds:
+    fieldDatumIds:
       type: array
       items:
         type: integer
-    FieldIds:
+    fieldIds:
       type: array
       items:
         type: integer
-    TagIds:
+    tagIds:
       type: array
       items:
         type: integer
-    TemplateId:
+    templateId:
       type: integer
       nullable: true
-    SourceTransactorId:
+    sourceTransactorId:
       type: integer
       nullable: true
-    RecipientTransactorId:
+    recipientTransactorId:
       type: integer
       nullable: true

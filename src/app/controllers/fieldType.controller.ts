@@ -5,6 +5,7 @@ import {
   type WhereOptions,
 } from "sequelize";
 import FieldType from "../../database/models/FieldType";
+import { FieldTypeResponseDto } from "../apiDtos/FieldTypeDtos";
 import { defaultLimit } from "../../utils/constants";
 import type express from "express";
 import { type fieldTypeTypeEnum } from "../../utils/enumerators";
@@ -31,7 +32,7 @@ export async function getFieldType(
   }
   res.status(200).send({
     message: "FieldType gotten.",
-    fieldType,
+    fieldType: new FieldTypeResponseDto(fieldType),
   });
 }
 
@@ -49,7 +50,10 @@ export async function createFieldType(
     validator: req.body.validator,
   };
   const fieldType = await FieldType.create(createOptions);
-  res.status(200).send({ message: "FieldType created.", fieldType });
+  res.status(200).send({
+    message: "FieldType created.",
+    fieldType: new FieldTypeResponseDto(fieldType),
+  });
 }
 
 export async function updateFieldType(
@@ -87,7 +91,7 @@ export async function updateFieldType(
   await fieldType.update(updateOptions);
   res.status(200).send({
     message: "FieldType updated.",
-    fieldType,
+    fieldType: new FieldTypeResponseDto(fieldType),
   });
 }
 
@@ -114,8 +118,11 @@ export async function getFieldTypes(
     where: whereOptions,
   };
   const fieldTypes = await FieldType.findAll(findOptions);
+  const fieldTypeResponseDtos = fieldTypes.map(
+    (fieldType) => new FieldTypeResponseDto(fieldType)
+  );
   res.status(200).send({
     message: "FieldTypes gotten.",
-    fieldTypes,
+    fieldTypes: fieldTypeResponseDtos,
   });
 }

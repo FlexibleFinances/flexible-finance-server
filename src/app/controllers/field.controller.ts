@@ -5,6 +5,7 @@ import {
   type WhereOptions,
 } from "sequelize";
 import Field from "../../database/models/Field";
+import { FieldResponseDto } from "../apiDtos/FieldDtos";
 import { defaultLimit } from "../../utils/constants";
 import type express from "express";
 import { hasRequestArguments } from "../../utils/helperFunctions";
@@ -30,7 +31,7 @@ export async function getField(
   }
   res.status(200).send({
     message: "Field gotten.",
-    field,
+    field: new FieldResponseDto(field),
   });
 }
 
@@ -47,7 +48,9 @@ export async function createField(
     FieldTypeId: req.body.FieldTypeId,
   };
   const field = await Field.create(createOptions);
-  res.status(200).send({ message: "Field created.", field });
+  res
+    .status(200)
+    .send({ message: "Field created.", field: new FieldResponseDto(field) });
 }
 
 export async function updateField(
@@ -83,7 +86,7 @@ export async function updateField(
   await field.update(updateOptions);
   res.status(200).send({
     message: "Field updated.",
-    field,
+    field: new FieldResponseDto(field),
   });
 }
 
@@ -138,8 +141,9 @@ export async function getFields(
     where: whereOptions,
   };
   const fields = await Field.findAll(findOptions);
+  const fieldResponseDtos = fields.map((field) => new FieldResponseDto(field));
   res.status(200).send({
     message: "Fields gotten.",
-    fields,
+    fields: fieldResponseDtos,
   });
 }

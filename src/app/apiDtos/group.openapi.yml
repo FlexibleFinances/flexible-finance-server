@@ -3,26 +3,14 @@ RequestSchema:
   properties:
     name:
       type: string
-    GroupId:
-      type: integer
-    FieldDatumIds:
+    AccountIds:
       type: array
       items:
         type: integer
-    FieldIds:
+    EntityIds:
       type: array
       items:
         type: integer
-    fieldValues:
-      type: object
-    TagIds:
-      type: array
-      items:
-        type: integer
-    TemplateId:
-      type: integer
-    isTemplate:
-      type: boolean
 ResponseSchema:
   type: object
   properties:
@@ -36,23 +24,11 @@ ResponseSchema:
       format: date-time
     name:
       type: string
-    GroupId:
-      type: integer
-      nullable: true
-    FieldDatumIds:
+    accountIds:
       type: array
       items:
         type: integer
-    FieldIds:
+    entityIds:
       type: array
       items:
         type: integer
-    TagIds:
-      type: array
-      items:
-        type: integer
-    TemplateId:
-      type: integer
-      nullable: true
-    isTemplate:
-      type: boolean

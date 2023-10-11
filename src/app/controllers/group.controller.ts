@@ -5,6 +5,7 @@ import {
   type WhereOptions,
 } from "sequelize";
 import Group from "../../database/models/Group";
+import { GroupResponseDto } from "../apiDtos/GroupDtos";
 import { defaultLimit } from "../../utils/constants";
 import type express from "express";
 import { hasRequestArguments } from "../../utils/helperFunctions";
@@ -30,7 +31,7 @@ export async function getGroup(
   }
   res.status(200).send({
     message: "Group gotten.",
-    group,
+    group: new GroupResponseDto(group),
   });
 }
 
@@ -48,7 +49,7 @@ export async function createGroup(
   const group = await Group.create(createOptions);
   res.status(200).send({
     message: "Group created.",
-    group,
+    group: new GroupResponseDto(group),
   });
 }
 
@@ -79,7 +80,7 @@ export async function updateGroup(
   await group.update(updateOptions);
   res.status(200).send({
     message: "Group updated.",
-    group,
+    group: new GroupResponseDto(group),
   });
 }
 
@@ -113,8 +114,9 @@ export async function getGroups(
     where: whereOptions,
   };
   const groups = await Group.findAll(findOptions);
+  const groupResponseDtos = groups.map((group) => new GroupResponseDto(group));
   res.status(200).send({
     message: "Groups gotten.",
-    groups,
+    groups: groupResponseDtos,
   });
 }

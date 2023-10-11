@@ -5,6 +5,7 @@ import {
   type WhereOptions,
 } from "sequelize";
 import User from "../../database/models/User";
+import { UserResponseDto } from "../apiDtos/UserDtos";
 import { defaultLimit } from "../../utils/constants";
 import type express from "express";
 import { hasRequestArguments } from "../../utils/helperFunctions";
@@ -30,7 +31,7 @@ export async function getUser(
   }
   res.status(200).send({
     message: "User gotten.",
-    user,
+    user: new UserResponseDto(user),
   });
 }
 
@@ -50,7 +51,9 @@ export async function createUser(
     password: req.body.password,
   };
   const user = await User.create(createOptions);
-  res.status(200).send({ message: "User created.", user });
+  res
+    .status(200)
+    .send({ message: "User created.", user: new UserResponseDto(user) });
 }
 
 export async function updateUser(
@@ -87,7 +90,7 @@ export async function updateUser(
   await user.update(updateOptions);
   res.status(200).send({
     message: "User updated.",
-    user,
+    user: new UserResponseDto(user),
   });
 }
 
@@ -119,8 +122,9 @@ export async function getUsers(
     where: whereOptions,
   };
   const users = await User.findAll(findOptions);
+  const userResponseDtos = users.map((user) => new UserResponseDto(user));
   res.status(200).send({
     message: "Users gotten.",
-    users,
+    users: userResponseDtos,
   });
 }

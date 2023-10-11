@@ -5,6 +5,7 @@ import {
   type WhereOptions,
 } from "sequelize";
 import Tag from "../../database/models/Tag";
+import { TagResponseDto } from "../apiDtos/TagDtos";
 import { defaultLimit } from "../../utils/constants";
 import type express from "express";
 import { hasRequestArguments } from "../../utils/helperFunctions";
@@ -30,7 +31,7 @@ export async function getTag(
   }
   res.status(200).send({
     message: "Tag gotten.",
-    tag,
+    tag: new TagResponseDto(tag),
   });
 }
 
@@ -46,7 +47,9 @@ export async function createTag(
     name: req.body.name,
   };
   const tag = await Tag.create(createOptions);
-  res.status(200).send({ message: "Tag created.", tag });
+  res
+    .status(200)
+    .send({ message: "Tag created.", tag: new TagResponseDto(tag) });
 }
 
 export async function updateTag(
@@ -76,7 +79,7 @@ export async function updateTag(
   await tag.update(updateOptions);
   res.status(200).send({
     message: "Tag updated.",
-    tag,
+    tag: new TagResponseDto(tag),
   });
 }
 
@@ -124,8 +127,9 @@ export async function getTags(
     where: whereOptions,
   };
   const tags = await Tag.findAll(findOptions);
+  const tagResponseDtos = tags.map((tag) => new TagResponseDto(tag));
   res.status(200).send({
     message: "Tags gotten.",
-    tags,
+    tags: tagResponseDtos,
   });
 }

@@ -11,6 +11,7 @@ import {
   minimizeAssociationsToIds,
 } from "../../utils/helperFunctions";
 import Account from "../../database/models/Account";
+import { AccountResponseDto } from "../apiDtos/AccountDtos";
 import Field from "../../database/models/Field";
 import Tag from "../../database/models/Tag";
 import { defaultLimit } from "../../utils/constants";
@@ -41,7 +42,7 @@ export async function getAccount(
 
   res.status(200).send({
     message: "Account gotten.",
-    account,
+    account: new AccountResponseDto(account),
   });
 }
 
@@ -82,7 +83,10 @@ export async function createAccount(
 
   await account.loadAssociatedIds();
 
-  res.status(200).send({ message: "Account created.", account });
+  res.status(200).send({
+    message: "Account created.",
+    account: new AccountResponseDto(account),
+  });
 }
 
 export async function updateAccount(
@@ -134,7 +138,7 @@ export async function updateAccount(
 
   res.status(200).send({
     message: "Account updated.",
-    account,
+    account: new AccountResponseDto(account),
   });
 }
 
@@ -183,9 +187,11 @@ export async function getAccounts(
   };
   const accounts = await Account.findAll(findOptions);
 
-  const minimizedAccounts: Account[] = [];
+  const minimizedAccounts: AccountResponseDto[] = [];
   accounts.forEach((account) => {
-    minimizedAccounts.push(minimizeAssociationsToIds(account));
+    minimizedAccounts.push(
+      new AccountResponseDto(minimizeAssociationsToIds(account))
+    );
   });
 
   if (req.query.isTemplate as unknown as boolean) {

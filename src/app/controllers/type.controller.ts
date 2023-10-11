@@ -5,6 +5,7 @@ import {
   type WhereOptions,
 } from "sequelize";
 import Type from "../../database/models/Type";
+import { TypeResponseDto } from "../apiDtos/TypeDtos";
 import { defaultLimit } from "../../utils/constants";
 import type express from "express";
 import { hasRequestArguments } from "../../utils/helperFunctions";
@@ -30,7 +31,7 @@ export async function getType(
   }
   res.status(200).send({
     message: "Type gotten.",
-    type,
+    type: new TypeResponseDto(type),
   });
 }
 
@@ -46,7 +47,9 @@ export async function createType(
     name: req.body.name,
   };
   const type = await Type.create(createOptions);
-  res.status(200).send({ message: "Type created.", type });
+  res
+    .status(200)
+    .send({ message: "Type created.", type: new TypeResponseDto(type) });
 }
 
 export async function updateType(
@@ -76,7 +79,7 @@ export async function updateType(
   await type.update(updateOptions);
   res.status(200).send({
     message: "Type updated.",
-    type,
+    type: new TypeResponseDto(type),
   });
 }
 
@@ -96,8 +99,9 @@ export async function getTypes(
     where: whereOptions,
   };
   const types = await Type.findAll(findOptions);
+  const typeResponseDtos = types.map((type) => new TypeResponseDto(type));
   res.status(200).send({
     message: "Types gotten.",
-    types,
+    types: typeResponseDtos,
   });
 }

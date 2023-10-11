@@ -9,11 +9,14 @@ import {
   minimizeAssociationsToIds,
 } from "../../utils/helperFunctions";
 import Account from "../../database/models/Account";
+import { AccountResponseDto } from "../apiDtos/AccountDtos";
 import Entity from "../../database/models/Entity";
+import { EntityResponseDto } from "../apiDtos/EntityDtos";
 import Field from "../../database/models/Field";
 import FieldDatum from "../../database/models/FieldDatum";
 import Tag from "../../database/models/Tag";
 import Transactor from "../../database/models/Transactor";
+import { TransactorResponseDto } from "../apiDtos/TransactorDtos";
 import { defaultLimit } from "../../utils/constants";
 import type express from "express";
 
@@ -39,7 +42,7 @@ export async function getTransactor(
 
   res.status(200).send({
     message: "Transactor gotten.",
-    transactor,
+    transactor: new TransactorResponseDto(transactor),
   });
 }
 
@@ -60,7 +63,10 @@ export async function createTransactor(
   };
   const transactor = await Transactor.create(createOptions);
 
-  res.status(200).send({ message: "Transactor created.", transactor });
+  res.status(200).send({
+    message: "Transactor created.",
+    transactor: new TransactorResponseDto(transactor),
+  });
 }
 
 export async function updateTransactor(
@@ -96,7 +102,7 @@ export async function updateTransactor(
 
   res.status(200).send({
     message: "Transactor updated.",
-    transactor,
+    transactor: new TransactorResponseDto(transactor),
   });
 }
 
@@ -170,9 +176,18 @@ export async function getTransactors(
       .filter((t) => t.Account?.id === t.id || t.Entity?.id === t.id)
       .map(async (t) => minimizeAssociationsToIds(await t.getChildObject()))
   );
+  const childrenResponseDtos = children.map((child) => {
+    if (child instanceof Account) {
+      return new AccountResponseDto(child);
+    }
+    if (child instanceof Entity) {
+      return new EntityResponseDto(child);
+    }
+    return null;
+  });
 
   res.status(200).send({
     message: "Transactors gotten.",
-    transactors: children,
+    transactors: childrenResponseDtos,
   });
 }

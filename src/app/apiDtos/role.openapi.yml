@@ -1,14 +1,9 @@
 RequestSchema:
   type: object
   properties:
-    username:
+    name:
       type: string
-    email:
-      type: string
-    password:
-      type: string
-      format: password
-    RoleIds:
+    UserIds:
       type: array
       items:
         type: integer
@@ -23,14 +18,9 @@ ResponseSchema:
     updatedAt:
       type: string
       format: date-time
-    username:
+    name:
       type: string
-    email:
-      type: string
-    password:
-      type: string
-      format: password
-    RoleIds:
+    userIds:
       type: array
       items:
         type: integer

@@ -3,10 +3,10 @@ RequestSchema:
   properties:
     name:
       type: string
-    FieldTypeId:
-      type: integer
-    isComponentOnly:
+    isTemplate:
       type: boolean
+    TransactorTypeId:
+      type: integer
 ResponseSchema:
   type: object
   properties:
@@ -20,23 +20,13 @@ ResponseSchema:
       format: date-time
     name:
       type: string
-    FieldDatumIds:
-      type: array
-      items:
-        type: integer
-    FieldTypeId:
+    transactorTypeId:
       type: integer
-    AccountIds:
+    accounts:
       type: array
       items:
-        type: integer
-    EntityIds:
+        $ref: ../../openapi.root.yml#/components/schemas/Account_ResponseSchema
+    entities:
       type: array
       items:
-        type: integer
-    TransactionIds:
-      type: array
-      items:
-        type: integer
-    isComponentOnly:
-      type: boolean
+        $ref: ../../openapi.root.yml#/components/schemas/Entity_ResponseSchema

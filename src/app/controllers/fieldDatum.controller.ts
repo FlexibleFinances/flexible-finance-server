@@ -5,6 +5,7 @@ import {
   type WhereOptions,
 } from "sequelize";
 import FieldDatum from "../../database/models/FieldDatum";
+import { FieldDatumResponseDto } from "../apiDtos/FieldDatumDtos";
 import { defaultLimit } from "../../utils/constants";
 import type express from "express";
 import { hasRequestArguments } from "../../utils/helperFunctions";
@@ -30,7 +31,7 @@ export async function getFieldDatum(
   }
   res.status(200).send({
     message: "FieldDatum gotten.",
-    fieldDatum,
+    fieldDatum: new FieldDatumResponseDto(fieldDatum),
   });
 }
 
@@ -60,7 +61,10 @@ export async function createFieldDatum(
     TransactionId: req.body.TransactionId,
   };
   const fieldDatum = await FieldDatum.create(createOptions);
-  res.status(200).send({ message: "FieldDatum created.", fieldDatum });
+  res.status(200).send({
+    message: "FieldDatum created.",
+    fieldDatum: new FieldDatumResponseDto(fieldDatum),
+  });
 }
 
 export async function updateFieldDatum(
@@ -112,7 +116,7 @@ export async function updateFieldDatum(
   await fieldDatum.update(updateOptions);
   res.status(200).send({
     message: "FieldDatum updated.",
-    fieldDatum,
+    fieldDatum: new FieldDatumResponseDto(fieldDatum),
   });
 }
 
@@ -180,8 +184,11 @@ export async function getFieldData(
     where: whereOptions,
   };
   const fieldData = await FieldDatum.findAll(findOptions);
+  const fieldDatumResponseDtos = fieldData.map(
+    (fieldDatum) => new FieldDatumResponseDto(fieldDatum)
+  );
   res.status(200).send({
     message: "FieldData gotten.",
-    fieldData,
+    fieldData: fieldDatumResponseDtos,
   });
 }
