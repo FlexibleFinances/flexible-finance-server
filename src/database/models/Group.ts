@@ -1,5 +1,7 @@
 import {
   type Association,
+  type BelongsToGetAssociationMixin,
+  type BelongsToSetAssociationMixin,
   type CreationOptional,
   DataTypes,
   type HasManyAddAssociationMixin,
@@ -31,6 +33,9 @@ export class Group extends Model<
 
   declare name: string;
 
+  declare GroupId: CreationOptional<number>;
+  declare Group: NonAttribute<Group>;
+
   declare AccountIds: NonAttribute<number[]>;
   declare Accounts: NonAttribute<Account[]>;
 
@@ -38,6 +43,7 @@ export class Group extends Model<
   declare Entities: NonAttribute<Entity[]>;
 
   declare static associations: {
+    Group: Association<Group, Group>;
     Accounts: Association<Account, Group>;
     Entities: Association<Entity, Group>;
   };
@@ -45,6 +51,9 @@ export class Group extends Model<
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
+  declare getGroup: BelongsToGetAssociationMixin<Group>;
+  declare setGroup: BelongsToSetAssociationMixin<Group, number>;
+
   declare getAccounts: HasManyGetAssociationsMixin<Account>;
   declare addAccount: HasManyAddAssociationMixin<Account, number>;
   declare addAccounts: HasManyAddAssociationsMixin<Account, number>;
@@ -82,6 +91,13 @@ export function initializeGroup(sequelize: Sequelize): void {
         type: DataTypes.STRING(128),
         allowNull: false,
         unique: true,
+      },
+      GroupId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Group",
+          key: "id",
+        },
       },
     },
     {

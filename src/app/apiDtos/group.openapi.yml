@@ -3,11 +3,13 @@ RequestSchema:
   properties:
     name:
       type: string
-    AccountIds:
+    parentGroupId:
+      type: integer
+    accountIds:
       type: array
       items:
         type: integer
-    EntityIds:
+    entityIds:
       type: array
       items:
         type: integer
@@ -24,6 +26,9 @@ ResponseSchema:
       format: date-time
     name:
       type: string
+    parentGroupId:
+      type: integer
+      nullable: true
     accountIds:
       type: array
       items:
