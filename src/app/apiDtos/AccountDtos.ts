@@ -6,7 +6,7 @@ export class AccountResponseDto {
   updatedAt: string;
 
   name: string;
-  groupId?: number;
+  parentGroupId?: number;
   fieldDatumIds?: number[];
   fieldIds?: number[];
   tagIds?: number[];
@@ -18,7 +18,7 @@ export class AccountResponseDto {
     this.createdAt = account.createdAt.toISOString();
     this.updatedAt = account.updatedAt.toISOString();
     this.name = account.name;
-    this.groupId = account.GroupId;
+    this.parentGroupId = account.GroupId;
     this.fieldDatumIds = account.FieldDatumIds;
     this.fieldIds = account.FieldIds;
     this.tagIds = account.TagIds;

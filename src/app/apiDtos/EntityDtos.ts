@@ -6,7 +6,7 @@ export class EntityResponseDto {
   updatedAt: string;
 
   name: string;
-  groupId?: number;
+  parentGroupId?: number;
   fieldDatumIds?: number[];
   fieldIds?: number[];
   tagIds?: number[];
@@ -18,7 +18,7 @@ export class EntityResponseDto {
     this.createdAt = entity.createdAt.toISOString();
     this.updatedAt = entity.updatedAt.toISOString();
     this.name = entity.name;
-    this.groupId = entity.GroupId;
+    this.parentGroupId = entity.GroupId;
     this.fieldDatumIds = entity.FieldDatumIds;
     this.fieldIds = entity.FieldIds;
     this.tagIds = entity.TagIds;
