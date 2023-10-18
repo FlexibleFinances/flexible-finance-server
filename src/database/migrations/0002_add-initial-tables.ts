@@ -27,6 +27,15 @@ export async function up({
       allowNull: false,
       unique: true,
     },
+    GroupId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Groups",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
   });
   await queryInterface.createTable("Files", {
     id: {
