@@ -5,7 +5,7 @@ RequestSchema:
       type: string
     isTemplate:
       type: boolean
-    TransactorTypeId:
+    transactorTypeId:
       type: integer
 ResponseSchema:
   type: object

@@ -1,14 +1,16 @@
 import type Account from "../../database/models/Account";
+import { type FieldValue } from "../../database/models/FieldDatum";
 
-export class AccountResponseDto {
+export class AccountDto {
   id: number;
   createdAt: string;
   updatedAt: string;
 
   name: string;
-  parentGroupId?: number;
   fieldDatumIds?: number[];
   fieldIds?: number[];
+  fieldValues?: FieldValue[];
+  parentGroupId?: number;
   tagIds?: number[];
   templateId: number | null;
   isTemplate: boolean;

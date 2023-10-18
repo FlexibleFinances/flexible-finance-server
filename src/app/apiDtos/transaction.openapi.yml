@@ -3,25 +3,25 @@ RequestSchema:
   properties:
     isTemplate:
       type: boolean
-    FieldDatumIds:
+    fieldDatumIds:
       type: array
       items:
         type: integer
-    FieldIds:
+    fieldIds:
       type: array
       items:
         type: integer
     fieldValues:
       type: object
-    TagIds:
+    tagIds:
       type: array
       items:
         type: integer
-    TemplateId:
+    templateId:
       type: integer
-    SourceTransactorId:
+    sourceTransactorId:
       type: integer
-    RecipientTransactorId:
+    recipientTransactorId:
       type: integer
 ResponseSchema:
   type: object
