@@ -1,34 +1,31 @@
 import {
-  type CreationAttributes,
-  type FindOptions,
-  Op,
-  type WhereOptions,
-} from "sequelize";
-import Field from "../../database/models/Field";
-import { FieldResponseDto } from "../apiDtos/FieldDtos";
-import { defaultLimit } from "../../utils/constants";
-import type express from "express";
+  type FieldRequest,
+  type FieldResponse,
+  FieldResponseDto,
+  type FieldSearchRequest,
+  type FieldsResponse,
+} from "../apiDtos/FieldDtos";
+import {
+  createFieldFromDto,
+  getFieldById,
+  getFieldsByOptions,
+  updateFieldFromDto,
+} from "../repositories/FieldRepository";
 import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getField(
-  req: express.Request,
-  res: express.Response
+  req: FieldRequest,
+  res: FieldResponse
 ): Promise<void> {
-  if (!hasRequestArguments(req, res, { params: ["FieldId"] })) {
-    return;
-  }
+  const field = await getFieldById(Number(req.params.fieldId));
 
-  const field = await Field.findOne({
-    where: {
-      id: req.params.FieldId,
-    },
-  });
   if (field === null) {
     res.status(500).send({
       message: "Field not found.",
     });
     return;
   }
+
   res.status(200).send({
     message: "Field gotten.",
     field: new FieldResponseDto(field),
@@ -36,54 +33,64 @@ export async function getField(
 }
 
 export async function createField(
-  req: express.Request,
-  res: express.Response
+  req: FieldRequest,
+  res: FieldResponse
 ): Promise<void> {
-  if (!hasRequestArguments(req, res, { body: ["name", "FieldTypeId"] })) {
+  const requestBody = req.body;
+  if (requestBody === undefined) {
+    res.status(500).send({
+      message: "Request not valid.",
+    });
     return;
   }
 
-  const createOptions: CreationAttributes<Field> = {
-    name: req.body.name,
-    FieldTypeId: req.body.FieldTypeId,
-  };
-  const field = await Field.create(createOptions);
-  res
-    .status(200)
-    .send({ message: "Field created.", field: new FieldResponseDto(field) });
+  const field = await createFieldFromDto(requestBody);
+
+  if (field === null) {
+    res.status(500).send({
+      message: "Field not created.",
+    });
+    return;
+  }
+
+  res.status(200).send({
+    message: "Field created.",
+    field: new FieldResponseDto(field),
+  });
 }
 
 export async function updateField(
-  req: express.Request,
-  res: express.Response
+  req: FieldRequest,
+  res: FieldResponse
 ): Promise<void> {
+  const requestBody = req.body;
+  if (requestBody === undefined) {
+    res.status(500).send({
+      message: "Request not valid.",
+    });
+    return;
+  }
+
   if (
     !hasRequestArguments(
       req,
       res,
       { params: ["FieldId"] },
-      { body: ["name", "FieldTypeId"] }
+      { body: ["name", "GroupId", "TemplateId", "fieldValues"] }
     )
   ) {
     return;
   }
 
-  const field = await Field.findOne({
-    where: {
-      id: req.params.FieldId,
-    },
-  });
+  const field = await updateFieldFromDto(requestBody);
+
   if (field === null) {
     res.status(500).send({
       message: "Field not found.",
     });
     return;
   }
-  const updateOptions: CreationAttributes<Field> = {
-    name: req.body.name,
-    FieldTypeId: req.body.FieldTypeId,
-  };
-  await field.update(updateOptions);
+
   res.status(200).send({
     message: "Field updated.",
     field: new FieldResponseDto(field),
@@ -91,59 +98,31 @@ export async function updateField(
 }
 
 export async function getFields(
-  req: express.Request,
-  res: express.Response
+  req: FieldSearchRequest,
+  res: FieldsResponse
 ): Promise<void> {
-  const whereOptions: WhereOptions = {};
-  if (req.query.name !== undefined) {
-    whereOptions.name = {
-      [Op.iLike]: req.body.name,
-    };
+  const requestQuery = req.query;
+
+  const fields = await getFieldsByOptions(requestQuery);
+
+  if (fields === null) {
+    res.status(500).send({
+      message: "Fields not found.",
+    });
+    return;
   }
-  if (req.query.FieldTypeIds !== undefined) {
-    whereOptions.fieldType = {
-      [Op.in]: (req.query.FieldTypeIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
+
+  const fieldDtos = fields.map((field) => new FieldResponseDto(field));
+
+  if (req.query.isTemplate as unknown as boolean) {
+    res.status(200).send({
+      message: "Field Templates gotten.",
+      templates: fieldDtos,
+    });
+  } else {
+    res.status(200).send({
+      message: "Fields gotten.",
+      fields: fieldDtos,
+    });
   }
-  if (req.query.FieldDatumIds !== undefined) {
-    whereOptions.data = {
-      [Op.in]: (req.query.FieldDatumIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
-  }
-  if (req.query.AccountIds !== undefined) {
-    whereOptions.accounts = {
-      [Op.in]: (req.query.AccountIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
-  }
-  if (req.query.EntityIds !== undefined) {
-    whereOptions.entities = {
-      [Op.in]: (req.query.EntityIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
-  }
-  if (req.query.TransactionIds !== undefined) {
-    whereOptions.transactions = {
-      [Op.in]: (req.query.TransactionIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
-  }
-  const findOptions: FindOptions = {
-    offset: +(req.query.offset ?? 0),
-    limit: +(req.query.limit ?? defaultLimit),
-    where: whereOptions,
-  };
-  const fields = await Field.findAll(findOptions);
-  const fieldResponseDtos = fields.map((field) => new FieldResponseDto(field));
-  res.status(200).send({
-    message: "Fields gotten.",
-    fields: fieldResponseDtos,
-  });
 }

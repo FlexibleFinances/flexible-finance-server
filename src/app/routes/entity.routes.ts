@@ -1,4 +1,10 @@
 import * as controller from "../controllers/entity.controller";
+import {
+  type EntitiesResponse,
+  type EntityRequest,
+  type EntityResponse,
+  type EntitySearchRequest,
+} from "../apiDtos/EntityDtos";
 import asyncHandler from "express-async-handler";
 import { authJwt } from "../middleware/authJwt";
 import type express from "express";
@@ -18,24 +24,41 @@ export function setEntityRoutes(app: express.Express): void {
   app.get(
     "/v1/" + endpointName,
     [authJwt.verifyToken],
-    asyncHandler(controller.getEntities)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.getEntities(
+        req as EntitySearchRequest,
+        res as EntitiesResponse
+      );
+    })
   );
 
   app.post(
     "/v1/" + endpointName,
     [authJwt.verifyToken],
-    asyncHandler(controller.createEntity)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.createEntity(
+        req as EntityRequest,
+        res as EntityResponse
+      );
+    })
   );
 
   app.get(
     "/v1/" + endpointName + "/:EntityId",
     [authJwt.verifyToken],
-    asyncHandler(controller.getEntity)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.getEntity(req as EntityRequest, res as EntityResponse);
+    })
   );
 
   app.put(
     "/v1/" + endpointName + "/:EntityId",
     [authJwt.verifyToken],
-    asyncHandler(controller.updateEntity)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.updateEntity(
+        req as EntityRequest,
+        res as EntityResponse
+      );
+    })
   );
 }

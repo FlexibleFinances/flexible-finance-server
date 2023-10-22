@@ -1,34 +1,31 @@
 import {
-  type CreationAttributes,
-  type FindOptions,
-  Op,
-  type WhereOptions,
-} from "sequelize";
-import User from "../../database/models/User";
-import { UserResponseDto } from "../apiDtos/UserDtos";
-import { defaultLimit } from "../../utils/constants";
-import type express from "express";
+  type UserRequest,
+  type UserResponse,
+  UserResponseDto,
+  type UserSearchRequest,
+  type UsersResponse,
+} from "../apiDtos/UserDtos";
+import {
+  createUserFromDto,
+  getUserById,
+  getUsersByOptions,
+  updateUserFromDto,
+} from "../repositories/UserRepository";
 import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getUser(
-  req: express.Request,
-  res: express.Response
+  req: UserRequest,
+  res: UserResponse
 ): Promise<void> {
-  if (!hasRequestArguments(req, res, { params: ["UserId"] })) {
-    return;
-  }
+  const user = await getUserById(Number(req.params.userId));
 
-  const user = await User.findOne({
-    where: {
-      id: req.params.UserId,
-    },
-  });
   if (user === null) {
     res.status(500).send({
       message: "User not found.",
     });
     return;
   }
+
   res.status(200).send({
     message: "User gotten.",
     user: new UserResponseDto(user),
@@ -36,58 +33,64 @@ export async function getUser(
 }
 
 export async function createUser(
-  req: express.Request,
-  res: express.Response
+  req: UserRequest,
+  res: UserResponse
 ): Promise<void> {
-  if (
-    !hasRequestArguments(req, res, { body: ["username", "email", "password"] })
-  ) {
+  const requestBody = req.body;
+  if (requestBody === undefined) {
+    res.status(500).send({
+      message: "Request not valid.",
+    });
     return;
   }
 
-  const createOptions: CreationAttributes<User> = {
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-  };
-  const user = await User.create(createOptions);
-  res
-    .status(200)
-    .send({ message: "User created.", user: new UserResponseDto(user) });
+  const user = await createUserFromDto(requestBody);
+
+  if (user === null) {
+    res.status(500).send({
+      message: "User not created.",
+    });
+    return;
+  }
+
+  res.status(200).send({
+    message: "User created.",
+    user: new UserResponseDto(user),
+  });
 }
 
 export async function updateUser(
-  req: express.Request,
-  res: express.Response
+  req: UserRequest,
+  res: UserResponse
 ): Promise<void> {
+  const requestBody = req.body;
+  if (requestBody === undefined) {
+    res.status(500).send({
+      message: "Request not valid.",
+    });
+    return;
+  }
+
   if (
     !hasRequestArguments(
       req,
       res,
       { params: ["UserId"] },
-      { body: ["username", "email", "password"] }
+      { body: ["username", "email", "password", "roleIds"] }
     )
   ) {
     return;
   }
 
-  const user = await User.findOne({
-    where: {
-      id: req.params.UserId,
-    },
-  });
+  const user = await updateUserFromDto(requestBody);
+
   if (user === null) {
     res.status(500).send({
       message: "User not found.",
     });
     return;
   }
-  const updateOptions: CreationAttributes<User> = {
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-  };
-  await user.update(updateOptions);
+
   res.status(200).send({
     message: "User updated.",
     user: new UserResponseDto(user),
@@ -95,36 +98,31 @@ export async function updateUser(
 }
 
 export async function getUsers(
-  req: express.Request,
-  res: express.Response
+  req: UserSearchRequest,
+  res: UsersResponse
 ): Promise<void> {
-  const whereOptions: WhereOptions = {};
-  if (req.query.name !== undefined) {
-    whereOptions.name = {
-      [Op.iLike]: req.body.name,
-    };
+  const requestQuery = req.query;
+
+  const users = await getUsersByOptions(requestQuery);
+
+  if (users === null) {
+    res.status(500).send({
+      message: "Users not found.",
+    });
+    return;
   }
-  if (req.query.email !== undefined) {
-    whereOptions.email = {
-      [Op.iLike]: req.body.email,
-    };
+
+  const userDtos = users.map((user) => new UserResponseDto(user));
+
+  if (req.query.isTemplate as unknown as boolean) {
+    res.status(200).send({
+      message: "User Templates gotten.",
+      templates: userDtos,
+    });
+  } else {
+    res.status(200).send({
+      message: "Users gotten.",
+      users: userDtos,
+    });
   }
-  if (req.query.RoleIds !== undefined) {
-    whereOptions.roles = {
-      [Op.in]: (req.query.RoleIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
-  }
-  const findOptions: FindOptions = {
-    offset: +(req.query.offset ?? 0),
-    limit: +(req.query.limit ?? defaultLimit),
-    where: whereOptions,
-  };
-  const users = await User.findAll(findOptions);
-  const userResponseDtos = users.map((user) => new UserResponseDto(user));
-  res.status(200).send({
-    message: "Users gotten.",
-    users: userResponseDtos,
-  });
 }

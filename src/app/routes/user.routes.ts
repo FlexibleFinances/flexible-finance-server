@@ -1,4 +1,10 @@
 import * as controller from "../controllers/user.controller";
+import {
+  type UserRequest,
+  type UserResponse,
+  type UserSearchRequest,
+  type UsersResponse,
+} from "../apiDtos/UserDtos";
 import asyncHandler from "express-async-handler";
 import { authJwt } from "../middleware/authJwt";
 import type express from "express";
@@ -18,24 +24,32 @@ export function setUserRoutes(app: express.Express): void {
   app.get(
     "/v1/" + endpointName,
     [authJwt.verifyToken],
-    asyncHandler(controller.getUsers)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.getUsers(req as UserSearchRequest, res as UsersResponse);
+    })
   );
 
   app.post(
     "/v1/" + endpointName,
     [authJwt.verifyToken],
-    asyncHandler(controller.createUser)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.createUser(req as UserRequest, res as UserResponse);
+    })
   );
 
   app.get(
     "/v1/" + endpointName + "/:UserId",
     [authJwt.verifyToken],
-    asyncHandler(controller.getUser)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.getUser(req as UserRequest, res as UserResponse);
+    })
   );
 
   app.put(
     "/v1/" + endpointName + "/:UserId",
     [authJwt.verifyToken, authJwt.isSelf],
-    asyncHandler(controller.updateUser)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.updateUser(req as UserRequest, res as UserResponse);
+    })
   );
 }

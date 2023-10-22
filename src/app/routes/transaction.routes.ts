@@ -1,4 +1,10 @@
 import * as controller from "../controllers/transaction.controller";
+import {
+  type TransactionRequest,
+  type TransactionResponse,
+  type TransactionSearchRequest,
+  type TransactionsResponse,
+} from "../apiDtos/TransactionDtos";
 import asyncHandler from "express-async-handler";
 import { authJwt } from "../middleware/authJwt";
 import type express from "express";
@@ -18,24 +24,44 @@ export function setTransactionRoutes(app: express.Express): void {
   app.get(
     "/v1/" + endpointName,
     [authJwt.verifyToken],
-    asyncHandler(controller.getTransactions)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.getTransactions(
+        req as TransactionSearchRequest,
+        res as TransactionsResponse
+      );
+    })
   );
 
   app.post(
     "/v1/" + endpointName,
     [authJwt.verifyToken],
-    asyncHandler(controller.createTransaction)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.createTransaction(
+        req as TransactionRequest,
+        res as TransactionResponse
+      );
+    })
   );
 
   app.get(
     "/v1/" + endpointName + "/:TransactionId",
     [authJwt.verifyToken],
-    asyncHandler(controller.getTransaction)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.getTransaction(
+        req as TransactionRequest,
+        res as TransactionResponse
+      );
+    })
   );
 
   app.put(
     "/v1/" + endpointName + "/:TransactionId",
     [authJwt.verifyToken],
-    asyncHandler(controller.updateTransaction)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.updateTransaction(
+        req as TransactionRequest,
+        res as TransactionResponse
+      );
+    })
   );
 }

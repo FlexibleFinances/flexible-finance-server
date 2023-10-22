@@ -28,7 +28,6 @@ const validatorOptions = {
   validateRequests: true,
   validateResponses: true,
   validateApiSpec: true,
-  ignoreUndocumented: true,
 };
 
 const corsOptions = {
@@ -72,7 +71,9 @@ app
       });
     }
   )
-  .get("/", (req, res) => res.render("pages/index"));
+  .get("/", (req, res) => {
+    res.render("pages/index");
+  });
 
 void initializeSequelize().then((sequelize) => {
   const migrator = initializeMigrator(sequelize);

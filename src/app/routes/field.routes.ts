@@ -1,4 +1,10 @@
 import * as controller from "../controllers/field.controller";
+import {
+  type FieldRequest,
+  type FieldResponse,
+  type FieldSearchRequest,
+  type FieldsResponse,
+} from "../apiDtos/FieldDtos";
 import asyncHandler from "express-async-handler";
 import { authJwt } from "../middleware/authJwt";
 import type express from "express";
@@ -18,24 +24,35 @@ export function setFieldRoutes(app: express.Express): void {
   app.get(
     "/v1/" + endpointName,
     [authJwt.verifyToken],
-    asyncHandler(controller.getFields)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.getFields(
+        req as FieldSearchRequest,
+        res as FieldsResponse
+      );
+    })
   );
 
   app.post(
     "/v1/" + endpointName,
     [authJwt.verifyToken],
-    asyncHandler(controller.createField)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.createField(req as FieldRequest, res as FieldResponse);
+    })
   );
 
   app.get(
     "/v1/" + endpointName + "/:FieldId",
     [authJwt.verifyToken],
-    asyncHandler(controller.getField)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.getField(req as FieldRequest, res as FieldResponse);
+    })
   );
 
   app.put(
     "/v1/" + endpointName + "/:FieldId",
     [authJwt.verifyToken],
-    asyncHandler(controller.updateField)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.updateField(req as FieldRequest, res as FieldResponse);
+    })
   );
 }

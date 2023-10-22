@@ -1,34 +1,31 @@
 import {
-  type CreationAttributes,
-  type FindOptions,
-  Op,
-  type WhereOptions,
-} from "sequelize";
-import Role from "../../database/models/Role";
-import { RoleResponseDto } from "../apiDtos/RoleDtos";
-import { defaultLimit } from "../../utils/constants";
-import type express from "express";
+  type RoleRequest,
+  type RoleResponse,
+  RoleResponseDto,
+  type RoleSearchRequest,
+  type RolesResponse,
+} from "../apiDtos/RoleDtos";
+import {
+  createRoleFromDto,
+  getRoleById,
+  getRolesByOptions,
+  updateRoleFromDto,
+} from "../repositories/RoleRepository";
 import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getRole(
-  req: express.Request,
-  res: express.Response
+  req: RoleRequest,
+  res: RoleResponse
 ): Promise<void> {
-  if (!hasRequestArguments(req, res, { params: ["RoleId"] })) {
-    return;
-  }
+  const role = await getRoleById(Number(req.params.roleId));
 
-  const role = await Role.findOne({
-    where: {
-      id: req.params.RoleId,
-    },
-  });
   if (role === null) {
     res.status(500).send({
       message: "Role not found.",
     });
     return;
   }
+
   res.status(200).send({
     message: "Role gotten.",
     role: new RoleResponseDto(role),
@@ -36,47 +33,64 @@ export async function getRole(
 }
 
 export async function createRole(
-  req: express.Request,
-  res: express.Response
+  req: RoleRequest,
+  res: RoleResponse
 ): Promise<void> {
-  if (!hasRequestArguments(req, res, { body: ["name"] })) {
+  const requestBody = req.body;
+  if (requestBody === undefined) {
+    res.status(500).send({
+      message: "Request not valid.",
+    });
     return;
   }
 
-  const createOptions: CreationAttributes<Role> = {
-    name: req.body.name,
-  };
-  const role = await Role.create(createOptions);
-  res
-    .status(200)
-    .send({ message: "Role created.", role: new RoleResponseDto(role) });
+  const role = await createRoleFromDto(requestBody);
+
+  if (role === null) {
+    res.status(500).send({
+      message: "Role not created.",
+    });
+    return;
+  }
+
+  res.status(200).send({
+    message: "Role created.",
+    role: new RoleResponseDto(role),
+  });
 }
 
 export async function updateRole(
-  req: express.Request,
-  res: express.Response
+  req: RoleRequest,
+  res: RoleResponse
 ): Promise<void> {
+  const requestBody = req.body;
+  if (requestBody === undefined) {
+    res.status(500).send({
+      message: "Request not valid.",
+    });
+    return;
+  }
+
   if (
-    !hasRequestArguments(req, res, { params: ["RoleId"] }, { body: ["name"] })
+    !hasRequestArguments(
+      req,
+      res,
+      { params: ["RoleId"] },
+      { body: ["name", "GroupId", "TemplateId", "fieldValues"] }
+    )
   ) {
     return;
   }
 
-  const role = await Role.findOne({
-    where: {
-      id: req.params.RoleId,
-    },
-  });
+  const role = await updateRoleFromDto(requestBody);
+
   if (role === null) {
     res.status(500).send({
       message: "Role not found.",
     });
     return;
   }
-  const updateOptions: CreationAttributes<Role> = {
-    name: req.body.name,
-  };
-  await role.update(updateOptions);
+
   res.status(200).send({
     message: "Role updated.",
     role: new RoleResponseDto(role),
@@ -84,31 +98,31 @@ export async function updateRole(
 }
 
 export async function getRoles(
-  req: express.Request,
-  res: express.Response
+  req: RoleSearchRequest,
+  res: RolesResponse
 ): Promise<void> {
-  const whereOptions: WhereOptions = {};
-  if (req.query.name !== undefined) {
-    whereOptions.name = {
-      [Op.iLike]: req.body.name,
-    };
+  const requestQuery = req.query;
+
+  const roles = await getRolesByOptions(requestQuery);
+
+  if (roles === null) {
+    res.status(500).send({
+      message: "Roles not found.",
+    });
+    return;
   }
-  if (req.query.UserIds !== undefined) {
-    whereOptions.users = {
-      [Op.in]: (req.query.UserIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
+
+  const roleDtos = roles.map((role) => new RoleResponseDto(role));
+
+  if (req.query.isTemplate as unknown as boolean) {
+    res.status(200).send({
+      message: "Role Templates gotten.",
+      templates: roleDtos,
+    });
+  } else {
+    res.status(200).send({
+      message: "Roles gotten.",
+      roles: roleDtos,
+    });
   }
-  const findOptions: FindOptions = {
-    offset: +(req.query.offset ?? 0),
-    limit: +(req.query.limit ?? defaultLimit),
-    where: whereOptions,
-  };
-  const roles = await Role.findAll(findOptions);
-  const roleResponseDtos = roles.map((role) => new RoleResponseDto(role));
-  res.status(200).send({
-    message: "Roles gotten.",
-    roles: roleResponseDtos,
-  });
 }

@@ -1,38 +1,24 @@
 import {
-  type CreationAttributes,
-  type FindOptions,
-  Op,
-  type WhereOptions,
-} from "sequelize";
+  type TransactorRequest,
+  type TransactorResponse,
+  TransactorResponseDto,
+  type TransactorSearchRequest,
+  type TransactorsResponse,
+} from "../apiDtos/TransactorDtos";
 import {
-  hasRequestArguments,
-  minimizeAssociationsToIds,
-} from "../../utils/helperFunctions";
-import Account from "../../database/models/Account";
-import { AccountResponseDto } from "../apiDtos/AccountDtos";
-import Entity from "../../database/models/Entity";
-import { EntityResponseDto } from "../apiDtos/EntityDtos";
-import Field from "../../database/models/Field";
-import FieldDatum from "../../database/models/FieldDatum";
-import Tag from "../../database/models/Tag";
-import Transactor from "../../database/models/Transactor";
-import { TransactorResponseDto } from "../apiDtos/TransactorDtos";
-import { defaultLimit } from "../../utils/constants";
-import type express from "express";
+  createTransactorFromDto,
+  getTransactorById,
+  getTransactorsByOptions,
+  updateTransactorFromDto,
+} from "../repositories/TransactorRepository";
+import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getTransactor(
-  req: express.Request,
-  res: express.Response
+  req: TransactorRequest,
+  res: TransactorResponse
 ): Promise<void> {
-  if (!hasRequestArguments(req, res, { params: ["TransactorId"] })) {
-    return;
-  }
+  const transactor = await getTransactorById(Number(req.params.transactorId));
 
-  const transactor = await Transactor.findOne({
-    where: {
-      id: req.params.TransactorId,
-    },
-  });
   if (transactor === null) {
     res.status(500).send({
       message: "Transactor not found.",
@@ -47,21 +33,25 @@ export async function getTransactor(
 }
 
 export async function createTransactor(
-  req: express.Request,
-  res: express.Response
+  req: TransactorRequest,
+  res: TransactorResponse
 ): Promise<void> {
-  if (
-    !hasRequestArguments(req, res, {
-      body: ["TransactorTypeId"],
-    })
-  ) {
+  const requestBody = req.body;
+  if (requestBody === undefined) {
+    res.status(500).send({
+      message: "Request not valid.",
+    });
     return;
   }
 
-  const createOptions: CreationAttributes<Transactor> = {
-    TransactorTypeId: req.body.TransactorTypeId,
-  };
-  const transactor = await Transactor.create(createOptions);
+  const transactor = await createTransactorFromDto(requestBody);
+
+  if (transactor === null) {
+    res.status(500).send({
+      message: "Transactor not created.",
+    });
+    return;
+  }
 
   res.status(200).send({
     message: "Transactor created.",
@@ -70,35 +60,31 @@ export async function createTransactor(
 }
 
 export async function updateTransactor(
-  req: express.Request,
-  res: express.Response
+  req: TransactorRequest,
+  res: TransactorResponse
 ): Promise<void> {
+  const requestBody = req.body;
+  if (requestBody === undefined) {
+    res.status(500).send({
+      message: "Request not valid.",
+    });
+    return;
+  }
+
   if (
-    !hasRequestArguments(
-      req,
-      res,
-      { params: ["TransactorId"] },
-      { body: ["TransactorTypeId"] }
-    )
+    !hasRequestArguments(req, res, { params: ["TransactorId"] }, { body: [] })
   ) {
     return;
   }
 
-  const transactor = await Transactor.findOne({
-    where: {
-      id: req.params.TransactorId,
-    },
-  });
+  const transactor = await updateTransactorFromDto(requestBody);
+
   if (transactor === null) {
     res.status(500).send({
       message: "Transactor not found.",
     });
     return;
   }
-  const updateOptions: CreationAttributes<Transactor> = {
-    TransactorTypeId: req.body.TransactorTypeId,
-  };
-  await transactor.update(updateOptions);
 
   res.status(200).send({
     message: "Transactor updated.",
@@ -107,87 +93,33 @@ export async function updateTransactor(
 }
 
 export async function getTransactors(
-  req: express.Request,
-  res: express.Response
+  req: TransactorSearchRequest,
+  res: TransactorsResponse
 ): Promise<void> {
-  const whereOptions: WhereOptions = {};
-  if (req.query.name !== undefined) {
-    whereOptions.name = {
-      [Op.iLike]: req.body.name,
-    };
-  }
-  if (req.query.TransactorTypeIds !== undefined) {
-    whereOptions.types = {
-      [Op.in]: (req.query.TransactorTypeIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
-  }
-  const childWhereOptions: WhereOptions = {};
-  if (req.query.isTemplate !== undefined) {
-    childWhereOptions.isTemplate = {
-      [Op.eq]: req.query.isTemplate as unknown as boolean,
-    };
-  }
-  if (req.query.GroupIds !== undefined) {
-    childWhereOptions.group = {
-      [Op.in]: (req.query.GroupIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
-  }
-  if (req.query.TagIds !== undefined) {
-    childWhereOptions.tags = {
-      [Op.in]: (req.query.TagIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
-  }
-  if (req.query.TemplateIds !== undefined) {
-    childWhereOptions.template = {
-      [Op.in]: (req.query.TemplateIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
+  const requestQuery = req.query;
+
+  const transactors = await getTransactorsByOptions(requestQuery);
+
+  if (transactors === null) {
+    res.status(500).send({
+      message: "Transactors not found.",
+    });
+    return;
   }
 
-  const findOptions: FindOptions = {
-    offset: +(req.query.offset ?? 0),
-    limit: +(req.query.limit ?? defaultLimit),
-    where: whereOptions,
-    include: [
-      {
-        model: Account,
-        where: childWhereOptions,
-        include: [Field, FieldDatum, Tag],
-        required: false,
-      },
-      {
-        model: Entity,
-        where: childWhereOptions,
-        include: [Field, FieldDatum, Tag],
-        required: false,
-      },
-    ],
-  };
-  const transactors = await Transactor.findAll(findOptions);
-  const children = await Promise.all(
-    transactors
-      .filter((t) => t.Account?.id === t.id || t.Entity?.id === t.id)
-      .map(async (t) => minimizeAssociationsToIds(await t.getChildObject()))
+  const transactorDtos = transactors.map(
+    (transactor) => new TransactorResponseDto(transactor)
   );
-  const childrenResponseDtos = children.map((child) => {
-    if (child instanceof Account) {
-      return new AccountResponseDto(child);
-    }
-    if (child instanceof Entity) {
-      return new EntityResponseDto(child);
-    }
-    return null;
-  });
 
-  res.status(200).send({
-    message: "Transactors gotten.",
-    transactors: childrenResponseDtos,
-  });
+  if (req.query.isTemplate as unknown as boolean) {
+    res.status(200).send({
+      message: "Transactor Templates gotten.",
+      templates: transactorDtos,
+    });
+  } else {
+    res.status(200).send({
+      message: "Transactors gotten.",
+      transactors: transactorDtos,
+    });
+  }
 }

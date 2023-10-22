@@ -56,10 +56,6 @@ paths:
     $ref: ./app/routes/role.openapi.yml#/RolesRequests
   /roles/{RoleId}:
     $ref: ./app/routes/role.openapi.yml#/RoleIdRequests
-  /statuses:
-    $ref: ./app/routes/status.openapi.yml#/StatusesRequests
-  /statuses/{StatusId}:
-    $ref: ./app/routes/status.openapi.yml#/StatusIdRequests
   /tags:
     $ref: ./app/routes/tag.openapi.yml#/TagsRequests
   /tags/{TagId}:
@@ -78,10 +74,6 @@ paths:
     $ref: ./app/routes/transactor.openapi.yml#/TransactorsRequests
   /transactors/{TransactorId}:
     $ref: ./app/routes/transactor.openapi.yml#/TransactorIdRequests
-  /types:
-    $ref: ./app/routes/type.openapi.yml#/TypesRequests
-  /types/{TypeId}:
-    $ref: ./app/routes/type.openapi.yml#/TypeIdRequests
   /users:
     $ref: ./app/routes/user.openapi.yml#/UsersRequests
   /users/{UserId}:
@@ -122,10 +114,6 @@ components:
       $ref: ./app/routes/role.openapi.yml#/RoleResponse
     Roles:
       $ref: ./app/routes/role.openapi.yml#/RolesResponse
-    Status:
-      $ref: ./app/routes/status.openapi.yml#/StatusResponse
-    Statuses:
-      $ref: ./app/routes/status.openapi.yml#/StatusesResponse
     Tag:
       $ref: ./app/routes/tag.openapi.yml#/TagResponse
     Tags:
@@ -138,10 +126,6 @@ components:
       $ref: ./app/routes/transactor.openapi.yml#/TransactorResponse
     Transactors:
       $ref: ./app/routes/transactor.openapi.yml#/TransactorsResponse
-    Type:
-      $ref: ./app/routes/type.openapi.yml#/TypeResponse
-    Types:
-      $ref: ./app/routes/type.openapi.yml#/TypesResponse
     User:
       $ref: ./app/routes/user.openapi.yml#/UserResponse
     Users:
@@ -224,10 +208,6 @@ components:
       $ref: ./app/apiDtos/role.openapi.yml#/RequestSchema
     Role_ResponseSchema:
       $ref: ./app/apiDtos/role.openapi.yml#/ResponseSchema
-    Status_RequestSchema:
-      $ref: ./app/apiDtos/status.openapi.yml#/RequestSchema
-    Status_ResponseSchema:
-      $ref: ./app/apiDtos/status.openapi.yml#/ResponseSchema
     Tag_RequestSchema:
       $ref: ./app/apiDtos/tag.openapi.yml#/RequestSchema
     Tag_ResponseSchema:
@@ -240,10 +220,6 @@ components:
       $ref: ./app/apiDtos/transactor.openapi.yml#/RequestSchema
     Transactor_ResponseSchema:
       $ref: ./app/apiDtos/transactor.openapi.yml#/ResponseSchema
-    Type_RequestSchema:
-      $ref: ./app/apiDtos/type.openapi.yml#/RequestSchema
-    Type_ResponseSchema:
-      $ref: ./app/apiDtos/type.openapi.yml#/ResponseSchema
     User_RequestSchema:
       $ref: ./app/apiDtos/user.openapi.yml#/RequestSchema
     User_ResponseSchema:
