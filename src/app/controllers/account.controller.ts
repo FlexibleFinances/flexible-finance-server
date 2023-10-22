@@ -1,44 +1,30 @@
 import {
-  type CreationAttributes,
-  type FindOptions,
-  Op,
-  type WhereOptions,
-} from "sequelize";
-import FieldDatum, { type FieldValues } from "../../database/models/FieldDatum";
+  type AccountRequest,
+  type AccountResponse,
+  AccountResponseDto,
+  type AccountSearchRequest,
+  type AccountsResponse,
+} from "../apiDtos/AccountDtos";
 import {
-  hasRequestArguments,
-  isTemplatedUpsertRequest,
-  minimizeAssociationsToIds,
-} from "../../utils/helperFunctions";
-import Account from "../../database/models/Account";
-import { AccountResponseDto } from "../apiDtos/AccountDtos";
-import Field from "../../database/models/Field";
-import Tag from "../../database/models/Tag";
-import { defaultLimit } from "../../utils/constants";
-import type express from "express";
+  createAccountFromDto,
+  getAccountById,
+  getAccountsByOptions,
+  updateAccountFromDto,
+} from "../repositories/AccountRepository";
+import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getAccount(
-  req: express.Request,
-  res: express.Response
+  req: AccountRequest,
+  res: AccountResponse
 ): Promise<void> {
-  if (!hasRequestArguments(req, res, { params: ["AccountId"] })) {
-    return;
-  }
+  const account = await getAccountById(Number(req.params.accountId));
 
-  const account = await Account.findOne({
-    where: {
-      id: req.params.AccountId,
-    },
-    include: [Field, FieldDatum, Tag],
-  });
   if (account === null) {
     res.status(500).send({
       message: "Account not found.",
     });
     return;
   }
-
-  minimizeAssociationsToIds(account);
 
   res.status(200).send({
     message: "Account gotten.",
@@ -47,41 +33,25 @@ export async function getAccount(
 }
 
 export async function createAccount(
-  req: express.Request,
-  res: express.Response
+  req: AccountRequest,
+  res: AccountResponse
 ): Promise<void> {
-  if (
-    !isTemplatedUpsertRequest(
-      req,
-      res,
-      req.body?.isTemplate as boolean | undefined,
-      req.body?.TemplateId as number | undefined,
-      { body: ["name"] }
-    )
-  ) {
+  const requestBody = req.body;
+  if (requestBody === undefined) {
+    res.status(500).send({
+      message: "Request not valid.",
+    });
     return;
   }
 
-  const createOptions: CreationAttributes<Account> = {
-    name: req.body.name,
-    TemplateId: req.body.TemplateId,
-    isTemplate: req.body.isTemplate,
-    GroupId: req.body.GroupId,
-  };
-  const account = await Account.create(createOptions);
+  const account = await createAccountFromDto(requestBody);
 
-  if (createOptions.isTemplate) {
-    if (req.body.FieldIds !== undefined) {
-      await account.addFields(req.body.FieldIds as number[]);
-    }
-  } else {
-    await FieldDatum.upsertFieldData(
-      req.body.fieldValues as FieldValues,
-      account.id
-    );
+  if (account === null) {
+    res.status(500).send({
+      message: "Account not created.",
+    });
+    return;
   }
-
-  await account.loadAssociatedIds();
 
   res.status(200).send({
     message: "Account created.",
@@ -90,9 +60,17 @@ export async function createAccount(
 }
 
 export async function updateAccount(
-  req: express.Request,
-  res: express.Response
+  req: AccountRequest,
+  res: AccountResponse
 ): Promise<void> {
+  const requestBody = req.body;
+  if (requestBody === undefined) {
+    res.status(500).send({
+      message: "Request not valid.",
+    });
+    return;
+  }
+
   if (
     !hasRequestArguments(
       req,
@@ -104,37 +82,14 @@ export async function updateAccount(
     return;
   }
 
-  const account = await Account.findOne({
-    where: {
-      id: req.params.AccountId,
-    },
-  });
+  const account = await updateAccountFromDto(requestBody);
+
   if (account === null) {
     res.status(500).send({
       message: "Account not found.",
     });
     return;
   }
-  const updateOptions: CreationAttributes<Account> = {
-    name: req.body.name,
-    GroupId: req.body.GroupId,
-    TemplateId: req.body.TemplateId,
-    isTemplate: account.isTemplate,
-  };
-  await account.update(updateOptions);
-
-  if (updateOptions.isTemplate) {
-    if (req.body.FieldIds !== undefined) {
-      await account.setFields(req.body.FieldIds as number[]);
-    }
-  } else {
-    await FieldDatum.upsertFieldData(
-      req.body.fieldValues as FieldValues,
-      account.id
-    );
-  }
-
-  await account.loadAssociatedIds();
 
   res.status(200).send({
     message: "Account updated.",
@@ -143,66 +98,33 @@ export async function updateAccount(
 }
 
 export async function getAccounts(
-  req: express.Request,
-  res: express.Response
+  req: AccountSearchRequest,
+  res: AccountsResponse
 ): Promise<void> {
-  const whereOptions: WhereOptions = {};
-  if (req.query.name !== undefined) {
-    whereOptions.name = {
-      [Op.iLike]: req.body.name,
-    };
-  }
-  if (req.query.isTemplate !== undefined) {
-    whereOptions.isTemplate = {
-      [Op.eq]: req.query.isTemplate as unknown as boolean,
-    };
-  }
-  if (req.query.GroupIds !== undefined) {
-    whereOptions.group = {
-      [Op.in]: (req.query.GroupIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
-  }
-  if (req.query.TagIds !== undefined) {
-    whereOptions.tags = {
-      [Op.in]: (req.query.TagIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
-  }
-  if (req.query.TemplateIds !== undefined) {
-    whereOptions.template = {
-      [Op.in]: (req.query.TemplateIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
+  const requestQuery = req.query;
+
+  const accounts = await getAccountsByOptions(requestQuery);
+
+  if (accounts === null) {
+    res.status(500).send({
+      message: "Accounts not found.",
+    });
+    return;
   }
 
-  const findOptions: FindOptions = {
-    offset: +(req.query.offset ?? 0),
-    limit: +(req.query.limit ?? defaultLimit),
-    where: whereOptions,
-    include: [Field, FieldDatum, Tag],
-  };
-  const accounts = await Account.findAll(findOptions);
-
-  const minimizedAccounts: AccountResponseDto[] = [];
-  accounts.forEach((account) => {
-    minimizedAccounts.push(
-      new AccountResponseDto(minimizeAssociationsToIds(account))
-    );
-  });
+  const accountDtos = accounts.map(
+    (account) => new AccountResponseDto(account)
+  );
 
   if (req.query.isTemplate as unknown as boolean) {
     res.status(200).send({
       message: "Account Templates gotten.",
-      templates: minimizedAccounts,
+      templates: accountDtos,
     });
   } else {
     res.status(200).send({
       message: "Accounts gotten.",
-      accounts: minimizedAccounts,
+      accounts: accountDtos,
     });
   }
 }

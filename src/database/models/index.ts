@@ -17,7 +17,6 @@ import Group, { initializeGroup } from "./Group";
 import Report, { initializeReport } from "./Report";
 import ReportTag, { initializeReportTag } from "./ReportTag";
 import Role, { initializeRole } from "./Role";
-import Status, { initializeStatus } from "./Status";
 import Tag, { initializeTag } from "./Tag";
 import Transaction, { initializeTransaction } from "./Transaction";
 import TransactionField, {
@@ -27,7 +26,6 @@ import TransactionFile, { initializeTransactionFile } from "./TransactionFile";
 import TransactionTag, { initializeTransactionTag } from "./TransactionTag";
 import Transactor, { initializeTransactor } from "./Transactor";
 import TransactorType, { initializeTransactorType } from "./TransactorType";
-import Type, { initializeType } from "./Type";
 import User, { initializeUser } from "./User";
 import UserRole, { initializeUserRole } from "./UserRole";
 import { type Sequelize } from "sequelize/types";
@@ -39,10 +37,8 @@ export async function syncAllModels(): Promise<void> {
     Group.sync(),
     Report.sync(),
     Role.sync(),
-    Status.sync(),
     Tag.sync(),
     TransactorType.sync(),
-    Type.sync(),
     User.sync(),
   ]);
 
@@ -71,10 +67,8 @@ export function initializeModels(sequelize: Sequelize): void {
   initializeGroup(sequelize);
   initializeReport(sequelize);
   initializeRole(sequelize);
-  initializeStatus(sequelize);
   initializeTag(sequelize);
   initializeTransactorType(sequelize);
-  initializeType(sequelize);
   initializeUser(sequelize);
   console.log("initialized model set 1");
 

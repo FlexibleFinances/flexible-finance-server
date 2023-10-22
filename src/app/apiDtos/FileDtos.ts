@@ -1,6 +1,6 @@
 import type File from "../../database/models/File";
 
-export class FileResponseDto {
+export class FileDto {
   id: number;
   createdAt: string;
   updatedAt: string;

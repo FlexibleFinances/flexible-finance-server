@@ -112,7 +112,7 @@ export function isTemplatedUpsertRequest(
   req: express.Request,
   res: express.Response,
   isTemplate: boolean | undefined,
-  templateId: number | undefined,
+  templateId: number | undefined | null,
   requiredArguments?: argObject
 ): boolean {
   let message = "";

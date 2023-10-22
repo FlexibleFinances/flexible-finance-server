@@ -3,15 +3,15 @@ RequestSchema:
   properties:
     name:
       type: string
-    AccountIds:
+    accountIds:
       type: array
       items:
         type: integer
-    EntityIds:
+    entityIds:
       type: array
       items:
         type: integer
-    TransactionIds:
+    transactionIds:
       type: array
       items:
         type: integer

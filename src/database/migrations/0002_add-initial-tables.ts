@@ -27,6 +27,15 @@ export async function up({
       allowNull: false,
       unique: true,
     },
+    GroupId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Groups",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
   });
   await queryInterface.createTable("Files", {
     id: {
@@ -68,47 +77,7 @@ export async function up({
       unique: true,
     },
   });
-  await queryInterface.createTable("Statuses", {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    name: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-      unique: true,
-    },
-  });
   await queryInterface.createTable("Tags", {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    name: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-      unique: true,
-    },
-  });
-  await queryInterface.createTable("Types", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -537,8 +506,6 @@ export async function down({
   await queryInterface.dropTable("Files", {});
   await queryInterface.dropTable("Reports", {});
   await queryInterface.dropTable("Tags", {});
-  await queryInterface.dropTable("Statuses", {});
-  await queryInterface.dropTable("Types", {});
   await queryInterface.dropTable("Transactors", {});
   await queryInterface.dropTable("TransactorTypes", {});
   console.log("0002 down - finished");

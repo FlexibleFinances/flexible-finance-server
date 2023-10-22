@@ -1,4 +1,10 @@
 import * as controller from "../controllers/fieldDatum.controller";
+import {
+  type FieldDataResponse,
+  type FieldDatumRequest,
+  type FieldDatumResponse,
+  type FieldDatumSearchRequest,
+} from "../apiDtos/FieldDatumDtos";
 import asyncHandler from "express-async-handler";
 import { authJwt } from "../middleware/authJwt";
 import type express from "express";
@@ -18,24 +24,44 @@ export function setFieldDatumRoutes(app: express.Express): void {
   app.get(
     "/v1/" + endpointName,
     [authJwt.verifyToken],
-    asyncHandler(controller.getFieldData)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.getFieldData(
+        req as FieldDatumSearchRequest,
+        res as FieldDataResponse
+      );
+    })
   );
 
   app.post(
     "/v1/" + endpointName,
     [authJwt.verifyToken],
-    asyncHandler(controller.createFieldDatum)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.createFieldDatum(
+        req as FieldDatumRequest,
+        res as FieldDatumResponse
+      );
+    })
   );
 
   app.get(
     "/v1/" + endpointName + "/:FieldDatumId",
     [authJwt.verifyToken],
-    asyncHandler(controller.getFieldDatum)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.getFieldDatum(
+        req as FieldDatumRequest,
+        res as FieldDatumResponse
+      );
+    })
   );
 
   app.put(
     "/v1/" + endpointName + "/:FieldDatumId",
     [authJwt.verifyToken],
-    asyncHandler(controller.updateFieldDatum)
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.updateFieldDatum(
+        req as FieldDatumRequest,
+        res as FieldDatumResponse
+      );
+    })
   );
 }

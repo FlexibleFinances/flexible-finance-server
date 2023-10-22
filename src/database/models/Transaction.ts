@@ -61,7 +61,7 @@ export class Transaction extends Model<
   declare TagIds: CreationOptional<number[]>;
   declare Tags: NonAttribute<Tag[]>;
 
-  declare TemplateId: number | null;
+  declare TemplateId?: number;
   declare Template: NonAttribute<Transaction>;
 
   declare static associations: {

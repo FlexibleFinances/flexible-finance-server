@@ -3,7 +3,7 @@ RequestSchema:
   properties:
     name:
       type: string
-    FieldTypeId:
+    fieldTypeId:
       type: integer
     isComponentOnly:
       type: boolean

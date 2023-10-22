@@ -3,7 +3,7 @@ RequestSchema:
   properties:
     name:
       type: string
-    UserIds:
+    userIds:
       type: array
       items:
         type: integer

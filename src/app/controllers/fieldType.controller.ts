@@ -1,35 +1,31 @@
 import {
-  type CreationAttributes,
-  type FindOptions,
-  Op,
-  type WhereOptions,
-} from "sequelize";
-import FieldType from "../../database/models/FieldType";
-import { FieldTypeResponseDto } from "../apiDtos/FieldTypeDtos";
-import { defaultLimit } from "../../utils/constants";
-import type express from "express";
-import { type fieldTypeTypeEnum } from "../../utils/enumerators";
+  type FieldTypeRequest,
+  type FieldTypeResponse,
+  FieldTypeResponseDto,
+  type FieldTypeSearchRequest,
+  type FieldTypesResponse,
+} from "../apiDtos/FieldTypeDtos";
+import {
+  createFieldTypeFromDto,
+  getFieldTypeById,
+  getFieldTypesByOptions,
+  updateFieldTypeFromDto,
+} from "../repositories/FieldTypeRepository";
 import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getFieldType(
-  req: express.Request,
-  res: express.Response
+  req: FieldTypeRequest,
+  res: FieldTypeResponse
 ): Promise<void> {
-  if (!hasRequestArguments(req, res, { params: ["FieldTypeId"] })) {
-    return;
-  }
+  const fieldType = await getFieldTypeById(Number(req.params.fieldTypeId));
 
-  const fieldType = await FieldType.findOne({
-    where: {
-      id: req.params.FieldTypeId,
-    },
-  });
   if (fieldType === null) {
     res.status(500).send({
       message: "FieldType not found.",
     });
     return;
   }
+
   res.status(200).send({
     message: "FieldType gotten.",
     fieldType: new FieldTypeResponseDto(fieldType),
@@ -37,19 +33,26 @@ export async function getFieldType(
 }
 
 export async function createFieldType(
-  req: express.Request,
-  res: express.Response
+  req: FieldTypeRequest,
+  res: FieldTypeResponse
 ): Promise<void> {
-  if (!hasRequestArguments(req, res, { body: ["name"] })) {
+  const requestBody = req.body;
+  if (requestBody === undefined) {
+    res.status(500).send({
+      message: "Request not valid.",
+    });
     return;
   }
 
-  const createOptions: CreationAttributes<FieldType> = {
-    name: req.body.name,
-    type: req.body.type as fieldTypeTypeEnum,
-    validator: req.body.validator,
-  };
-  const fieldType = await FieldType.create(createOptions);
+  const fieldType = await createFieldTypeFromDto(requestBody);
+
+  if (fieldType === null) {
+    res.status(500).send({
+      message: "FieldType not created.",
+    });
+    return;
+  }
+
   res.status(200).send({
     message: "FieldType created.",
     fieldType: new FieldTypeResponseDto(fieldType),
@@ -57,38 +60,37 @@ export async function createFieldType(
 }
 
 export async function updateFieldType(
-  req: express.Request,
-  res: express.Response
+  req: FieldTypeRequest,
+  res: FieldTypeResponse
 ): Promise<void> {
+  const requestBody = req.body;
+  if (requestBody === undefined) {
+    res.status(500).send({
+      message: "Request not valid.",
+    });
+    return;
+  }
+
   if (
     !hasRequestArguments(
       req,
       res,
       { params: ["FieldTypeId"] },
-      { body: ["name"] }
+      { body: ["name", "GroupId", "TemplateId", "fieldValues"] }
     )
   ) {
     return;
   }
 
-  const fieldType = await FieldType.findOne({
-    where: {
-      id: req.params.FieldTypeId,
-    },
-  });
+  const fieldType = await updateFieldTypeFromDto(requestBody);
+
   if (fieldType === null) {
     res.status(500).send({
       message: "FieldType not found.",
     });
     return;
   }
-  const updateOptions: CreationAttributes<FieldType> = {
-    name: req.body.name,
-    type: req.body.type as fieldTypeTypeEnum,
-    validator: req.body.validator,
-  };
-  console.log(updateOptions);
-  await fieldType.update(updateOptions);
+
   res.status(200).send({
     message: "FieldType updated.",
     fieldType: new FieldTypeResponseDto(fieldType),
@@ -96,33 +98,33 @@ export async function updateFieldType(
 }
 
 export async function getFieldTypes(
-  req: express.Request,
-  res: express.Response
+  req: FieldTypeSearchRequest,
+  res: FieldTypesResponse
 ): Promise<void> {
-  const whereOptions: WhereOptions = {};
-  if (req.query.name !== undefined) {
-    whereOptions.name = {
-      [Op.iLike]: req.body.name,
-    };
+  const requestQuery = req.query;
+
+  const fieldTypes = await getFieldTypesByOptions(requestQuery);
+
+  if (fieldTypes === null) {
+    res.status(500).send({
+      message: "FieldTypes not found.",
+    });
+    return;
   }
-  if (req.query.FieldIds !== undefined) {
-    whereOptions.fields = {
-      [Op.in]: (req.query.FieldIds as string[]).map((x) => {
-        return +x;
-      }),
-    };
-  }
-  const findOptions: FindOptions = {
-    offset: +(req.query.offset ?? 0),
-    limit: +(req.query.limit ?? defaultLimit),
-    where: whereOptions,
-  };
-  const fieldTypes = await FieldType.findAll(findOptions);
-  const fieldTypeResponseDtos = fieldTypes.map(
+
+  const fieldTypeDtos = fieldTypes.map(
     (fieldType) => new FieldTypeResponseDto(fieldType)
   );
-  res.status(200).send({
-    message: "FieldTypes gotten.",
-    fieldTypes: fieldTypeResponseDtos,
-  });
+
+  if (req.query.isTemplate as unknown as boolean) {
+    res.status(200).send({
+      message: "FieldType Templates gotten.",
+      templates: fieldTypeDtos,
+    });
+  } else {
+    res.status(200).send({
+      message: "FieldTypes gotten.",
+      fieldTypes: fieldTypeDtos,
+    });
+  }
 }

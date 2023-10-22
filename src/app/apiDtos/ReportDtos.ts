@@ -1,6 +1,6 @@
 import type Report from "../../database/models/Report";
 
-export class ReportResponseDto {
+export class ReportDto {
   id: number;
   createdAt: string;
   updatedAt: string;

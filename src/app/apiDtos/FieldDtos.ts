@@ -1,4 +1,45 @@
 import type Field from "../../database/models/Field";
+import { FieldTypeResponseDto } from "./FieldTypeDtos";
+import { type Query } from "express-serve-static-core";
+// import type Tag from "../../database/models/Tag";
+import { type TagResponseDto } from "./TagDtos";
+import type express from "express";
+
+export interface FieldRequest extends express.Request {
+  body: FieldRequestDto;
+}
+
+export interface FieldSearchRequest extends express.Request {
+  query: FieldSearchRequestDto;
+}
+
+export interface FieldResponse extends express.Response {
+  field: FieldResponseDto;
+}
+
+export interface FieldsResponse extends express.Response {
+  fields: FieldResponseDto[];
+}
+
+export interface FieldRequestDto {
+  id?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  name: string;
+  fieldTypeId: number;
+  tagIds?: number[];
+}
+
+export interface FieldSearchRequestDto extends Query {
+  offset?: string;
+  limit?: string;
+  ids?: string[];
+  createdAt?: string;
+  updatedAt?: string;
+  name?: string;
+  fieldTypeIds?: string[];
+  tagIds?: string[];
+}
 
 export class FieldResponseDto {
   id: number;
@@ -6,23 +47,21 @@ export class FieldResponseDto {
   updatedAt: string;
 
   name: string;
-  fieldDatumIds?: number[];
+  fieldType: FieldTypeResponseDto;
   fieldTypeId: number;
-  accountIds?: number[];
-  entityIds?: number[];
-  transactionIds?: number[];
-  isComponentOnly: boolean;
+  tags?: TagResponseDto[];
+  tagIds?: number[];
 
   constructor(field: Field) {
     this.id = field.id;
     this.createdAt = field.createdAt.toISOString();
     this.updatedAt = field.updatedAt.toISOString();
     this.name = field.name;
-    this.fieldDatumIds = field.FieldDatumIds;
-    this.fieldTypeId = field.FieldTypeId;
-    this.accountIds = field.AccountIds;
-    this.entityIds = field.EntityIds;
-    this.transactionIds = field.TransactionIds;
-    this.isComponentOnly = field.isComponentOnly;
+    this.fieldType = new FieldTypeResponseDto(field.FieldType);
+    this.fieldTypeId = field.FieldType.id;
+
+    //    if (field.Tags !== undefined) {
+    //      this.tagIds = field.Tags.map((tag: Tag) => tag.id);
+    //    }
   }
 }

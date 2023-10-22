@@ -15,7 +15,7 @@ RequestSchema:
     validator:
       type: string
       nullable: true
-    FieldTypeComponentIds:
+    fieldTypeComponentIds:
       type: array
       items:
         type: integer
