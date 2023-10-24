@@ -79,6 +79,96 @@ paths:
   /users/{UserId}:
     $ref: ./app/routes/user.openapi.yml#/UserIdRequests
 components:
+  parameters:
+    offsetParameter:
+      name: offset
+      in: query
+      schema:
+        type: integer
+    limitParameter:
+      name: limit
+      in: query
+      schema:
+        type: integer
+    idParameter:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+    nameParameter:
+      name: name
+      in: query
+      schema:
+        type: string
+    accountIdsParameter:
+      name: accountIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: number
+    entityIdsParameter:
+      name: entityIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: number
+    fieldIdsParameter:
+      name: fieldIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: number
+    fieldDatumIdsParameter:
+      name: fieldDatumIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: number
+    fieldTypeIdsParameter:
+      name: fieldTypeIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: number
+    groupIdsParameter:
+      name: groupIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: number
+    tagIdsParameter:
+      name: tagIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: number
+    templateIdsParameter:
+      name: templateIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: number
+    transactionIdsParameter:
+      name: transactionIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: number
+    isTemplateParameter:
+      name: isTemplate
+      in: query
+      schema:
+        type: boolean
   responses:
     Message:
       description: a simple response with just a message

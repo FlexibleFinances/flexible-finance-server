@@ -1,11 +1,7 @@
 FieldDatumIdRequests:
   get:
     parameters:
-      - name: FieldDatumId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldDatum"
@@ -19,11 +15,7 @@ FieldDatumIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: FieldDatumId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
     requestBody:
       required: true
       content:
@@ -56,14 +48,13 @@ FieldDatumIdRequests:
 FieldDataRequests:
   get:
     parameters:
-      - name: offset
-        in: query
-        schema:
-          type: integer
-      - name: limit
-        in: query
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/offsetParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/limitParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/nameParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/fieldIdsParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/accountIdsParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/entityIdsParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/transactionIdsParameter"
       - name: stringValue
         in: query
         schema:
@@ -84,30 +75,6 @@ FieldDataRequests:
         in: query
         schema:
           type: boolean
-      - name: FieldIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: AccountIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: EntityIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: TransactionIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldData"

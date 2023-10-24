@@ -1,11 +1,7 @@
 RoleIdRequests:
   get:
     parameters:
-      - name: RoleId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Role"
@@ -19,11 +15,7 @@ RoleIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: RoleId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
     requestBody:
       required: true
       content:
@@ -44,19 +36,10 @@ RoleIdRequests:
 RolesRequests:
   get:
     parameters:
-      - name: offset
-        in: query
-        schema:
-          type: integer
-      - name: limit
-        in: query
-        schema:
-          type: integer
-      - name: name
-        in: query
-        schema:
-          type: string
-      - name: UserIds
+      - $ref: "../../openapi.root.yml#/components/parameters/offsetParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/limitParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/nameParameter"
+      - name: userIds
         in: query
         schema:
           type: array

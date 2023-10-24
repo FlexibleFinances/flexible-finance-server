@@ -1,11 +1,7 @@
 TransactionIdRequests:
   get:
     parameters:
-      - name: TransactionId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transaction"
@@ -19,11 +15,7 @@ TransactionIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: TransactionId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
     requestBody:
       required: true
       content:
@@ -44,42 +36,13 @@ TransactionIdRequests:
 TransactionsRequests:
   get:
     parameters:
-      - name: offset
-        in: query
-        schema:
-          type: integer
-      - name: limit
-        in: query
-        schema:
-          type: integer
-      - name: FieldDatumIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: FieldIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: fileIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: TagIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: isTemplate
-        in: query
-        schema:
-          type: boolean
+      - $ref: "../../openapi.root.yml#/components/parameters/offsetParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/limitParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/fieldIdsParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/fieldDatumIdsParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/tagIdsParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/templateIdsParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/isTemplateParameter"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transactions"

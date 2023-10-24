@@ -1,11 +1,7 @@
 FieldTypeIdRequests:
   get:
     parameters:
-      - name: FieldTypeId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldType"
@@ -19,11 +15,7 @@ FieldTypeIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: FieldTypeId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
     requestBody:
       required: true
       content:
@@ -44,24 +36,11 @@ FieldTypeIdRequests:
 FieldTypesRequests:
   get:
     parameters:
-      - name: offset
-        in: query
-        schema:
-          type: integer
-      - name: limit
-        in: query
-        schema:
-          type: integer
-      - name: name
-        in: query
-        schema:
-          type: string
-      - name: FieldIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
+      - $ref: "../../openapi.root.yml#/components/parameters/offsetParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/limitParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/nameParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/fieldIdsParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/tagIdsParameter"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldTypes"
