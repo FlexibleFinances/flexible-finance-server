@@ -2,8 +2,7 @@ import type Field from "../../database/models/Field";
 import type FieldDatum from "../../database/models/FieldDatum";
 import { type FieldValue } from "../../database/models/FieldDatum";
 import { type Query } from "express-serve-static-core";
-import type Tag from "../../database/models/Tag";
-import { type TagResponseDto } from "./TagDtos";
+import { TagResponseDto } from "./TagDtos";
 import type Transaction from "../../database/models/Transaction";
 import type express from "express";
 
@@ -71,6 +70,8 @@ export class TransactionResponseDto {
     this.createdAt = transaction.createdAt.toISOString();
     this.updatedAt = transaction.updatedAt.toISOString();
     this.name = transaction.name;
+    this.tags = transaction.Tags?.map((tag) => new TagResponseDto(tag));
+    this.tagIds = transaction.Tags?.map((tag) => tag.id);
     this.templateId = transaction.TemplateId;
     this.isTemplate = transaction.isTemplate;
 
@@ -84,9 +85,6 @@ export class TransactionResponseDto {
           (fieldDatum: FieldDatum) => fieldDatum.id
         );
       }
-    }
-    if (transaction.Tags !== undefined) {
-      this.tagIds = transaction.Tags.map((tag: Tag) => tag.id);
     }
   }
 }

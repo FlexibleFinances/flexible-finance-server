@@ -119,6 +119,74 @@ export async function up({
     },
   });
 
+  await queryInterface.createTable("FieldTypeTags", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    GroupId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "FieldTypes",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    TagId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Tags",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+  });
+
+  await queryInterface.createTable("FieldTags", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    GroupId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Fields",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    TagId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Tags",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+  });
+
   await queryInterface.createTable("AccountFields", {
     id: {
       type: DataTypes.INTEGER,
@@ -364,6 +432,8 @@ export async function down({
   context: QueryInterface;
 }): Promise<void> {
   console.log("0003 down - starting");
+  await queryInterface.dropTable("FieldTags", {});
+  await queryInterface.dropTable("FieldTypeTags", {});
   await queryInterface.dropTable("FieldData", {});
   await queryInterface.dropTable("FieldComponents", {});
   await queryInterface.dropTable("FieldChoices", {});

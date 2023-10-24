@@ -1,5 +1,6 @@
 import type Group from "../../database/models/Group";
 import { type Query } from "express-serve-static-core";
+import { TagResponseDto } from "./TagDtos";
 import type express from "express";
 
 export interface GroupRequest extends express.Request {
@@ -24,6 +25,7 @@ export interface GroupRequestDto {
   updatedAt?: string;
   name?: string;
   parentGroupId?: number;
+  tagIds?: number[];
 }
 
 export interface GroupSearchRequestDto extends Query {
@@ -34,6 +36,7 @@ export interface GroupSearchRequestDto extends Query {
   updatedAt?: string;
   name?: string;
   parentGroupIds?: string[];
+  tagIds?: string[];
 }
 
 export class GroupResponseDto {
@@ -44,6 +47,8 @@ export class GroupResponseDto {
   name: string;
   parentGroup?: GroupResponseDto;
   parentGroupId?: number;
+  tags?: TagResponseDto[];
+  tagIds?: number[];
 
   constructor(group: Group) {
     this.id = group.id;
@@ -51,5 +56,7 @@ export class GroupResponseDto {
     this.updatedAt = group.updatedAt.toISOString();
     this.name = group.name;
     this.parentGroupId = group.GroupId;
+    this.tags = group.Tags?.map((tag) => new TagResponseDto(tag));
+    this.tagIds = group.Tags?.map((tag) => tag.id);
   }
 }

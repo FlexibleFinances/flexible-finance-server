@@ -22,6 +22,8 @@ import {
 } from "sequelize";
 import type Account from "./Account";
 import type Entity from "./Entity";
+import type Tag from "./Tag";
+import { getTagIds } from "../../utils/helperFunctions";
 
 export class Group extends Model<
   InferAttributes<Group>,
@@ -42,10 +44,14 @@ export class Group extends Model<
   declare EntityIds: NonAttribute<number[]>;
   declare Entities: NonAttribute<Entity[]>;
 
+  declare TagIds: CreationOptional<number[]>;
+  declare Tags: NonAttribute<Tag[]>;
+
   declare static associations: {
     Group: Association<Group, Group>;
     Accounts: Association<Account, Group>;
     Entities: Association<Entity, Group>;
+    Tags: Association<Group, Tag>;
   };
 
   // Since TS cannot determine model association at compile time
@@ -75,6 +81,27 @@ export class Group extends Model<
   declare hasEntities: HasManyHasAssociationsMixin<Entity, number>;
   declare countEntities: HasManyCountAssociationsMixin;
   declare createEntitys: HasManyCreateAssociationMixin<Entity, "GroupId">;
+
+  declare getTags: HasManyGetAssociationsMixin<Tag>;
+  declare addTag: HasManyAddAssociationMixin<Tag, number>;
+  declare addTags: HasManyAddAssociationsMixin<Tag, number>;
+  declare setTags: HasManySetAssociationsMixin<Tag, number>;
+  declare removeTag: HasManyRemoveAssociationMixin<Tag, number>;
+  declare removeTags: HasManyRemoveAssociationsMixin<Tag, number>;
+  declare hasTag: HasManyHasAssociationMixin<Tag, number>;
+  declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
+  declare countTags: HasManyCountAssociationsMixin;
+  declare createTag: HasManyCreateAssociationMixin<Tag, "id">;
+
+  public async loadTagIds(): Promise<void> {
+    const tagIds = await getTagIds(this);
+    this.setDataValue("TagIds", tagIds);
+  }
+
+  public async loadAssociatedIds(): Promise<void> {
+    const loadPromises = [this.loadTagIds()];
+    await Promise.all(loadPromises);
+  }
 }
 
 export function initializeGroup(sequelize: Sequelize): void {
@@ -99,6 +126,7 @@ export function initializeGroup(sequelize: Sequelize): void {
           key: "id",
         },
       },
+      TagIds: DataTypes.VIRTUAL,
     },
     {
       sequelize,

@@ -4,8 +4,7 @@ import type FieldDatum from "../../database/models/FieldDatum";
 import { type FieldValue } from "../../database/models/FieldDatum";
 import { type GroupResponseDto } from "./GroupDtos";
 import { type Query } from "express-serve-static-core";
-import type Tag from "../../database/models/Tag";
-import { type TagResponseDto } from "./TagDtos";
+import { TagResponseDto } from "./TagDtos";
 import type express from "express";
 
 export interface AccountRequest extends express.Request {
@@ -77,6 +76,8 @@ export class AccountResponseDto {
     this.updatedAt = account.updatedAt.toISOString();
     this.name = account.name;
     this.parentGroupId = account.GroupId;
+    this.tags = account.Tags?.map((tag) => new TagResponseDto(tag));
+    this.tagIds = account.Tags?.map((tag) => tag.id);
     this.templateId = account.TemplateId;
     this.isTemplate = account.isTemplate;
 
@@ -90,9 +91,6 @@ export class AccountResponseDto {
           (fieldDatum: FieldDatum) => fieldDatum.id
         );
       }
-    }
-    if (account.Tags !== undefined) {
-      this.tagIds = account.Tags.map((tag: Tag) => tag.id);
     }
   }
 }

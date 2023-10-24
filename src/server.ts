@@ -1,12 +1,12 @@
 import * as OpenApiValidator from "express-openapi-validator";
 import * as swaggerUi from "swagger-ui-express";
-import * as yaml from "js-yaml";
 import {
   initializeMigrator,
   initializeSequelize,
   runMigrations,
 } from "./database/index";
 import { initializeModels, syncAllModels } from "./database/models";
+import YAML from "yaml";
 import compression from "compression";
 import cors from "cors";
 import express from "express";
@@ -19,8 +19,8 @@ import toobusy from "toobusy-js";
 
 const app = express();
 
-const apiDoc = yaml.load(
-  fs.readFileSync("build/openapi.yml").toString()
+const apiDoc = YAML.parse(
+  fs.readFileSync("./build/openapi.yml", "utf8")
 ) as swaggerUi.JsonObject;
 
 const validatorOptions = {

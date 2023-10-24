@@ -85,6 +85,9 @@ export async function createEntityFromDto(
   } else if (entityDto.fieldValues !== undefined) {
     await FieldDatum.upsertFieldData(entityDto.fieldValues, entity.id);
   }
+  if (entityDto.tagIds !== undefined) {
+    await entity.setTags(entityDto.tagIds);
+  }
 
   await entity.loadAssociatedIds();
 
@@ -116,6 +119,9 @@ export async function updateEntityFromDto(
     }
   } else if (entityDto.fieldValues !== undefined) {
     await FieldDatum.upsertFieldData(entityDto.fieldValues, entity.id);
+  }
+  if (entityDto.tagIds !== undefined) {
+    await entity.setTags(entityDto.tagIds);
   }
 
   await entity.loadAssociatedIds();

@@ -2,7 +2,7 @@ import type Field from "../../database/models/Field";
 import { FieldTypeResponseDto } from "./FieldTypeDtos";
 import { type Query } from "express-serve-static-core";
 // import type Tag from "../../database/models/Tag";
-import { type TagResponseDto } from "./TagDtos";
+import { TagResponseDto } from "./TagDtos";
 import type express from "express";
 
 export interface FieldRequest extends express.Request {
@@ -59,9 +59,7 @@ export class FieldResponseDto {
     this.name = field.name;
     this.fieldType = new FieldTypeResponseDto(field.FieldType);
     this.fieldTypeId = field.FieldType.id;
-
-    //    if (field.Tags !== undefined) {
-    //      this.tagIds = field.Tags.map((tag: Tag) => tag.id);
-    //    }
+    this.tags = field.Tags?.map((tag) => new TagResponseDto(tag));
+    this.tagIds = field.Tags?.map((tag) => tag.id);
   }
 }
