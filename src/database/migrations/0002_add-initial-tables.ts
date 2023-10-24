@@ -383,6 +383,40 @@ export async function up({
     },
   });
 
+  await queryInterface.createTable("GroupTags", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    GroupId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Groups",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    TagId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Tags",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+  });
+
   await queryInterface.createTable("ReportTags", {
     id: {
       type: DataTypes.INTEGER,
@@ -496,6 +530,7 @@ export async function down({
   console.log("0002 down - starting");
   await queryInterface.dropTable("AccountTags", {});
   await queryInterface.dropTable("EntityTags", {});
+  await queryInterface.dropTable("GroupTags", {});
   await queryInterface.dropTable("ReportTags", {});
   await queryInterface.dropTable("TransactionFiles", {});
   await queryInterface.dropTable("TransactionTags", {});

@@ -32,6 +32,11 @@ export async function getFieldTypesByOptions(
       [Op.iLike]: fieldTypeOptions.name,
     };
   }
+  if (fieldTypeOptions.tagIds !== undefined) {
+    whereOptions.tags = {
+      [Op.in]: fieldTypeOptions.tagIds.map((id) => +id),
+    };
+  }
 
   const findOptions: FindOptions = {
     offset: +(fieldTypeOptions.offset ?? 0),
@@ -53,6 +58,12 @@ export async function createFieldTypeFromDto(
   };
   const fieldType = await FieldType.create(createOptions);
 
+  if (fieldTypeDto.tagIds !== undefined) {
+    await fieldType.setTags(fieldTypeDto.tagIds);
+  }
+
+  await fieldType.loadAssociatedIds();
+
   return fieldType;
 }
 
@@ -71,6 +82,12 @@ export async function updateFieldTypeFromDto(
     name: fieldTypeDto.name ?? "",
   };
   await fieldType.update(updateOptions);
+
+  if (fieldTypeDto.tagIds !== undefined) {
+    await fieldType.setTags(fieldTypeDto.tagIds);
+  }
+
+  await fieldType.loadAssociatedIds();
 
   return fieldType;
 }

@@ -58,6 +58,12 @@ export async function createFieldFromDto(
 
   const field = await Field.create(createOptions);
 
+  if (fieldDto.tagIds !== undefined) {
+    await field.setTags(fieldDto.tagIds);
+  }
+
+  await field.loadAssociatedIds();
+
   return field;
 }
 
@@ -77,6 +83,12 @@ export async function updateFieldFromDto(
     FieldTypeId: fieldDto.fieldTypeId,
   };
   await field.update(updateOptions);
+
+  if (fieldDto.tagIds !== undefined) {
+    await field.setTags(fieldDto.tagIds);
+  }
+
+  await field.loadAssociatedIds();
 
   return field;
 }

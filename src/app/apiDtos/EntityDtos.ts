@@ -4,8 +4,7 @@ import type FieldDatum from "../../database/models/FieldDatum";
 import { type FieldValue } from "../../database/models/FieldDatum";
 import { GroupResponseDto } from "./GroupDtos";
 import { type Query } from "express-serve-static-core";
-import type Tag from "../../database/models/Tag";
-import { type TagResponseDto } from "./TagDtos";
+import { TagResponseDto } from "./TagDtos";
 import type express from "express";
 
 export interface EntityRequest extends express.Request {
@@ -78,6 +77,8 @@ export class EntityResponseDto {
     this.name = entity.name;
     this.parentGroup = new GroupResponseDto(entity.Group);
     this.parentGroupId = entity.Group?.id;
+    this.tags = entity.Tags?.map((tag) => new TagResponseDto(tag));
+    this.tagIds = entity.Tags?.map((tag) => tag.id);
     this.templateId = entity.TemplateId;
     this.isTemplate = entity.isTemplate;
 
@@ -91,9 +92,6 @@ export class EntityResponseDto {
           (fieldDatum: FieldDatum) => fieldDatum.id
         );
       }
-    }
-    if (entity.Tags !== undefined) {
-      this.tagIds = entity.Tags.map((tag: Tag) => tag.id);
     }
   }
 }

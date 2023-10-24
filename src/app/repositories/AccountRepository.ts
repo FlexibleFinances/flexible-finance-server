@@ -87,6 +87,9 @@ export async function createAccountFromDto(
   } else if (accountDto.fieldValues !== undefined) {
     await FieldDatum.upsertFieldData(accountDto.fieldValues, account.id);
   }
+  if (accountDto.tagIds !== undefined) {
+    await account.setTags(accountDto.tagIds);
+  }
 
   await account.loadAssociatedIds();
 
@@ -118,6 +121,9 @@ export async function updateAccountFromDto(
     }
   } else if (accountDto.fieldValues !== undefined) {
     await FieldDatum.upsertFieldData(accountDto.fieldValues, account.id);
+  }
+  if (accountDto.tagIds !== undefined) {
+    await account.setTags(accountDto.tagIds);
   }
 
   await account.loadAssociatedIds();

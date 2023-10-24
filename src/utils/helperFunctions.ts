@@ -2,6 +2,8 @@ import Account from "../database/models/Account";
 import Entity from "../database/models/Entity";
 import type Field from "../database/models/Field";
 import type FieldDatum from "../database/models/FieldDatum";
+import type FieldType from "../database/models/FieldType";
+import type Group from "../database/models/Group";
 import type Tag from "../database/models/Tag";
 import Transaction from "../database/models/Transaction";
 import type express from "express";
@@ -161,7 +163,7 @@ export async function getFieldDatumIds(
 }
 
 export async function getTagIds(
-  object: Account | Entity | Transaction
+  object: Account | Entity | Transaction | Field | FieldType | Group
 ): Promise<number[]> {
   const tags = await object.getTags();
   return tags.map((tag: Tag) => tag.id);

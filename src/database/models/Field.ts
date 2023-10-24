@@ -24,7 +24,9 @@ import type Account from "./Account";
 import type Entity from "./Entity";
 import type FieldDatum from "./FieldDatum";
 import type FieldType from "./FieldType";
+import type Tag from "./Tag";
 import type Transaction from "./Transaction";
+import { getTagIds } from "../../utils/helperFunctions";
 
 export class Field extends Model<
   InferAttributes<Field>,
@@ -52,11 +54,15 @@ export class Field extends Model<
   declare TransactionIds: NonAttribute<number[]>;
   declare Transactions: NonAttribute<Transaction[]>;
 
+  declare TagIds: CreationOptional<number[]>;
+  declare Tags: NonAttribute<Tag[]>;
+
   declare static associations: {
     FieldData: Association<Field, FieldDatum>;
     FieldType: Association<Field, FieldType>;
     Accounts: Association<Field, Account>;
     Entities: Association<Field, Entity>;
+    Tags: Association<Field, Tag>;
     Transactions: Association<Field, Transaction>;
   };
 
@@ -115,6 +121,27 @@ export class Field extends Model<
     Transaction,
     number
   >;
+
+  declare getTags: HasManyGetAssociationsMixin<Tag>;
+  declare addTag: HasManyAddAssociationMixin<Tag, number>;
+  declare addTags: HasManyAddAssociationsMixin<Tag, number>;
+  declare setTags: HasManySetAssociationsMixin<Tag, number>;
+  declare removeTag: HasManyRemoveAssociationMixin<Tag, number>;
+  declare removeTags: HasManyRemoveAssociationsMixin<Tag, number>;
+  declare hasTag: HasManyHasAssociationMixin<Tag, number>;
+  declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
+  declare countTags: HasManyCountAssociationsMixin;
+  declare createTag: HasManyCreateAssociationMixin<Tag, "id">;
+
+  public async loadTagIds(): Promise<void> {
+    const tagIds = await getTagIds(this);
+    this.setDataValue("TagIds", tagIds);
+  }
+
+  public async loadAssociatedIds(): Promise<void> {
+    const loadPromises = [this.loadTagIds()];
+    await Promise.all(loadPromises);
+  }
 }
 
 export function initializeField(sequelize: Sequelize): void {
@@ -146,6 +173,7 @@ export function initializeField(sequelize: Sequelize): void {
         defaultValue: false,
       },
       FieldDatumIds: DataTypes.VIRTUAL,
+      TagIds: DataTypes.VIRTUAL,
     },
     {
       sequelize,

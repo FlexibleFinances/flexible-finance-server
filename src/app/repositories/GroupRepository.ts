@@ -35,6 +35,11 @@ export async function getGroupsByOptions(
       [Op.in]: groupOptions.parentGroupIds.map((id) => +id),
     };
   }
+  if (groupOptions.tagIds !== undefined) {
+    whereOptions.tags = {
+      [Op.in]: groupOptions.tagIds.map((id) => +id),
+    };
+  }
 
   const findOptions: FindOptions = {
     offset: +(groupOptions.offset ?? 0),
@@ -57,6 +62,12 @@ export async function createGroupFromDto(
   };
   const group = await Group.create(createOptions);
 
+  if (groupDto.tagIds !== undefined) {
+    await group.setTags(groupDto.tagIds);
+  }
+
+  await group.loadAssociatedIds();
+
   return group;
 }
 
@@ -76,6 +87,12 @@ export async function updateGroupFromDto(
     GroupId: groupDto.parentGroupId,
   };
   await group.update(updateOptions);
+
+  if (groupDto.tagIds !== undefined) {
+    await group.setTags(groupDto.tagIds);
+  }
+
+  await group.loadAssociatedIds();
 
   return group;
 }

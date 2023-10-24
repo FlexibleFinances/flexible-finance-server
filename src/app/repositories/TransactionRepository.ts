@@ -83,6 +83,9 @@ export async function createTransactionFromDto(
       transaction.id
     );
   }
+  if (transactionDto.tagIds !== undefined) {
+    await transaction.setTags(transactionDto.tagIds);
+  }
 
   await transaction.loadAssociatedIds();
 
@@ -116,6 +119,9 @@ export async function updateTransactionFromDto(
       transactionDto.fieldValues,
       transaction.id
     );
+  }
+  if (transactionDto.tagIds !== undefined) {
+    await transaction.setTags(transactionDto.tagIds);
   }
 
   await transaction.loadAssociatedIds();

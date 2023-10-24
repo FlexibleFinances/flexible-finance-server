@@ -1,5 +1,6 @@
 import type FieldType from "../../database/models/FieldType";
 import { type Query } from "express-serve-static-core";
+import { TagResponseDto } from "./TagDtos";
 import type express from "express";
 import { type fieldTypeTypeEnum } from "../../utils/enumerators";
 
@@ -24,6 +25,7 @@ export interface FieldTypeRequestDto {
   createdAt?: string;
   updatedAt?: string;
   name?: string;
+  tagIds?: number[];
   type?: fieldTypeTypeEnum;
   validator?: string;
 }
@@ -35,6 +37,7 @@ export interface FieldTypeSearchRequestDto extends Query {
   createdAt?: string;
   updatedAt?: string;
   name?: string;
+  tagIds?: string[];
   type?: string;
   validator?: string;
 }
@@ -47,6 +50,8 @@ export class FieldTypeResponseDto {
   name: string;
   type?: fieldTypeTypeEnum;
   validator?: string;
+  tags?: TagResponseDto[];
+  tagIds?: number[];
 
   constructor(fieldType: FieldType) {
     this.id = fieldType.id;
@@ -55,5 +60,7 @@ export class FieldTypeResponseDto {
     this.name = fieldType.name;
     this.type = fieldType.type;
     this.validator = fieldType.validator;
+    this.tags = fieldType.Tags?.map((tag) => new TagResponseDto(tag));
+    this.tagIds = fieldType.Tags?.map((tag) => tag.id);
   }
 }
