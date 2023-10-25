@@ -1,28 +1,32 @@
-RequestSchema:
-  type: object
-  properties:
-    isTemplate:
-      type: boolean
-    fieldDatumIds:
-      type: array
-      items:
-        type: integer
-    fieldIds:
-      type: array
-      items:
-        type: integer
-    fieldValues:
-      type: object
-    tagIds:
-      type: array
-      items:
-        type: integer
-    templateId:
-      type: integer
-    sourceTransactorId:
-      type: integer
-    recipientTransactorId:
-      type: integer
+RequestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          isTemplate:
+            type: boolean
+          fieldDatumIds:
+            type: array
+            items:
+              type: integer
+          fieldIds:
+            type: array
+            items:
+              type: integer
+          fieldValues:
+            type: object
+          tagIds:
+            type: array
+            items:
+              type: integer
+          templateId:
+            type: integer
+          sourceTransactorId:
+            type: integer
+          recipientTransactorId:
+            type: integer
 ResponseSchema:
   type: object
   properties:

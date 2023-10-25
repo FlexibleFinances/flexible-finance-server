@@ -1,17 +1,21 @@
-RequestSchema:
-  type: object
-  properties:
-    username:
-      type: string
-    email:
-      type: string
-    password:
-      type: string
-      format: password
-    roleIds:
-      type: array
-      items:
-        type: integer
+RequestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          username:
+            type: string
+          email:
+            type: string
+          password:
+            type: string
+            format: password
+          roleIds:
+            type: array
+            items:
+              type: integer
 ResponseSchema:
   type: object
   properties:

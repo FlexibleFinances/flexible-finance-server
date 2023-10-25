@@ -1,18 +1,22 @@
-RequestSchema:
-  type: object
-  properties:
-    name:
-      type: string
-    parentGroupId:
-      type: integer
-    accountIds:
-      type: array
-      items:
-        type: integer
-    entityIds:
-      type: array
-      items:
-        type: integer
+RequestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+          parentGroupId:
+            type: integer
+          accountIds:
+            type: array
+            items:
+              type: integer
+          entityIds:
+            type: array
+            items:
+              type: integer
 ResponseSchema:
   type: object
   properties:

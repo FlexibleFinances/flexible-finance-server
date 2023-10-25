@@ -1,28 +1,32 @@
-RequestSchema:
-  type: object
-  properties:
-    name:
-      type: string
-    parentGroupId:
-      type: integer
-    fieldDatumIds:
-      type: array
-      items:
-        type: integer
-    fieldIds:
-      type: array
-      items:
-        type: integer
-    fieldValues:
-      type: object
-    tagIds:
-      type: array
-      items:
-        type: integer
-    templateId:
-      type: integer
-    isTemplate:
-      type: boolean
+RequestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+          parentGroupId:
+            type: integer
+          fieldDatumIds:
+            type: array
+            items:
+              type: integer
+          fieldIds:
+            type: array
+            items:
+              type: integer
+          fieldValues:
+            type: object
+          tagIds:
+            type: array
+            items:
+              type: integer
+          templateId:
+            type: integer
+          isTemplate:
+            type: boolean
 ResponseSchema:
   type: object
   properties:

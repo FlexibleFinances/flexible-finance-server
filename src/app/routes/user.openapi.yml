@@ -1,7 +1,7 @@
 UserIdRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/id"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/User"
@@ -15,13 +15,9 @@ UserIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/id"
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.root.yml#/components/schemas/User_RequestSchema"
+      $ref: "../../openapi.root.yml#/components/requestBodies/User"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/User"
@@ -36,8 +32,8 @@ UserIdRequests:
 UsersRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/offsetParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/limitParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/limit"
       - name: username
         in: query
         schema:
@@ -63,11 +59,7 @@ UsersRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.root.yml#/components/schemas/User_RequestSchema"
+      $ref: "../../openapi.root.yml#/components/requestBodies/User"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/User"
@@ -89,7 +81,7 @@ UserResponse:
           message:
             type: string
           user:
-            $ref: "../../openapi.root.yml#/components/schemas/User_ResponseSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/User_Response"
 UsersResponse:
   description: Returns the users' info.
   content:
@@ -102,4 +94,4 @@ UsersResponse:
           users:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/User_ResponseSchema"
+              $ref: "../../openapi.root.yml#/components/schemas/User_Response"

@@ -1,12 +1,16 @@
-RequestSchema:
-  type: object
-  properties:
-    name:
-      type: string
-    userIds:
-      type: array
-      items:
-        type: integer
+RequestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+          userIds:
+            type: array
+            items:
+              type: integer
 ResponseSchema:
   type: object
   properties:

@@ -109,6 +109,26 @@ StringTransaction_RequestSchema:
       type: string
     transactionId:
       type: integer
+
+RequestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        oneOf:
+          - $ref: "#/BoolAccount_RequestSchema"
+          - $ref: "#/BoolEntity_RequestSchema"
+          - $ref: "#/BoolTransaction_RequestSchema"
+          - $ref: "#/DateAccount_RequestSchema"
+          - $ref: "#/DateEntity_RequestSchema"
+          - $ref: "#/DateTransaction_RequestSchema"
+          - $ref: "#/IntAccount_RequestSchema"
+          - $ref: "#/IntEntity_RequestSchema"
+          - $ref: "#/IntTransaction_RequestSchema"
+          - $ref: "#/StringAccount_RequestSchema"
+          - $ref: "#/StringEntity_RequestSchema"
+          - $ref: "#/StringTransaction_RequestSchema"
+
 BoolAccount_ResponseSchema:
   type: object
   properties:

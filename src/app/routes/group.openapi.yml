@@ -1,7 +1,7 @@
 GroupIdRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/id"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Group"
@@ -15,13 +15,9 @@ GroupIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/id"
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Group_RequestSchema"
+      $ref: "../../openapi.root.yml#/components/requestBodies/Group"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Group"
@@ -36,13 +32,13 @@ GroupIdRequests:
 GroupsRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/offsetParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/limitParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/nameParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/accountIdsParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/entityIdsParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/groupIdsParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/tagIdsParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/name"
+      - $ref: "../../openapi.root.yml#/components/parameters/accountIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/entityIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/groupIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/tagIds"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Groups"
@@ -54,11 +50,7 @@ GroupsRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Group_RequestSchema"
+      $ref: "../../openapi.root.yml#/components/requestBodies/Group"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Group"
@@ -80,7 +72,7 @@ GroupResponse:
           message:
             type: string
           group:
-            $ref: "../../openapi.root.yml#/components/schemas/Group_ResponseSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Group_Response"
 GroupsResponse:
   description: Returns the groups' info.
   content:
@@ -93,4 +85,4 @@ GroupsResponse:
           groups:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Group_ResponseSchema"
+              $ref: "../../openapi.root.yml#/components/schemas/Group_Response"

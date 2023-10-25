@@ -1,7 +1,7 @@
 FieldTypeIdRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/id"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldType"
@@ -15,13 +15,9 @@ FieldTypeIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/id"
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.root.yml#/components/schemas/FieldType_RequestSchema"
+      $ref: "../../openapi.root.yml#/components/requestBodies/FieldType"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldType"
@@ -36,11 +32,11 @@ FieldTypeIdRequests:
 FieldTypesRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/offsetParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/limitParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/nameParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/fieldIdsParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/tagIdsParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/name"
+      - $ref: "../../openapi.root.yml#/components/parameters/fieldIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/tagIds"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldTypes"
@@ -52,11 +48,7 @@ FieldTypesRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.root.yml#/components/schemas/FieldType_RequestSchema"
+      $ref: "../../openapi.root.yml#/components/requestBodies/Field"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldType"
@@ -78,7 +70,7 @@ FieldTypeResponse:
           message:
             type: string
           fieldType:
-            $ref: "../../openapi.root.yml#/components/schemas/FieldType_ResponseSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/FieldType_Response"
 FieldTypesResponse:
   description: Returns the field types' info.
   content:
@@ -91,4 +83,4 @@ FieldTypesResponse:
           fieldTypes:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/FieldType_ResponseSchema"
+              $ref: "../../openapi.root.yml#/components/schemas/FieldType_Response"

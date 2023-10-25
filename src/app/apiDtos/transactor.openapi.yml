@@ -1,12 +1,16 @@
-RequestSchema:
-  type: object
-  properties:
-    name:
-      type: string
-    isTemplate:
-      type: boolean
-    transactorTypeId:
-      type: integer
+RequestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+          isTemplate:
+            type: boolean
+          transactorTypeId:
+            type: integer
 ResponseSchema:
   type: object
   properties:
@@ -25,8 +29,8 @@ ResponseSchema:
     accounts:
       type: array
       items:
-        $ref: ../../openapi.root.yml#/components/schemas/Account_ResponseSchema
+        $ref: ../../openapi.root.yml#/components/schemas/Account_Response
     entities:
       type: array
       items:
-        $ref: ../../openapi.root.yml#/components/schemas/Entity_ResponseSchema
+        $ref: ../../openapi.root.yml#/components/schemas/Entity_Response

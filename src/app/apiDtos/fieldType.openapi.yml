@@ -1,24 +1,28 @@
-RequestSchema:
-  type: object
-  properties:
-    name:
-      type: string
-    type:
-      type: string
-      nullable: true
-      enum:
-        - Text
-        - Number
-        - Date
-        - Boolean
-        - null
-    validator:
-      type: string
-      nullable: true
-    fieldTypeComponentIds:
-      type: array
-      items:
-        type: integer
+RequestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+          type:
+            type: string
+            nullable: true
+            enum:
+              - Text
+              - Number
+              - Date
+              - Boolean
+              - null
+          validator:
+            type: string
+            nullable: true
+          fieldTypeComponentIds:
+            type: array
+            items:
+              type: integer
 ResponseSchema:
   type: object
   properties:

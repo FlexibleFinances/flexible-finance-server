@@ -1,7 +1,7 @@
 EntityIdRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/id"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Entity"
@@ -15,13 +15,9 @@ EntityIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/idParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/id"
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Entity_RequestSchema"
+      $ref: "../../openapi.root.yml#/components/requestBodies/Entity"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Entity"
@@ -36,15 +32,15 @@ EntityIdRequests:
 EntitiesRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/offsetParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/limitParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/nameParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/fieldIdsParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/fieldDatumIdsParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/groupIdsParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/tagIdsParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/templateIdsParameter"
-      - $ref: "../../openapi.root.yml#/components/parameters/isTemplateParameter"
+      - $ref: "../../openapi.root.yml#/components/parameters/offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/name"
+      - $ref: "../../openapi.root.yml#/components/parameters/fieldIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/fieldDatumIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/groupIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/tagIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/templateIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/isTemplate"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Entities"
@@ -56,11 +52,7 @@ EntitiesRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Entity_RequestSchema"
+      $ref: "../../openapi.root.yml#/components/requestBodies/Entity"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Entity"
@@ -82,7 +74,7 @@ EntityResponse:
           message:
             type: string
           entity:
-            $ref: "../../openapi.root.yml#/components/schemas/Entity_ResponseSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Entity_Response"
 EntitiesResponse:
   description: Returns the entities' info.
   content:
@@ -96,9 +88,9 @@ EntitiesResponse:
             type: array
             nullable: true
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Entity_ResponseSchema"
+              $ref: "../../openapi.root.yml#/components/schemas/Entity_Response"
           templates:
             type: array
             nullable: true
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Entity_ResponseSchema"
+              $ref: "../../openapi.root.yml#/components/schemas/Entity_Response"
