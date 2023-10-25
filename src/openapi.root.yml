@@ -80,95 +80,95 @@ paths:
     $ref: ./app/routes/user.openapi.yml#/UserIdRequests
 components:
   parameters:
-    offset:
-      name: offset
-      in: query
-      schema:
-        type: integer
-    limit:
-      name: limit
-      in: query
-      schema:
-        type: integer
-    id:
+    path_id:
       name: id
       in: path
       required: true
       schema:
         type: integer
-    name:
-      name: name
-      in: query
-      schema:
-        type: string
-    accountIds:
+    query_accountIds:
       name: accountIds
       in: query
       schema:
         type: array
         items:
           type: number
-    entityIds:
+    query_entityIds:
       name: entityIds
       in: query
       schema:
         type: array
         items:
           type: number
-    fieldIds:
+    query_fieldIds:
       name: fieldIds
       in: query
       schema:
         type: array
         items:
           type: number
-    fieldDatumIds:
+    query_fieldDatumIds:
       name: fieldDatumIds
       in: query
       schema:
         type: array
         items:
           type: number
-    fieldTypeIds:
+    query_fieldTypeIds:
       name: fieldTypeIds
       in: query
       schema:
         type: array
         items:
           type: number
-    groupIds:
+    query_groupIds:
       name: groupIds
       in: query
       schema:
         type: array
         items:
           type: number
-    tagIds:
+    query_isTemplate:
+      name: isTemplate
+      in: query
+      schema:
+        type: boolean
+    query_limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+    query_offset:
+      name: offset
+      in: query
+      schema:
+        type: integer
+    query_name:
+      name: name
+      in: query
+      schema:
+        type: string
+    query_tagIds:
       name: tagIds
       in: query
       schema:
         type: array
         items:
           type: number
-    templateIds:
+    query_templateIds:
       name: templateIds
       in: query
       schema:
         type: array
         items:
           type: number
-    transactionIds:
+    query_transactionIds:
       name: transactionIds
       in: query
       schema:
         type: array
         items:
           type: number
-    isTemplate:
-      name: isTemplate
-      in: query
-      schema:
-        type: boolean
   requestBodies:
     Account:
       $ref: ./app/apiDtos/account.openapi.yml#/RequestBody

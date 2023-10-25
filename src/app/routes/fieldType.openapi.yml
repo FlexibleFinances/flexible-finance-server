@@ -1,7 +1,7 @@
 FieldTypeIdRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/id"
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldType"
@@ -15,7 +15,7 @@ FieldTypeIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/id"
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
       $ref: "../../openapi.root.yml#/components/requestBodies/FieldType"
     responses:
@@ -32,11 +32,11 @@ FieldTypeIdRequests:
 FieldTypesRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/offset"
-      - $ref: "../../openapi.root.yml#/components/parameters/limit"
-      - $ref: "../../openapi.root.yml#/components/parameters/name"
-      - $ref: "../../openapi.root.yml#/components/parameters/fieldIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/tagIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldTypes"

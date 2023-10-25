@@ -1,7 +1,7 @@
 FieldIdRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/id"
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Field"
@@ -15,7 +15,7 @@ FieldIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/id"
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
       $ref: "../../openapi.root.yml#/components/requestBodies/Field"
     responses:
@@ -32,15 +32,15 @@ FieldIdRequests:
 FieldsRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/offset"
-      - $ref: "../../openapi.root.yml#/components/parameters/limit"
-      - $ref: "../../openapi.root.yml#/components/parameters/name"
-      - $ref: "../../openapi.root.yml#/components/parameters/fieldIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/fieldDatumIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/accountIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/entityIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/transactionIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/isTemplate"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldDatumIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_accountIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_entityIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_transactionIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Fields"

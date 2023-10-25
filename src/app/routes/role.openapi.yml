@@ -1,7 +1,7 @@
 RoleIdRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/id"
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Role"
@@ -15,7 +15,7 @@ RoleIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/id"
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
       $ref: "../../openapi.root.yml#/components/requestBodies/Role"
     responses:
@@ -32,9 +32,9 @@ RoleIdRequests:
 RolesRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/offset"
-      - $ref: "../../openapi.root.yml#/components/parameters/limit"
-      - $ref: "../../openapi.root.yml#/components/parameters/name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
       - name: userIds
         in: query
         schema:
