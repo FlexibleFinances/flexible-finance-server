@@ -1,3 +1,4 @@
+GroupRequests:
 GroupIdRequests:
   get:
     parameters:
@@ -17,7 +18,11 @@ GroupIdRequests:
     parameters:
       - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
-      $ref: "../../openapi.root.yml#/components/requestBodies/Group"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Group"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Group"
@@ -32,12 +37,9 @@ GroupIdRequests:
 GroupsRequests:
   get:
     parameters:
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
       - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
       - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_accountIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_entityIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_groupIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
     responses:
       200:
@@ -50,7 +52,11 @@ GroupsRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     requestBody:
-      $ref: "../../openapi.root.yml#/components/requestBodies/Group"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Group"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Group"
@@ -72,7 +78,7 @@ GroupResponse:
           message:
             type: string
           group:
-            $ref: "../../openapi.root.yml#/components/schemas/Group_Response"
+            $ref: "../../openapi.root.yml#/components/schemas/Group"
 GroupsResponse:
   description: Returns the groups' info.
   content:
@@ -84,5 +90,11 @@ GroupsResponse:
             type: string
           groups:
             type: array
+            nullable: true
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Group_Response"
+              $ref: "../../openapi.root.yml#/components/schemas/Group"
+          templates:
+            type: array
+            nullable: true
+            items:
+              $ref: "../../openapi.root.yml#/components/schemas/Group"

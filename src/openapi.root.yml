@@ -70,10 +70,6 @@ paths:
     $ref: ./app/routes/transaction.openapi.yml#/TransactionsRequests
   /transactions/{TransactionId}:
     $ref: ./app/routes/transaction.openapi.yml#/TransactionIdRequests
-  /transactors:
-    $ref: ./app/routes/transactor.openapi.yml#/TransactorsRequests
-  /transactors/{TransactorId}:
-    $ref: ./app/routes/transactor.openapi.yml#/TransactorIdRequests
   /users:
     $ref: ./app/routes/user.openapi.yml#/UsersRequests
   /users/{UserId}:
@@ -148,6 +144,13 @@ components:
       in: query
       schema:
         type: string
+    query_roleIds:
+      name: roleIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: number
     query_tagIds:
       name: tagIds
       in: query
@@ -169,29 +172,16 @@ components:
         type: array
         items:
           type: number
+    query_userIds:
+      name: userIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: number
   requestBodies:
-    Account:
-      $ref: ./app/apiDtos/account.openapi.yml#/RequestBody
-    Entity:
-      $ref: ./app/apiDtos/entity.openapi.yml#/RequestBody
-    Field:
-      $ref: ./app/apiDtos/field.openapi.yml#/RequestBody
     FieldDatum:
       $ref: ./app/apiDtos/fieldDatum.openapi.yml#/RequestBody
-    FieldType:
-      $ref: ./app/apiDtos/fieldType.openapi.yml#/RequestBody
-    Group:
-      $ref: ./app/apiDtos/group.openapi.yml#/RequestBody
-    Role:
-      $ref: ./app/apiDtos/role.openapi.yml#/RequestBody
-    Tag:
-      $ref: ./app/apiDtos/tag.openapi.yml#/RequestBody
-    Transaction:
-      $ref: ./app/apiDtos/transaction.openapi.yml#/RequestBody
-    Transactor:
-      $ref: ./app/apiDtos/transactor.openapi.yml#/RequestBody
-    User:
-      $ref: ./app/apiDtos/user.openapi.yml#/RequestBody
   responses:
     Message:
       description: a simple response with just a message
@@ -235,10 +225,6 @@ components:
       $ref: ./app/routes/transaction.openapi.yml#/TransactionResponse
     Transactions:
       $ref: ./app/routes/transaction.openapi.yml#/TransactionsResponse
-    Transactor:
-      $ref: ./app/routes/transactor.openapi.yml#/TransactorResponse
-    Transactors:
-      $ref: ./app/routes/transactor.openapi.yml#/TransactorsResponse
     User:
       $ref: ./app/routes/user.openapi.yml#/UserResponse
     Users:
@@ -249,50 +235,56 @@ components:
       properties:
         message:
           type: string
-    Account_Response:
-      $ref: ./app/apiDtos/account.openapi.yml#/ResponseSchema
-    Entity_Response:
-      $ref: ./app/apiDtos/entity.openapi.yml#/ResponseSchema
-    Field_Response:
-      $ref: ./app/apiDtos/field.openapi.yml#/ResponseSchema
-    FieldDatum_BoolAccount_Response:
-      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/BoolAccount_ResponseSchema
-    FieldDatum_BoolEntity_Response:
-      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/BoolEntity_ResponseSchema
-    FieldDatum_BoolTransaction_Response:
-      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/BoolTransaction_ResponseSchema
-    FieldDatum_DateAccount_Response:
-      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/DateAccount_ResponseSchema
-    FieldDatum_DateEntity_Response:
-      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/DateEntity_ResponseSchema
-    FieldDatum_DateTransaction_Response:
-      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/DateTransaction_ResponseSchema
-    FieldDatum_IntAccount_Response:
-      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/IntAccount_ResponseSchema
-    FieldDatum_IntEntity_Response:
-      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/IntEntity_ResponseSchema
-    FieldDatum_IntTransaction_Response:
-      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/IntTransaction_ResponseSchema
-    FieldDatum_StringAccount_Response:
-      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/StringAccount_ResponseSchema
-    FieldDatum_StringEntity_Response:
-      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/StringEntity_ResponseSchema
-    FieldDatum_StringTransaction_Response:
-      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/StringTransaction_ResponseSchema
-    FieldType_Response:
-      $ref: ./app/apiDtos/fieldType.openapi.yml#/ResponseSchema
-    Group_Response:
-      $ref: ./app/apiDtos/group.openapi.yml#/ResponseSchema
-    Role_Response:
-      $ref: ./app/apiDtos/role.openapi.yml#/ResponseSchema
-    Tag_Response:
-      $ref: ./app/apiDtos/tag.openapi.yml#/ResponseSchema
-    Transaction_Response:
-      $ref: ./app/apiDtos/transaction.openapi.yml#/ResponseSchema
-    Transactor_Response:
-      $ref: ./app/apiDtos/transactor.openapi.yml#/ResponseSchema
-    User_Response:
-      $ref: ./app/apiDtos/user.openapi.yml#/ResponseSchema
+    Account:
+      $ref: ./app/apiDtos/account.openapi.yml#/AccountSchema
+    AccountTemplate:
+      $ref: ./app/apiDtos/account.openapi.yml#/AccountTemplateSchema
+    Entity:
+      $ref: ./app/apiDtos/entity.openapi.yml#/EntitySchema
+    EntityTemplate:
+      $ref: ./app/apiDtos/entity.openapi.yml#/EntityTemplateSchema
+    Field:
+      $ref: ./app/apiDtos/field.openapi.yml#/FieldSchema
+    FieldDatum_BoolAccount:
+      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/BoolAccount_FieldDatumSchema
+    FieldDatum_BoolEntity:
+      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/BoolEntity_FieldDatumSchema
+    FieldDatum_BoolTransaction:
+      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/BoolTransaction_FieldDatumSchema
+    FieldDatum_DateAccount:
+      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/DateAccount_FieldDatumSchema
+    FieldDatum_DateEntity:
+      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/DateEntity_FieldDatumSchema
+    FieldDatum_DateTransaction:
+      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/DateTransaction_FieldDatumSchema
+    FieldDatum_IntAccount:
+      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/IntAccount_FieldDatumSchema
+    FieldDatum_IntEntity:
+      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/IntEntity_FieldDatumSchema
+    FieldDatum_IntTransaction:
+      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/IntTransaction_FieldDatumSchema
+    FieldDatum_StringAccount:
+      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/StringAccount_FieldDatumSchema
+    FieldDatum_StringEntity:
+      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/StringEntity_FieldDatumSchema
+    FieldDatum_StringTransaction:
+      $ref: ./app/apiDtos/fieldDatum.openapi.yml#/StringTransaction_FieldDatumSchema
+    FieldType:
+      $ref: ./app/apiDtos/fieldType.openapi.yml#/FieldTypeSchema
+    Group:
+      $ref: ./app/apiDtos/group.openapi.yml#/GroupSchema
+    Role:
+      $ref: ./app/apiDtos/role.openapi.yml#/RoleSchema
+    Tag:
+      $ref: ./app/apiDtos/tag.openapi.yml#/TagSchema
+    Transaction:
+      $ref: ./app/apiDtos/transaction.openapi.yml#/TransactionSchema
+    TransactionTemplate:
+      $ref: ./app/apiDtos/transaction.openapi.yml#/TransactionTemplateSchema
+    Transactor:
+      $ref: ./app/apiDtos/transactor.openapi.yml#/TransactorSchema
+    User:
+      $ref: ./app/apiDtos/user.openapi.yml#/UserSchema
   securitySchemes:
     bearerAuth:
       type: http

@@ -1,3 +1,4 @@
+UserRequests:
 UserIdRequests:
   get:
     parameters:
@@ -17,7 +18,11 @@ UserIdRequests:
     parameters:
       - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
-      $ref: "../../openapi.root.yml#/components/requestBodies/User"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/User"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/User"
@@ -32,22 +37,10 @@ UserIdRequests:
 UsersRequests:
   get:
     parameters:
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
       - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
       - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
-      - name: username
-        in: query
-        schema:
-          type: string
-      - name: email
-        in: query
-        schema:
-          type: string
-      - name: roleIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
+      - $ref: "../../openapi.root.yml#/components/parameters/query_roleIds"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Users"
@@ -59,7 +52,11 @@ UsersRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     requestBody:
-      $ref: "../../openapi.root.yml#/components/requestBodies/User"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/User"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/User"
@@ -81,7 +78,7 @@ UserResponse:
           message:
             type: string
           user:
-            $ref: "../../openapi.root.yml#/components/schemas/User_Response"
+            $ref: "../../openapi.root.yml#/components/schemas/User"
 UsersResponse:
   description: Returns the users' info.
   content:
@@ -93,5 +90,11 @@ UsersResponse:
             type: string
           users:
             type: array
+            nullable: true
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/User_Response"
+              $ref: "../../openapi.root.yml#/components/schemas/User"
+          templates:
+            type: array
+            nullable: true
+            items:
+              $ref: "../../openapi.root.yml#/components/schemas/User"

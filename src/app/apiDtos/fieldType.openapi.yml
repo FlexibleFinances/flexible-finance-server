@@ -1,58 +1,61 @@
-RequestBody:
-  required: true
-  content:
-    application/json:
-      schema:
-        type: object
-        properties:
-          name:
-            type: string
-          type:
-            type: string
-            nullable: true
-            enum:
-              - Text
-              - Number
-              - Date
-              - Boolean
-              - null
-          validator:
-            type: string
-            nullable: true
-          fieldTypeComponentIds:
-            type: array
-            items:
-              type: integer
-ResponseSchema:
+FieldTypeSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - fieldTypeComponents
+    - fieldTypeComponentIds
+    - name
+    - tags
+    - tagIds
+    - type
+    - validator
   properties:
     id:
+      readOnly: true
       type: integer
     createdAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
     updatedAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
+    fieldTypeComponents:
+      items:
+        type: object
+        properties:
+          $ref: "../../openapi.root.yml#/components/schemas/FieldType"
+      readOnly: true
+      type: array
+    fieldTypeComponentIds:
+      items:
+        type: integer
+      type: array
     name:
       type: string
+    tags:
+      items:
+        type: object
+        properties:
+          $ref: "../../openapi.root.yml#/components/schemas/Tag"
+      readOnly: true
+      type: array
+    tagIds:
+      items:
+        type: integer
+      type: array
     type:
-      type: string
-      nullable: true
       enum:
         - Text
         - Number
         - Date
         - Boolean
         - null
-    validator:
-      type: string
       nullable: true
-    fieldTypeComponentIds:
-      type: array
-      items:
-        type: integer
-    fieldIds:
-      type: array
-      items:
-        type: integer
+      type: string
+    validator:
+      nullable: true
+      type: string

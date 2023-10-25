@@ -1,43 +1,71 @@
-RequestBody:
-  required: true
-  content:
-    application/json:
-      schema:
-        type: object
-        properties:
-          name:
-            type: string
-          parentGroupId:
-            type: integer
-          accountIds:
-            type: array
-            items:
-              type: integer
-          entityIds:
-            type: array
-            items:
-              type: integer
-ResponseSchema:
+GroupSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - accounts
+    - accountIds
+    - entities
+    - entityIds
+    - name
+    - parentGroup
+    - parentGroupId
+    - tags
+    - tagIds
   properties:
     id:
+      readOnly: true
       type: integer
     createdAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
     updatedAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
+    accounts:
+      items:
+        type: object
+      properties:
+        $ref: "../../openapi.root.yml#/components/schemas/Account"
+      readOnly: true
+      type: array
+    accountIds:
+      items:
+        type: integer
+      type: array
+    entities:
+      items:
+        type: object
+      properties:
+        $ref: "../../openapi.root.yml#/components/schemas/Entity"
+      readOnly: true
+      type: array
+    entityIds:
+      items:
+        type: integer
+      type: array
     name:
       type: string
-    parentGroupId:
-      type: integer
+    parentGroup:
+      readOnly: true
       nullable: true
-    accountIds:
+      type: object
+      properties:
+        $ref: "../../openapi.root.yml#/components/schemas/Group"
+    parentGroupId:
+      nullable: true
+      type: integer
+    tags:
+      items:
+        type: object
+        properties:
+          $ref: "../../openapi.root.yml#/components/schemas/Tag"
+      readOnly: true
       type: array
+    tagIds:
       items:
         type: integer
-    entityIds:
       type: array
-      items:
-        type: integer

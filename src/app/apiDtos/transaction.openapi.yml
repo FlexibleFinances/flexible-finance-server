@@ -1,63 +1,165 @@
-RequestBody:
-  required: true
-  content:
-    application/json:
-      schema:
-        type: object
-        properties:
-          isTemplate:
-            type: boolean
-          fieldDatumIds:
-            type: array
-            items:
-              type: integer
-          fieldIds:
-            type: array
-            items:
-              type: integer
-          fieldValues:
-            type: object
-          tagIds:
-            type: array
-            items:
-              type: integer
-          templateId:
-            type: integer
-          sourceTransactorId:
-            type: integer
-          recipientTransactorId:
-            type: integer
-ResponseSchema:
+TransactionSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - isTemplate
+    - fieldDatumIds
+    - recipientTransactor
+    - recipientTransactorId
+    - sourceTransactor
+    - sourceTransactorId
+    - tagIds
+    - templateId
   properties:
     id:
+      readOnly: true
       type: integer
     createdAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
     updatedAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
     isTemplate:
       type: boolean
+    fieldData:
+      items:
+        type: object
+        properties:
+          oneOf:
+            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount"
+            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount"
+            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntAccount"
+            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringAccount"
+      readOnly: true
+      type: array
     fieldDatumIds:
-      type: array
       items:
         type: integer
-    fieldIds:
       type: array
-      items:
-        type: integer
-    tagIds:
-      type: array
-      items:
-        type: integer
-    templateId:
-      type: integer
-      nullable: true
-    sourceTransactorId:
-      type: integer
-      nullable: true
+    name:
+      type: string
+    recipientTransactor:
+      properties:
+        $ref: "../../openapi.root.yml#/components/schemas/Transactor"
+      readOnly: true
+      type: object
     recipientTransactorId:
       type: integer
+    sourceTransactor:
+      properties:
+        $ref: "../../openapi.root.yml#/components/schemas/Transactor"
+      readOnly: true
+      type: object
+    sourceTransactorId:
+      type: integer
+    tags:
+      items:
+        type: object
+        properties:
+          $ref: "../../openapi.root.yml#/components/schemas/Tag"
+      readOnly: true
+      type: array
+    tagIds:
+      items:
+        type: integer
+      type: array
+    template:
+      properties:
+        $ref: "../../openapi.root.yml#/components/schemas/AccountTemplate"
+      readOnly: true
+      type: object
+    templateId:
+      type: integer
+
+TransactionTemplateSchema:
+  type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - isTemplate
+    - name
+    - fields
+    - fieldIds
+    - recipientTransactor
+    - recipientTransactorId
+    - sourceTransactor
+    - sourceTransactorId
+    - tags
+    - tagIds
+  properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    isTemplate:
+      type: boolean
+    name:
+      type: string
+    fields:
+      items:
+        type: object
+        properties:
+          $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
+      type: array
+    fieldIds:
+      items:
+        type: integer
+      type: array
+    fieldData:
+      items:
+        properties:
+          oneOf:
+            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount"
+            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount"
+            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntAccount"
+            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringAccount"
+        type: object
+      readOnly: true
+      type: array
+    fieldDatumIds:
+      items:
+        type: integer
+      type: array
+    recipientTransactor:
       nullable: true
+      properties:
+        $ref: "../../openapi.root.yml#/components/schemas/Transactor"
+      readOnly: true
+      type: object
+    recipientTransactorId:
+      nullable: true
+      type: integer
+    sourceTransactor:
+      nullable: true
+      properties:
+        $ref: "../../openapi.root.yml#/components/schemas/Transactor"
+      readOnly: true
+      type: object
+    sourceTransactorId:
+      nullable: true
+      type: integer
+    tags:
+      items:
+        properties:
+          $ref: "../../openapi.root.yml#/components/schemas/Tag"
+        type: object
+      readOnly: true
+      type: array
+    tagIds:
+      items:
+        type: integer
+      type: array

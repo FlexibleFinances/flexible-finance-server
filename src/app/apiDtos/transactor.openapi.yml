@@ -1,36 +1,5 @@
-RequestBody:
-  required: true
-  content:
-    application/json:
-      schema:
-        type: object
-        properties:
-          name:
-            type: string
-          isTemplate:
-            type: boolean
-          transactorTypeId:
-            type: integer
-ResponseSchema:
+TransactorSchema:
   type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-      format: date-time
-    updatedAt:
-      type: string
-      format: date-time
-    name:
-      type: string
-    transactorTypeId:
-      type: integer
-    accounts:
-      type: array
-      items:
-        $ref: ../../openapi.root.yml#/components/schemas/Account_Response
-    entities:
-      type: array
-      items:
-        $ref: ../../openapi.root.yml#/components/schemas/Entity_Response
+  oneOf:
+    - $ref: "../../openapi.root.yml#/components/schemas/Account"
+    - $ref: "../../openapi.root.yml#/components/schemas/Entity"

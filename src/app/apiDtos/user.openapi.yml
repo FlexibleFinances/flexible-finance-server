@@ -1,37 +1,41 @@
-RequestBody:
-  required: true
-  content:
-    application/json:
-      schema:
-        type: object
-        properties:
-          username:
-            type: string
-          email:
-            type: string
-          password:
-            type: string
-            format: password
-          roleIds:
-            type: array
-            items:
-              type: integer
-ResponseSchema:
+UserSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - email
+    - password
+    - roles
+    - rolesIds
+    - username
   properties:
     id:
+      readOnly: true
       type: integer
     createdAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
     updatedAt:
-      type: string
       format: date-time
-    username:
+      readOnly: true
       type: string
     email:
       type: string
-    roleIds:
+    password:
+      writeOnly: true
+      type: string
+    roles:
+      items:
+        type: object
+        properties:
+          $ref: "../../openapi.root.yml#/components/schemas/Role"
+      readOnly: true
       type: array
+    roleIds:
       items:
         type: integer
+      type: array
+    username:
+      type: string

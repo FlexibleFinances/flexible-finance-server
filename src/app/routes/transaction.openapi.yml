@@ -1,3 +1,4 @@
+TransactionRequests:
 TransactionIdRequests:
   get:
     parameters:
@@ -17,7 +18,11 @@ TransactionIdRequests:
     parameters:
       - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
-      $ref: "../../openapi.root.yml#/components/requestBodies/Transaction"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Transaction"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transaction"
@@ -32,13 +37,14 @@ TransactionIdRequests:
 TransactionsRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
       - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_fieldDatumIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
       - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_templateIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transactions"
@@ -50,7 +56,11 @@ TransactionsRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     requestBody:
-      $ref: "../../openapi.root.yml#/components/requestBodies/Transaction"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Transaction"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transaction"
@@ -72,7 +82,7 @@ TransactionResponse:
           message:
             type: string
           transaction:
-            $ref: "../../openapi.root.yml#/components/schemas/Transaction_Response"
+            $ref: "../../openapi.root.yml#/components/schemas/Transaction"
 TransactionsResponse:
   description: Returns the transactions' info.
   content:
@@ -86,9 +96,9 @@ TransactionsResponse:
             type: array
             nullable: true
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Transaction_Response"
+              $ref: "../../openapi.root.yml#/components/schemas/Transaction"
           templates:
             type: array
             nullable: true
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Transaction_Response"
+              $ref: "../../openapi.root.yml#/components/schemas/Transaction"

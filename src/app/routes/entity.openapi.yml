@@ -1,3 +1,4 @@
+EntityRequests:
 EntityIdRequests:
   get:
     parameters:
@@ -17,7 +18,11 @@ EntityIdRequests:
     parameters:
       - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
-      $ref: "../../openapi.root.yml#/components/requestBodies/Entity"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Entity"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Entity"
@@ -32,15 +37,15 @@ EntityIdRequests:
 EntitiesRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
       - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_fieldDatumIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_groupIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
       - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_templateIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Entities"
@@ -52,7 +57,11 @@ EntitiesRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     requestBody:
-      $ref: "../../openapi.root.yml#/components/requestBodies/Entity"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Entity"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Entity"
@@ -74,7 +83,7 @@ EntityResponse:
           message:
             type: string
           entity:
-            $ref: "../../openapi.root.yml#/components/schemas/Entity_Response"
+            $ref: "../../openapi.root.yml#/components/schemas/Entity"
 EntitiesResponse:
   description: Returns the entities' info.
   content:
@@ -88,9 +97,9 @@ EntitiesResponse:
             type: array
             nullable: true
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Entity_Response"
+              $ref: "../../openapi.root.yml#/components/schemas/Entity"
           templates:
             type: array
             nullable: true
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Entity_Response"
+              $ref: "../../openapi.root.yml#/components/schemas/Entity"

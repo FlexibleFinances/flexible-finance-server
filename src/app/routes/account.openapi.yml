@@ -18,7 +18,11 @@ AccountIdRequests:
     parameters:
       - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
-      $ref: "../../openapi.root.yml#/components/requestBodies/Account"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Account"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Account"
@@ -33,15 +37,15 @@ AccountIdRequests:
 AccountsRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
       - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_fieldDatumIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_groupIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
       - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_templateIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Accounts"
@@ -53,7 +57,11 @@ AccountsRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     requestBody:
-      $ref: "../../openapi.root.yml#/components/requestBodies/Account"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Account"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Account"
@@ -75,7 +83,7 @@ AccountResponse:
           message:
             type: string
           account:
-            $ref: "../../openapi.root.yml#/components/schemas/Account_Response"
+            $ref: "../../openapi.root.yml#/components/schemas/Account"
 AccountsResponse:
   description: Returns the accounts' info.
   content:
@@ -89,9 +97,9 @@ AccountsResponse:
             type: array
             nullable: true
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Account_Response"
+              $ref: "../../openapi.root.yml#/components/schemas/Account"
           templates:
             type: array
             nullable: true
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Account_Response"
+              $ref: "../../openapi.root.yml#/components/schemas/Account"

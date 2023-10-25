@@ -1,46 +1,46 @@
-RequestBody:
-  required: true
-  content:
-    application/json:
-      schema:
-        type: object
-        properties:
-          name:
-            type: string
-          fieldTypeId:
-            type: integer
-          isComponentOnly:
-            type: boolean
-ResponseSchema:
+FieldSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - isComponentOnly
+    - fieldType
+    - fieldTypeId
+    - name
+    - tags
+    - tagIds
   properties:
     id:
+      readOnly: true
       type: integer
     createdAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
     updatedAt:
-      type: string
       format: date-time
-    name:
+      readOnly: true
       type: string
-    fieldDatumIds:
-      type: array
-      items:
-        type: integer
-    fieldTypeId:
-      type: integer
-    accountIds:
-      type: array
-      items:
-        type: integer
-    entityIds:
-      type: array
-      items:
-        type: integer
-    transactionIds:
-      type: array
-      items:
-        type: integer
     isComponentOnly:
       type: boolean
+    fieldType:
+      readOnly: true
+      type: object
+      properties:
+        $ref: "../../openapi.root.yml#/components/schemas/FieldType"
+    fieldTypeId:
+      type: integer
+    name:
+      type: string
+    tags:
+      items:
+        type: object
+        properties:
+          $ref: "../../openapi.root.yml#/components/schemas/Tag"
+      readOnly: true
+      type: array
+    tagIds:
+      items:
+        type: integer
+      type: array

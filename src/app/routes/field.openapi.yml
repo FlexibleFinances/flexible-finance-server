@@ -1,3 +1,4 @@
+FieldRequests:
 FieldIdRequests:
   get:
     parameters:
@@ -17,7 +18,11 @@ FieldIdRequests:
     parameters:
       - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
-      $ref: "../../openapi.root.yml#/components/requestBodies/Field"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Field"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Field"
@@ -32,15 +37,15 @@ FieldIdRequests:
 FieldsRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
       - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_fieldDatumIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_accountIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_entityIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_transactionIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_groupIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_templateIds"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Fields"
@@ -52,7 +57,11 @@ FieldsRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     requestBody:
-      $ref: "../../openapi.root.yml#/components/requestBodies/Field"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Field"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Field"
@@ -74,7 +83,7 @@ FieldResponse:
           message:
             type: string
           field:
-            $ref: "../../openapi.root.yml#/components/schemas/Field_Response"
+            $ref: "../../openapi.root.yml#/components/schemas/Field"
 FieldsResponse:
   description: Returns the fields' info.
   content:
@@ -86,5 +95,11 @@ FieldsResponse:
             type: string
           fields:
             type: array
+            nullable: true
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Field_Response"
+              $ref: "../../openapi.root.yml#/components/schemas/Field"
+          templates:
+            type: array
+            nullable: true
+            items:
+              $ref: "../../openapi.root.yml#/components/schemas/Field"

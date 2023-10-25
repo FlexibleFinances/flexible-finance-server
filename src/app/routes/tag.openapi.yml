@@ -17,7 +17,11 @@ TagIdRequests:
     parameters:
       - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
-      $ref: "../../openapi.root.yml#/components/requestBodies/Tag"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Tag"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Tag"
@@ -52,7 +56,11 @@ TagsRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     requestBody:
-      $ref: "../../openapi.root.yml#/components/requestBodies/Tag"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Tag"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Tag"
@@ -74,7 +82,7 @@ TagResponse:
           message:
             type: string
           tag:
-            $ref: "../../openapi.root.yml#/components/schemas/Tag_Response"
+            $ref: "../../openapi.root.yml#/components/schemas/Tag"
 TagsResponse:
   description: Returns the tags' info.
   content:
@@ -87,4 +95,4 @@ TagsResponse:
           tags:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Tag_Response"
+              $ref: "../../openapi.root.yml#/components/schemas/Tag"
