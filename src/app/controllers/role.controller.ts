@@ -17,7 +17,7 @@ export async function getRole(
   req: RoleRequest,
   res: RoleResponse
 ): Promise<void> {
-  const role = await getRoleById(Number(req.params.roleId));
+  const role = await getRoleById(Number(req.params.id));
 
   if (role === null) {
     res.status(500).send({
@@ -71,18 +71,11 @@ export async function updateRole(
     return;
   }
 
-  if (
-    !hasRequestArguments(
-      req,
-      res,
-      { params: ["RoleId"] },
-      { body: ["name", "GroupId", "TemplateId", "fieldValues"] }
-    )
-  ) {
+  if (!hasRequestArguments(req, res, { params: ["id"] }, { body: ["name"] })) {
     return;
   }
 
-  const role = await updateRoleFromDto(requestBody);
+  const role = await updateRoleFromDto(Number(req.params.id), requestBody);
 
   if (role === null) {
     res.status(500).send({

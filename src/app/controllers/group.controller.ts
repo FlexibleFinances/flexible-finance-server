@@ -17,7 +17,7 @@ export async function getGroup(
   req: GroupRequest,
   res: GroupResponse
 ): Promise<void> {
-  const group = await getGroupById(Number(req.params.groupId));
+  const group = await getGroupById(Number(req.params.id));
 
   if (group === null) {
     res.status(500).send({
@@ -75,14 +75,14 @@ export async function updateGroup(
     !hasRequestArguments(
       req,
       res,
-      { params: ["GroupId"] },
-      { body: ["name", "GroupId"] }
+      { params: ["id"] },
+      { body: ["name", "parentGroupId"] }
     )
   ) {
     return;
   }
 
-  const group = await updateGroupFromDto(requestBody);
+  const group = await updateGroupFromDto(Number(req.params.id), requestBody);
 
   if (group === null) {
     res.status(500).send({

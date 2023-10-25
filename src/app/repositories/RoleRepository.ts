@@ -60,11 +60,12 @@ export async function createRoleFromDto(
 }
 
 export async function updateRoleFromDto(
+  id: number,
   roleDto: RoleRequestDto
 ): Promise<Role | null> {
   const role = await Role.findOne({
     where: {
-      id: roleDto.id,
+      id,
     },
   });
   if (role === null) {

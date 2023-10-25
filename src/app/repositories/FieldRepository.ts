@@ -68,11 +68,12 @@ export async function createFieldFromDto(
 }
 
 export async function updateFieldFromDto(
+  id: number,
   fieldDto: FieldRequestDto
 ): Promise<Field | null> {
   const field = await Field.findOne({
     where: {
-      id: fieldDto.id,
+      id,
     },
   });
   if (field === null) {

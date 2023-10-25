@@ -17,7 +17,7 @@ export async function getTransactor(
   req: TransactorRequest,
   res: TransactorResponse
 ): Promise<void> {
-  const transactor = await getTransactorById(Number(req.params.transactorId));
+  const transactor = await getTransactorById(Number(req.params.id));
 
   if (transactor === null) {
     res.status(500).send({
@@ -71,13 +71,14 @@ export async function updateTransactor(
     return;
   }
 
-  if (
-    !hasRequestArguments(req, res, { params: ["TransactorId"] }, { body: [] })
-  ) {
+  if (!hasRequestArguments(req, res, { params: ["id"] }, { body: [] })) {
     return;
   }
 
-  const transactor = await updateTransactorFromDto(requestBody);
+  const transactor = await updateTransactorFromDto(
+    Number(req.params.id),
+    requestBody
+  );
 
   if (transactor === null) {
     res.status(500).send({

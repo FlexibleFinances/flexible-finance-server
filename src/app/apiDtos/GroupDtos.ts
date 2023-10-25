@@ -20,9 +20,6 @@ export interface GroupsResponse extends express.Response {
 }
 
 export interface GroupRequestDto {
-  id?: number;
-  createdAt?: string;
-  updatedAt?: string;
   name?: string;
   parentGroupId?: number;
   tagIds?: number[];

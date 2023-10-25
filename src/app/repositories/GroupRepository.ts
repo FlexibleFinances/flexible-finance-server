@@ -72,11 +72,12 @@ export async function createGroupFromDto(
 }
 
 export async function updateGroupFromDto(
+  id: number,
   groupDto: GroupRequestDto
 ): Promise<Group | null> {
   const group = await Group.findOne({
     where: {
-      id: groupDto.id,
+      id,
     },
   });
   if (group === null) {

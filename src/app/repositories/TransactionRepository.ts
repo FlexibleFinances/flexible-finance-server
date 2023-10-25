@@ -93,11 +93,12 @@ export async function createTransactionFromDto(
 }
 
 export async function updateTransactionFromDto(
+  id: number,
   transactionDto: TransactionRequestDto
 ): Promise<Transaction | null> {
   const transaction = await Transaction.findOne({
     where: {
-      id: transactionDto.id,
+      id,
     },
   });
   if (transaction === null) {

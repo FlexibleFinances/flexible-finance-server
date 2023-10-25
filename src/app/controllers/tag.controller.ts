@@ -14,7 +14,7 @@ import {
 import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getTag(req: TagRequest, res: TagResponse): Promise<void> {
-  const tag = await getTagById(Number(req.params.tagId));
+  const tag = await getTagById(Number(req.params.id));
 
   if (tag === null) {
     res.status(500).send({
@@ -68,13 +68,11 @@ export async function updateTag(
     return;
   }
 
-  if (
-    !hasRequestArguments(req, res, { params: ["TagId"] }, { body: ["name"] })
-  ) {
+  if (!hasRequestArguments(req, res, { params: ["id"] }, { body: ["name"] })) {
     return;
   }
 
-  const tag = await updateTagFromDto(requestBody);
+  const tag = await updateTagFromDto(Number(req.params.id), requestBody);
 
   if (tag === null) {
     res.status(500).send({

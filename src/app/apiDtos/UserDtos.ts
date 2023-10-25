@@ -21,9 +21,6 @@ export interface UsersResponse extends express.Response {
 }
 
 export interface UserRequestDto {
-  id?: number;
-  createdAt?: string;
-  updatedAt?: string;
   username?: string;
   email?: string;
   password?: string;

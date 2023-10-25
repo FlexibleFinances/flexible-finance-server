@@ -17,7 +17,7 @@ export async function getFieldType(
   req: FieldTypeRequest,
   res: FieldTypeResponse
 ): Promise<void> {
-  const fieldType = await getFieldTypeById(Number(req.params.fieldTypeId));
+  const fieldType = await getFieldTypeById(Number(req.params.id));
 
   if (fieldType === null) {
     res.status(500).send({
@@ -71,18 +71,14 @@ export async function updateFieldType(
     return;
   }
 
-  if (
-    !hasRequestArguments(
-      req,
-      res,
-      { params: ["FieldTypeId"] },
-      { body: ["name", "GroupId", "TemplateId", "fieldValues"] }
-    )
-  ) {
+  if (!hasRequestArguments(req, res, { params: ["id"] }, { body: ["name"] })) {
     return;
   }
 
-  const fieldType = await updateFieldTypeFromDto(requestBody);
+  const fieldType = await updateFieldTypeFromDto(
+    Number(req.params.id),
+    requestBody
+  );
 
   if (fieldType === null) {
     res.status(500).send({

@@ -51,11 +51,12 @@ export async function createTransactorFromDto(
 }
 
 export async function updateTransactorFromDto(
+  id: number,
   transactorDto: TransactorRequestDto
 ): Promise<Transactor | null> {
   const transactor = await Transactor.findOne({
     where: {
-      id: transactorDto.id,
+      id,
     },
   });
   if (transactor === null) {

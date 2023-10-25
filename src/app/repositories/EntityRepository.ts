@@ -95,11 +95,12 @@ export async function createEntityFromDto(
 }
 
 export async function updateEntityFromDto(
+  id: number,
   entityDto: EntityRequestDto
 ): Promise<Entity | null> {
   const entity = await Entity.findOne({
     where: {
-      id: entityDto.id,
+      id,
     },
   });
   if (entity === null) {

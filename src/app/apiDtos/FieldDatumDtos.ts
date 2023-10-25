@@ -22,9 +22,6 @@ export interface FieldDataResponse extends express.Response {
 }
 
 export interface FieldDatumRequestDto {
-  id?: number;
-  createdAt?: string;
-  updatedAt?: string;
   fieldId: number;
   tagIds?: number[];
 }

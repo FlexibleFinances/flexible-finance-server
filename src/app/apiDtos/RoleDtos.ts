@@ -20,9 +20,6 @@ export interface RolesResponse extends express.Response {
 }
 
 export interface RoleRequestDto {
-  id?: number;
-  createdAt?: string;
-  updatedAt?: string;
   name?: string;
   userIds?: number[];
 }

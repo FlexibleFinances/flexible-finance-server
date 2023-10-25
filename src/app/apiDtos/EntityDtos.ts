@@ -24,9 +24,6 @@ export interface EntitiesResponse extends express.Response {
 }
 
 export interface EntityRequestDto {
-  id?: number;
-  createdAt?: string;
-  updatedAt?: string;
   name?: string;
   fieldDatumIds?: number[];
   fieldIds?: number[];

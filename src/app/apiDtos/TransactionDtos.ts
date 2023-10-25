@@ -23,9 +23,6 @@ export interface TransactionsResponse extends express.Response {
 }
 
 export interface TransactionRequestDto {
-  id?: number;
-  createdAt?: string;
-  updatedAt?: string;
   name?: string;
   fieldDatumIds?: number[];
   fieldIds?: number[];

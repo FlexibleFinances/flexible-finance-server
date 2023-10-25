@@ -68,11 +68,12 @@ export async function createFieldTypeFromDto(
 }
 
 export async function updateFieldTypeFromDto(
+  id: number,
   fieldTypeDto: FieldTypeRequestDto
 ): Promise<FieldType | null> {
   const fieldType = await FieldType.findOne({
     where: {
-      id: fieldTypeDto.id,
+      id,
     },
   });
   if (fieldType === null) {

@@ -17,7 +17,7 @@ export async function getEntity(
   req: EntityRequest,
   res: EntityResponse
 ): Promise<void> {
-  const entity = await getEntityById(Number(req.params.entityId));
+  const entity = await getEntityById(Number(req.params.id));
 
   if (entity === null) {
     res.status(500).send({
@@ -75,14 +75,14 @@ export async function updateEntity(
     !hasRequestArguments(
       req,
       res,
-      { params: ["EntityId"] },
-      { body: ["name", "GroupId", "TemplateId", "fieldValues"] }
+      { params: ["id"] },
+      { body: ["name", "groupId", "templateId", "fieldValues"] }
     )
   ) {
     return;
   }
 
-  const entity = await updateEntityFromDto(requestBody);
+  const entity = await updateEntityFromDto(Number(req.params.id), requestBody);
 
   if (entity === null) {
     res.status(500).send({

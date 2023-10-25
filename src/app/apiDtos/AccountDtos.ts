@@ -24,9 +24,6 @@ export interface AccountsResponse extends express.Response {
 }
 
 export interface AccountRequestDto {
-  id?: number;
-  createdAt?: string;
-  updatedAt?: string;
   name?: string;
   fieldDatumIds?: number[];
   fieldIds?: number[];

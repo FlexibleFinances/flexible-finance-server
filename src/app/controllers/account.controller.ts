@@ -17,7 +17,7 @@ export async function getAccount(
   req: AccountRequest,
   res: AccountResponse
 ): Promise<void> {
-  const account = await getAccountById(Number(req.params.accountId));
+  const account = await getAccountById(Number(req.params.id));
 
   if (account === null) {
     res.status(500).send({
@@ -75,14 +75,17 @@ export async function updateAccount(
     !hasRequestArguments(
       req,
       res,
-      { params: ["AccountId"] },
-      { body: ["name", "GroupId", "TemplateId", "fieldValues"] }
+      { params: ["id"] },
+      { body: ["name", "groupId", "templateId", "fieldValues"] }
     )
   ) {
     return;
   }
 
-  const account = await updateAccountFromDto(requestBody);
+  const account = await updateAccountFromDto(
+    Number(req.params.id),
+    requestBody
+  );
 
   if (account === null) {
     res.status(500).send({

@@ -17,9 +17,7 @@ export async function getTransaction(
   req: TransactionRequest,
   res: TransactionResponse
 ): Promise<void> {
-  const transaction = await getTransactionById(
-    Number(req.params.transactionId)
-  );
+  const transaction = await getTransactionById(Number(req.params.id));
 
   if (transaction === null) {
     res.status(500).send({
@@ -77,14 +75,17 @@ export async function updateTransaction(
     !hasRequestArguments(
       req,
       res,
-      { params: ["TransactionId"] },
-      { body: ["name", "TemplateId", "fieldValues"] }
+      { params: ["id"] },
+      { body: ["name", "templateId", "fieldValues"] }
     )
   ) {
     return;
   }
 
-  const transaction = await updateTransactionFromDto(requestBody);
+  const transaction = await updateTransactionFromDto(
+    Number(req.params.id),
+    requestBody
+  );
 
   if (transaction === null) {
     res.status(500).send({

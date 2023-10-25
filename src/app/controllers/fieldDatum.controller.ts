@@ -17,7 +17,7 @@ export async function getFieldDatum(
   req: FieldDatumRequest,
   res: FieldDatumResponse
 ): Promise<void> {
-  const fieldDatum = await getFieldDatumById(Number(req.params.fieldDatumId));
+  const fieldDatum = await getFieldDatumById(Number(req.params.id));
 
   if (fieldDatum === null) {
     res.status(500).send({
@@ -71,18 +71,14 @@ export async function updateFieldDatum(
     return;
   }
 
-  if (
-    !hasRequestArguments(
-      req,
-      res,
-      { params: ["FieldDatumId"] },
-      { body: ["name", "GroupId", "TemplateId", "fieldValues"] }
-    )
-  ) {
+  if (!hasRequestArguments(req, res, { params: ["id"] }, { body: [] })) {
     return;
   }
 
-  const fieldDatum = await updateFieldDatumFromDto(requestBody);
+  const fieldDatum = await updateFieldDatumFromDto(
+    Number(req.params.id),
+    requestBody
+  );
 
   if (fieldDatum === null) {
     res.status(500).send({

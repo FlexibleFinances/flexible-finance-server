@@ -57,11 +57,12 @@ export async function createFieldDatumFromDto(
 }
 
 export async function updateFieldDatumFromDto(
+  id: number,
   fieldDatumDto: FieldDatumRequestDto
 ): Promise<FieldDatum | null> {
   const fieldDatum = await FieldDatum.findOne({
     where: {
-      id: fieldDatumDto.id,
+      id,
     },
   });
   if (fieldDatum === null) {

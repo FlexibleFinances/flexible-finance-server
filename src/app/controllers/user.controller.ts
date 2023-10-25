@@ -17,7 +17,7 @@ export async function getUser(
   req: UserRequest,
   res: UserResponse
 ): Promise<void> {
-  const user = await getUserById(Number(req.params.userId));
+  const user = await getUserById(Number(req.params.id));
 
   if (user === null) {
     res.status(500).send({
@@ -75,14 +75,14 @@ export async function updateUser(
     !hasRequestArguments(
       req,
       res,
-      { params: ["UserId"] },
+      { params: ["id"] },
       { body: ["username", "email", "password", "roleIds"] }
     )
   ) {
     return;
   }
 
-  const user = await updateUserFromDto(requestBody);
+  const user = await updateUserFromDto(Number(req.params.id), requestBody);
 
   if (user === null) {
     res.status(500).send({

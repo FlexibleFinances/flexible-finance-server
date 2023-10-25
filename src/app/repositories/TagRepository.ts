@@ -55,11 +55,12 @@ export async function createTagFromDto(
 }
 
 export async function updateTagFromDto(
+  id: number,
   tagDto: TagRequestDto
 ): Promise<Tag | null> {
   const tag = await Tag.findOne({
     where: {
-      id: tagDto.id,
+      id,
     },
   });
   if (tag === null) {

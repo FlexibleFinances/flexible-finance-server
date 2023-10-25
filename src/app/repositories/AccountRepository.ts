@@ -97,11 +97,12 @@ export async function createAccountFromDto(
 }
 
 export async function updateAccountFromDto(
+  id: number,
   accountDto: AccountRequestDto
 ): Promise<Account | null> {
   const account = await Account.findOne({
     where: {
-      id: accountDto.id,
+      id,
     },
   });
   if (account === null) {

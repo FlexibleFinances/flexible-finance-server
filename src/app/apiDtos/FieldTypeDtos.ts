@@ -21,9 +21,6 @@ export interface FieldTypesResponse extends express.Response {
 }
 
 export interface FieldTypeRequestDto {
-  id?: number;
-  createdAt?: string;
-  updatedAt?: string;
   name?: string;
   tagIds?: number[];
   type?: fieldTypeTypeEnum;

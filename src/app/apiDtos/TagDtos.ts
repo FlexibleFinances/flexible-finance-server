@@ -19,9 +19,6 @@ export interface TagsResponse extends express.Response {
 }
 
 export interface TagRequestDto {
-  id?: number;
-  createdAt?: string;
-  updatedAt?: string;
   name?: string;
 }
 

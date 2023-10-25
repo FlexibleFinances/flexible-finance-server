@@ -71,11 +71,12 @@ export async function createUserFromDto(
 }
 
 export async function updateUserFromDto(
+  id: number,
   userDto: UserRequestDto
 ): Promise<User | null> {
   const user = await User.findOne({
     where: {
-      id: userDto.id,
+      id,
     },
   });
   if (user === null) {

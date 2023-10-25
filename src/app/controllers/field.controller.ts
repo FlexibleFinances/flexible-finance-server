@@ -17,7 +17,7 @@ export async function getField(
   req: FieldRequest,
   res: FieldResponse
 ): Promise<void> {
-  const field = await getFieldById(Number(req.params.fieldId));
+  const field = await getFieldById(Number(req.params.id));
 
   if (field === null) {
     res.status(500).send({
@@ -71,18 +71,11 @@ export async function updateField(
     return;
   }
 
-  if (
-    !hasRequestArguments(
-      req,
-      res,
-      { params: ["FieldId"] },
-      { body: ["name", "GroupId", "TemplateId", "fieldValues"] }
-    )
-  ) {
+  if (!hasRequestArguments(req, res, { params: ["id"] }, { body: ["name"] })) {
     return;
   }
 
-  const field = await updateFieldFromDto(requestBody);
+  const field = await updateFieldFromDto(Number(req.params.id), requestBody);
 
   if (field === null) {
     res.status(500).send({
