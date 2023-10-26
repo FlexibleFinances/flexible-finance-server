@@ -23,7 +23,7 @@ export interface FieldTypesResponse extends express.Response {
 export interface FieldTypeRequestDto {
   name?: string;
   tagIds?: number[];
-  type?: fieldTypeTypeEnum;
+  valueType?: fieldTypeTypeEnum;
   validator?: string;
 }
 
@@ -35,7 +35,7 @@ export interface FieldTypeSearchRequestDto extends Query {
   updatedAt?: string;
   name?: string;
   tagIds?: string[];
-  type?: string;
+  valueType?: string;
   validator?: string;
 }
 
@@ -45,7 +45,7 @@ export class FieldTypeResponseDto {
   updatedAt: string;
 
   name: string;
-  type?: fieldTypeTypeEnum;
+  valueType?: fieldTypeTypeEnum;
   validator?: string;
   tags?: TagResponseDto[];
   tagIds?: number[];
@@ -55,7 +55,7 @@ export class FieldTypeResponseDto {
     this.createdAt = fieldType.createdAt.toISOString();
     this.updatedAt = fieldType.updatedAt.toISOString();
     this.name = fieldType.name;
-    this.type = fieldType.type;
+    this.valueType = fieldType.type;
     this.validator = fieldType.validator;
     this.tags = fieldType.Tags?.map((tag) => new TagResponseDto(tag));
     this.tagIds = fieldType.Tags?.map((tag) => tag.id);

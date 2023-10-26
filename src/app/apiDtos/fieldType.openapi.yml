@@ -9,7 +9,7 @@ FieldTypeSchema:
     - name
     - tags
     - tagIds
-    - type
+    - valueType
     - validator
   properties:
     id:
@@ -47,7 +47,7 @@ FieldTypeSchema:
       items:
         type: integer
       type: array
-    type:
+    valueType:
       enum:
         - Text
         - Number
