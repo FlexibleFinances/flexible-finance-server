@@ -1,46 +1,36 @@
-RequestBody:
-  required: true
-  content:
-    application/json:
-      schema:
-        type: object
-        properties:
-          name:
-            type: string
-          accountIds:
-            type: array
-            items:
-              type: integer
-          entityIds:
-            type: array
-            items:
-              type: integer
-          transactionIds:
-            type: array
-            items:
-              type: integer
-ResponseSchema:
+TagSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - name
   properties:
     id:
+      readOnly: true
       type: integer
     createdAt:
+      readOnly: true
       type: string
       format: date-time
     updatedAt:
+      readOnly: true
       type: string
       format: date-time
     name:
       type: string
     accountIds:
+      readOnly: true
       type: array
       items:
         type: integer
     entityIds:
+      readOnly: true
       type: array
       items:
         type: integer
     transactionIds:
+      readOnly: true
       type: array
       items:
         type: integer
