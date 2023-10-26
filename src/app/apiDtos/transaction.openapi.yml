@@ -29,7 +29,7 @@ TransactionSchema:
     fieldData:
       items:
         type: object
-        properties:
+        additionalProperties:
           oneOf:
             - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount"
             - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount"
@@ -44,14 +44,14 @@ TransactionSchema:
     name:
       type: string
     recipientTransactor:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Transactor"
       readOnly: true
       type: object
     recipientTransactorId:
       type: integer
     sourceTransactor:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Transactor"
       readOnly: true
       type: object
@@ -60,7 +60,7 @@ TransactionSchema:
     tags:
       items:
         type: object
-        properties:
+        additionalProperties:
           $ref: "../../openapi.root.yml#/components/schemas/Tag"
       readOnly: true
       type: array
@@ -69,7 +69,7 @@ TransactionSchema:
         type: integer
       type: array
     template:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/AccountTemplate"
       readOnly: true
       type: object
@@ -111,7 +111,7 @@ TransactionTemplateSchema:
     fields:
       items:
         type: object
-        properties:
+        additionalProperties:
           $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: array
@@ -121,7 +121,7 @@ TransactionTemplateSchema:
       type: array
     fieldData:
       items:
-        properties:
+        additionalProperties:
           oneOf:
             - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount"
             - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount"
@@ -136,7 +136,7 @@ TransactionTemplateSchema:
       type: array
     recipientTransactor:
       nullable: true
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Transactor"
       readOnly: true
       type: object
@@ -145,7 +145,7 @@ TransactionTemplateSchema:
       type: integer
     sourceTransactor:
       nullable: true
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Transactor"
       readOnly: true
       type: object
@@ -154,7 +154,7 @@ TransactionTemplateSchema:
       type: integer
     tags:
       items:
-        properties:
+        additionalProperties:
           $ref: "../../openapi.root.yml#/components/schemas/Tag"
         type: object
       readOnly: true

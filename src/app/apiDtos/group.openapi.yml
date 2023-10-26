@@ -28,7 +28,7 @@ GroupSchema:
     accounts:
       items:
         type: object
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Account"
       readOnly: true
       type: array
@@ -39,7 +39,7 @@ GroupSchema:
     entities:
       items:
         type: object
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Entity"
       readOnly: true
       type: array
@@ -53,7 +53,7 @@ GroupSchema:
       readOnly: true
       nullable: true
       type: object
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Group"
     parentGroupId:
       nullable: true
@@ -61,7 +61,7 @@ GroupSchema:
     tags:
       items:
         type: object
-        properties:
+        additionalProperties:
           $ref: "../../openapi.root.yml#/components/schemas/Tag"
       readOnly: true
       type: array

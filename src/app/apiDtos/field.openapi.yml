@@ -27,7 +27,7 @@ FieldSchema:
     fieldType:
       readOnly: true
       type: object
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/FieldType"
     fieldTypeId:
       type: integer
@@ -36,7 +36,7 @@ FieldSchema:
     tags:
       items:
         type: object
-        properties:
+        additionalProperties:
           $ref: "../../openapi.root.yml#/components/schemas/Tag"
       readOnly: true
       type: array

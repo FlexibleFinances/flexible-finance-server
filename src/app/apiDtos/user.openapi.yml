@@ -29,7 +29,7 @@ UserSchema:
     roles:
       items:
         type: object
-        properties:
+        additionalProperties:
           $ref: "../../openapi.root.yml#/components/schemas/Role"
       readOnly: true
       type: array

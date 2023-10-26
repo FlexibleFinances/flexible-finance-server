@@ -27,7 +27,7 @@ EntitySchema:
     fieldData:
       items:
         type: object
-        properties:
+        additionalProperties:
           oneOf:
             - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolEntity"
             - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateEntity"
@@ -43,7 +43,7 @@ EntitySchema:
       type: string
     parentGroup:
       nullable: true
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Group"
       readOnly: true
       type: object
@@ -53,7 +53,7 @@ EntitySchema:
     tags:
       items:
         type: object
-        properties:
+        additionalProperties:
           $ref: "../../openapi.root.yml#/components/schemas/Tag"
       readOnly: true
       type: array
@@ -62,7 +62,7 @@ EntitySchema:
         type: integer
       type: array
     template:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/EntityTemplate"
       readOnly: true
       type: object
@@ -102,7 +102,7 @@ EntityTemplateSchema:
     fields:
       items:
         type: object
-        properties:
+        additionalProperties:
           $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: array
@@ -112,7 +112,7 @@ EntityTemplateSchema:
       type: array
     fieldData:
       items:
-        properties:
+        additionalProperties:
           oneOf:
             - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolEntity"
             - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateEntity"
@@ -127,7 +127,7 @@ EntityTemplateSchema:
       type: array
     parentGroup:
       nullable: true
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Group"
       readOnly: true
       type: object
@@ -136,7 +136,7 @@ EntityTemplateSchema:
       type: integer
     tags:
       items:
-        properties:
+        additionalProperties:
           $ref: "../../openapi.root.yml#/components/schemas/Tag"
         type: object
       readOnly: true

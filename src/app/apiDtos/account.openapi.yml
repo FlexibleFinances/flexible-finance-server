@@ -27,7 +27,7 @@ AccountSchema:
     fieldData:
       items:
         type: object
-        properties:
+        additionalProperties:
           oneOf:
             - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount"
             - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount"
@@ -43,7 +43,7 @@ AccountSchema:
       type: string
     parentGroup:
       nullable: true
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Group"
       readOnly: true
       type: object
@@ -53,7 +53,7 @@ AccountSchema:
     tags:
       items:
         type: object
-        properties:
+        additionalProperties:
           $ref: "../../openapi.root.yml#/components/schemas/Tag"
       readOnly: true
       type: array
@@ -62,7 +62,7 @@ AccountSchema:
         type: integer
       type: array
     template:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/AccountTemplate"
       readOnly: true
       type: object
@@ -102,7 +102,7 @@ AccountTemplateSchema:
     fields:
       items:
         type: object
-        properties:
+        additionalProperties:
           $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: array
@@ -112,7 +112,7 @@ AccountTemplateSchema:
       type: array
     fieldData:
       items:
-        properties:
+        additionalProperties:
           oneOf:
             - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount"
             - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount"
@@ -127,7 +127,7 @@ AccountTemplateSchema:
       type: array
     parentGroup:
       nullable: true
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Group"
       readOnly: true
       type: object
@@ -136,7 +136,7 @@ AccountTemplateSchema:
       type: integer
     tags:
       items:
-        properties:
+        additionalProperties:
           $ref: "../../openapi.root.yml#/components/schemas/Tag"
         type: object
       readOnly: true

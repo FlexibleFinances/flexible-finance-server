@@ -21,7 +21,7 @@ BoolAccount_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: object
@@ -54,7 +54,7 @@ BoolEntity_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: object
@@ -87,7 +87,7 @@ BoolTransaction_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: object
@@ -121,7 +121,7 @@ DateAccount_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: object
@@ -155,7 +155,7 @@ DateEntity_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: object
@@ -189,7 +189,7 @@ DateTransaction_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: object
@@ -224,7 +224,7 @@ IntAccount_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: object
@@ -257,7 +257,7 @@ IntEntity_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: object
@@ -290,7 +290,7 @@ IntTransaction_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: object
@@ -324,7 +324,7 @@ StringAccount_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: object
@@ -357,7 +357,7 @@ StringEntity_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: object
@@ -390,7 +390,7 @@ StringTransaction_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      properties:
+      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: object
