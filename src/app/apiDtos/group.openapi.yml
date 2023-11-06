@@ -1,39 +1,73 @@
-RequestSchema:
+GroupSchema:
+  nullable: true
   type: object
-  properties:
-    name:
-      type: string
-    parentGroupId:
-      type: integer
-    accountIds:
-      type: array
-      items:
-        type: integer
-    entityIds:
-      type: array
-      items:
-        type: integer
-ResponseSchema:
-  type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - accounts
+    - accountIds
+    - childGroups
+    - childGroupIds
+    - entities
+    - entityIds
+    - name
+    - parentGroup
+    - parentGroupId
+    - tags
+    - tagIds
   properties:
     id:
+      readOnly: true
       type: integer
     createdAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
     updatedAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
+    accounts:
+      items:
+        $ref: "../../openapi.root.yml#/components/schemas/Account"
+      readOnly: true
+      type: array
+    accountIds:
+      items:
+        type: integer
+      type: array
+    childGroups:
+      items:
+        $ref: "../../openapi.root.yml#/components/schemas/Group"
+      readOnly: true
+      type: array
+    childGroupIds:
+      items:
+        type: integer
+      type: array
+    entities:
+      items:
+        $ref: "../../openapi.root.yml#/components/schemas/Entity"
+      readOnly: true
+      type: array
+    entityIds:
+      items:
+        type: integer
+      type: array
     name:
       type: string
+    parentGroup:
+      readOnly: true
     parentGroupId:
-      type: integer
       nullable: true
-    accountIds:
+      type: integer
+    tags:
+      items:
+        $ref: "../../openapi.root.yml#/components/schemas/Tag"
+      readOnly: true
       type: array
+    tagIds:
       items:
         type: integer
-    entityIds:
       type: array
-      items:
-        type: integer

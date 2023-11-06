@@ -20,8 +20,8 @@ export class FieldTypeComponent extends Model<
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
-  declare FieldTypeId: number;
-  declare FieldType: NonAttribute<FieldType>;
+  declare ChildFieldTypeId: number;
+  declare ChildFieldType: NonAttribute<FieldType>;
   declare ParentFieldTypeId: number;
   declare ParentFieldType: NonAttribute<FieldType>;
   declare order: number;
@@ -29,15 +29,15 @@ export class FieldTypeComponent extends Model<
   declare validator?: CreationOptional<string>;
 
   declare static associations: {
-    FieldType: Association<FieldTypeComponent, FieldType>;
+    ChildFieldType: Association<FieldTypeComponent, FieldType>;
     ParentFieldType: Association<FieldTypeComponent, FieldType>;
   };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  declare getFieldType: BelongsToGetAssociationMixin<FieldType>;
-  declare setFieldType: BelongsToSetAssociationMixin<FieldType, number>;
+  declare getChildFieldType: BelongsToGetAssociationMixin<FieldType>;
+  declare setChildFieldType: BelongsToSetAssociationMixin<FieldType, number>;
 
   declare getParentFieldType: BelongsToGetAssociationMixin<FieldType>;
   declare setParentFieldType: BelongsToSetAssociationMixin<FieldType, number>;
@@ -53,7 +53,7 @@ export function initializeFieldTypeComponent(sequelize: Sequelize): void {
       },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
-      FieldTypeId: {
+      ChildFieldTypeId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {

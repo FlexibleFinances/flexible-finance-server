@@ -1,3 +1,4 @@
+import * as FieldTypeService from "../services/FieldTypeService";
 import {
   type FieldTypeRequest,
   type FieldTypeResponse,
@@ -5,19 +6,13 @@ import {
   type FieldTypeSearchRequest,
   type FieldTypesResponse,
 } from "../apiDtos/FieldTypeDtos";
-import {
-  createFieldTypeFromDto,
-  getFieldTypeById,
-  getFieldTypesByOptions,
-  updateFieldTypeFromDto,
-} from "../repositories/FieldTypeRepository";
 import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getFieldType(
   req: FieldTypeRequest,
   res: FieldTypeResponse
 ): Promise<void> {
-  const fieldType = await getFieldTypeById(Number(req.params.fieldTypeId));
+  const fieldType = await FieldTypeService.getFieldType(Number(req.params.id));
 
   if (fieldType === null) {
     res.status(500).send({
@@ -26,9 +21,12 @@ export async function getFieldType(
     return;
   }
 
+  const fieldTypeResponseDto = new FieldTypeResponseDto(fieldType);
+  await fieldTypeResponseDto.loadAssociations(fieldType);
+
   res.status(200).send({
     message: "FieldType gotten.",
-    fieldType: new FieldTypeResponseDto(fieldType),
+    fieldType: fieldTypeResponseDto,
   });
 }
 
@@ -44,7 +42,7 @@ export async function createFieldType(
     return;
   }
 
-  const fieldType = await createFieldTypeFromDto(requestBody);
+  const fieldType = await FieldTypeService.createFieldTypeFromDto(requestBody);
 
   if (fieldType === null) {
     res.status(500).send({
@@ -53,9 +51,12 @@ export async function createFieldType(
     return;
   }
 
+  const fieldTypeResponseDto = new FieldTypeResponseDto(fieldType);
+  await fieldTypeResponseDto.loadAssociations(fieldType);
+
   res.status(200).send({
     message: "FieldType created.",
-    fieldType: new FieldTypeResponseDto(fieldType),
+    fieldType: fieldTypeResponseDto,
   });
 }
 
@@ -71,18 +72,14 @@ export async function updateFieldType(
     return;
   }
 
-  if (
-    !hasRequestArguments(
-      req,
-      res,
-      { params: ["FieldTypeId"] },
-      { body: ["name", "GroupId", "TemplateId", "fieldValues"] }
-    )
-  ) {
+  if (!hasRequestArguments(req, res, { params: ["id"] }, { body: ["name"] })) {
     return;
   }
 
-  const fieldType = await updateFieldTypeFromDto(requestBody);
+  const fieldType = await FieldTypeService.updateFieldTypeFromDto(
+    Number(req.params.id),
+    requestBody
+  );
 
   if (fieldType === null) {
     res.status(500).send({
@@ -91,9 +88,12 @@ export async function updateFieldType(
     return;
   }
 
+  const fieldTypeResponseDto = new FieldTypeResponseDto(fieldType);
+  await fieldTypeResponseDto.loadAssociations(fieldType);
+
   res.status(200).send({
     message: "FieldType updated.",
-    fieldType: new FieldTypeResponseDto(fieldType),
+    fieldType: fieldTypeResponseDto,
   });
 }
 
@@ -103,7 +103,7 @@ export async function getFieldTypes(
 ): Promise<void> {
   const requestQuery = req.query;
 
-  const fieldTypes = await getFieldTypesByOptions(requestQuery);
+  const fieldTypes = await FieldTypeService.getFieldTypes(requestQuery);
 
   if (fieldTypes === null) {
     res.status(500).send({
@@ -112,19 +112,18 @@ export async function getFieldTypes(
     return;
   }
 
-  const fieldTypeDtos = fieldTypes.map(
-    (fieldType) => new FieldTypeResponseDto(fieldType)
-  );
+  const fieldTypeResponseDtoAssocciationsPromises: Array<Promise<void>> = [];
+  const fieldTypeResponseDtos = fieldTypes.map((fieldType) => {
+    const fieldTypeReponseDto = new FieldTypeResponseDto(fieldType);
+    fieldTypeResponseDtoAssocciationsPromises.push(
+      fieldTypeReponseDto.loadAssociations(fieldType)
+    );
+    return fieldTypeReponseDto;
+  });
+  await Promise.all(fieldTypeResponseDtoAssocciationsPromises);
 
-  if (req.query.isTemplate as unknown as boolean) {
-    res.status(200).send({
-      message: "FieldType Templates gotten.",
-      templates: fieldTypeDtos,
-    });
-  } else {
-    res.status(200).send({
-      message: "FieldTypes gotten.",
-      fieldTypes: fieldTypeDtos,
-    });
-  }
+  res.status(200).send({
+    message: "FieldTypes gotten.",
+    fieldTypes: fieldTypeResponseDtos,
+  });
 }

@@ -1,3 +1,4 @@
+import * as UserService from "../services/UserService";
 import {
   type UserRequest,
   type UserResponse,
@@ -5,19 +6,13 @@ import {
   type UserSearchRequest,
   type UsersResponse,
 } from "../apiDtos/UserDtos";
-import {
-  createUserFromDto,
-  getUserById,
-  getUsersByOptions,
-  updateUserFromDto,
-} from "../repositories/UserRepository";
 import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getUser(
   req: UserRequest,
   res: UserResponse
 ): Promise<void> {
-  const user = await getUserById(Number(req.params.userId));
+  const user = await UserService.getUser(Number(req.params.id));
 
   if (user === null) {
     res.status(500).send({
@@ -26,9 +21,12 @@ export async function getUser(
     return;
   }
 
+  const userResponseDto = new UserResponseDto(user);
+  await userResponseDto.loadAssociations(user);
+
   res.status(200).send({
     message: "User gotten.",
-    user: new UserResponseDto(user),
+    user: userResponseDto,
   });
 }
 
@@ -44,7 +42,7 @@ export async function createUser(
     return;
   }
 
-  const user = await createUserFromDto(requestBody);
+  const user = await UserService.createUserFromDto(requestBody);
 
   if (user === null) {
     res.status(500).send({
@@ -53,9 +51,12 @@ export async function createUser(
     return;
   }
 
+  const userResponseDto = new UserResponseDto(user);
+  await userResponseDto.loadAssociations(user);
+
   res.status(200).send({
     message: "User created.",
-    user: new UserResponseDto(user),
+    user: userResponseDto,
   });
 }
 
@@ -72,17 +73,15 @@ export async function updateUser(
   }
 
   if (
-    !hasRequestArguments(
-      req,
-      res,
-      { params: ["UserId"] },
-      { body: ["username", "email", "password", "roleIds"] }
-    )
+    !hasRequestArguments(req, res, { params: ["id"] }, { body: ["username"] })
   ) {
     return;
   }
 
-  const user = await updateUserFromDto(requestBody);
+  const user = await UserService.updateUserFromDto(
+    Number(req.params.id),
+    requestBody
+  );
 
   if (user === null) {
     res.status(500).send({
@@ -91,9 +90,12 @@ export async function updateUser(
     return;
   }
 
+  const userResponseDto = new UserResponseDto(user);
+  await userResponseDto.loadAssociations(user);
+
   res.status(200).send({
     message: "User updated.",
-    user: new UserResponseDto(user),
+    user: userResponseDto,
   });
 }
 
@@ -103,7 +105,7 @@ export async function getUsers(
 ): Promise<void> {
   const requestQuery = req.query;
 
-  const users = await getUsersByOptions(requestQuery);
+  const users = await UserService.getUsers(requestQuery);
 
   if (users === null) {
     res.status(500).send({
@@ -112,17 +114,18 @@ export async function getUsers(
     return;
   }
 
-  const userDtos = users.map((user) => new UserResponseDto(user));
+  const userResponseDtoAssocciationsPromises: Array<Promise<void>> = [];
+  const userResponseDtos = users.map((user) => {
+    const userReponseDto = new UserResponseDto(user);
+    userResponseDtoAssocciationsPromises.push(
+      userReponseDto.loadAssociations(user)
+    );
+    return userReponseDto;
+  });
+  await Promise.all(userResponseDtoAssocciationsPromises);
 
-  if (req.query.isTemplate as unknown as boolean) {
-    res.status(200).send({
-      message: "User Templates gotten.",
-      templates: userDtos,
-    });
-  } else {
-    res.status(200).send({
-      message: "Users gotten.",
-      users: userDtos,
-    });
-  }
+  res.status(200).send({
+    message: "Users gotten.",
+    users: userResponseDtos,
+  });
 }

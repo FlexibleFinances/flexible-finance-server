@@ -1,11 +1,7 @@
 TransactorIdRequests:
   get:
     parameters:
-      - name: TransactorId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transactor"
@@ -19,17 +15,9 @@ TransactorIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: TransactorId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Transactor_RequestSchema"
+      $ref: "../../openapi.root.yml#/components/requestBodies/Transactor"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transactor"
@@ -44,40 +32,15 @@ TransactorIdRequests:
 TransactorsRequests:
   get:
     parameters:
-      - name: offset
-        in: query
-        schema:
-          type: integer
-      - name: limit
-        in: query
-        schema:
-          type: integer
-      - name: name
-        in: query
-        schema:
-          type: string
-      - name: isTemplate
-        in: query
-        schema:
-          type: boolean
-      - name: GroupIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: TagIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: TemplateIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
+      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldDatumIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_parentGroupIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_templateIds"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transactors"
@@ -89,11 +52,7 @@ TransactorsRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Transactor_RequestSchema"
+      $ref: "../../openapi.root.yml#/components/requestBodies/Transactor"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transactor"
@@ -115,7 +74,7 @@ TransactorResponse:
           message:
             type: string
           transactor:
-            $ref: "../../openapi.root.yml#/components/schemas/Transactor_ResponseSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Transactor_Response"
 TransactorsResponse:
   description: Returns the transactors' info.
   content:
@@ -128,4 +87,4 @@ TransactorsResponse:
           transactors:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Transactor_ResponseSchema"
+              $ref: "../../openapi.root.yml#/components/schemas/Transactor_Response"

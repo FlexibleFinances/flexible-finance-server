@@ -1,7 +1,10 @@
-import type Field from "../../database/models/Field";
+import {
+  type FieldComponentRequestDto,
+  FieldComponentResponseDto,
+} from "./FieldComponentDtos";
+import Field from "../../database/models/Field";
 import { FieldTypeResponseDto } from "./FieldTypeDtos";
 import { type Query } from "express-serve-static-core";
-// import type Tag from "../../database/models/Tag";
 import { TagResponseDto } from "./TagDtos";
 import type express from "express";
 
@@ -22,23 +25,30 @@ export interface FieldsResponse extends express.Response {
 }
 
 export interface FieldRequestDto {
-  id?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  name: string;
+  childFieldComponents: FieldComponentRequestDto[];
+  childFieldComponentIds: number[];
   fieldTypeId: number;
-  tagIds?: number[];
+  isComponentOnly: boolean;
+  name: string;
+  parentFieldComponent: FieldComponentRequestDto;
+  parentFieldComponentId: number;
+  tagIds: number[];
 }
 
 export interface FieldSearchRequestDto extends Query {
-  offset?: string;
-  limit?: string;
-  ids?: string[];
+  accountIds?: string[];
+  childFieldComponentIds?: string[];
   createdAt?: string;
-  updatedAt?: string;
-  name?: string;
+  entityIds?: string[];
   fieldTypeIds?: string[];
+  ids?: string[];
+  limit?: string;
+  name?: string;
+  offset?: string;
+  parentFieldComponentIds?: string[];
   tagIds?: string[];
+  transactionIds?: string[];
+  updatedAt?: string;
 }
 
 export class FieldResponseDto {
@@ -46,20 +56,68 @@ export class FieldResponseDto {
   createdAt: string;
   updatedAt: string;
 
-  name: string;
-  fieldType: FieldTypeResponseDto;
+  childFieldComponents: FieldComponentResponseDto[] = [];
+  childFieldComponentIds: number[] = [];
+  fieldType: FieldTypeResponseDto | null = null;
   fieldTypeId: number;
-  tags?: TagResponseDto[];
-  tagIds?: number[];
+  isComponentOnly: boolean;
+  name: string;
+  parentFieldComponent?: FieldComponentRequestDto;
+  parentFieldComponentId: number | null = null;
+  tags: TagResponseDto[] = [];
+  tagIds: number[] = [];
 
   constructor(field: Field) {
     this.id = field.id;
     this.createdAt = field.createdAt.toISOString();
     this.updatedAt = field.updatedAt.toISOString();
+    this.fieldTypeId = field.FieldTypeId;
+    this.isComponentOnly = field.isComponentOnly;
     this.name = field.name;
-    this.fieldType = new FieldTypeResponseDto(field.FieldType);
-    this.fieldTypeId = field.FieldType.id;
-    this.tags = field.Tags?.map((tag) => new TagResponseDto(tag));
-    this.tagIds = field.Tags?.map((tag) => tag.id);
   }
+
+  public async loadAssociations(field: Field): Promise<void> {
+    if (this.id !== field.id) {
+      throw new Error("IDs don't match.");
+    }
+
+    const childFieldComponents = await field.getChildFieldComponents();
+    childFieldComponents?.forEach((childFieldComponent) => {
+      this.childFieldComponents.push(
+        new FieldComponentResponseDto(childFieldComponent)
+      );
+      this.childFieldComponentIds.push(childFieldComponent.id);
+    });
+
+    const fieldType = await field.getFieldType();
+    if (fieldType === undefined) {
+      throw new Error("Must have a field type.");
+    }
+    this.fieldType = new FieldTypeResponseDto(fieldType);
+
+    const parentFieldComponent = await field.getParentFieldComponent();
+    if (parentFieldComponent !== undefined && parentFieldComponent !== null) {
+      this.parentFieldComponent = new FieldComponentResponseDto(
+        parentFieldComponent
+      );
+      this.parentFieldComponentId = parentFieldComponent.id;
+    }
+
+    const tags = await field.getTags();
+    tags?.forEach((tag) => {
+      this.tags.push(new TagResponseDto(tag));
+      this.tagIds.push(tag.id);
+    });
+  }
+}
+
+export function FieldDtoToModel(
+  fieldDto: FieldRequestDto | FieldResponseDto
+): Field {
+  const field = Field.build({
+    FieldTypeId: fieldDto.fieldTypeId,
+    isComponentOnly: fieldDto.isComponentOnly,
+    name: fieldDto.name,
+  });
+  return field;
 }

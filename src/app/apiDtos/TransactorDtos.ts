@@ -20,10 +20,6 @@ export interface TransactorsResponse extends express.Response {
 }
 
 export interface TransactorRequestDto {
-  id?: number;
-  createdAt?: string;
-  updatedAt?: string;
-
   transactorTypeId: transactorTypeEnum;
 }
 

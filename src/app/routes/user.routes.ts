@@ -38,7 +38,7 @@ export function setUserRoutes(app: express.Express): void {
   );
 
   app.get(
-    "/v1/" + endpointName + "/:UserId",
+    "/v1/" + endpointName + "/:id",
     [authJwt.verifyToken],
     asyncHandler(async (req: express.Request, res: express.Response) => {
       await controller.getUser(req as UserRequest, res as UserResponse);
@@ -46,7 +46,7 @@ export function setUserRoutes(app: express.Express): void {
   );
 
   app.put(
-    "/v1/" + endpointName + "/:UserId",
+    "/v1/" + endpointName + "/:id",
     [authJwt.verifyToken, authJwt.isSelf],
     asyncHandler(async (req: express.Request, res: express.Response) => {
       await controller.updateUser(req as UserRequest, res as UserResponse);

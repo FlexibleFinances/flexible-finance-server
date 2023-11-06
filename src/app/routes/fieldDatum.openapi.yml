@@ -1,11 +1,7 @@
 FieldDatumIdRequests:
   get:
     parameters:
-      - name: FieldDatumId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldDatum"
@@ -19,29 +15,9 @@ FieldDatumIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: FieldDatumId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            oneOf:
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolEntity_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolTransaction_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateEntity_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateTransaction_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntAccount_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntEntity_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntTransaction_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringAccount_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringEntity_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringTransaction_RequestSchema"
+      $ref: "../../openapi.root.yml#/components/requestBodies/FieldDatum"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldDatum"
@@ -56,14 +32,12 @@ FieldDatumIdRequests:
 FieldDataRequests:
   get:
     parameters:
-      - name: offset
-        in: query
-        schema:
-          type: integer
-      - name: limit
-        in: query
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/query_accountIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_entityIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_transactionIds"
       - name: stringValue
         in: query
         schema:
@@ -84,30 +58,6 @@ FieldDataRequests:
         in: query
         schema:
           type: boolean
-      - name: FieldIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: AccountIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: EntityIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: TransactionIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldData"
@@ -119,23 +69,7 @@ FieldDataRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   post:
     requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            oneOf:
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolEntity_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolTransaction_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateEntity_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateTransaction_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntAccount_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntEntity_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntTransaction_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringAccount_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringEntity_RequestSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringTransaction_RequestSchema"
+      $ref: "../../openapi.root.yml#/components/requestBodies/FieldDatum"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldDatum"
@@ -158,18 +92,18 @@ FieldDatumResponse:
             type: string
           fieldDatum:
             oneOf:
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount_ResponseSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolEntity_ResponseSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolTransaction_ResponseSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount_ResponseSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateEntity_ResponseSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateTransaction_ResponseSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntAccount_ResponseSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntEntity_ResponseSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntTransaction_ResponseSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringAccount_ResponseSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringEntity_ResponseSchema"
-              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringTransaction_ResponseSchema"
+              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount"
+              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolEntity"
+              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolTransaction"
+              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount"
+              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateEntity"
+              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateTransaction"
+              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntAccount"
+              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntEntity"
+              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntTransaction"
+              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringAccount"
+              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringEntity"
+              - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringTransaction"
 FieldDataResponse:
   description: Returns the field data's info.
   content:
@@ -183,15 +117,15 @@ FieldDataResponse:
             type: array
             items:
               oneOf:
-                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount_ResponseSchema"
-                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolEntity_ResponseSchema"
-                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolTransaction_ResponseSchema"
-                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount_ResponseSchema"
-                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateEntity_ResponseSchema"
-                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateTransaction_ResponseSchema"
-                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntAccount_ResponseSchema"
-                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntEntity_ResponseSchema"
-                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntTransaction_ResponseSchema"
-                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringAccount_ResponseSchema"
-                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringEntity_ResponseSchema"
-                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringTransaction_ResponseSchema"
+                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount"
+                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolEntity"
+                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolTransaction"
+                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount"
+                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateEntity"
+                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateTransaction"
+                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntAccount"
+                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntEntity"
+                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntTransaction"
+                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringAccount"
+                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringEntity"
+                - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringTransaction"

@@ -44,7 +44,7 @@ export function setEntityRoutes(app: express.Express): void {
   );
 
   app.get(
-    "/v1/" + endpointName + "/:EntityId",
+    "/v1/" + endpointName + "/:id",
     [authJwt.verifyToken],
     asyncHandler(async (req: express.Request, res: express.Response) => {
       await controller.getEntity(req as EntityRequest, res as EntityResponse);
@@ -52,7 +52,7 @@ export function setEntityRoutes(app: express.Express): void {
   );
 
   app.put(
-    "/v1/" + endpointName + "/:EntityId",
+    "/v1/" + endpointName + "/:id",
     [authJwt.verifyToken],
     asyncHandler(async (req: express.Request, res: express.Response) => {
       await controller.updateEntity(

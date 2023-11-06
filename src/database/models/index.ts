@@ -111,8 +111,11 @@ export function initializeModels(sequelize: Sequelize): void {
   // #endregion
 
   // #region Account relationships
-  Account.belongsTo(Account, { foreignKey: "TemplateId" });
-  Account.belongsTo(Group);
+  Account.belongsTo(Account, {
+    as: "Template",
+    foreignKey: "TemplateId",
+  });
+  Account.belongsTo(Group, { as: "ParentGroup" });
   Account.belongsTo(Transactor, { foreignKey: "id" });
   Account.belongsTo(TransactorType);
   Account.belongsToMany(Tag, { through: AccountTag });
@@ -122,8 +125,8 @@ export function initializeModels(sequelize: Sequelize): void {
   // #endregion
 
   // #region Entity relationships
-  Entity.belongsTo(Entity, { foreignKey: "TemplateId" });
-  Entity.belongsTo(Group);
+  Entity.belongsTo(Entity, { as: "Template", foreignKey: "TemplateId" });
+  Entity.belongsTo(Group, { as: "ParentGroup" });
   Entity.belongsTo(Transactor, { foreignKey: "id" });
   Entity.belongsTo(TransactorType);
   Entity.belongsToMany(Field, { through: EntityField });
@@ -139,7 +142,14 @@ export function initializeModels(sequelize: Sequelize): void {
   Field.belongsToMany(Tag, { through: FieldTag });
   Field.belongsToMany(Transaction, { through: TransactionField });
   Field.hasMany(FieldChoice);
-  Field.hasMany(FieldComponent);
+  Field.hasMany(FieldComponent, {
+    as: "ChildFieldComponents",
+    foreignKey: "ParentFieldId",
+  });
+  Field.hasOne(FieldComponent, {
+    as: "ParentFieldComponent",
+    foreignKey: "ChildFieldId",
+  });
   Field.hasMany(FieldDatum);
   // #endregion
 
@@ -148,6 +158,10 @@ export function initializeModels(sequelize: Sequelize): void {
   // #endregion
 
   // #region FieldComponent relationships
+  FieldComponent.belongsTo(Field, {
+    as: "ChildField",
+    foreignKey: "ChildFieldId",
+  });
   FieldComponent.belongsTo(Field, {
     as: "ParentField",
     foreignKey: "ParentFieldId",
@@ -162,11 +176,23 @@ export function initializeModels(sequelize: Sequelize): void {
   // #endregion
 
   // #region FieldType relationships
+  FieldType.belongsToMany(Tag, { through: FieldTypeTag });
   FieldType.hasMany(Field);
-  FieldType.hasMany(FieldTypeComponent);
+  FieldType.hasMany(FieldTypeComponent, {
+    as: "ChildFieldTypeComponents",
+    foreignKey: "ParentFieldTypeId",
+  });
+  FieldType.hasOne(FieldTypeComponent, {
+    as: "ParentFieldTypeComponent",
+    foreignKey: "ChildFieldTypeId",
+  });
   // #endregion
 
   // #region FieldTypeComponent relationships
+  FieldTypeComponent.belongsTo(FieldType, {
+    as: "ChildFieldType",
+    foreignKey: "ChildFieldTypeId",
+  });
   FieldTypeComponent.belongsTo(FieldType, {
     as: "ParentFieldType",
     foreignKey: "ParentFieldTypeId",
@@ -178,9 +204,11 @@ export function initializeModels(sequelize: Sequelize): void {
   // #endregion
 
   // #region Group relationships
-  Group.hasMany(Account);
-  Group.hasMany(Entity);
+  Group.belongsTo(Group, { as: "ParentGroup" });
   Group.belongsToMany(Tag, { through: GroupTag });
+  Group.hasMany(Account, { foreignKey: "ParentGroupId" });
+  Group.hasMany(Group, { as: "ChildGroups", foreignKey: "ParentGroupId" });
+  Group.hasMany(Entity, { foreignKey: "ParentGroupId" });
   // #endregion
 
   // #region Tag relationships
@@ -194,7 +222,10 @@ export function initializeModels(sequelize: Sequelize): void {
   // #endregion
 
   // #region Transaction relationships
-  Transaction.belongsTo(Transaction, { foreignKey: "TemplateId" });
+  Transaction.belongsTo(Transaction, {
+    as: "Template",
+    foreignKey: "TemplateId",
+  });
   Transaction.belongsTo(Transactor, {
     as: "RecipientTransactor",
     foreignKey: "RecipientTransactorId",

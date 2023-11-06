@@ -1,26 +1,32 @@
-RequestSchema:
+RoleSchema:
   type: object
-  properties:
-    name:
-      type: string
-    userIds:
-      type: array
-      items:
-        type: integer
-ResponseSchema:
-  type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - name
+    - users
+    - userIds
   properties:
     id:
+      readOnly: true
       type: integer
     createdAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
     updatedAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
     name:
       type: string
-    userIds:
+    users:
+      items:
+        $ref: "../../openapi.root.yml#/components/schemas/UserResponse"
+      readOnly: true
       type: array
+    userIds:
       items:
         type: integer
+      type: array

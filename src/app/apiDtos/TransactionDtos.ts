@@ -1,10 +1,15 @@
-import type Field from "../../database/models/Field";
-import type FieldDatum from "../../database/models/FieldDatum";
-import { type FieldValue } from "../../database/models/FieldDatum";
+import {
+  type FieldDatumRequestDto,
+  FieldDatumResponseDto,
+} from "./FieldDatumDtos";
+import { AccountResponseDto } from "./AccountDtos";
+import { EntityResponseDto } from "./EntityDtos";
 import { type Query } from "express-serve-static-core";
 import { TagResponseDto } from "./TagDtos";
-import type Transaction from "../../database/models/Transaction";
+import Transaction from "../../database/models/Transaction";
+import { TransactionTemplateResponseDto } from "./TransactionTemplateDtos";
 import type express from "express";
+import { transactorTypeEnum } from "../../utils/enumerators";
 
 export interface TransactionRequest extends express.Request {
   body: TransactionRequestDto;
@@ -23,31 +28,29 @@ export interface TransactionsResponse extends express.Response {
 }
 
 export interface TransactionRequestDto {
-  id?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  name?: string;
-  fieldDatumIds?: number[];
   fieldIds?: number[];
-  fieldValues?: FieldValue[];
-  tagIds?: number[];
-  templateId?: number;
-  isTemplate?: boolean;
+  fieldData: FieldDatumRequestDto[];
+  fieldDatumIds: number[];
+  isTemplate: boolean;
+  recipientTransactorId: number;
+  sourceTransactorId: number;
+  tagIds: number[];
+  templateId: number;
 }
 
 export interface TransactionSearchRequestDto extends Query {
-  offset?: string;
-  limit?: string;
-  ids?: string[];
   createdAt?: string;
-  updatedAt?: string;
-  name?: string;
-  fieldDatumIds?: string[];
   fieldIds?: string[];
-  fieldValues?: undefined;
+  fieldDatumIds?: string[];
+  ids?: string[];
+  isTemplate?: string;
+  limit?: string;
+  offset?: string;
+  recipientTransactorIds: string[];
+  sourceTransactorIds: string[];
   tagIds?: string[];
   templateIds?: string[];
-  isTemplate?: string;
+  updatedAt?: string;
 }
 
 export class TransactionResponseDto {
@@ -55,36 +58,117 @@ export class TransactionResponseDto {
   createdAt: string;
   updatedAt: string;
 
-  name: string;
-  fieldDatumIds?: number[];
-  fieldIds?: number[];
-  fieldValues?: FieldValue[];
-  tags?: TagResponseDto[];
-  tagIds?: number[];
-  template?: TransactionResponseDto;
-  templateId?: number;
-  isTemplate: boolean;
+  fieldData: FieldDatumResponseDto[] = [];
+  fieldDatumIds: number[] = [];
+  isTemplate: boolean = false;
+  recipientTransactor: AccountResponseDto | EntityResponseDto | null = null;
+  recipientTransactorId: number;
+  sourceTransactor: AccountResponseDto | EntityResponseDto | null = null;
+  sourceTransactorId: number;
+  tags: TagResponseDto[] = [];
+  tagIds: number[] = [];
+  template: TransactionTemplateResponseDto | null = null;
+  templateId: number;
 
   constructor(transaction: Transaction) {
     this.id = transaction.id;
     this.createdAt = transaction.createdAt.toISOString();
     this.updatedAt = transaction.updatedAt.toISOString();
-    this.name = transaction.name;
-    this.tags = transaction.Tags?.map((tag) => new TagResponseDto(tag));
-    this.tagIds = transaction.Tags?.map((tag) => tag.id);
-    this.templateId = transaction.TemplateId;
     this.isTemplate = transaction.isTemplate;
-
-    if (transaction.isTemplate) {
-      if (transaction.Fields !== undefined) {
-        this.fieldIds = transaction.Fields.map((field: Field) => field.id);
-      }
+    if (transaction.RecipientTransactorId !== undefined) {
+      this.recipientTransactorId = transaction.RecipientTransactorId;
     } else {
-      if (transaction.FieldData !== undefined) {
-        this.fieldDatumIds = transaction.FieldData.map(
-          (fieldDatum: FieldDatum) => fieldDatum.id
-        );
-      }
+      throw new Error("Must have a recipient transactor.");
+    }
+    if (transaction.SourceTransactorId !== undefined) {
+      this.sourceTransactorId = transaction.SourceTransactorId;
+    } else {
+      throw new Error("Must have a source transactor.");
+    }
+    if (transaction.TemplateId !== undefined) {
+      this.templateId = transaction.TemplateId;
+    } else {
+      throw new Error("Must have a template.");
     }
   }
+
+  public async loadAssociations(transaction: Transaction): Promise<void> {
+    if (this.id !== transaction.id) {
+      throw new Error("IDs don't match.");
+    }
+
+    const fieldData = await transaction.getFieldData();
+    fieldData?.forEach((fieldDatum) => {
+      this.fieldData.push(new FieldDatumResponseDto(fieldDatum));
+      this.fieldDatumIds.push(fieldDatum.id);
+    });
+
+    const recipientTransactor = await transaction.getRecipientTransactor();
+    if (recipientTransactor === undefined || recipientTransactor === null) {
+      throw new Error("Transaction does not have a Recipient Transactor");
+    }
+    if (recipientTransactor.TransactorTypeId === transactorTypeEnum.Account) {
+      const recipientAccount = await recipientTransactor.getAccount();
+      const recipientAccountDto = new AccountResponseDto(recipientAccount);
+      await recipientAccountDto.loadAssociations(recipientAccount);
+      this.recipientTransactor = recipientAccountDto;
+    } else if (
+      recipientTransactor.TransactorTypeId === transactorTypeEnum.Entity
+    ) {
+      const recipientEntity = await recipientTransactor.getEntity();
+      const recipientEntityDto = new EntityResponseDto(recipientEntity);
+      await recipientEntityDto.loadAssociations(recipientEntity);
+      this.recipientTransactor = recipientEntityDto;
+    } else {
+      throw new Error("Recipient must be Account or Entity.");
+    }
+
+    const sourceTransactor = await transaction.getSourceTransactor();
+    if (sourceTransactor === undefined || sourceTransactor === null) {
+      throw new Error("Transaction does not have a Source Transactor");
+    }
+    if (sourceTransactor.TransactorTypeId === transactorTypeEnum.Account) {
+      const sourceAccount = await sourceTransactor.getAccount();
+      const sourceAccountDto = new AccountResponseDto(sourceAccount);
+      await sourceAccountDto.loadAssociations(sourceAccount);
+      this.sourceTransactor = sourceAccountDto;
+    } else if (
+      sourceTransactor.TransactorTypeId === transactorTypeEnum.Entity
+    ) {
+      const sourceEntity = await sourceTransactor.getEntity();
+      const sourceEntityDto = new EntityResponseDto(sourceEntity);
+      await sourceEntityDto.loadAssociations(sourceEntity);
+      this.sourceTransactor = sourceEntityDto;
+    } else {
+      throw new Error("Source must be Account or Entity.");
+    }
+
+    const tags = await transaction.getTags();
+    tags?.forEach((tag) => {
+      this.tags.push(new TagResponseDto(tag));
+      this.tagIds.push(tag.id);
+    });
+
+    const transactionTemplate = await transaction.getTemplate();
+    if (transactionTemplate === undefined || transactionTemplate === null) {
+      throw new Error("Must have template.");
+    }
+    const transactionTemplateDto = new TransactionTemplateResponseDto(
+      transactionTemplate
+    );
+    await transactionTemplateDto.loadAssociations(transactionTemplate);
+    this.template = transactionTemplateDto;
+  }
+}
+
+export function TransactionDtoToModel(
+  transactionDto: TransactionRequestDto | TransactionResponseDto
+): Transaction {
+  const transaction = Transaction.build({
+    isTemplate: transactionDto.isTemplate,
+    RecipientTransactorId: transactionDto.recipientTransactorId,
+    SourceTransactorId: transactionDto.sourceTransactorId,
+    TemplateId: transactionDto.templateId,
+  });
+  return transaction;
 }

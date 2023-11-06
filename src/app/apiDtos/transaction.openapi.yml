@@ -1,59 +1,142 @@
-RequestSchema:
+TransactionSchema:
   type: object
-  properties:
-    isTemplate:
-      type: boolean
-    fieldDatumIds:
-      type: array
-      items:
-        type: integer
-    fieldIds:
-      type: array
-      items:
-        type: integer
-    fieldValues:
-      type: object
-    tagIds:
-      type: array
-      items:
-        type: integer
-    templateId:
-      type: integer
-    sourceTransactorId:
-      type: integer
-    recipientTransactorId:
-      type: integer
-ResponseSchema:
-  type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - fieldData
+    - fieldDatumIds
+    - isTemplate
+    - recipientTransactor
+    - recipientTransactorId
+    - sourceTransactor
+    - sourceTransactorId
+    - tags
+    - tagIds
+    - template
+    - templateId
   properties:
     id:
+      readOnly: true
       type: integer
     createdAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
     updatedAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
     isTemplate:
       type: boolean
+    fieldData:
+      items:
+        oneOf:
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolTransaction"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateTransaction"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntTransaction"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringTransaction"
+      type: array
     fieldDatumIds:
-      type: array
       items:
         type: integer
-    fieldIds:
       type: array
-      items:
-        type: integer
-    tagIds:
-      type: array
-      items:
-        type: integer
-    templateId:
-      type: integer
-      nullable: true
-    sourceTransactorId:
-      type: integer
-      nullable: true
+    name:
+      type: string
+    recipientTransactor:
+      $ref: "../../openapi.root.yml#/components/schemas/Transactor"
+      readOnly: true
     recipientTransactorId:
       type: integer
+    sourceTransactor:
+      $ref: "../../openapi.root.yml#/components/schemas/Transactor"
+      readOnly: true
+    sourceTransactorId:
+      type: integer
+    tags:
+      items:
+        $ref: "../../openapi.root.yml#/components/schemas/Tag"
+      readOnly: true
+      type: array
+    tagIds:
+      items:
+        type: integer
+      type: array
+    template:
+      $ref: "../../openapi.root.yml#/components/schemas/TransactionTemplate"
+      readOnly: true
+    templateId:
+      type: integer
+
+TransactionTemplateSchema:
+  type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - fields
+    - fieldIds
+    - isTemplate
+    - name
+    - recipientTransactorId
+    - sourceTransactorId
+    - tags
+    - tagIds
+  properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    isTemplate:
+      type: boolean
+    fields:
+      items:
+        $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
+      type: array
+    fieldIds:
+      items:
+        type: integer
+      type: array
+    fieldData:
+      items:
+        oneOf:
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolTransaction"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateTransaction"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntTransaction"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringTransaction"
+      type: array
+    fieldDatumIds:
+      items:
+        type: integer
+      type: array
+    name:
+      type: string
+    recipientTransactor:
+      $ref: "../../openapi.root.yml#/components/schemas/Transactor_Nullable"
+      readOnly: true
+    recipientTransactorId:
       nullable: true
+      type: integer
+    sourceTransactor:
+      $ref: "../../openapi.root.yml#/components/schemas/Transactor_Nullable"
+      readOnly: true
+    sourceTransactorId:
+      nullable: true
+      type: integer
+    tags:
+      items:
+        $ref: "../../openapi.root.yml#/components/schemas/Tag"
+      readOnly: true
+      type: array
+    tagIds:
+      items:
+        type: integer
+      type: array

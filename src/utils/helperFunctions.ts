@@ -175,10 +175,10 @@ export function minimizeAssociationsToIds<
   let miniObject;
   if (object instanceof Account) {
     miniObject = new Account();
-    miniObject.GroupId = object.GroupId;
+    miniObject.ParentGroupId = object.ParentGroupId;
   } else if (object instanceof Entity) {
     miniObject = new Entity();
-    miniObject.GroupId = object.GroupId;
+    miniObject.ParentGroupId = object.ParentGroupId;
   } else if (object instanceof Transaction) {
     miniObject = new Transaction();
     miniObject.SourceTransactorId = object.SourceTransactorId;

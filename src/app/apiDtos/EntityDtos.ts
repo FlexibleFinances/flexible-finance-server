@@ -1,7 +1,9 @@
-import type Entity from "../../database/models/Entity";
-import type Field from "../../database/models/Field";
-import type FieldDatum from "../../database/models/FieldDatum";
-import { type FieldValue } from "../../database/models/FieldDatum";
+import {
+  type FieldDatumRequestDto,
+  FieldDatumResponseDto,
+} from "./FieldDatumDtos";
+import Entity from "../../database/models/Entity";
+import { EntityTemplateResponseDto } from "./EntityTemplateDtos";
 import { GroupResponseDto } from "./GroupDtos";
 import { type Query } from "express-serve-static-core";
 import { TagResponseDto } from "./TagDtos";
@@ -24,17 +26,13 @@ export interface EntitiesResponse extends express.Response {
 }
 
 export interface EntityRequestDto {
-  id?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  name?: string;
-  fieldDatumIds?: number[];
-  fieldIds?: number[];
-  fieldValues?: FieldValue[];
-  parentGroupId?: number;
-  tagIds?: number[];
-  templateId?: number;
-  isTemplate?: boolean;
+  isTemplate: boolean;
+  fieldData: FieldDatumRequestDto[];
+  fieldDatumIds: number[];
+  name: string;
+  parentGroupId: number;
+  tagIds: number[];
+  templateId: number;
 }
 
 export interface EntitySearchRequestDto extends Query {
@@ -43,14 +41,13 @@ export interface EntitySearchRequestDto extends Query {
   ids?: string[];
   createdAt?: string;
   updatedAt?: string;
+  isTemplate?: string;
   name?: string;
-  fieldDatumIds?: string[];
   fieldIds?: string[];
-  fieldValues?: undefined;
+  fieldDatumIds?: string[];
   parentGroupIds?: string[];
   tagIds?: string[];
   templateIds?: string[];
-  isTemplate?: string;
 }
 
 export class EntityResponseDto {
@@ -58,40 +55,67 @@ export class EntityResponseDto {
   createdAt: string;
   updatedAt: string;
 
-  name: string;
-  fieldDatumIds?: number[];
-  fieldIds?: number[];
-  fieldValues?: FieldValue[];
-  parentGroup?: GroupResponseDto;
-  parentGroupId?: number;
-  tags?: TagResponseDto[];
-  tagIds?: number[];
-  template?: EntityResponseDto;
-  templateId?: number;
   isTemplate: boolean;
+  name: string;
+  fieldData: FieldDatumResponseDto[] = [];
+  fieldDatumIds: number[] = [];
+  parentGroup: GroupResponseDto | null = null;
+  parentGroupId: number | null = null;
+  tags: TagResponseDto[] = [];
+  tagIds: number[] = [];
+  template: EntityTemplateResponseDto | null = null;
+  templateId: number;
 
   constructor(entity: Entity) {
     this.id = entity.id;
     this.createdAt = entity.createdAt.toISOString();
     this.updatedAt = entity.updatedAt.toISOString();
-    this.name = entity.name;
-    this.parentGroup = new GroupResponseDto(entity.Group);
-    this.parentGroupId = entity.Group?.id;
-    this.tags = entity.Tags?.map((tag) => new TagResponseDto(tag));
-    this.tagIds = entity.Tags?.map((tag) => tag.id);
-    this.templateId = entity.TemplateId;
     this.isTemplate = entity.isTemplate;
-
-    if (entity.isTemplate) {
-      if (entity.Fields !== undefined) {
-        this.fieldIds = entity.Fields.map((field: Field) => field.id);
-      }
+    this.name = entity.name;
+    this.parentGroupId = entity.ParentGroupId ?? null;
+    if (entity.TemplateId !== undefined) {
+      this.templateId = entity.TemplateId;
     } else {
-      if (entity.FieldData !== undefined) {
-        this.fieldDatumIds = entity.FieldData.map(
-          (fieldDatum: FieldDatum) => fieldDatum.id
-        );
-      }
+      throw new Error("Must have a template.");
     }
   }
+
+  public async loadAssociations(entity: Entity): Promise<void> {
+    if (this.id !== entity.id) {
+      throw new Error("IDs don't match.");
+    }
+
+    const fieldData = await entity.getFieldData();
+    fieldData?.forEach((fieldDatum) => {
+      this.fieldData.push(new FieldDatumResponseDto(fieldDatum));
+      this.fieldDatumIds.push(fieldDatum.id);
+    });
+
+    if (this.parentGroupId !== null) {
+      this.parentGroup = new GroupResponseDto(await entity.getParentGroup());
+    }
+
+    const tags = await entity.getTags();
+    tags?.forEach((tag) => {
+      this.tags.push(new TagResponseDto(tag));
+      this.tagIds.push(tag.id);
+    });
+
+    const entityTemplate = await entity.getTemplate();
+    const entityTemplateDto = new EntityTemplateResponseDto(entityTemplate);
+    await entityTemplateDto.loadAssociations(entityTemplate);
+    this.template = entityTemplateDto;
+  }
+}
+
+export function EntityDtoToModel(
+  entityDto: EntityRequestDto | EntityResponseDto
+): Entity {
+  const entity = Entity.build({
+    isTemplate: entityDto.isTemplate,
+    name: entityDto.name,
+    ParentGroupId: entityDto.parentGroupId ?? undefined,
+    TemplateId: entityDto.templateId,
+  });
+  return entity;
 }

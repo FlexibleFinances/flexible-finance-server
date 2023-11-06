@@ -1,11 +1,7 @@
-EntityIdRequests:
+EntityIdRequest:
   get:
     parameters:
-      - name: EntityId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Entity"
@@ -19,17 +15,13 @@ EntityIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: EntityId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Entity_RequestSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Entity"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Entity"
@@ -41,55 +33,18 @@ EntityIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       500:
         $ref: "../../openapi.root.yml#/components/responses/Message"
-EntitiesRequests:
+EntitiesRequest:
   get:
     parameters:
-      - name: offset
-        in: query
-        schema:
-          type: integer
-      - name: limit
-        in: query
-        schema:
-          type: integer
-      - name: name
-        in: query
-        schema:
-          type: string
-      - name: GroupIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: FieldDatumIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: FieldIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: TagIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: TemplateIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: isTemplate
-        in: query
-        schema:
-          type: boolean
+      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldDatumIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_parentGroupIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_templateIds"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Entities"
@@ -105,7 +60,7 @@ EntitiesRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Entity_RequestSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Entity"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Entity"
@@ -127,7 +82,7 @@ EntityResponse:
           message:
             type: string
           entity:
-            $ref: "../../openapi.root.yml#/components/schemas/Entity_ResponseSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Entity"
 EntitiesResponse:
   description: Returns the entities' info.
   content:
@@ -139,11 +94,5 @@ EntitiesResponse:
             type: string
           entities:
             type: array
-            nullable: true
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Entity_ResponseSchema"
-          templates:
-            type: array
-            nullable: true
-            items:
-              $ref: "../../openapi.root.yml#/components/schemas/Entity_ResponseSchema"
+              $ref: "../../openapi.root.yml#/components/schemas/Entity"

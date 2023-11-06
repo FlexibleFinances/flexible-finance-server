@@ -44,7 +44,7 @@ export function setFieldTypeRoutes(app: express.Express): void {
   );
 
   app.get(
-    "/v1/" + endpointName + "/:FieldTypeId",
+    "/v1/" + endpointName + "/:id",
     [authJwt.verifyToken],
     asyncHandler(async (req: express.Request, res: express.Response) => {
       await controller.getFieldType(
@@ -55,7 +55,7 @@ export function setFieldTypeRoutes(app: express.Express): void {
   );
 
   app.put(
-    "/v1/" + endpointName + "/:FieldTypeId",
+    "/v1/" + endpointName + "/:id",
     [authJwt.verifyToken],
     asyncHandler(async (req: express.Request, res: express.Response) => {
       await controller.updateFieldType(

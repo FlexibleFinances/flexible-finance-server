@@ -1,5 +1,5 @@
 import { type Query } from "express-serve-static-core";
-import type Tag from "../../database/models/Tag";
+import Tag from "../../database/models/Tag";
 import type express from "express";
 
 export interface TagRequest extends express.Request {
@@ -19,19 +19,21 @@ export interface TagsResponse extends express.Response {
 }
 
 export interface TagRequestDto {
-  id?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  name?: string;
+  name: string;
 }
 
 export interface TagSearchRequestDto extends Query {
-  offset?: string;
-  limit?: string;
-  ids?: string[];
+  accountIds?: string[];
   createdAt?: string;
-  updatedAt?: string;
+  entityIds?: string[];
+  fieldIds?: string[];
+  fieldTypeIds?: string[];
+  ids?: string[];
+  limit?: string;
   name?: string;
+  offset?: string;
+  transactionIds?: string[];
+  updatedAt?: string;
 }
 
 export class TagResponseDto {
@@ -47,4 +49,11 @@ export class TagResponseDto {
     this.updatedAt = tag.updatedAt.toISOString();
     this.name = tag.name;
   }
+}
+
+export function TagDtoToModel(tagDto: TagRequestDto | TagResponseDto): Tag {
+  const tag = Tag.build({
+    name: tagDto.name,
+  });
+  return tag;
 }

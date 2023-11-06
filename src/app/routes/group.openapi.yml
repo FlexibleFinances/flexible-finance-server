@@ -1,11 +1,8 @@
+GroupRequests:
 GroupIdRequests:
   get:
     parameters:
-      - name: GroupId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Group"
@@ -19,17 +16,13 @@ GroupIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: GroupId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Group_RequestSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Group"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Group"
@@ -44,30 +37,14 @@ GroupIdRequests:
 GroupsRequests:
   get:
     parameters:
-      - name: offset
-        in: query
-        schema:
-          type: integer
-      - name: limit
-        in: query
-        schema:
-          type: integer
-      - name: name
-        in: query
-        schema:
-          type: string
-      - name: AccountIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: EntityIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
+      - $ref: "../../openapi.root.yml#/components/parameters/query_accountIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_childGroupIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_entityIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_parentGroupIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Groups"
@@ -83,7 +60,7 @@ GroupsRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Group_RequestSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Group"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Group"
@@ -105,7 +82,7 @@ GroupResponse:
           message:
             type: string
           group:
-            $ref: "../../openapi.root.yml#/components/schemas/Group_ResponseSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Group"
 GroupsResponse:
   description: Returns the groups' info.
   content:
@@ -118,4 +95,4 @@ GroupsResponse:
           groups:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Group_ResponseSchema"
+              $ref: "../../openapi.root.yml#/components/schemas/Group"

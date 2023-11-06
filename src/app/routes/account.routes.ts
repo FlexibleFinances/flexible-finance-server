@@ -22,6 +22,28 @@ export function setAccountRoutes(app: express.Express): void {
   });
 
   app.get(
+    "/v1/" + endpointName + "/:id",
+    [authJwt.verifyToken],
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.getAccount(
+        req as AccountRequest,
+        res as AccountResponse
+      );
+    })
+  );
+
+  app.put(
+    "/v1/" + endpointName + "/:id",
+    [authJwt.verifyToken],
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.updateAccount(
+        req as AccountRequest,
+        res as AccountResponse
+      );
+    })
+  );
+
+  app.get(
     "/v1/" + endpointName,
     [authJwt.verifyToken],
     asyncHandler(async (req: express.Request, res: express.Response) => {
@@ -37,28 +59,6 @@ export function setAccountRoutes(app: express.Express): void {
     [authJwt.verifyToken],
     asyncHandler(async (req: express.Request, res: express.Response) => {
       await controller.createAccount(
-        req as AccountRequest,
-        res as AccountResponse
-      );
-    })
-  );
-
-  app.get(
-    "/v1/" + endpointName + "/:AccountId",
-    [authJwt.verifyToken],
-    asyncHandler(async (req: express.Request, res: express.Response) => {
-      await controller.getAccount(
-        req as AccountRequest,
-        res as AccountResponse
-      );
-    })
-  );
-
-  app.put(
-    "/v1/" + endpointName + "/:AccountId",
-    [authJwt.verifyToken],
-    asyncHandler(async (req: express.Request, res: express.Response) => {
-      await controller.updateAccount(
         req as AccountRequest,
         res as AccountResponse
       );

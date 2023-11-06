@@ -1,11 +1,7 @@
 TagIdRequests:
   get:
     parameters:
-      - name: TagId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Tag"
@@ -19,17 +15,13 @@ TagIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: TagId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Tag_RequestSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Tag"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Tag"
@@ -44,42 +36,14 @@ TagIdRequests:
 TagsRequests:
   get:
     parameters:
-      - name: offset
-        in: query
-        schema:
-          type: integer
-      - name: limit
-        in: query
-        schema:
-          type: integer
-      - name: name
-        in: query
-        schema:
-          type: string
-      - name: AccountIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: EntityIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: reportIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: TransactionIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
+      - $ref: "../../openapi.root.yml#/components/parameters/query_accountIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_entityIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldTypeIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_transactionIds"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Tags"
@@ -95,7 +59,7 @@ TagsRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Tag_RequestSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Tag"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Tag"
@@ -117,7 +81,7 @@ TagResponse:
           message:
             type: string
           tag:
-            $ref: "../../openapi.root.yml#/components/schemas/Tag_ResponseSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Tag"
 TagsResponse:
   description: Returns the tags' info.
   content:
@@ -130,4 +94,4 @@ TagsResponse:
           tags:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Tag_ResponseSchema"
+              $ref: "../../openapi.root.yml#/components/schemas/Tag"

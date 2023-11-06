@@ -38,7 +38,7 @@ export function setRoleRoutes(app: express.Express): void {
   );
 
   app.get(
-    "/v1/" + endpointName + "/:RoleId",
+    "/v1/" + endpointName + "/:id",
     [authJwt.verifyToken],
     asyncHandler(async (req: express.Request, res: express.Response) => {
       await controller.getRole(req as RoleRequest, res as RoleResponse);
@@ -46,7 +46,7 @@ export function setRoleRoutes(app: express.Express): void {
   );
 
   app.put(
-    "/v1/" + endpointName + "/:RoleId",
+    "/v1/" + endpointName + "/:id",
     [authJwt.verifyToken, authJwt.isAdmin],
     asyncHandler(async (req: express.Request, res: express.Response) => {
       await controller.updateRole(req as RoleRequest, res as RoleResponse);

@@ -1,11 +1,8 @@
+TransactionRequests:
 TransactionIdRequests:
   get:
     parameters:
-      - name: TransactionId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transaction"
@@ -19,17 +16,13 @@ TransactionIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: TransactionId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Transaction_RequestSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Transaction"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transaction"
@@ -44,42 +37,15 @@ TransactionIdRequests:
 TransactionsRequests:
   get:
     parameters:
-      - name: offset
-        in: query
-        schema:
-          type: integer
-      - name: limit
-        in: query
-        schema:
-          type: integer
-      - name: FieldDatumIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: FieldIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: fileIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: TagIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: isTemplate
-        in: query
-        schema:
-          type: boolean
+      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldDatumIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_recipientTransactorIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_sourceTransactorIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_templateIds"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transactions"
@@ -95,7 +61,7 @@ TransactionsRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Transaction_RequestSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Transaction"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transaction"
@@ -117,7 +83,7 @@ TransactionResponse:
           message:
             type: string
           transaction:
-            $ref: "../../openapi.root.yml#/components/schemas/Transaction_ResponseSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Transaction"
 TransactionsResponse:
   description: Returns the transactions' info.
   content:
@@ -129,11 +95,5 @@ TransactionsResponse:
             type: string
           transactions:
             type: array
-            nullable: true
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Transaction_ResponseSchema"
-          templates:
-            type: array
-            nullable: true
-            items:
-              $ref: "../../openapi.root.yml#/components/schemas/Transaction_ResponseSchema"
+              $ref: "../../openapi.root.yml#/components/schemas/Transaction"

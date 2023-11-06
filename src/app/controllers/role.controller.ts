@@ -1,3 +1,4 @@
+import * as RoleService from "../services/RoleService";
 import {
   type RoleRequest,
   type RoleResponse,
@@ -5,19 +6,13 @@ import {
   type RoleSearchRequest,
   type RolesResponse,
 } from "../apiDtos/RoleDtos";
-import {
-  createRoleFromDto,
-  getRoleById,
-  getRolesByOptions,
-  updateRoleFromDto,
-} from "../repositories/RoleRepository";
 import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getRole(
   req: RoleRequest,
   res: RoleResponse
 ): Promise<void> {
-  const role = await getRoleById(Number(req.params.roleId));
+  const role = await RoleService.getRole(Number(req.params.id));
 
   if (role === null) {
     res.status(500).send({
@@ -26,9 +21,12 @@ export async function getRole(
     return;
   }
 
+  const roleResponseDto = new RoleResponseDto(role);
+  await roleResponseDto.loadAssociations(role);
+
   res.status(200).send({
     message: "Role gotten.",
-    role: new RoleResponseDto(role),
+    role: roleResponseDto,
   });
 }
 
@@ -44,7 +42,7 @@ export async function createRole(
     return;
   }
 
-  const role = await createRoleFromDto(requestBody);
+  const role = await RoleService.createRoleFromDto(requestBody);
 
   if (role === null) {
     res.status(500).send({
@@ -53,9 +51,12 @@ export async function createRole(
     return;
   }
 
+  const roleResponseDto = new RoleResponseDto(role);
+  await roleResponseDto.loadAssociations(role);
+
   res.status(200).send({
     message: "Role created.",
-    role: new RoleResponseDto(role),
+    role: roleResponseDto,
   });
 }
 
@@ -71,18 +72,14 @@ export async function updateRole(
     return;
   }
 
-  if (
-    !hasRequestArguments(
-      req,
-      res,
-      { params: ["RoleId"] },
-      { body: ["name", "GroupId", "TemplateId", "fieldValues"] }
-    )
-  ) {
+  if (!hasRequestArguments(req, res, { params: ["id"] }, { body: ["name"] })) {
     return;
   }
 
-  const role = await updateRoleFromDto(requestBody);
+  const role = await RoleService.updateRoleFromDto(
+    Number(req.params.id),
+    requestBody
+  );
 
   if (role === null) {
     res.status(500).send({
@@ -91,9 +88,12 @@ export async function updateRole(
     return;
   }
 
+  const roleResponseDto = new RoleResponseDto(role);
+  await roleResponseDto.loadAssociations(role);
+
   res.status(200).send({
     message: "Role updated.",
-    role: new RoleResponseDto(role),
+    role: roleResponseDto,
   });
 }
 
@@ -103,7 +103,7 @@ export async function getRoles(
 ): Promise<void> {
   const requestQuery = req.query;
 
-  const roles = await getRolesByOptions(requestQuery);
+  const roles = await RoleService.getRoles(requestQuery);
 
   if (roles === null) {
     res.status(500).send({
@@ -112,17 +112,18 @@ export async function getRoles(
     return;
   }
 
-  const roleDtos = roles.map((role) => new RoleResponseDto(role));
+  const roleResponseDtoAssocciationsPromises: Array<Promise<void>> = [];
+  const roleResponseDtos = roles.map((role) => {
+    const roleReponseDto = new RoleResponseDto(role);
+    roleResponseDtoAssocciationsPromises.push(
+      roleReponseDto.loadAssociations(role)
+    );
+    return roleReponseDto;
+  });
+  await Promise.all(roleResponseDtoAssocciationsPromises);
 
-  if (req.query.isTemplate as unknown as boolean) {
-    res.status(200).send({
-      message: "Role Templates gotten.",
-      templates: roleDtos,
-    });
-  } else {
-    res.status(200).send({
-      message: "Roles gotten.",
-      roles: roleDtos,
-    });
-  }
+  res.status(200).send({
+    message: "Roles gotten.",
+    roles: roleResponseDtos,
+  });
 }

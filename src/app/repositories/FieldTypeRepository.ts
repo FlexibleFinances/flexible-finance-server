@@ -1,48 +1,30 @@
 import {
-  type CreationAttributes,
+  type Attributes,
   type FindOptions,
-  Op,
   type WhereOptions,
 } from "sequelize";
-import {
-  type FieldTypeRequestDto,
-  type FieldTypeSearchRequestDto,
-} from "../apiDtos/FieldTypeDtos";
 import FieldType from "../../database/models/FieldType";
-import { defaultLimit } from "../../utils/constants";
 
-export async function getFieldTypeById(
+export async function getFieldType(
   fieldTypeId: number
 ): Promise<FieldType | null> {
   const fieldType = await FieldType.findOne({
     where: {
       id: fieldTypeId,
     },
-    include: { all: true },
   });
   return fieldType;
 }
 
-export async function getFieldTypesByOptions(
-  fieldTypeOptions: FieldTypeSearchRequestDto
-): Promise<FieldType[] | null> {
-  const whereOptions: WhereOptions = {};
-  if (fieldTypeOptions.name !== undefined) {
-    whereOptions.name = {
-      [Op.iLike]: fieldTypeOptions.name,
-    };
-  }
-  if (fieldTypeOptions.tagIds !== undefined) {
-    whereOptions.tags = {
-      [Op.in]: fieldTypeOptions.tagIds.map((id) => +id),
-    };
-  }
-
+export async function getFieldTypes(
+  fieldTypeWhereOptions: WhereOptions<Attributes<FieldType>>,
+  limit: number,
+  offset: number
+): Promise<FieldType[]> {
   const findOptions: FindOptions = {
-    offset: +(fieldTypeOptions.offset ?? 0),
-    limit: +(fieldTypeOptions.limit ?? defaultLimit),
-    where: whereOptions,
-    include: { all: true },
+    limit,
+    offset,
+    where: fieldTypeWhereOptions,
   };
 
   const fieldTypes = await FieldType.findAll(findOptions);
@@ -50,44 +32,9 @@ export async function getFieldTypesByOptions(
   return fieldTypes;
 }
 
-export async function createFieldTypeFromDto(
-  fieldTypeDto: FieldTypeRequestDto
-): Promise<FieldType | null> {
-  const createOptions: CreationAttributes<FieldType> = {
-    name: fieldTypeDto.name ?? "",
-  };
-  const fieldType = await FieldType.create(createOptions);
-
-  if (fieldTypeDto.tagIds !== undefined) {
-    await fieldType.setTags(fieldTypeDto.tagIds);
-  }
-
-  await fieldType.loadAssociatedIds();
-
-  return fieldType;
-}
-
-export async function updateFieldTypeFromDto(
-  fieldTypeDto: FieldTypeRequestDto
-): Promise<FieldType | null> {
-  const fieldType = await FieldType.findOne({
-    where: {
-      id: fieldTypeDto.id,
-    },
-  });
-  if (fieldType === null) {
-    return null;
-  }
-  const updateOptions: CreationAttributes<FieldType> = {
-    name: fieldTypeDto.name ?? "",
-  };
-  await fieldType.update(updateOptions);
-
-  if (fieldTypeDto.tagIds !== undefined) {
-    await fieldType.setTags(fieldTypeDto.tagIds);
-  }
-
-  await fieldType.loadAssociatedIds();
-
+export async function createOrUpdateFieldType(
+  fieldTypeModel: FieldType
+): Promise<FieldType> {
+  const fieldType = await fieldTypeModel.save();
   return fieldType;
 }

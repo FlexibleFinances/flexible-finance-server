@@ -1,3 +1,4 @@
+import * as EntityService from "../services/EntityService";
 import {
   type EntitiesResponse,
   type EntityRequest,
@@ -5,19 +6,13 @@ import {
   EntityResponseDto,
   type EntitySearchRequest,
 } from "../apiDtos/EntityDtos";
-import {
-  createEntityFromDto,
-  getEntitiesByOptions,
-  getEntityById,
-  updateEntityFromDto,
-} from "../repositories/EntityRepository";
 import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getEntity(
   req: EntityRequest,
   res: EntityResponse
 ): Promise<void> {
-  const entity = await getEntityById(Number(req.params.entityId));
+  const entity = await EntityService.getEntity(Number(req.params.id));
 
   if (entity === null) {
     res.status(500).send({
@@ -26,9 +21,12 @@ export async function getEntity(
     return;
   }
 
+  const entityResponseDto = new EntityResponseDto(entity);
+  await entityResponseDto.loadAssociations(entity);
+
   res.status(200).send({
     message: "Entity gotten.",
-    entity: new EntityResponseDto(entity),
+    entity: entityResponseDto,
   });
 }
 
@@ -44,7 +42,7 @@ export async function createEntity(
     return;
   }
 
-  const entity = await createEntityFromDto(requestBody);
+  const entity = await EntityService.createEntityFromDto(requestBody);
 
   if (entity === null) {
     res.status(500).send({
@@ -53,9 +51,12 @@ export async function createEntity(
     return;
   }
 
+  const entityResponseDto = new EntityResponseDto(entity);
+  await entityResponseDto.loadAssociations(entity);
+
   res.status(200).send({
     message: "Entity created.",
-    entity: new EntityResponseDto(entity),
+    entity: entityResponseDto,
   });
 }
 
@@ -75,14 +76,17 @@ export async function updateEntity(
     !hasRequestArguments(
       req,
       res,
-      { params: ["EntityId"] },
-      { body: ["name", "GroupId", "TemplateId", "fieldValues"] }
+      { params: ["id"] },
+      { body: ["name", "groupId", "templateId"] }
     )
   ) {
     return;
   }
 
-  const entity = await updateEntityFromDto(requestBody);
+  const entity = await EntityService.updateEntityFromDto(
+    Number(req.params.id),
+    requestBody
+  );
 
   if (entity === null) {
     res.status(500).send({
@@ -91,9 +95,12 @@ export async function updateEntity(
     return;
   }
 
+  const entityResponseDto = new EntityResponseDto(entity);
+  await entityResponseDto.loadAssociations(entity);
+
   res.status(200).send({
     message: "Entity updated.",
-    entity: new EntityResponseDto(entity),
+    entity: entityResponseDto,
   });
 }
 
@@ -103,7 +110,7 @@ export async function getEntities(
 ): Promise<void> {
   const requestQuery = req.query;
 
-  const entities = await getEntitiesByOptions(requestQuery);
+  const entities = await EntityService.getEntities(requestQuery);
 
   if (entities === null) {
     res.status(500).send({
@@ -112,17 +119,18 @@ export async function getEntities(
     return;
   }
 
-  const entityDtos = entities.map((entity) => new EntityResponseDto(entity));
+  const entityResponseDtoAssocciationsPromises: Array<Promise<void>> = [];
+  const entityResponseDtos = entities.map((entity) => {
+    const entityReponseDto = new EntityResponseDto(entity);
+    entityResponseDtoAssocciationsPromises.push(
+      entityReponseDto.loadAssociations(entity)
+    );
+    return entityReponseDto;
+  });
+  await Promise.all(entityResponseDtoAssocciationsPromises);
 
-  if (req.query.isTemplate as unknown as boolean) {
-    res.status(200).send({
-      message: "Entity Templates gotten.",
-      templates: entityDtos,
-    });
-  } else {
-    res.status(200).send({
-      message: "Entities gotten.",
-      entities: entityDtos,
-    });
-  }
+  res.status(200).send({
+    message: "Entities gotten.",
+    entities: entityResponseDtos,
+  });
 }

@@ -21,18 +21,13 @@ import {
   type NonAttribute,
   type Sequelize,
 } from "sequelize";
-import {
-  getFieldDatumIds,
-  getFieldIds,
-  getTagIds,
-  isTemplatedObject,
-} from "../../utils/helperFunctions";
 import type Account from "./Account";
 import type Entity from "./Entity";
 import type Field from "./Field";
 import type FieldDatum from "./FieldDatum";
 import type Tag from "./Tag";
 import type Transactor from "./Transactor";
+import { isTemplatedObject } from "../../utils/helperFunctions";
 
 export class Transaction extends Model<
   InferAttributes<Transaction>,
@@ -52,11 +47,11 @@ export class Transaction extends Model<
   declare FieldDatumIds: CreationOptional<number[]>;
   declare FieldData: NonAttribute<FieldDatum[]>;
 
-  declare RecipientTransactorId: CreationOptional<number>;
-  declare RecipientTransactor: NonAttribute<Account | Entity>;
+  declare RecipientTransactorId?: number;
+  declare RecipientTransactor?: NonAttribute<Account | Entity>;
 
-  declare SourceTransactorId: CreationOptional<number>;
-  declare SourceTransactor: NonAttribute<Account | Entity>;
+  declare SourceTransactorId?: number;
+  declare SourceTransactor?: NonAttribute<Account | Entity>;
 
   declare TagIds: CreationOptional<number[]>;
   declare Tags: NonAttribute<Tag[]>;
@@ -125,31 +120,6 @@ export class Transaction extends Model<
 
   declare getTemplate: BelongsToGetAssociationMixin<Transaction>;
   declare setTemplate: BelongsToSetAssociationMixin<Transaction, number>;
-
-  public async loadFieldIds(): Promise<void> {
-    const fieldIds = await getFieldIds(this);
-    this.setDataValue("FieldIds", fieldIds);
-  }
-
-  public async loadFieldDatumIds(): Promise<void> {
-    const fieldDatumIds = await getFieldDatumIds(this);
-    this.setDataValue("FieldDatumIds", fieldDatumIds);
-  }
-
-  public async loadTagIds(): Promise<void> {
-    const tagIds = await getTagIds(this);
-    this.setDataValue("TagIds", tagIds);
-  }
-
-  public async loadAssociatedIds(): Promise<void> {
-    const loadPromises = [this.loadTagIds()];
-    if (this.isTemplate) {
-      loadPromises.push(this.loadFieldIds());
-    } else {
-      loadPromises.push(this.loadFieldDatumIds());
-    }
-    await Promise.all(loadPromises);
-  }
 }
 
 export function initializeTransaction(sequelize: Sequelize): void {

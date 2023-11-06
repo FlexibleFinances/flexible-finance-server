@@ -1,11 +1,8 @@
-FieldTypeIdRequests:
+FieldTypeRequest:
+FieldTypeIdRequest:
   get:
     parameters:
-      - name: FieldTypeId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldType"
@@ -19,17 +16,13 @@ FieldTypeIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: FieldTypeId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/FieldType_RequestSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/FieldType"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldType"
@@ -41,27 +34,16 @@ FieldTypeIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       500:
         $ref: "../../openapi.root.yml#/components/responses/Message"
-FieldTypesRequests:
+FieldTypesRequest:
   get:
     parameters:
-      - name: offset
-        in: query
-        schema:
-          type: integer
-      - name: limit
-        in: query
-        schema:
-          type: integer
-      - name: name
-        in: query
-        schema:
-          type: string
-      - name: FieldIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldTypeComponentIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_valueType"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_validator"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldTypes"
@@ -77,7 +59,7 @@ FieldTypesRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/FieldType_RequestSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/FieldType"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/FieldType"
@@ -90,7 +72,7 @@ FieldTypesRequests:
       500:
         $ref: "../../openapi.root.yml#/components/responses/Message"
 FieldTypeResponse:
-  description: Returns the field type's info.
+  description: Returns the fieldType's info.
   content:
     application/json:
       schema:
@@ -99,9 +81,9 @@ FieldTypeResponse:
           message:
             type: string
           fieldType:
-            $ref: "../../openapi.root.yml#/components/schemas/FieldType_ResponseSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/FieldType"
 FieldTypesResponse:
-  description: Returns the field types' info.
+  description: Returns the fieldTypes' info.
   content:
     application/json:
       schema:
@@ -112,4 +94,4 @@ FieldTypesResponse:
           fieldTypes:
             type: array
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/FieldType_ResponseSchema"
+              $ref: "../../openapi.root.yml#/components/schemas/FieldType"

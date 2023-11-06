@@ -1,318 +1,397 @@
-BoolAccount_RequestSchema:
+BoolAccount_FieldDatumSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - field
+    - fieldId
+    - boolValue
+    - accountId
   properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    field:
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
     fieldId:
       type: integer
     boolValue:
       type: boolean
     accountId:
       type: integer
-BoolEntity_RequestSchema:
+BoolEntity_FieldDatumSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - field
+    - fieldId
+    - boolValue
+    - entityId
   properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    field:
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
     fieldId:
       type: integer
     boolValue:
       type: boolean
     entityId:
       type: integer
-BoolTransaction_RequestSchema:
+BoolTransaction_FieldDatumSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - field
+    - fieldId
+    - boolValue
+    - transactionId
   properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    field:
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
     fieldId:
       type: integer
     boolValue:
       type: boolean
     transactionId:
       type: integer
-DateAccount_RequestSchema:
+
+DateAccount_FieldDatumSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - field
+    - fieldId
+    - dateValue
+    - accountId
   properties:
-    FieldId:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    field:
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
+    fieldId:
       type: integer
     dateValue:
-      type: string
       format: date-time
+      type: string
     accountId:
       type: integer
-DateEntity_RequestSchema:
+DateEntity_FieldDatumSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - field
+    - fieldId
+    - dateValue
+    - entityId
   properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    field:
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
     fieldId:
       type: integer
     dateValue:
-      type: string
       format: date-time
+      type: string
     entityId:
       type: integer
-DateTransaction_RequestSchema:
+DateTransaction_FieldDatumSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - field
+    - fieldId
+    - dateValue
+    - transactionId
   properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    field:
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
     fieldId:
       type: integer
     dateValue:
-      type: string
       format: date-time
+      type: string
     transactionId:
       type: integer
-IntAccount_RequestSchema:
+
+IntAccount_FieldDatumSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - field
+    - fieldId
+    - intValue
+    - accountId
   properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    field:
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
     fieldId:
       type: integer
     intValue:
       type: integer
     accountId:
       type: integer
-IntEntity_RequestSchema:
+IntEntity_FieldDatumSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - field
+    - fieldId
+    - intValue
+    - entityId
   properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    field:
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
     fieldId:
       type: integer
     intValue:
       type: integer
     entityId:
       type: integer
-IntTransaction_RequestSchema:
+IntTransaction_FieldDatumSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - field
+    - fieldId
+    - intValue
+    - transactionId
   properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    field:
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
     fieldId:
       type: integer
     intValue:
       type: integer
     transactionId:
       type: integer
-StringAccount_RequestSchema:
+
+StringAccount_FieldDatumSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - field
+    - fieldId
+    - stringValue
+    - accountId
   properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    field:
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
     fieldId:
       type: integer
     stringValue:
       type: string
     accountId:
       type: integer
-StringEntity_RequestSchema:
+StringEntity_FieldDatumSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - field
+    - fieldId
+    - stringValue
+    - entityId
   properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    field:
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
     fieldId:
       type: integer
     stringValue:
       type: string
     entityId:
       type: integer
-StringTransaction_RequestSchema:
+StringTransaction_FieldDatumSchema:
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - field
+    - fieldId
+    - stringValue
+    - transactionId
   properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    field:
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
     fieldId:
       type: integer
     stringValue:
       type: string
     transactionId:
       type: integer
-BoolAccount_ResponseSchema:
-  type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-      format: date-time
-    updatedAt:
-      type: string
-      format: date-time
-    fieldId:
-      type: integer
-    boolValue:
-      type: boolean
-    accountId:
-      type: integer
-BoolEntity_ResponseSchema:
-  type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-      format: date-time
-    updatedAt:
-      type: string
-      format: date-time
-    fieldId:
-      type: integer
-    boolValue:
-      type: boolean
-    entityId:
-      type: integer
-BoolTransaction_ResponseSchema:
-  type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-      format: date-time
-    updatedAt:
-      type: string
-      format: date-time
-    fieldId:
-      type: integer
-    boolValue:
-      type: boolean
-    transactionId:
-      type: integer
-DateAccount_ResponseSchema:
-  type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-      format: date-time
-    updatedAt:
-      type: string
-      format: date-time
-    fieldId:
-      type: integer
-    dateValue:
-      type: string
-      format: date-time
-    accountId:
-      type: integer
-DateEntity_ResponseSchema:
-  type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-      format: date-time
-    updatedAt:
-      type: string
-      format: date-time
-    fieldId:
-      type: integer
-    dateValue:
-      type: string
-      format: date-time
-    entityId:
-      type: integer
-DateTransaction_ResponseSchema:
-  type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-      format: date-time
-    updatedAt:
-      type: string
-      format: date-time
-    fieldId:
-      type: integer
-    dateValue:
-      type: string
-      format: date-time
-    transactionId:
-      type: integer
-IntAccount_ResponseSchema:
-  type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-      format: date-time
-    updatedAt:
-      type: string
-      format: date-time
-    fieldId:
-      type: integer
-    intValue:
-      type: integer
-    accountId:
-      type: integer
-IntEntity_ResponseSchema:
-  type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-      format: date-time
-    updatedAt:
-      type: string
-      format: date-time
-    fieldId:
-      type: integer
-    intValue:
-      type: integer
-    entityId:
-      type: integer
-IntTransaction_ResponseSchema:
-  type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-      format: date-time
-    updatedAt:
-      type: string
-      format: date-time
-    fieldId:
-      type: integer
-    intValue:
-      type: integer
-    transactionId:
-      type: integer
-StringAccount_ResponseSchema:
-  type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-      format: date-time
-    updatedAt:
-      type: string
-      format: date-time
-    fieldId:
-      type: integer
-    stringValue:
-      type: string
-    accountId:
-      type: integer
-StringEntity_ResponseSchema:
-  type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-      format: date-time
-    updatedAt:
-      type: string
-      format: date-time
-    fieldId:
-      type: integer
-    stringValue:
-      type: string
-    entityId:
-      type: integer
-StringTransaction_ResponseSchema:
-  type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-      format: date-time
-    updatedAt:
-      type: string
-      format: date-time
-    fieldId:
-      type: integer
-    stringValue:
-      type: string
-    transactionId:
-      type: integer
+
+RequestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        oneOf:
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolEntity"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolTransaction"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateEntity"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateTransaction"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntAccount"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntEntity"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntTransaction"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringAccount"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringEntity"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringTransaction"

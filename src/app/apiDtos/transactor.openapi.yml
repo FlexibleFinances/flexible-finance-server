@@ -1,32 +1,9 @@
-RequestSchema:
-  type: object
-  properties:
-    name:
-      type: string
-    isTemplate:
-      type: boolean
-    transactorTypeId:
-      type: integer
-ResponseSchema:
-  type: object
-  properties:
-    id:
-      type: integer
-    createdAt:
-      type: string
-      format: date-time
-    updatedAt:
-      type: string
-      format: date-time
-    name:
-      type: string
-    transactorTypeId:
-      type: integer
-    accounts:
-      type: array
-      items:
-        $ref: ../../openapi.root.yml#/components/schemas/Account_ResponseSchema
-    entities:
-      type: array
-      items:
-        $ref: ../../openapi.root.yml#/components/schemas/Entity_ResponseSchema
+TransactorSchema:
+  anyOf:
+    - $ref: "../../openapi.root.yml#/components/schemas/Account"
+    - $ref: "../../openapi.root.yml#/components/schemas/Entity"
+
+NullableTransactorSchema:
+  anyOf:
+    - $ref: "../../openapi.root.yml#/components/schemas/Account_Nullable"
+    - $ref: "../../openapi.root.yml#/components/schemas/Entity_Nullable"

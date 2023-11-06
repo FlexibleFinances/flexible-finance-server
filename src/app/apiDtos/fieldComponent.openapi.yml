@@ -1,0 +1,31 @@
+FieldComponentSchema:
+  type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - childField
+    - childFieldId
+    - parentFieldId
+  properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    childField:
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
+    childFieldId:
+      type: integer
+    parentField:
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
+      readOnly: true
+    parentFieldId:
+      type: integer

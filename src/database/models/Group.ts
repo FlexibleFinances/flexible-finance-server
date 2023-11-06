@@ -23,7 +23,6 @@ import {
 import type Account from "./Account";
 import type Entity from "./Entity";
 import type Tag from "./Tag";
-import { getTagIds } from "../../utils/helperFunctions";
 
 export class Group extends Model<
   InferAttributes<Group>,
@@ -35,20 +34,24 @@ export class Group extends Model<
 
   declare name: string;
 
-  declare GroupId: CreationOptional<number>;
-  declare Group: NonAttribute<Group>;
+  declare ParentGroupId?: number;
+  declare ParentGroup?: NonAttribute<Group>;
 
-  declare AccountIds: NonAttribute<number[]>;
+  declare AccountIds: CreationOptional<number[]>;
   declare Accounts: NonAttribute<Account[]>;
 
-  declare EntityIds: NonAttribute<number[]>;
+  declare ChildGroupIds: CreationOptional<number[]>;
+  declare ChildGroups: NonAttribute<Group[]>;
+
+  declare EntityIds: CreationOptional<number[]>;
   declare Entities: NonAttribute<Entity[]>;
 
   declare TagIds: CreationOptional<number[]>;
   declare Tags: NonAttribute<Tag[]>;
 
   declare static associations: {
-    Group: Association<Group, Group>;
+    ParentGroup: Association<Group, Group>;
+    ChildGroups: Association<Group, Group>;
     Accounts: Association<Account, Group>;
     Entities: Association<Entity, Group>;
     Tags: Association<Group, Tag>;
@@ -57,8 +60,8 @@ export class Group extends Model<
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  declare getGroup: BelongsToGetAssociationMixin<Group>;
-  declare setGroup: BelongsToSetAssociationMixin<Group, number>;
+  declare getParentGroup: BelongsToGetAssociationMixin<Group>;
+  declare setParentGroup: BelongsToSetAssociationMixin<Group, number>;
 
   declare getAccounts: HasManyGetAssociationsMixin<Account>;
   declare addAccount: HasManyAddAssociationMixin<Account, number>;
@@ -69,7 +72,24 @@ export class Group extends Model<
   declare hasAccount: HasManyHasAssociationMixin<Account, number>;
   declare hasAccounts: HasManyHasAssociationsMixin<Account, number>;
   declare countAccounts: HasManyCountAssociationsMixin;
-  declare createAccounts: HasManyCreateAssociationMixin<Account, "GroupId">;
+  declare createAccounts: HasManyCreateAssociationMixin<
+    Account,
+    "ParentGroupId"
+  >;
+
+  declare getChildGroups: HasManyGetAssociationsMixin<Group>;
+  declare addChildGroup: HasManyAddAssociationMixin<Group, number>;
+  declare addChildGroups: HasManyAddAssociationsMixin<Group, number>;
+  declare setChildGroups: HasManySetAssociationsMixin<Group, number>;
+  declare removeChildGroup: HasManyRemoveAssociationMixin<Group, number>;
+  declare removeChildGroups: HasManyRemoveAssociationsMixin<Group, number>;
+  declare hasChildGroup: HasManyHasAssociationMixin<Group, number>;
+  declare hasChildGroups: HasManyHasAssociationsMixin<Group, number>;
+  declare countChildGroups: HasManyCountAssociationsMixin;
+  declare createChildGroups: HasManyCreateAssociationMixin<
+    Group,
+    "ParentGroupId"
+  >;
 
   declare getEntities: HasManyGetAssociationsMixin<Entity>;
   declare addEntity: HasManyAddAssociationMixin<Entity, number>;
@@ -80,7 +100,7 @@ export class Group extends Model<
   declare hasEntity: HasManyHasAssociationMixin<Entity, number>;
   declare hasEntities: HasManyHasAssociationsMixin<Entity, number>;
   declare countEntities: HasManyCountAssociationsMixin;
-  declare createEntitys: HasManyCreateAssociationMixin<Entity, "GroupId">;
+  declare createEntitys: HasManyCreateAssociationMixin<Entity, "ParentGroupId">;
 
   declare getTags: HasManyGetAssociationsMixin<Tag>;
   declare addTag: HasManyAddAssociationMixin<Tag, number>;
@@ -92,16 +112,6 @@ export class Group extends Model<
   declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
   declare countTags: HasManyCountAssociationsMixin;
   declare createTag: HasManyCreateAssociationMixin<Tag, "id">;
-
-  public async loadTagIds(): Promise<void> {
-    const tagIds = await getTagIds(this);
-    this.setDataValue("TagIds", tagIds);
-  }
-
-  public async loadAssociatedIds(): Promise<void> {
-    const loadPromises = [this.loadTagIds()];
-    await Promise.all(loadPromises);
-  }
 }
 
 export function initializeGroup(sequelize: Sequelize): void {
@@ -119,13 +129,17 @@ export function initializeGroup(sequelize: Sequelize): void {
         allowNull: false,
         unique: true,
       },
-      GroupId: {
+      ParentGroupId: {
         type: DataTypes.INTEGER,
+        allowNull: true,
         references: {
           model: "Group",
           key: "id",
         },
       },
+      AccountIds: DataTypes.VIRTUAL,
+      ChildGroupIds: DataTypes.VIRTUAL,
+      EntityIds: DataTypes.VIRTUAL,
       TagIds: DataTypes.VIRTUAL,
     },
     {

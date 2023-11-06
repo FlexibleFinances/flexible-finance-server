@@ -1,3 +1,4 @@
+import * as TransactionService from "../services/TransactionService";
 import {
   type TransactionRequest,
   type TransactionResponse,
@@ -5,20 +6,14 @@ import {
   type TransactionSearchRequest,
   type TransactionsResponse,
 } from "../apiDtos/TransactionDtos";
-import {
-  createTransactionFromDto,
-  getTransactionById,
-  getTransactionsByOptions,
-  updateTransactionFromDto,
-} from "../repositories/TransactionRepository";
 import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getTransaction(
   req: TransactionRequest,
   res: TransactionResponse
 ): Promise<void> {
-  const transaction = await getTransactionById(
-    Number(req.params.transactionId)
+  const transaction = await TransactionService.getTransaction(
+    Number(req.params.id)
   );
 
   if (transaction === null) {
@@ -28,9 +23,12 @@ export async function getTransaction(
     return;
   }
 
+  const transactionResponseDto = new TransactionResponseDto(transaction);
+  await transactionResponseDto.loadAssociations(transaction);
+
   res.status(200).send({
     message: "Transaction gotten.",
-    transaction: new TransactionResponseDto(transaction),
+    transaction: transactionResponseDto,
   });
 }
 
@@ -46,7 +44,9 @@ export async function createTransaction(
     return;
   }
 
-  const transaction = await createTransactionFromDto(requestBody);
+  const transaction = await TransactionService.createTransactionFromDto(
+    requestBody
+  );
 
   if (transaction === null) {
     res.status(500).send({
@@ -55,9 +55,14 @@ export async function createTransaction(
     return;
   }
 
+  const transactionResponseDto = new TransactionResponseDto(transaction);
+  await transactionResponseDto.loadAssociations(transaction);
+
+  console.log(transactionResponseDto);
+
   res.status(200).send({
     message: "Transaction created.",
-    transaction: new TransactionResponseDto(transaction),
+    transaction: transactionResponseDto,
   });
 }
 
@@ -73,18 +78,14 @@ export async function updateTransaction(
     return;
   }
 
-  if (
-    !hasRequestArguments(
-      req,
-      res,
-      { params: ["TransactionId"] },
-      { body: ["name", "TemplateId", "fieldValues"] }
-    )
-  ) {
+  if (!hasRequestArguments(req, res, { params: ["id"] }, { body: ["name"] })) {
     return;
   }
 
-  const transaction = await updateTransactionFromDto(requestBody);
+  const transaction = await TransactionService.updateTransactionFromDto(
+    Number(req.params.id),
+    requestBody
+  );
 
   if (transaction === null) {
     res.status(500).send({
@@ -93,9 +94,12 @@ export async function updateTransaction(
     return;
   }
 
+  const transactionResponseDto = new TransactionResponseDto(transaction);
+  await transactionResponseDto.loadAssociations(transaction);
+
   res.status(200).send({
     message: "Transaction updated.",
-    transaction: new TransactionResponseDto(transaction),
+    transaction: transactionResponseDto,
   });
 }
 
@@ -105,7 +109,7 @@ export async function getTransactions(
 ): Promise<void> {
   const requestQuery = req.query;
 
-  const transactions = await getTransactionsByOptions(requestQuery);
+  const transactions = await TransactionService.getTransactions(requestQuery);
 
   if (transactions === null) {
     res.status(500).send({
@@ -114,19 +118,18 @@ export async function getTransactions(
     return;
   }
 
-  const transactionDtos = transactions.map(
-    (transaction) => new TransactionResponseDto(transaction)
-  );
+  const transactionResponseDtoAssocciationsPromises: Array<Promise<void>> = [];
+  const transactionResponseDtos = transactions.map((transaction) => {
+    const transactionReponseDto = new TransactionResponseDto(transaction);
+    transactionResponseDtoAssocciationsPromises.push(
+      transactionReponseDto.loadAssociations(transaction)
+    );
+    return transactionReponseDto;
+  });
+  await Promise.all(transactionResponseDtoAssocciationsPromises);
 
-  if (req.query.isTemplate as unknown as boolean) {
-    res.status(200).send({
-      message: "Transaction Templates gotten.",
-      templates: transactionDtos,
-    });
-  } else {
-    res.status(200).send({
-      message: "Transactions gotten.",
-      transactions: transactionDtos,
-    });
-  }
+  res.status(200).send({
+    message: "Transactions gotten.",
+    transactions: transactionResponseDtos,
+  });
 }

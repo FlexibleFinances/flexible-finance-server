@@ -1,33 +1,57 @@
-RequestSchema:
+UserRequestSchema:
+  description: "Must use separate schemas because required + writeOnly combo (for 'password') is not supported in openapi-express-validator"
   type: object
+  required:
+    - email
+    - password
+    - roleIds
+    - username
   properties:
-    username:
-      type: string
     email:
       type: string
     password:
+      writeOnly: true
       type: string
-      format: password
     roleIds:
-      type: array
       items:
         type: integer
-ResponseSchema:
+      type: array
+    username:
+      type: string
+
+UserResponseSchema:
+  description: "Must use separate schemas because required + writeOnly combo (for 'password') is not supported in openapi-express-validator"
   type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - email
+    - roles
+    - roleIds
+    - username
   properties:
     id:
+      readOnly: true
       type: integer
     createdAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
     updatedAt:
-      type: string
       format: date-time
-    username:
+      readOnly: true
       type: string
     email:
       type: string
-    roleIds:
+    roles:
+      items:
+        $ref: "../../openapi.root.yml#/components/schemas/Role"
+      readOnly: true
       type: array
+    roleIds:
       items:
         type: integer
+      type: array
+    username:
+      type: string

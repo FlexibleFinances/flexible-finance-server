@@ -20,21 +20,21 @@ export class FieldComponent extends Model<
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
-  declare FieldId: number;
-  declare Field: NonAttribute<Field>;
+  declare ChildFieldId: number;
+  declare ChildField: NonAttribute<Field>;
   declare ParentFieldId: number;
   declare ParentField: NonAttribute<Field>;
 
   declare static associations: {
-    Field: Association<FieldComponent, Field>;
+    ChildField: Association<FieldComponent, Field>;
     ParentField: Association<FieldComponent, Field>;
   };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  declare getField: BelongsToGetAssociationMixin<Field>;
-  declare setField: BelongsToSetAssociationMixin<Field, number>;
+  declare getChildField: BelongsToGetAssociationMixin<Field>;
+  declare setChildField: BelongsToSetAssociationMixin<Field, number>;
 
   declare getParentField: BelongsToGetAssociationMixin<Field>;
   declare setParentField: BelongsToSetAssociationMixin<Field, number>;
@@ -50,7 +50,7 @@ export function initializeFieldComponent(sequelize: Sequelize): void {
       },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
-      FieldId: {
+      ChildFieldId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {

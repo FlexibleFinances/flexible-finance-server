@@ -1,43 +1,30 @@
 import {
-  type CreationAttributes,
+  type Attributes,
   type FindOptions,
-  Op,
   type WhereOptions,
 } from "sequelize";
-import {
-  type FieldDatumRequestDto,
-  type FieldDatumSearchRequestDto,
-} from "../apiDtos/FieldDatumDtos";
 import FieldDatum from "../../database/models/FieldDatum";
-import { defaultLimit } from "../../utils/constants";
 
-export async function getFieldDatumById(
+export async function getFieldDatum(
   fieldDatumId: number
 ): Promise<FieldDatum | null> {
   const fieldDatum = await FieldDatum.findOne({
     where: {
       id: fieldDatumId,
     },
-    include: { all: true },
   });
   return fieldDatum;
 }
 
-export async function getFieldDataByOptions(
-  fieldDatumOptions: FieldDatumSearchRequestDto
-): Promise<FieldDatum[] | null> {
-  const whereOptions: WhereOptions = {};
-  if (fieldDatumOptions.tagIds !== undefined) {
-    whereOptions.tags = {
-      [Op.in]: fieldDatumOptions.tagIds.map((id) => +id),
-    };
-  }
-
+export async function getFieldData(
+  fieldDatumWhereOptions: WhereOptions<Attributes<FieldDatum>>,
+  limit: number,
+  offset: number
+): Promise<FieldDatum[]> {
   const findOptions: FindOptions = {
-    offset: +(fieldDatumOptions.offset ?? 0),
-    limit: +(fieldDatumOptions.limit ?? defaultLimit),
-    where: whereOptions,
-    include: { all: true },
+    limit: +limit,
+    offset: +offset,
+    where: fieldDatumWhereOptions,
   };
 
   const fieldData = await FieldDatum.findAll(findOptions);
@@ -45,32 +32,17 @@ export async function getFieldDataByOptions(
   return fieldData;
 }
 
-export async function createFieldDatumFromDto(
-  fieldDatumDto: FieldDatumRequestDto
-): Promise<FieldDatum | null> {
-  const createOptions: CreationAttributes<FieldDatum> = {
-    FieldId: fieldDatumDto.fieldId,
-  };
-  const fieldDatum = await FieldDatum.create(createOptions);
-
+export async function createOrUpdateFieldDatum(
+  fieldDatumModel: FieldDatum
+): Promise<FieldDatum> {
+  const fieldDatum = await fieldDatumModel.save();
   return fieldDatum;
 }
 
-export async function updateFieldDatumFromDto(
-  fieldDatumDto: FieldDatumRequestDto
-): Promise<FieldDatum | null> {
-  const fieldDatum = await FieldDatum.findOne({
-    where: {
-      id: fieldDatumDto.id,
-    },
+export async function deleteFieldData(
+  whereOptions: WhereOptions<Attributes<FieldDatum>>
+): Promise<void> {
+  await FieldDatum.destroy({
+    where: whereOptions,
   });
-  if (fieldDatum === null) {
-    return null;
-  }
-  const updateOptions: CreationAttributes<FieldDatum> = {
-    FieldId: fieldDatumDto.fieldId,
-  };
-  await fieldDatum.update(updateOptions);
-
-  return fieldDatum;
 }

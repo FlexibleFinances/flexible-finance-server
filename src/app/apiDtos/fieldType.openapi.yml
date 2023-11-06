@@ -1,54 +1,63 @@
-RequestSchema:
+FieldTypeSchema:
   type: object
-  properties:
-    name:
-      type: string
-    type:
-      type: string
-      nullable: true
-      enum:
-        - Text
-        - Number
-        - Date
-        - Boolean
-        - null
-    validator:
-      type: string
-      nullable: true
-    fieldTypeComponentIds:
-      type: array
-      items:
-        type: integer
-ResponseSchema:
-  type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - childFieldTypeComponents
+    - childFieldTypeComponentIds
+    - name
+    - parentFieldTypeComponent
+    - parentFieldTypeComponentId
+    - tags
+    - tagIds
+    - valueType
+    - validator
   properties:
     id:
+      readOnly: true
       type: integer
     createdAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
     updatedAt:
-      type: string
       format: date-time
+      readOnly: true
+      type: string
+    childFieldTypeComponents:
+      items:
+        $ref: "../../openapi.root.yml#/components/schemas/FieldTypeComponent"
+      type: array
+    childFieldTypeComponentIds:
+      items:
+        type: integer
+      type: array
     name:
       type: string
-    type:
-      type: string
+    parentFieldTypeComponent:
+      $ref: "../../openapi.root.yml#/components/schemas/FieldTypeComponent"
+    parentFieldTypeComponentId:
       nullable: true
+      type: integer
+    tags:
+      items:
+        $ref: "../../openapi.root.yml#/components/schemas/Tag"
+      readOnly: true
+      type: array
+    tagIds:
+      items:
+        type: integer
+      type: array
+    valueType:
       enum:
         - Text
         - Number
         - Date
         - Boolean
         - null
-    validator:
-      type: string
       nullable: true
-    fieldTypeComponentIds:
-      type: array
-      items:
-        type: integer
-    fieldIds:
-      type: array
-      items:
-        type: integer
+      type: string
+    validator:
+      nullable: true
+      type: string

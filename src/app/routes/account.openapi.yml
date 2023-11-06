@@ -1,12 +1,7 @@
-AccountRequests:
-AccountIdRequests:
+AccountIdRequest:
   get:
     parameters:
-      - name: AccountId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Account"
@@ -20,17 +15,13 @@ AccountIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
   put:
     parameters:
-      - name: AccountId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Account_RequestSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Account"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Account"
@@ -42,43 +33,18 @@ AccountIdRequests:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       500:
         $ref: "../../openapi.root.yml#/components/responses/Message"
-AccountsRequests:
+AccountsRequest:
   get:
     parameters:
-      - name: offset
-        in: query
-        schema:
-          type: integer
-      - name: limit
-        in: query
-        schema:
-          type: integer
-      - name: name
-        in: query
-        schema:
-          type: string
-      - name: GroupIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: TagIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: TemplateIds
-        in: query
-        schema:
-          type: array
-          items:
-            type: number
-      - name: isTemplate
-        in: query
-        schema:
-          type: boolean
+      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldDatumIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_parentGroupIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_templateIds"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Accounts"
@@ -94,7 +60,7 @@ AccountsRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Account_RequestSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Account"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Account"
@@ -116,7 +82,7 @@ AccountResponse:
           message:
             type: string
           account:
-            $ref: "../../openapi.root.yml#/components/schemas/Account_ResponseSchema"
+            $ref: "../../openapi.root.yml#/components/schemas/Account"
 AccountsResponse:
   description: Returns the accounts' info.
   content:
@@ -128,11 +94,5 @@ AccountsResponse:
             type: string
           accounts:
             type: array
-            nullable: true
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/Account_ResponseSchema"
-          templates:
-            type: array
-            nullable: true
-            items:
-              $ref: "../../openapi.root.yml#/components/schemas/Account_ResponseSchema"
+              $ref: "../../openapi.root.yml#/components/schemas/Account"
