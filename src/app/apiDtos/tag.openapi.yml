@@ -19,18 +19,3 @@ TagSchema:
       format: date-time
     name:
       type: string
-    accountIds:
-      readOnly: true
-      type: array
-      items:
-        type: integer
-    entityIds:
-      readOnly: true
-      type: array
-      items:
-        type: integer
-    transactionIds:
-      readOnly: true
-      type: array
-      items:
-        type: integer

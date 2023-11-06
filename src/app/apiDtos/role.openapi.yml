@@ -23,9 +23,7 @@ RoleSchema:
       type: string
     users:
       items:
-        type: object
-        additionalProperties:
-          $ref: "../../openapi.root.yml#/components/schemas/User"
+        $ref: "../../openapi.root.yml#/components/schemas/UserResponse"
       readOnly: true
       type: array
     userIds:

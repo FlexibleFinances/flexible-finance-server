@@ -1,3 +1,4 @@
+import * as FieldDatumService from "../services/FieldDatumService";
 import {
   type FieldDataResponse,
   type FieldDatumRequest,
@@ -5,19 +6,15 @@ import {
   FieldDatumResponseDto,
   type FieldDatumSearchRequest,
 } from "../apiDtos/FieldDatumDtos";
-import {
-  createFieldDatumFromDto,
-  getFieldDataByOptions,
-  getFieldDatumById,
-  updateFieldDatumFromDto,
-} from "../repositories/FieldDatumRepository";
 import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getFieldDatum(
   req: FieldDatumRequest,
   res: FieldDatumResponse
 ): Promise<void> {
-  const fieldDatum = await getFieldDatumById(Number(req.params.id));
+  const fieldDatum = await FieldDatumService.getFieldDatum(
+    Number(req.params.id)
+  );
 
   if (fieldDatum === null) {
     res.status(500).send({
@@ -26,9 +23,12 @@ export async function getFieldDatum(
     return;
   }
 
+  const fieldDatumResponseDto = new FieldDatumResponseDto(fieldDatum);
+  await fieldDatumResponseDto.loadAssociations(fieldDatum);
+
   res.status(200).send({
     message: "FieldDatum gotten.",
-    fieldDatum: new FieldDatumResponseDto(fieldDatum),
+    fieldDatum: fieldDatumResponseDto,
   });
 }
 
@@ -44,7 +44,9 @@ export async function createFieldDatum(
     return;
   }
 
-  const fieldDatum = await createFieldDatumFromDto(requestBody);
+  const fieldDatum = await FieldDatumService.createFieldDatumFromDto(
+    requestBody
+  );
 
   if (fieldDatum === null) {
     res.status(500).send({
@@ -53,9 +55,12 @@ export async function createFieldDatum(
     return;
   }
 
+  const fieldDatumResponseDto = new FieldDatumResponseDto(fieldDatum);
+  await fieldDatumResponseDto.loadAssociations(fieldDatum);
+
   res.status(200).send({
     message: "FieldDatum created.",
-    fieldDatum: new FieldDatumResponseDto(fieldDatum),
+    fieldDatum: fieldDatumResponseDto,
   });
 }
 
@@ -71,11 +76,13 @@ export async function updateFieldDatum(
     return;
   }
 
-  if (!hasRequestArguments(req, res, { params: ["id"] }, { body: [] })) {
+  if (
+    !hasRequestArguments(req, res, { params: ["id"] }, { body: ["fieldId"] })
+  ) {
     return;
   }
 
-  const fieldDatum = await updateFieldDatumFromDto(
+  const fieldDatum = await FieldDatumService.updateFieldDatumFromDto(
     Number(req.params.id),
     requestBody
   );
@@ -87,9 +94,12 @@ export async function updateFieldDatum(
     return;
   }
 
+  const fieldDatumResponseDto = new FieldDatumResponseDto(fieldDatum);
+  await fieldDatumResponseDto.loadAssociations(fieldDatum);
+
   res.status(200).send({
     message: "FieldDatum updated.",
-    fieldDatum: new FieldDatumResponseDto(fieldDatum),
+    fieldDatum: fieldDatumResponseDto,
   });
 }
 
@@ -99,7 +109,7 @@ export async function getFieldData(
 ): Promise<void> {
   const requestQuery = req.query;
 
-  const fieldData = await getFieldDataByOptions(requestQuery);
+  const fieldData = await FieldDatumService.getFieldData(requestQuery);
 
   if (fieldData === null) {
     res.status(500).send({
@@ -108,19 +118,18 @@ export async function getFieldData(
     return;
   }
 
-  const fieldDatumDtos = fieldData.map(
-    (fieldDatum) => new FieldDatumResponseDto(fieldDatum)
-  );
+  const fieldDatumResponseDtoAssocciationsPromises: Array<Promise<void>> = [];
+  const fieldDatumResponseDtos = fieldData.map((fieldDatum) => {
+    const fieldDatumReponseDto = new FieldDatumResponseDto(fieldDatum);
+    fieldDatumResponseDtoAssocciationsPromises.push(
+      fieldDatumReponseDto.loadAssociations(fieldDatum)
+    );
+    return fieldDatumReponseDto;
+  });
+  await Promise.all(fieldDatumResponseDtoAssocciationsPromises);
 
-  if (req.query.isTemplate as unknown as boolean) {
-    res.status(200).send({
-      message: "FieldDatum Templates gotten.",
-      templates: fieldDatumDtos,
-    });
-  } else {
-    res.status(200).send({
-      message: "FieldData gotten.",
-      fieldData: fieldDatumDtos,
-    });
-  }
+  res.status(200).send({
+    message: "FieldData gotten.",
+    fieldData: fieldDatumResponseDtos,
+  });
 }

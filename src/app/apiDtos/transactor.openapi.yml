@@ -1,5 +1,9 @@
 TransactorSchema:
-  type: object
-  oneOf:
+  anyOf:
     - $ref: "../../openapi.root.yml#/components/schemas/Account"
     - $ref: "../../openapi.root.yml#/components/schemas/Entity"
+
+NullableTransactorSchema:
+  anyOf:
+    - $ref: "../../openapi.root.yml#/components/schemas/Account_Nullable"
+    - $ref: "../../openapi.root.yml#/components/schemas/Entity_Nullable"

@@ -21,18 +21,13 @@ import {
   type NonAttribute,
   type Sequelize,
 } from "sequelize";
-import {
-  getFieldDatumIds,
-  getFieldIds,
-  getTagIds,
-  isTemplatedObject,
-} from "../../utils/helperFunctions";
 import type Field from "./Field";
 import type FieldDatum from "./FieldDatum";
 import type Group from "./Group";
 import type Tag from "./Tag";
 import Transactor from "./Transactor";
 import type TransactorType from "./TransactorType";
+import { isTemplatedObject } from "../../utils/helperFunctions";
 import { transactorTypeEnum } from "../../utils/enumerators";
 
 export class Account extends Model<
@@ -53,21 +48,21 @@ export class Account extends Model<
   declare FieldDatumIds: CreationOptional<number[]>;
   declare FieldData: NonAttribute<FieldDatum[]>;
 
-  declare GroupId: CreationOptional<number>;
-  declare Group: NonAttribute<Group>;
+  declare ParentGroupId?: number;
+  declare ParentGroup?: NonAttribute<Group>;
 
   declare TagIds: CreationOptional<number[]>;
   declare Tags: NonAttribute<Tag[]>;
 
   declare TemplateId?: number;
-  declare Template: NonAttribute<Account>;
+  declare Template?: NonAttribute<Account>;
 
   declare TransactorTypeId: CreationOptional<number>;
 
   declare static associations: {
     Fields: Association<Account, Field>;
     FieldData: Association<Account, FieldDatum>;
-    Group: Association<Account, Group>;
+    ParentGroup: Association<Account, Group>;
     Tags: Association<Account, Tag>;
     Template: Association<Account, Account>;
     Transactor: Association<Account, Transactor>;
@@ -102,8 +97,8 @@ export class Account extends Model<
     "AccountId"
   >;
 
-  declare getGroup: BelongsToGetAssociationMixin<Group>;
-  declare setGroup: BelongsToSetAssociationMixin<Group, number>;
+  declare getParentGroup: BelongsToGetAssociationMixin<Group>;
+  declare setParentGroup: BelongsToSetAssociationMixin<Group, number>;
 
   declare getTags: HasManyGetAssociationsMixin<Tag>;
   declare addTag: HasManyAddAssociationMixin<Tag, number>;
@@ -124,31 +119,6 @@ export class Account extends Model<
   declare setTransactor: BelongsToSetAssociationMixin<Transactor, number>;
 
   declare getTransactorType: BelongsToGetAssociationMixin<TransactorType>;
-
-  public async loadFieldIds(): Promise<void> {
-    const fieldIds = await getFieldIds(this);
-    this.setDataValue("FieldIds", fieldIds);
-  }
-
-  public async loadFieldDatumIds(): Promise<void> {
-    const fieldDatumIds = await getFieldDatumIds(this);
-    this.setDataValue("FieldDatumIds", fieldDatumIds);
-  }
-
-  public async loadTagIds(): Promise<void> {
-    const tagIds = await getTagIds(this);
-    this.setDataValue("TagIds", tagIds);
-  }
-
-  public async loadAssociatedIds(): Promise<void> {
-    const loadPromises = [this.loadTagIds()];
-    if (this.isTemplate) {
-      loadPromises.push(this.loadFieldIds());
-    } else {
-      loadPromises.push(this.loadFieldDatumIds());
-    }
-    await Promise.all(loadPromises);
-  }
 }
 
 export function initializeAccount(sequelize: Sequelize): void {
@@ -174,8 +144,9 @@ export function initializeAccount(sequelize: Sequelize): void {
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },
-      GroupId: {
+      ParentGroupId: {
         type: DataTypes.INTEGER,
+        allowNull: true,
         references: {
           model: "Group",
           key: "id",

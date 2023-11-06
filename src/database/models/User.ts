@@ -34,7 +34,7 @@ export class User extends Model<
 
   declare password: string;
 
-  declare RoleIds: NonAttribute<number[]>;
+  declare RoleIds: CreationOptional<number[]>;
   declare Roles: NonAttribute<Role[]>;
 
   declare static associations: {
@@ -80,6 +80,7 @@ export function initializeUser(sequelize: Sequelize): void {
         type: DataTypes.STRING(128),
         allowNull: true,
       },
+      RoleIds: DataTypes.VIRTUAL,
     },
     {
       sequelize,

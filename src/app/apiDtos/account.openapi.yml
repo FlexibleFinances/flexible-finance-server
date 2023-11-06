@@ -4,11 +4,15 @@ AccountSchema:
     - id
     - createdAt
     - updatedAt
-    - isTemplate
+    - fieldData
     - fieldDatumIds
+    - isTemplate
     - name
+    - parentGroup
     - parentGroupId
+    - tags
     - tagIds
+    - template
     - templateId
   properties:
     id:
@@ -22,39 +26,31 @@ AccountSchema:
       format: date-time
       readOnly: true
       type: string
-    isTemplate:
-      type: boolean
     fieldData:
       items:
-        type: object
-        additionalProperties:
-          oneOf:
-            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount"
-            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount"
-            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntAccount"
-            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringAccount"
-      readOnly: true
+        oneOf:
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntAccount"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringAccount"
       type: array
     fieldDatumIds:
       items:
         type: integer
       type: array
+    isTemplate:
+      type: boolean
     name:
       type: string
     parentGroup:
-      nullable: true
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/Group"
+      $ref: "../../openapi.root.yml#/components/schemas/Group"
       readOnly: true
-      type: object
     parentGroupId:
       nullable: true
       type: integer
     tags:
       items:
-        type: object
-        additionalProperties:
-          $ref: "../../openapi.root.yml#/components/schemas/Tag"
+        $ref: "../../openapi.root.yml#/components/schemas/Tag"
       readOnly: true
       type: array
     tagIds:
@@ -62,10 +58,8 @@ AccountSchema:
         type: integer
       type: array
     template:
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/AccountTemplate"
+      $ref: "../../openapi.root.yml#/components/schemas/AccountTemplate"
       readOnly: true
-      type: object
     templateId:
       type: integer
 
@@ -75,10 +69,10 @@ AccountTemplateSchema:
     - id
     - createdAt
     - updatedAt
-    - isTemplate
-    - name
     - fields
     - fieldIds
+    - isTemplate
+    - name
     - parentGroup
     - parentGroupId
     - tags
@@ -95,15 +89,9 @@ AccountTemplateSchema:
       format: date-time
       readOnly: true
       type: string
-    isTemplate:
-      type: boolean
-    name:
-      type: string
     fields:
       items:
-        type: object
-        additionalProperties:
-          $ref: "../../openapi.root.yml#/components/schemas/Field"
+        $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
       type: array
     fieldIds:
@@ -112,36 +100,98 @@ AccountTemplateSchema:
       type: array
     fieldData:
       items:
-        additionalProperties:
-          oneOf:
-            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount"
-            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount"
-            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntAccount"
-            - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringAccount"
-        type: object
-      readOnly: true
+        oneOf:
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntAccount"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringAccount"
       type: array
     fieldDatumIds:
       items:
         type: integer
       type: array
+    isTemplate:
+      type: boolean
+    name:
+      type: string
     parentGroup:
-      nullable: true
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/Group"
+      $ref: "../../openapi.root.yml#/components/schemas/Group"
       readOnly: true
-      type: object
     parentGroupId:
       nullable: true
       type: integer
     tags:
       items:
-        additionalProperties:
-          $ref: "../../openapi.root.yml#/components/schemas/Tag"
-        type: object
+        $ref: "../../openapi.root.yml#/components/schemas/Tag"
       readOnly: true
       type: array
     tagIds:
       items:
         type: integer
       type: array
+
+NullableAccountSchema:
+  nullable: true
+  type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - fieldData
+    - fieldDatumIds
+    - isTemplate
+    - name
+    - parentGroup
+    - parentGroupId
+    - tags
+    - tagIds
+    - template
+    - templateId
+  properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    fieldData:
+      items:
+        oneOf:
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_BoolAccount"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_DateAccount"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_IntAccount"
+          - $ref: "../../openapi.root.yml#/components/schemas/FieldDatum_StringAccount"
+      type: array
+    fieldDatumIds:
+      items:
+        type: integer
+      type: array
+    isTemplate:
+      type: boolean
+    name:
+      type: string
+    parentGroup:
+      $ref: "../../openapi.root.yml#/components/schemas/Group"
+      readOnly: true
+    parentGroupId:
+      nullable: true
+      type: integer
+    tags:
+      items:
+        $ref: "../../openapi.root.yml#/components/schemas/Tag"
+      readOnly: true
+      type: array
+    tagIds:
+      items:
+        type: integer
+      type: array
+    template:
+      $ref: "../../openapi.root.yml#/components/schemas/AccountTemplate"
+      readOnly: true
+    templateId:
+      type: integer

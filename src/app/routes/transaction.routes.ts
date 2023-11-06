@@ -22,6 +22,28 @@ export function setTransactionRoutes(app: express.Express): void {
   });
 
   app.get(
+    "/v1/" + endpointName + "/:id",
+    [authJwt.verifyToken],
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.getTransaction(
+        req as TransactionRequest,
+        res as TransactionResponse
+      );
+    })
+  );
+
+  app.put(
+    "/v1/" + endpointName + "/:id",
+    [authJwt.verifyToken],
+    asyncHandler(async (req: express.Request, res: express.Response) => {
+      await controller.updateTransaction(
+        req as TransactionRequest,
+        res as TransactionResponse
+      );
+    })
+  );
+
+  app.get(
     "/v1/" + endpointName,
     [authJwt.verifyToken],
     asyncHandler(async (req: express.Request, res: express.Response) => {
@@ -37,28 +59,6 @@ export function setTransactionRoutes(app: express.Express): void {
     [authJwt.verifyToken],
     asyncHandler(async (req: express.Request, res: express.Response) => {
       await controller.createTransaction(
-        req as TransactionRequest,
-        res as TransactionResponse
-      );
-    })
-  );
-
-  app.get(
-    "/v1/" + endpointName + "/:TransactionId",
-    [authJwt.verifyToken],
-    asyncHandler(async (req: express.Request, res: express.Response) => {
-      await controller.getTransaction(
-        req as TransactionRequest,
-        res as TransactionResponse
-      );
-    })
-  );
-
-  app.put(
-    "/v1/" + endpointName + "/:TransactionId",
-    [authJwt.verifyToken],
-    asyncHandler(async (req: express.Request, res: express.Response) => {
-      await controller.updateTransaction(
         req as TransactionRequest,
         res as TransactionResponse
       );

@@ -15,9 +15,13 @@ info:
 #tags:
 paths:
   /accounts:
-    $ref: ./app/routes/account.openapi.yml#/AccountsRequests
-  /accounts/{AccountId}:
-    $ref: ./app/routes/account.openapi.yml#/AccountIdRequests
+    $ref: ./app/routes/account.openapi.yml#/AccountsRequest
+  /accounts/{id}:
+    $ref: ./app/routes/account.openapi.yml#/AccountIdRequest
+  /accounts/templates:
+    $ref: ./app/routes/accountTemplate.openapi.yml#/AccountTemplatesRequest
+  /accounts/templates/{id}:
+    $ref: ./app/routes/accountTemplate.openapi.yml#/AccountTemplateIdRequest
   /auth/signup:
     $ref: ./app/routes/auth.openapi.yml#/SignUp
   /auth/signin:
@@ -33,32 +37,36 @@ paths:
               schema:
                 type: string
   /entities:
-    $ref: ./app/routes/entity.openapi.yml#/EntitiesRequests
-  /entities/{EntityId}:
-    $ref: ./app/routes/entity.openapi.yml#/EntityIdRequests
+    $ref: ./app/routes/entity.openapi.yml#/EntitiesRequest
+  /entities/{id}:
+    $ref: ./app/routes/entity.openapi.yml#/EntityIdRequest
+  /entities/templates:
+    $ref: ./app/routes/entityTemplate.openapi.yml#/EntityTemplatesRequest
+  /entities/templates/{id}:
+    $ref: ./app/routes/entityTemplate.openapi.yml#/EntityTemplateIdRequest
   /fields:
     $ref: ./app/routes/field.openapi.yml#/FieldsRequests
-  /fields/{FieldId}:
+  /fields/{id}:
     $ref: ./app/routes/field.openapi.yml#/FieldIdRequests
   /fieldData:
     $ref: ./app/routes/fieldDatum.openapi.yml#/FieldDataRequests
-  /fieldData/{FieldDatumId}:
+  /fieldData/{id}:
     $ref: ./app/routes/fieldDatum.openapi.yml#/FieldDatumIdRequests
   /fieldTypes:
-    $ref: ./app/routes/fieldType.openapi.yml#/FieldTypesRequests
-  /fieldTypes/{FieldTypeId}:
-    $ref: ./app/routes/fieldType.openapi.yml#/FieldTypeIdRequests
+    $ref: ./app/routes/fieldType.openapi.yml#/FieldTypesRequest
+  /fieldTypes/{id}:
+    $ref: ./app/routes/fieldType.openapi.yml#/FieldTypeIdRequest
   /groups:
     $ref: ./app/routes/group.openapi.yml#/GroupsRequests
-  /groups/{GroupId}:
+  /groups/{id}:
     $ref: ./app/routes/group.openapi.yml#/GroupIdRequests
   /roles:
     $ref: ./app/routes/role.openapi.yml#/RolesRequests
-  /roles/{RoleId}:
+  /roles/{id}:
     $ref: ./app/routes/role.openapi.yml#/RoleIdRequests
   /tags:
     $ref: ./app/routes/tag.openapi.yml#/TagsRequests
-  /tags/{TagId}:
+  /tags/{id}:
     $ref: ./app/routes/tag.openapi.yml#/TagIdRequests
   /test/all:
     $ref: ./app/routes/authTest.openapi.yml#/TestAll
@@ -68,11 +76,15 @@ paths:
     $ref: ./app/routes/authTest.openapi.yml#/TestAdmin
   /transactions:
     $ref: ./app/routes/transaction.openapi.yml#/TransactionsRequests
-  /transactions/{TransactionId}:
+  /transactions/{id}:
     $ref: ./app/routes/transaction.openapi.yml#/TransactionIdRequests
+  /transactions/templates:
+    $ref: ./app/routes/transactionTemplate.openapi.yml#/TransactionTemplatesRequests
+  /transactions/templates/{id}:
+    $ref: ./app/routes/transactionTemplate.openapi.yml#/TransactionTemplateIdRequests
   /users:
     $ref: ./app/routes/user.openapi.yml#/UsersRequests
-  /users/{UserId}:
+  /users/{id}:
     $ref: ./app/routes/user.openapi.yml#/UserIdRequests
 components:
   parameters:
@@ -84,6 +96,13 @@ components:
         type: integer
     query_accountIds:
       name: accountIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: number
+    query_childGroupIds:
+      name: query_childGroupIds
       in: query
       schema:
         type: array
@@ -117,8 +136,15 @@ components:
         type: array
         items:
           type: number
-    query_groupIds:
-      name: groupIds
+    query_fieldTypeComponentIds:
+      name: fieldTypeComponentIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: number
+    query_parentGroupIds:
+      name: query_parentGroupIds
       in: query
       schema:
         type: array
@@ -146,6 +172,20 @@ components:
         type: string
     query_roleIds:
       name: roleIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: number
+    query_recipientTransactorIds:
+      name: recipientTransactorIds
+      in: query
+      schema:
+        type: array
+        items:
+          type: number
+    query_sourceTransactorIds:
+      name: sourceTransactorIds
       in: query
       schema:
         type: array
@@ -179,6 +219,16 @@ components:
         type: array
         items:
           type: number
+    query_valueType:
+      name: valueType
+      in: query
+      schema:
+        type: string
+    query_validator:
+      name: validator
+      in: query
+      schema:
+        type: string
   requestBodies:
     FieldDatum:
       $ref: ./app/apiDtos/fieldDatum.openapi.yml#/RequestBody
@@ -193,10 +243,18 @@ components:
       $ref: ./app/routes/account.openapi.yml#/AccountResponse
     Accounts:
       $ref: ./app/routes/account.openapi.yml#/AccountsResponse
+    AccountTemplate:
+      $ref: ./app/routes/accountTemplate.openapi.yml#/AccountTemplateResponse
+    AccountTemplates:
+      $ref: ./app/routes/accountTemplate.openapi.yml#/AccountTemplatesResponse
     Entity:
       $ref: ./app/routes/entity.openapi.yml#/EntityResponse
     Entities:
       $ref: ./app/routes/entity.openapi.yml#/EntitiesResponse
+    EntityTemplate:
+      $ref: ./app/routes/entityTemplate.openapi.yml#/EntityTemplateResponse
+    EntityTemplates:
+      $ref: ./app/routes/entityTemplate.openapi.yml#/EntityTemplatesResponse
     Field:
       $ref: ./app/routes/field.openapi.yml#/FieldResponse
     Fields:
@@ -225,6 +283,10 @@ components:
       $ref: ./app/routes/transaction.openapi.yml#/TransactionResponse
     Transactions:
       $ref: ./app/routes/transaction.openapi.yml#/TransactionsResponse
+    TransactionTemplate:
+      $ref: ./app/routes/transactionTemplate.openapi.yml#/TransactionTemplateResponse
+    TransactionsTemplates:
+      $ref: ./app/routes/transactionTemplate.openapi.yml#/TransactionTemplatesResponse
     User:
       $ref: ./app/routes/user.openapi.yml#/UserResponse
     Users:
@@ -237,14 +299,20 @@ components:
           type: string
     Account:
       $ref: ./app/apiDtos/account.openapi.yml#/AccountSchema
+    Account_Nullable:
+      $ref: ./app/apiDtos/account.openapi.yml#/NullableAccountSchema
     AccountTemplate:
       $ref: ./app/apiDtos/account.openapi.yml#/AccountTemplateSchema
     Entity:
       $ref: ./app/apiDtos/entity.openapi.yml#/EntitySchema
+    Entity_Nullable:
+      $ref: ./app/apiDtos/entity.openapi.yml#/NullableEntitySchema
     EntityTemplate:
       $ref: ./app/apiDtos/entity.openapi.yml#/EntityTemplateSchema
     Field:
       $ref: ./app/apiDtos/field.openapi.yml#/FieldSchema
+    FieldComponent:
+      $ref: ./app/apiDtos/fieldComponent.openapi.yml#/FieldComponentSchema
     FieldDatum_BoolAccount:
       $ref: ./app/apiDtos/fieldDatum.openapi.yml#/BoolAccount_FieldDatumSchema
     FieldDatum_BoolEntity:
@@ -271,6 +339,8 @@ components:
       $ref: ./app/apiDtos/fieldDatum.openapi.yml#/StringTransaction_FieldDatumSchema
     FieldType:
       $ref: ./app/apiDtos/fieldType.openapi.yml#/FieldTypeSchema
+    FieldTypeComponent:
+      $ref: ./app/apiDtos/fieldTypeComponent.openapi.yml#/FieldTypeComponentSchema
     Group:
       $ref: ./app/apiDtos/group.openapi.yml#/GroupSchema
     Role:
@@ -283,8 +353,12 @@ components:
       $ref: ./app/apiDtos/transaction.openapi.yml#/TransactionTemplateSchema
     Transactor:
       $ref: ./app/apiDtos/transactor.openapi.yml#/TransactorSchema
-    User:
-      $ref: ./app/apiDtos/user.openapi.yml#/UserSchema
+    Transactor_Nullable:
+      $ref: ./app/apiDtos/transactor.openapi.yml#/NullableTransactorSchema
+    UserRequest:
+      $ref: ./app/apiDtos/user.openapi.yml#/UserRequestSchema
+    UserResponse:
+      $ref: ./app/apiDtos/user.openapi.yml#/UserResponseSchema
   securitySchemes:
     bearerAuth:
       type: http

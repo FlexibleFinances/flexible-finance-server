@@ -1,0 +1,99 @@
+TransactionTemplateRequests:
+TransactionTemplateIdRequests:
+  get:
+    parameters:
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/Transaction"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+  put:
+    parameters:
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/Transaction"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/Transaction"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+TransactionTemplatesRequests:
+  get:
+    parameters:
+      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldDatumIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_recipientTransactorIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_sourceTransactorIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/Transactions"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+  post:
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/TransactionTemplate"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/TransactionTemplate"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+TransactionTemplateResponse:
+  description: Returns the transaction's info.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          transaction:
+            $ref: "../../openapi.root.yml#/components/schemas/TransactionTemplate"
+TransactionTemplatesResponse:
+  description: Returns the transactions' info.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          transactionTemplates:
+            type: array
+            items:
+              $ref: "../../openapi.root.yml#/components/schemas/TransactionTemplate"

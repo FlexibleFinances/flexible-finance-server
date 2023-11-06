@@ -1,3 +1,4 @@
+import * as AccountService from "../services/AccountService";
 import {
   type AccountRequest,
   type AccountResponse,
@@ -5,19 +6,13 @@ import {
   type AccountSearchRequest,
   type AccountsResponse,
 } from "../apiDtos/AccountDtos";
-import {
-  createAccountFromDto,
-  getAccountById,
-  getAccountsByOptions,
-  updateAccountFromDto,
-} from "../repositories/AccountRepository";
 import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getAccount(
   req: AccountRequest,
   res: AccountResponse
 ): Promise<void> {
-  const account = await getAccountById(Number(req.params.id));
+  const account = await AccountService.getAccount(Number(req.params.id));
 
   if (account === null) {
     res.status(500).send({
@@ -26,9 +21,12 @@ export async function getAccount(
     return;
   }
 
+  const accountResponseDto = new AccountResponseDto(account);
+  await accountResponseDto.loadAssociations(account);
+
   res.status(200).send({
     message: "Account gotten.",
-    account: new AccountResponseDto(account),
+    account: accountResponseDto,
   });
 }
 
@@ -44,7 +42,7 @@ export async function createAccount(
     return;
   }
 
-  const account = await createAccountFromDto(requestBody);
+  const account = await AccountService.createAccountFromDto(requestBody);
 
   if (account === null) {
     res.status(500).send({
@@ -53,9 +51,12 @@ export async function createAccount(
     return;
   }
 
+  const accountResponseDto = new AccountResponseDto(account);
+  await accountResponseDto.loadAssociations(account);
+
   res.status(200).send({
     message: "Account created.",
-    account: new AccountResponseDto(account),
+    account: accountResponseDto,
   });
 }
 
@@ -76,13 +77,13 @@ export async function updateAccount(
       req,
       res,
       { params: ["id"] },
-      { body: ["name", "groupId", "templateId", "fieldValues"] }
+      { body: ["name", "parentGroupId", "templateId"] }
     )
   ) {
     return;
   }
 
-  const account = await updateAccountFromDto(
+  const account = await AccountService.updateAccountFromDto(
     Number(req.params.id),
     requestBody
   );
@@ -94,9 +95,12 @@ export async function updateAccount(
     return;
   }
 
+  const accountResponseDto = new AccountResponseDto(account);
+  await accountResponseDto.loadAssociations(account);
+
   res.status(200).send({
     message: "Account updated.",
-    account: new AccountResponseDto(account),
+    account: accountResponseDto,
   });
 }
 
@@ -106,7 +110,7 @@ export async function getAccounts(
 ): Promise<void> {
   const requestQuery = req.query;
 
-  const accounts = await getAccountsByOptions(requestQuery);
+  const accounts = await AccountService.getAccounts(requestQuery);
 
   if (accounts === null) {
     res.status(500).send({
@@ -115,19 +119,18 @@ export async function getAccounts(
     return;
   }
 
-  const accountDtos = accounts.map(
-    (account) => new AccountResponseDto(account)
-  );
+  const accountResponseDtoAssocciationsPromises: Array<Promise<void>> = [];
+  const accountResponseDtos = accounts.map((account) => {
+    const accountReponseDto = new AccountResponseDto(account);
+    accountResponseDtoAssocciationsPromises.push(
+      accountReponseDto.loadAssociations(account)
+    );
+    return accountReponseDto;
+  });
+  await Promise.all(accountResponseDtoAssocciationsPromises);
 
-  if (req.query.isTemplate as unknown as boolean) {
-    res.status(200).send({
-      message: "Account Templates gotten.",
-      templates: accountDtos,
-    });
-  } else {
-    res.status(200).send({
-      message: "Accounts gotten.",
-      accounts: accountDtos,
-    });
-  }
+  res.status(200).send({
+    message: "Accounts gotten.",
+    accounts: accountResponseDtos,
+  });
 }

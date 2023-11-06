@@ -1,3 +1,4 @@
+import * as TagService from "../services/TagService";
 import {
   type TagRequest,
   type TagResponse,
@@ -5,16 +6,10 @@ import {
   type TagSearchRequest,
   type TagsResponse,
 } from "../apiDtos/TagDtos";
-import {
-  createTagFromDto,
-  getTagById,
-  getTagsByOptions,
-  updateTagFromDto,
-} from "../repositories/TagRepository";
 import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getTag(req: TagRequest, res: TagResponse): Promise<void> {
-  const tag = await getTagById(Number(req.params.id));
+  const tag = await TagService.getTag(Number(req.params.id));
 
   if (tag === null) {
     res.status(500).send({
@@ -23,9 +18,11 @@ export async function getTag(req: TagRequest, res: TagResponse): Promise<void> {
     return;
   }
 
+  const tagResponseDto = new TagResponseDto(tag);
+
   res.status(200).send({
     message: "Tag gotten.",
-    tag: new TagResponseDto(tag),
+    tag: tagResponseDto,
   });
 }
 
@@ -41,7 +38,7 @@ export async function createTag(
     return;
   }
 
-  const tag = await createTagFromDto(requestBody);
+  const tag = await TagService.createTagFromDto(requestBody);
 
   if (tag === null) {
     res.status(500).send({
@@ -50,9 +47,11 @@ export async function createTag(
     return;
   }
 
+  const tagResponseDto = new TagResponseDto(tag);
+
   res.status(200).send({
     message: "Tag created.",
-    tag: new TagResponseDto(tag),
+    tag: tagResponseDto,
   });
 }
 
@@ -72,7 +71,10 @@ export async function updateTag(
     return;
   }
 
-  const tag = await updateTagFromDto(Number(req.params.id), requestBody);
+  const tag = await TagService.updateTagFromDto(
+    Number(req.params.id),
+    requestBody
+  );
 
   if (tag === null) {
     res.status(500).send({
@@ -81,9 +83,11 @@ export async function updateTag(
     return;
   }
 
+  const tagResponseDto = new TagResponseDto(tag);
+
   res.status(200).send({
     message: "Tag updated.",
-    tag: new TagResponseDto(tag),
+    tag: tagResponseDto,
   });
 }
 
@@ -93,7 +97,7 @@ export async function getTags(
 ): Promise<void> {
   const requestQuery = req.query;
 
-  const tags = await getTagsByOptions(requestQuery);
+  const tags = await TagService.getTags(requestQuery);
 
   if (tags === null) {
     res.status(500).send({
@@ -102,17 +106,13 @@ export async function getTags(
     return;
   }
 
-  const tagDtos = tags.map((tag) => new TagResponseDto(tag));
+  const tagResponseDtos = tags.map((tag) => {
+    const tagReponseDto = new TagResponseDto(tag);
+    return tagReponseDto;
+  });
 
-  if (req.query.isTemplate as unknown as boolean) {
-    res.status(200).send({
-      message: "Tag Templates gotten.",
-      templates: tagDtos,
-    });
-  } else {
-    res.status(200).send({
-      message: "Tags gotten.",
-      tags: tagDtos,
-    });
-  }
+  res.status(200).send({
+    message: "Tags gotten.",
+    tags: tagResponseDtos,
+  });
 }

@@ -30,7 +30,7 @@ export class Role extends Model<
 
   declare name: string;
 
-  declare UserIds: NonAttribute<number[]>;
+  declare UserIds: CreationOptional<number[]>;
   declare Users: NonAttribute<User[]>;
 
   declare static associations: {
@@ -67,6 +67,7 @@ export function initializeRole(sequelize: Sequelize): void {
         allowNull: false,
         unique: true,
       },
+      UserIds: DataTypes.VIRTUAL,
     },
     {
       sequelize,

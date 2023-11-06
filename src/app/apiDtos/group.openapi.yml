@@ -1,4 +1,5 @@
 GroupSchema:
+  nullable: true
   type: object
   required:
     - id
@@ -6,6 +7,8 @@ GroupSchema:
     - updatedAt
     - accounts
     - accountIds
+    - childGroups
+    - childGroupIds
     - entities
     - entityIds
     - name
@@ -27,8 +30,6 @@ GroupSchema:
       type: string
     accounts:
       items:
-        type: object
-      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Account"
       readOnly: true
       type: array
@@ -36,10 +37,17 @@ GroupSchema:
       items:
         type: integer
       type: array
+    childGroups:
+      items:
+        $ref: "../../openapi.root.yml#/components/schemas/Group"
+      readOnly: true
+      type: array
+    childGroupIds:
+      items:
+        type: integer
+      type: array
     entities:
       items:
-        type: object
-      additionalProperties:
         $ref: "../../openapi.root.yml#/components/schemas/Entity"
       readOnly: true
       type: array
@@ -51,18 +59,12 @@ GroupSchema:
       type: string
     parentGroup:
       readOnly: true
-      nullable: true
-      type: object
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/Group"
     parentGroupId:
       nullable: true
       type: integer
     tags:
       items:
-        type: object
-        additionalProperties:
-          $ref: "../../openapi.root.yml#/components/schemas/Tag"
+        $ref: "../../openapi.root.yml#/components/schemas/Tag"
       readOnly: true
       type: array
     tagIds:

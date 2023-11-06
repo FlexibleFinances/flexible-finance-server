@@ -32,15 +32,15 @@ TransactorIdRequests:
 TransactorsRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
       - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_fieldDatumIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_groupIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_parentGroupIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_templateIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/Transactors"

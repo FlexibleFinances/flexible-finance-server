@@ -27,8 +27,9 @@ export async function up({
       allowNull: false,
       unique: true,
     },
-    GroupId: {
+    ParentGroupId: {
       type: DataTypes.INTEGER,
+      allowNull: true,
       references: {
         model: "Groups",
         key: "id",
@@ -177,8 +178,9 @@ export async function up({
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
-    GroupId: {
+    ParentGroupId: {
       type: DataTypes.INTEGER,
+      allowNull: true,
       references: {
         model: "Groups",
         key: "id",
@@ -234,8 +236,9 @@ export async function up({
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
-    GroupId: {
+    ParentGroupId: {
       type: DataTypes.INTEGER,
+      allowNull: true,
       references: {
         model: "Groups",
         key: "id",

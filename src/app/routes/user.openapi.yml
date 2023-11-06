@@ -22,7 +22,7 @@ UserIdRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/User"
+            $ref: "../../openapi.root.yml#/components/schemas/UserRequest"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/User"
@@ -37,9 +37,9 @@ UserIdRequests:
 UsersRequests:
   get:
     parameters:
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
       - $ref: "../../openapi.root.yml#/components/parameters/query_name"
       - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
       - $ref: "../../openapi.root.yml#/components/parameters/query_roleIds"
     responses:
       200:
@@ -56,7 +56,7 @@ UsersRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/User"
+            $ref: "../../openapi.root.yml#/components/schemas/UserRequest"
     responses:
       200:
         $ref: "../../openapi.root.yml#/components/responses/User"
@@ -78,7 +78,7 @@ UserResponse:
           message:
             type: string
           user:
-            $ref: "../../openapi.root.yml#/components/schemas/User"
+            $ref: "../../openapi.root.yml#/components/schemas/UserResponse"
 UsersResponse:
   description: Returns the users' info.
   content:
@@ -90,11 +90,5 @@ UsersResponse:
             type: string
           users:
             type: array
-            nullable: true
             items:
-              $ref: "../../openapi.root.yml#/components/schemas/User"
-          templates:
-            type: array
-            nullable: true
-            items:
-              $ref: "../../openapi.root.yml#/components/schemas/User"
+              $ref: "../../openapi.root.yml#/components/schemas/UserResponse"

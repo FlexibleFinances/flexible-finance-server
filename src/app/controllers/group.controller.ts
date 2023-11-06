@@ -1,3 +1,4 @@
+import * as GroupService from "../services/GroupService";
 import {
   type GroupRequest,
   type GroupResponse,
@@ -5,19 +6,13 @@ import {
   type GroupSearchRequest,
   type GroupsResponse,
 } from "../apiDtos/GroupDtos";
-import {
-  createGroupFromDto,
-  getGroupById,
-  getGroupsByOptions,
-  updateGroupFromDto,
-} from "../repositories/GroupRepository";
 import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getGroup(
   req: GroupRequest,
   res: GroupResponse
 ): Promise<void> {
-  const group = await getGroupById(Number(req.params.id));
+  const group = await GroupService.getGroup(Number(req.params.id));
 
   if (group === null) {
     res.status(500).send({
@@ -26,9 +21,12 @@ export async function getGroup(
     return;
   }
 
+  const groupResponseDto = new GroupResponseDto(group);
+  await groupResponseDto.loadAssociations(group);
+
   res.status(200).send({
     message: "Group gotten.",
-    group: new GroupResponseDto(group),
+    group: groupResponseDto,
   });
 }
 
@@ -44,7 +42,7 @@ export async function createGroup(
     return;
   }
 
-  const group = await createGroupFromDto(requestBody);
+  const group = await GroupService.createGroupFromDto(requestBody);
 
   if (group === null) {
     res.status(500).send({
@@ -53,9 +51,12 @@ export async function createGroup(
     return;
   }
 
+  const groupResponseDto = new GroupResponseDto(group);
+  await groupResponseDto.loadAssociations(group);
+
   res.status(200).send({
     message: "Group created.",
-    group: new GroupResponseDto(group),
+    group: groupResponseDto,
   });
 }
 
@@ -82,7 +83,10 @@ export async function updateGroup(
     return;
   }
 
-  const group = await updateGroupFromDto(Number(req.params.id), requestBody);
+  const group = await GroupService.updateGroupFromDto(
+    Number(req.params.id),
+    requestBody
+  );
 
   if (group === null) {
     res.status(500).send({
@@ -91,9 +95,12 @@ export async function updateGroup(
     return;
   }
 
+  const groupResponseDto = new GroupResponseDto(group);
+  await groupResponseDto.loadAssociations(group);
+
   res.status(200).send({
     message: "Group updated.",
-    group: new GroupResponseDto(group),
+    group: groupResponseDto,
   });
 }
 
@@ -103,7 +110,7 @@ export async function getGroups(
 ): Promise<void> {
   const requestQuery = req.query;
 
-  const groups = await getGroupsByOptions(requestQuery);
+  const groups = await GroupService.getGroups(requestQuery);
 
   if (groups === null) {
     res.status(500).send({
@@ -112,17 +119,18 @@ export async function getGroups(
     return;
   }
 
-  const groupDtos = groups.map((group) => new GroupResponseDto(group));
+  const groupResponseDtoAssocciationsPromises: Array<Promise<void>> = [];
+  const groupResponseDtos = groups.map((group) => {
+    const groupReponseDto = new GroupResponseDto(group);
+    groupResponseDtoAssocciationsPromises.push(
+      groupReponseDto.loadAssociations(group)
+    );
+    return groupReponseDto;
+  });
+  await Promise.all(groupResponseDtoAssocciationsPromises);
 
-  if (req.query.isTemplate as unknown as boolean) {
-    res.status(200).send({
-      message: "Group Templates gotten.",
-      templates: groupDtos,
-    });
-  } else {
-    res.status(200).send({
-      message: "Groups gotten.",
-      groups: groupDtos,
-    });
-  }
+  res.status(200).send({
+    message: "Groups gotten.",
+    groups: groupResponseDtos,
+  });
 }

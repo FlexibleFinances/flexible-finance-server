@@ -4,9 +4,11 @@ FieldTypeSchema:
     - id
     - createdAt
     - updatedAt
-    - fieldTypeComponents
-    - fieldTypeComponentIds
+    - childFieldTypeComponents
+    - childFieldTypeComponentIds
     - name
+    - parentFieldTypeComponent
+    - parentFieldTypeComponentId
     - tags
     - tagIds
     - valueType
@@ -23,24 +25,24 @@ FieldTypeSchema:
       format: date-time
       readOnly: true
       type: string
-    fieldTypeComponents:
+    childFieldTypeComponents:
       items:
-        type: object
-        additionalProperties:
-          $ref: "../../openapi.root.yml#/components/schemas/FieldType"
-      readOnly: true
+        $ref: "../../openapi.root.yml#/components/schemas/FieldTypeComponent"
       type: array
-    fieldTypeComponentIds:
+    childFieldTypeComponentIds:
       items:
         type: integer
       type: array
     name:
       type: string
+    parentFieldTypeComponent:
+      $ref: "../../openapi.root.yml#/components/schemas/FieldTypeComponent"
+    parentFieldTypeComponentId:
+      nullable: true
+      type: integer
     tags:
       items:
-        type: object
-        additionalProperties:
-          $ref: "../../openapi.root.yml#/components/schemas/Tag"
+        $ref: "../../openapi.root.yml#/components/schemas/Tag"
       readOnly: true
       type: array
     tagIds:

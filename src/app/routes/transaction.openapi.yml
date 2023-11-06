@@ -40,9 +40,10 @@ TransactionsRequests:
       - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
       - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_fieldDatumIds"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
       - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_recipientTransactorIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_sourceTransactorIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_templateIds"
     responses:
@@ -94,11 +95,5 @@ TransactionsResponse:
             type: string
           transactions:
             type: array
-            nullable: true
-            items:
-              $ref: "../../openapi.root.yml#/components/schemas/Transaction"
-          templates:
-            type: array
-            nullable: true
             items:
               $ref: "../../openapi.root.yml#/components/schemas/Transaction"

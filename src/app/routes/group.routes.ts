@@ -41,7 +41,7 @@ export function setGroupRoutes(app: express.Express): void {
   );
 
   app.get(
-    "/v1/" + endpointName + "/:GroupId",
+    "/v1/" + endpointName + "/:id",
     [authJwt.verifyToken],
     asyncHandler(async (req: express.Request, res: express.Response) => {
       await controller.getGroup(req as GroupRequest, res as GroupResponse);
@@ -49,7 +49,7 @@ export function setGroupRoutes(app: express.Express): void {
   );
 
   app.put(
-    "/v1/" + endpointName + "/:GroupId",
+    "/v1/" + endpointName + "/:id",
     [authJwt.verifyToken],
     asyncHandler(async (req: express.Request, res: express.Response) => {
       await controller.updateGroup(req as GroupRequest, res as GroupResponse);

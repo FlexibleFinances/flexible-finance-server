@@ -19,6 +19,8 @@ import {
 } from "sequelize";
 import type Account from "./Account";
 import type Entity from "./Entity";
+import type Field from "./Field";
+import type FieldType from "./FieldType";
 import type Report from "./Report";
 import type Transaction from "./Transaction";
 
@@ -32,21 +34,29 @@ export class Tag extends Model<
 
   declare name: string;
 
-  declare AccountIds: NonAttribute<number[]>;
+  declare AccountIds: CreationOptional<number[]>;
   declare Accounts: NonAttribute<Account[]>;
 
-  declare EntityIds: NonAttribute<number[]>;
+  declare EntityIds: CreationOptional<number[]>;
   declare Entities: NonAttribute<Entity[]>;
+
+  declare FieldIds: CreationOptional<number[]>;
+  declare Fields: NonAttribute<Field[]>;
+
+  declare FieldTypeIds: CreationOptional<number[]>;
+  declare FieldTypes: NonAttribute<FieldType[]>;
 
   declare ReportIds: NonAttribute<number[]>;
   declare Reports: NonAttribute<Report[]>;
 
-  declare TransactionIds: NonAttribute<number[]>;
+  declare TransactionIds: CreationOptional<number[]>;
   declare Transactions: NonAttribute<Transaction[]>;
 
   declare static associations: {
     Accounts: Association<Account, Tag>;
     Entities: Association<Entity, Tag>;
+    Fields: Association<Field, Tag>;
+    FieldTypes: Association<FieldType, Tag>;
     Reports: Association<Report, Tag>;
     Transactions: Association<Transaction, Tag>;
   };
@@ -73,6 +83,26 @@ export class Tag extends Model<
   declare hasEntity: HasManyHasAssociationMixin<Entity, number>;
   declare hasEntities: HasManyHasAssociationsMixin<Entity, number>;
   declare countEntities: HasManyCountAssociationsMixin;
+
+  declare getFields: HasManyGetAssociationsMixin<Field>;
+  declare addField: HasManyAddAssociationMixin<Field, number>;
+  declare addFields: HasManyAddAssociationsMixin<Field, number>;
+  declare setFields: HasManySetAssociationsMixin<Field, number>;
+  declare removeField: HasManyRemoveAssociationMixin<Field, number>;
+  declare removeFields: HasManyRemoveAssociationsMixin<Field, number>;
+  declare hasField: HasManyHasAssociationMixin<Field, number>;
+  declare hasFields: HasManyHasAssociationsMixin<Field, number>;
+  declare countFields: HasManyCountAssociationsMixin;
+
+  declare getFieldTypes: HasManyGetAssociationsMixin<FieldType>;
+  declare addFieldType: HasManyAddAssociationMixin<FieldType, number>;
+  declare addFieldTypes: HasManyAddAssociationsMixin<FieldType, number>;
+  declare setFieldTypes: HasManySetAssociationsMixin<FieldType, number>;
+  declare removeFieldType: HasManyRemoveAssociationMixin<FieldType, number>;
+  declare removeFieldTypes: HasManyRemoveAssociationsMixin<FieldType, number>;
+  declare hasFieldType: HasManyHasAssociationMixin<FieldType, number>;
+  declare hasFieldTypes: HasManyHasAssociationsMixin<FieldType, number>;
+  declare countFieldTypes: HasManyCountAssociationsMixin;
 
   declare getReports: HasManyGetAssociationsMixin<Report>;
   declare addReport: HasManyAddAssociationMixin<Report, number>;
@@ -114,6 +144,11 @@ export function initializeTag(sequelize: Sequelize): void {
         allowNull: false,
         unique: true,
       },
+      AccountIds: DataTypes.VIRTUAL,
+      EntityIds: DataTypes.VIRTUAL,
+      FieldIds: DataTypes.VIRTUAL,
+      FieldTypeIds: DataTypes.VIRTUAL,
+      TransactionIds: DataTypes.VIRTUAL,
     },
     {
       sequelize,

@@ -22,11 +22,11 @@ import {
 } from "sequelize";
 import type Account from "./Account";
 import type Entity from "./Entity";
+import type FieldComponent from "./FieldComponent";
 import type FieldDatum from "./FieldDatum";
 import type FieldType from "./FieldType";
 import type Tag from "./Tag";
 import type Transaction from "./Transaction";
-import { getTagIds } from "../../utils/helperFunctions";
 
 export class Field extends Model<
   InferAttributes<Field>,
@@ -39,25 +39,33 @@ export class Field extends Model<
   declare name: string;
   declare isComponentOnly: CreationOptional<boolean>;
 
+  declare ChildFieldComponentIds?: CreationOptional<number[]>;
+  declare ChildFieldComponents?: NonAttribute<FieldComponent[]>;
+
+  declare ParentFieldComponentId?: CreationOptional<number>;
+  declare ParentFieldComponent?: NonAttribute<FieldComponent>;
+
   declare FieldTypeId: number;
   declare FieldType: NonAttribute<FieldType>;
 
   declare FieldDatumIds: CreationOptional<number[]>;
   declare FieldData: NonAttribute<FieldDatum[]>;
 
-  declare AccountIds: NonAttribute<number[]>;
+  declare AccountIds: CreationOptional<number[]>;
   declare Accounts: NonAttribute<Account[]>;
 
-  declare EntityIds: NonAttribute<number[]>;
+  declare EntityIds: CreationOptional<number[]>;
   declare Entities: NonAttribute<Entity[]>;
 
-  declare TransactionIds: NonAttribute<number[]>;
+  declare TransactionIds: CreationOptional<number[]>;
   declare Transactions: NonAttribute<Transaction[]>;
 
   declare TagIds: CreationOptional<number[]>;
   declare Tags: NonAttribute<Tag[]>;
 
   declare static associations: {
+    ChildFieldComponents: Association<Field, FieldComponent>;
+    ParentFieldComponent: Association<Field, FieldComponent>;
     FieldData: Association<Field, FieldDatum>;
     FieldType: Association<Field, FieldType>;
     Accounts: Association<Field, Account>;
@@ -69,6 +77,50 @@ export class Field extends Model<
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
+  declare getChildFieldComponents: HasManyGetAssociationsMixin<FieldComponent>;
+  declare addChildFieldComponent: HasManyAddAssociationMixin<
+    FieldComponent,
+    number
+  >;
+
+  declare addChildFieldComponents: HasManyAddAssociationsMixin<
+    FieldComponent,
+    number
+  >;
+
+  declare setChildFieldComponents: HasManySetAssociationsMixin<
+    FieldComponent,
+    number
+  >;
+
+  declare removeChildFieldComponent: HasManyRemoveAssociationMixin<
+    FieldComponent,
+    number
+  >;
+
+  declare removeChildFieldComponents: HasManyRemoveAssociationsMixin<
+    FieldComponent,
+    number
+  >;
+
+  declare hasChildFieldComponent: HasManyHasAssociationMixin<
+    FieldComponent,
+    number
+  >;
+
+  declare hasChildFieldComponents: HasManyHasAssociationsMixin<
+    FieldComponent,
+    number
+  >;
+
+  declare countChildFieldComponents: HasManyCountAssociationsMixin;
+
+  declare getParentFieldComponent: BelongsToGetAssociationMixin<FieldComponent>;
+  declare setParentFieldComponent: BelongsToSetAssociationMixin<
+    FieldComponent,
+    number
+  >;
+
   declare getFieldData: HasManyGetAssociationsMixin<FieldDatum>;
   declare addFieldDatum: HasManyAddAssociationMixin<FieldDatum, number>;
   declare addFieldData: HasManyAddAssociationsMixin<FieldDatum, number>;
@@ -132,16 +184,6 @@ export class Field extends Model<
   declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
   declare countTags: HasManyCountAssociationsMixin;
   declare createTag: HasManyCreateAssociationMixin<Tag, "id">;
-
-  public async loadTagIds(): Promise<void> {
-    const tagIds = await getTagIds(this);
-    this.setDataValue("TagIds", tagIds);
-  }
-
-  public async loadAssociatedIds(): Promise<void> {
-    const loadPromises = [this.loadTagIds()];
-    await Promise.all(loadPromises);
-  }
 }
 
 export function initializeField(sequelize: Sequelize): void {
@@ -172,8 +214,13 @@ export function initializeField(sequelize: Sequelize): void {
         allowNull: false,
         defaultValue: false,
       },
+      AccountIds: DataTypes.VIRTUAL,
+      ChildFieldComponentIds: DataTypes.VIRTUAL,
+      EntityIds: DataTypes.VIRTUAL,
       FieldDatumIds: DataTypes.VIRTUAL,
+      ParentFieldComponentId: DataTypes.VIRTUAL,
       TagIds: DataTypes.VIRTUAL,
+      TransactionIds: DataTypes.VIRTUAL,
     },
     {
       sequelize,

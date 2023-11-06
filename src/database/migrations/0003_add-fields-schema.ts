@@ -51,7 +51,7 @@ export async function up({
       type: DataTypes.DATE,
       allowNull: false,
     },
-    FieldTypeId: {
+    ChildFieldTypeId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -133,7 +133,7 @@ export async function up({
       type: DataTypes.DATE,
       allowNull: false,
     },
-    GroupId: {
+    FieldTypeId: {
       type: DataTypes.INTEGER,
       references: {
         model: "FieldTypes",
@@ -167,7 +167,7 @@ export async function up({
       type: DataTypes.DATE,
       allowNull: false,
     },
-    GroupId: {
+    FieldId: {
       type: DataTypes.INTEGER,
       references: {
         model: "Fields",
@@ -336,7 +336,7 @@ export async function up({
       type: DataTypes.DATE,
       allowNull: false,
     },
-    FieldId: {
+    ChildFieldId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {

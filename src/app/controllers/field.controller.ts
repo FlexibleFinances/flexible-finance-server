@@ -1,3 +1,4 @@
+import * as FieldService from "../services/FieldService";
 import {
   type FieldRequest,
   type FieldResponse,
@@ -5,19 +6,13 @@ import {
   type FieldSearchRequest,
   type FieldsResponse,
 } from "../apiDtos/FieldDtos";
-import {
-  createFieldFromDto,
-  getFieldById,
-  getFieldsByOptions,
-  updateFieldFromDto,
-} from "../repositories/FieldRepository";
 import { hasRequestArguments } from "../../utils/helperFunctions";
 
 export async function getField(
   req: FieldRequest,
   res: FieldResponse
 ): Promise<void> {
-  const field = await getFieldById(Number(req.params.id));
+  const field = await FieldService.getField(Number(req.params.id));
 
   if (field === null) {
     res.status(500).send({
@@ -26,9 +21,12 @@ export async function getField(
     return;
   }
 
+  const fieldResponseDto = new FieldResponseDto(field);
+  await fieldResponseDto.loadAssociations(field);
+
   res.status(200).send({
     message: "Field gotten.",
-    field: new FieldResponseDto(field),
+    field: fieldResponseDto,
   });
 }
 
@@ -44,7 +42,7 @@ export async function createField(
     return;
   }
 
-  const field = await createFieldFromDto(requestBody);
+  const field = await FieldService.createFieldFromDto(requestBody);
 
   if (field === null) {
     res.status(500).send({
@@ -53,9 +51,12 @@ export async function createField(
     return;
   }
 
+  const fieldResponseDto = new FieldResponseDto(field);
+  await fieldResponseDto.loadAssociations(field);
+
   res.status(200).send({
     message: "Field created.",
-    field: new FieldResponseDto(field),
+    field: fieldResponseDto,
   });
 }
 
@@ -71,11 +72,21 @@ export async function updateField(
     return;
   }
 
-  if (!hasRequestArguments(req, res, { params: ["id"] }, { body: ["name"] })) {
+  if (
+    !hasRequestArguments(
+      req,
+      res,
+      { params: ["id"] },
+      { body: ["name", "fieldTypeId"] }
+    )
+  ) {
     return;
   }
 
-  const field = await updateFieldFromDto(Number(req.params.id), requestBody);
+  const field = await FieldService.updateFieldFromDto(
+    Number(req.params.id),
+    requestBody
+  );
 
   if (field === null) {
     res.status(500).send({
@@ -84,9 +95,12 @@ export async function updateField(
     return;
   }
 
+  const fieldResponseDto = new FieldResponseDto(field);
+  await fieldResponseDto.loadAssociations(field);
+
   res.status(200).send({
     message: "Field updated.",
-    field: new FieldResponseDto(field),
+    field: fieldResponseDto,
   });
 }
 
@@ -96,7 +110,7 @@ export async function getFields(
 ): Promise<void> {
   const requestQuery = req.query;
 
-  const fields = await getFieldsByOptions(requestQuery);
+  const fields = await FieldService.getFields(requestQuery);
 
   if (fields === null) {
     res.status(500).send({
@@ -105,17 +119,18 @@ export async function getFields(
     return;
   }
 
-  const fieldDtos = fields.map((field) => new FieldResponseDto(field));
+  const fieldResponseDtoAssocciationsPromises: Array<Promise<void>> = [];
+  const fieldResponseDtos = fields.map((field) => {
+    const fieldReponseDto = new FieldResponseDto(field);
+    fieldResponseDtoAssocciationsPromises.push(
+      fieldReponseDto.loadAssociations(field)
+    );
+    return fieldReponseDto;
+  });
+  await Promise.all(fieldResponseDtoAssocciationsPromises);
 
-  if (req.query.isTemplate as unknown as boolean) {
-    res.status(200).send({
-      message: "Field Templates gotten.",
-      templates: fieldDtos,
-    });
-  } else {
-    res.status(200).send({
-      message: "Fields gotten.",
-      fields: fieldDtos,
-    });
-  }
+  res.status(200).send({
+    message: "Fields gotten.",
+    fields: fieldResponseDtos,
+  });
 }

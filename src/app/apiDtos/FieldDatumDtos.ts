@@ -1,8 +1,9 @@
-import type FieldDatum from "../../database/models/FieldDatum";
+import { type AccountResponseDto } from "./AccountDtos";
+import { type EntityResponseDto } from "./EntityDtos";
+import FieldDatum from "../../database/models/FieldDatum";
 import { FieldResponseDto } from "./FieldDtos";
 import { type Query } from "express-serve-static-core";
-// import type Tag from "../../database/models/Tag";
-import { type TagResponseDto } from "./TagDtos";
+import { type TransactionResponseDto } from "./TransactionDtos";
 import type express from "express";
 
 export interface FieldDatumRequest extends express.Request {
@@ -22,18 +23,26 @@ export interface FieldDataResponse extends express.Response {
 }
 
 export interface FieldDatumRequestDto {
+  accountId?: number;
+  boolValue?: boolean;
+  dateValue?: Date;
+  entityId?: number;
   fieldId: number;
-  tagIds?: number[];
+  intValue?: number;
+  stringValue?: string;
+  transactionId?: number;
 }
 
 export interface FieldDatumSearchRequestDto extends Query {
-  offset?: string;
-  limit?: string;
-  ids?: string[];
+  accountIds?: string[];
   createdAt?: string;
-  updatedAt?: string;
+  entityIds?: string[];
   fieldIds?: string[];
-  tagIds?: string[];
+  ids?: string[];
+  limit?: string;
+  offset?: string;
+  transactionIds?: string[];
+  updatedAt?: string;
 }
 
 export class FieldDatumResponseDto {
@@ -41,21 +50,60 @@ export class FieldDatumResponseDto {
   createdAt: string;
   updatedAt: string;
 
-  field: FieldResponseDto;
+  account?: AccountResponseDto;
+  accountId?: number;
+  boolValue?: boolean;
+  dateValue?: Date;
+  entity?: EntityResponseDto;
+  entityId?: number;
+  field: FieldResponseDto | null = null;
   fieldId: number;
-  tags?: TagResponseDto[];
-  tagIds?: number[];
+  intValue?: number;
+  stringValue?: string;
+  transaction?: TransactionResponseDto;
+  transactionId?: number;
 
   constructor(fieldDatum: FieldDatum) {
     this.id = fieldDatum.id;
     this.createdAt = fieldDatum.createdAt.toISOString();
     this.updatedAt = fieldDatum.updatedAt.toISOString();
-
-    this.field = new FieldResponseDto(fieldDatum.Field);
-    this.fieldId = fieldDatum.Field.id;
-
-    //    if (fieldDatum.Tags !== undefined) {
-    //      this.tagIds = fieldDatum.Tags.map((tag: Tag) => tag.id);
-    //    }
+    this.accountId = fieldDatum.AccountId;
+    this.boolValue = fieldDatum.boolValue;
+    this.dateValue = fieldDatum.dateValue;
+    this.entityId = fieldDatum.EntityId;
+    this.fieldId = fieldDatum.FieldId;
+    this.intValue = fieldDatum.intValue;
+    this.stringValue = fieldDatum.stringValue;
+    this.transactionId = fieldDatum.TransactionId;
   }
+
+  public async loadAssociations(fieldDatum: FieldDatum): Promise<void> {
+    if (this.id !== fieldDatum.id) {
+      throw new Error("IDs don't match.");
+    }
+
+    const field = await fieldDatum.getField();
+    if (field === undefined) {
+      throw new Error("Must have field.");
+    }
+    const fieldDto = new FieldResponseDto(field);
+    await fieldDto.loadAssociations(field);
+    this.field = fieldDto;
+  }
+}
+
+export function FieldDatumDtoToModel(
+  fieldDatumDto: FieldDatumRequestDto | FieldDatumResponseDto
+): FieldDatum {
+  const fieldDatum = FieldDatum.build({
+    AccountId: fieldDatumDto.accountId,
+    EntityId: fieldDatumDto.entityId,
+    FieldId: fieldDatumDto.fieldId,
+    TransactionId: fieldDatumDto.transactionId,
+    boolValue: fieldDatumDto.boolValue,
+    dateValue: fieldDatumDto.dateValue,
+    intValue: fieldDatumDto.intValue,
+    stringValue: fieldDatumDto.stringValue,
+  });
+  return fieldDatum;
 }

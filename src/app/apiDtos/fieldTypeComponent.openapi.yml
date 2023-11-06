@@ -1,0 +1,42 @@
+FieldTypeComponentSchema:
+  nullable: true
+  type: object
+  required:
+    - id
+    - createdAt
+    - updatedAt
+    - childFieldType
+    - childFieldTypeId
+    - isRequired
+    - order
+    - parentFieldTypeId
+    - validator
+  properties:
+    id:
+      readOnly: true
+      type: integer
+    createdAt:
+      format: date-time
+      readOnly: true
+      type: string
+    updatedAt:
+      format: date-time
+      readOnly: true
+      type: string
+    childFieldType:
+      $ref: "../../openapi.root.yml#/components/schemas/FieldType"
+      readOnly: true
+    childFieldTypeId:
+      type: integer
+    isRequired:
+      type: boolean
+    order:
+      type: integer
+    parentFieldType:
+      $ref: "../../openapi.root.yml#/components/schemas/FieldType"
+      readOnly: true
+    parentFieldTypeId:
+      type: integer
+    validator:
+      nullable: true
+      type: string

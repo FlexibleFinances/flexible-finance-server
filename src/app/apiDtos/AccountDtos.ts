@@ -1,8 +1,10 @@
-import type Account from "../../database/models/Account";
-import type Field from "../../database/models/Field";
-import type FieldDatum from "../../database/models/FieldDatum";
-import { type FieldValue } from "../../database/models/FieldDatum";
-import { type GroupResponseDto } from "./GroupDtos";
+import {
+  type FieldDatumRequestDto,
+  FieldDatumResponseDto,
+} from "./FieldDatumDtos";
+import Account from "../../database/models/Account";
+import { AccountTemplateResponseDto } from "./AccountTemplateDtos";
+import { GroupResponseDto } from "./GroupDtos";
 import { type Query } from "express-serve-static-core";
 import { TagResponseDto } from "./TagDtos";
 import type express from "express";
@@ -24,30 +26,28 @@ export interface AccountsResponse extends express.Response {
 }
 
 export interface AccountRequestDto {
-  name?: string;
-  fieldDatumIds?: number[];
-  fieldIds?: number[];
-  fieldValues?: FieldValue[];
-  parentGroupId?: number;
-  tagIds?: number[];
-  templateId?: number;
-  isTemplate?: boolean;
+  fieldData: FieldDatumRequestDto[];
+  fieldDatumIds: number[];
+  isTemplate: boolean;
+  name: string;
+  parentGroupId: number;
+  tagIds: number[];
+  templateId: number;
 }
 
 export interface AccountSearchRequestDto extends Query {
-  offset?: string;
-  limit?: string;
-  ids?: string[];
   createdAt?: string;
-  updatedAt?: string;
-  name?: string;
-  fieldDatumIds?: string[];
   fieldIds?: string[];
-  fieldValues?: undefined;
+  fieldDatumIds?: string[];
+  ids?: string[];
+  isTemplate?: string;
+  limit?: string;
+  name?: string;
+  offset?: string;
   parentGroupIds?: string[];
   tagIds?: string[];
   templateIds?: string[];
-  isTemplate?: string;
+  updatedAt?: string;
 }
 
 export class AccountResponseDto {
@@ -55,39 +55,67 @@ export class AccountResponseDto {
   createdAt: string;
   updatedAt: string;
 
-  name: string;
-  fieldDatumIds?: number[];
-  fieldIds?: number[];
-  fieldValues?: FieldValue[];
-  parentGroup?: GroupResponseDto;
-  parentGroupId?: number;
-  tags?: TagResponseDto[];
-  tagIds?: number[];
-  template?: AccountResponseDto;
-  templateId?: number;
+  fieldData: FieldDatumResponseDto[] = [];
+  fieldDatumIds: number[] = [];
   isTemplate: boolean;
+  name: string;
+  parentGroup: GroupResponseDto | null = null;
+  parentGroupId: number | null = null;
+  tags: TagResponseDto[] = [];
+  tagIds: number[] = [];
+  template: AccountTemplateResponseDto | null = null;
+  templateId: number;
 
   constructor(account: Account) {
     this.id = account.id;
     this.createdAt = account.createdAt.toISOString();
     this.updatedAt = account.updatedAt.toISOString();
-    this.name = account.name;
-    this.parentGroupId = account.GroupId;
-    this.tags = account.Tags?.map((tag) => new TagResponseDto(tag));
-    this.tagIds = account.Tags?.map((tag) => tag.id);
-    this.templateId = account.TemplateId;
     this.isTemplate = account.isTemplate;
-
-    if (account.isTemplate) {
-      if (account.Fields !== undefined) {
-        this.fieldIds = account.Fields.map((field: Field) => field.id);
-      }
+    this.name = account.name;
+    this.parentGroupId = account.ParentGroupId ?? null;
+    if (account.TemplateId !== undefined) {
+      this.templateId = account.TemplateId;
     } else {
-      if (account.FieldData !== undefined) {
-        this.fieldDatumIds = account.FieldData.map(
-          (fieldDatum: FieldDatum) => fieldDatum.id
-        );
-      }
+      throw new Error("Must have a template.");
     }
   }
+
+  public async loadAssociations(account: Account): Promise<void> {
+    if (this.id !== account.id) {
+      throw new Error("IDs don't match.");
+    }
+
+    const fieldData = await account.getFieldData();
+    fieldData?.forEach((fieldDatum) => {
+      this.fieldData.push(new FieldDatumResponseDto(fieldDatum));
+      this.fieldDatumIds.push(fieldDatum.id);
+    });
+
+    if (this.parentGroupId !== null) {
+      this.parentGroup = new GroupResponseDto(await account.getParentGroup());
+    }
+
+    const tags = await account.getTags();
+    tags?.forEach((tag) => {
+      this.tags.push(new TagResponseDto(tag));
+      this.tagIds.push(tag.id);
+    });
+
+    const accountTemplate = await account.getTemplate();
+    const accountTemplateDto = new AccountTemplateResponseDto(accountTemplate);
+    await accountTemplateDto.loadAssociations(accountTemplate);
+    this.template = accountTemplateDto;
+  }
+}
+
+export function AccountDtoToModel(
+  accountDto: AccountRequestDto | AccountResponseDto
+): Account {
+  const account = Account.build({
+    isTemplate: accountDto.isTemplate,
+    name: accountDto.name,
+    ParentGroupId: accountDto.parentGroupId ?? undefined,
+    TemplateId: accountDto.templateId,
+  });
+  return account;
 }

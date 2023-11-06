@@ -1,0 +1,97 @@
+EntityTemplateIdRequest:
+  get:
+    parameters:
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/EntityTemplate"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+  put:
+    parameters:
+      - $ref: "../../openapi.root.yml#/components/parameters/path_id"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/EntityTemplate"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/EntityTemplate"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+EntityTemplatesRequest:
+  get:
+    parameters:
+      - $ref: "../../openapi.root.yml#/components/parameters/query_isTemplate"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldDatumIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_parentGroupIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/EntityTemplates"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+  post:
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.root.yml#/components/schemas/EntityTemplate"
+    responses:
+      200:
+        $ref: "../../openapi.root.yml#/components/responses/EntityTemplate"
+      400:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      401:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      403:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+      500:
+        $ref: "../../openapi.root.yml#/components/responses/Message"
+EntityTemplateResponse:
+  description: Returns the entity template's info.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          entityTemplate:
+            $ref: "../../openapi.root.yml#/components/schemas/EntityTemplate"
+EntityTemplatesResponse:
+  description: Returns the entity templates' info.
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+          entityTemplates:
+            type: array
+            items:
+              $ref: "../../openapi.root.yml#/components/schemas/EntityTemplate"

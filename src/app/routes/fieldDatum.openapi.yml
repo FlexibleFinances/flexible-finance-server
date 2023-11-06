@@ -32,12 +32,11 @@ FieldDatumIdRequests:
 FieldDataRequests:
   get:
     parameters:
-      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_name"
-      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_accountIds"
       - $ref: "../../openapi.root.yml#/components/parameters/query_entityIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_fieldIds"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_limit"
+      - $ref: "../../openapi.root.yml#/components/parameters/query_offset"
       - $ref: "../../openapi.root.yml#/components/parameters/query_transactionIds"
       - name: stringValue
         in: query

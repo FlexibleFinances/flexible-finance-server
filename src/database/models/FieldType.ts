@@ -1,5 +1,7 @@
 import {
   type Association,
+  type BelongsToGetAssociationMixin,
+  type BelongsToSetAssociationMixin,
   type CreationOptional,
   DataTypes,
   type HasManyAddAssociationMixin,
@@ -22,7 +24,6 @@ import type Field from "./Field";
 import type FieldTypeComponent from "./FieldTypeComponent";
 import type Tag from "./Tag";
 import { fieldTypeTypeEnum } from "../../utils/enumerators";
-import { getTagIds } from "../../utils/helperFunctions";
 
 export class FieldType extends Model<
   InferAttributes<FieldType>,
@@ -36,64 +37,74 @@ export class FieldType extends Model<
   declare type?: CreationOptional<fieldTypeTypeEnum>;
   declare validator?: CreationOptional<string>;
 
-  declare FieldTypeComponentIds?: NonAttribute<number[]>;
-  declare FieldTypeComponents?: NonAttribute<FieldTypeComponent[]>;
+  declare ChildFieldTypeComponentIds?: CreationOptional<number[]>;
+  declare ChildFieldTypeComponents?: NonAttribute<FieldTypeComponent[]>;
 
-  declare FieldIds: NonAttribute<number[]>;
+  declare FieldIds: CreationOptional<number[]>;
   declare Fields: NonAttribute<Field[]>;
+
+  declare ParentFieldTypeComponentId?: CreationOptional<number>;
+  declare ParentFieldTypeComponent?: NonAttribute<FieldTypeComponent>;
 
   declare TagIds: CreationOptional<number[]>;
   declare Tags: NonAttribute<Tag[]>;
 
   declare static associations: {
     Fields: Association<FieldType, Field>;
-    FieldTypeComponents: Association<FieldType, FieldTypeComponent>;
+    ChildFieldTypeComponents: Association<FieldType, FieldTypeComponent>;
+    ParentFieldTypeComponent: Association<FieldType, FieldTypeComponent>;
     Tags: Association<FieldType, Tag>;
   };
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
   // these will not exist until `Model.init` was called.
-  declare getFieldTypeComponents: HasManyGetAssociationsMixin<FieldTypeComponent>;
-  declare addFieldTypeComponent: HasManyAddAssociationMixin<
+  declare getChildFieldTypeComponents: HasManyGetAssociationsMixin<FieldTypeComponent>;
+  declare addChildFieldTypeComponent: HasManyAddAssociationMixin<
     FieldTypeComponent,
     number
   >;
 
-  declare addFieldTypeComponents: HasManyAddAssociationsMixin<
+  declare addChildFieldTypeComponents: HasManyAddAssociationsMixin<
     FieldTypeComponent,
     number
   >;
 
-  declare setFieldTypeComponents: HasManySetAssociationsMixin<
+  declare setChildFieldTypeComponents: HasManySetAssociationsMixin<
     FieldTypeComponent,
     number
   >;
 
-  declare removeFieldTypeComponent: HasManyRemoveAssociationMixin<
+  declare removeChildFieldTypeComponent: HasManyRemoveAssociationMixin<
     FieldTypeComponent,
     number
   >;
 
-  declare removeFieldTypeComponents: HasManyRemoveAssociationsMixin<
+  declare removeChildFieldTypeComponents: HasManyRemoveAssociationsMixin<
     FieldTypeComponent,
     number
   >;
 
-  declare hasFieldTypeComponent: HasManyHasAssociationMixin<
+  declare hasChildFieldTypeComponent: HasManyHasAssociationMixin<
     FieldTypeComponent,
     number
   >;
 
-  declare hasFieldTypeComponents: HasManyHasAssociationsMixin<
+  declare hasChildFieldTypeComponents: HasManyHasAssociationsMixin<
     FieldTypeComponent,
     number
   >;
 
-  declare countFieldTypeComponents: HasManyCountAssociationsMixin;
-  declare createFieldTypeComponent: HasManyCreateAssociationMixin<
+  declare countChildFieldTypeComponents: HasManyCountAssociationsMixin;
+  declare createChildFieldTypeComponent: HasManyCreateAssociationMixin<
     FieldTypeComponent,
     "ParentFieldTypeId"
+  >;
+
+  declare getParentFieldTypeComponent: BelongsToGetAssociationMixin<FieldTypeComponent>;
+  declare setParentFieldTypeComponent: BelongsToSetAssociationMixin<
+    FieldTypeComponent,
+    number
   >;
 
   declare getFields: HasManyGetAssociationsMixin<Field>;
@@ -117,16 +128,6 @@ export class FieldType extends Model<
   declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
   declare countTags: HasManyCountAssociationsMixin;
   declare createTag: HasManyCreateAssociationMixin<Tag, "id">;
-
-  public async loadTagIds(): Promise<void> {
-    const tagIds = await getTagIds(this);
-    this.setDataValue("TagIds", tagIds);
-  }
-
-  public async loadAssociatedIds(): Promise<void> {
-    const loadPromises = [this.loadTagIds()];
-    await Promise.all(loadPromises);
-  }
 }
 
 export function initializeFieldType(sequelize: Sequelize): void {
@@ -150,6 +151,9 @@ export function initializeFieldType(sequelize: Sequelize): void {
       validator: {
         type: DataTypes.STRING,
       },
+      ChildFieldTypeComponentIds: DataTypes.VIRTUAL,
+      FieldIds: DataTypes.VIRTUAL,
+      ParentFieldTypeComponentId: DataTypes.VIRTUAL,
       TagIds: DataTypes.VIRTUAL,
     },
     {

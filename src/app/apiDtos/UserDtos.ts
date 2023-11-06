@@ -1,7 +1,6 @@
 import { type Query } from "express-serve-static-core";
-import type Role from "../../database/models/Role";
 import { RoleResponseDto } from "./RoleDtos";
-import type User from "../../database/models/User";
+import User from "../../database/models/User";
 import type express from "express";
 
 export interface UserRequest extends express.Request {
@@ -21,21 +20,20 @@ export interface UsersResponse extends express.Response {
 }
 
 export interface UserRequestDto {
-  username?: string;
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
   roleIds: number[];
+  username: string;
 }
 
 export interface UserSearchRequestDto extends Query {
-  offset?: string;
-  limit?: string;
-  ids?: string[];
   createdAt?: string;
+  ids?: string[];
+  limit?: string;
+  offset?: string;
+  roleIds?: string[];
   updatedAt?: string;
   username?: string;
-  email?: string;
-  roleIds: string[];
 }
 
 export class UserResponseDto {
@@ -43,18 +41,37 @@ export class UserResponseDto {
   createdAt: string;
   updatedAt: string;
 
-  username: string;
   email: string;
-  roles?: RoleResponseDto[];
-  roleIds?: number[];
+  roles: RoleResponseDto[] = [];
+  roleIds: number[] = [];
+  username: string;
 
   constructor(user: User) {
     this.id = user.id;
     this.createdAt = user.createdAt.toISOString();
     this.updatedAt = user.updatedAt.toISOString();
-    this.username = user.username;
     this.email = user.email;
-    this.roles = user.Roles?.map((role) => new RoleResponseDto(role));
-    this.roleIds = user.Roles?.map((role: Role) => role.id);
+    this.username = user.username;
   }
+
+  public async loadAssociations(user: User): Promise<void> {
+    if (this.id !== user.id) {
+      throw new Error("IDs don't match.");
+    }
+
+    const roles = await user.getRoles();
+    roles?.forEach((role) => {
+      this.roles.push(new RoleResponseDto(role));
+      this.roleIds.push(role.id);
+    });
+  }
+}
+
+export function UserDtoToModel(userDto: UserRequestDto): User {
+  const user = User.build({
+    email: userDto.email,
+    password: userDto.password,
+    username: userDto.username,
+  });
+  return user;
 }

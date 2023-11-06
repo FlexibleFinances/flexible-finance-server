@@ -38,7 +38,7 @@ export function setTagRoutes(app: express.Express): void {
   );
 
   app.get(
-    "/v1/" + endpointName + "/:TagId",
+    "/v1/" + endpointName + "/:id",
     [authJwt.verifyToken],
     asyncHandler(async (req: express.Request, res: express.Response) => {
       await controller.getTag(req as TagRequest, res as TagResponse);
@@ -46,7 +46,7 @@ export function setTagRoutes(app: express.Express): void {
   );
 
   app.put(
-    "/v1/" + endpointName + "/:TagId",
+    "/v1/" + endpointName + "/:id",
     [authJwt.verifyToken],
     asyncHandler(async (req: express.Request, res: express.Response) => {
       await controller.updateTag(req as TagRequest, res as TagResponse);

@@ -21,10 +21,8 @@ BoolAccount_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/Field"
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
-      type: object
     fieldId:
       type: integer
     boolValue:
@@ -54,10 +52,8 @@ BoolEntity_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/Field"
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
-      type: object
     fieldId:
       type: integer
     boolValue:
@@ -87,10 +83,8 @@ BoolTransaction_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/Field"
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
-      type: object
     fieldId:
       type: integer
     boolValue:
@@ -121,10 +115,8 @@ DateAccount_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/Field"
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
-      type: object
     fieldId:
       type: integer
     dateValue:
@@ -155,10 +147,8 @@ DateEntity_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/Field"
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
-      type: object
     fieldId:
       type: integer
     dateValue:
@@ -189,10 +179,8 @@ DateTransaction_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/Field"
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
-      type: object
     fieldId:
       type: integer
     dateValue:
@@ -224,10 +212,8 @@ IntAccount_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/Field"
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
-      type: object
     fieldId:
       type: integer
     intValue:
@@ -257,10 +243,8 @@ IntEntity_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/Field"
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
-      type: object
     fieldId:
       type: integer
     intValue:
@@ -290,10 +274,8 @@ IntTransaction_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/Field"
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
-      type: object
     fieldId:
       type: integer
     intValue:
@@ -324,10 +306,8 @@ StringAccount_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/Field"
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
-      type: object
     fieldId:
       type: integer
     stringValue:
@@ -357,10 +337,8 @@ StringEntity_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/Field"
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
-      type: object
     fieldId:
       type: integer
     stringValue:
@@ -390,10 +368,8 @@ StringTransaction_FieldDatumSchema:
       readOnly: true
       type: string
     field:
-      additionalProperties:
-        $ref: "../../openapi.root.yml#/components/schemas/Field"
+      $ref: "../../openapi.root.yml#/components/schemas/Field"
       readOnly: true
-      type: object
     fieldId:
       type: integer
     stringValue:

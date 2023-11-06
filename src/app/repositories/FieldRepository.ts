@@ -1,46 +1,28 @@
 import {
-  type CreationAttributes,
+  type Attributes,
   type FindOptions,
-  Op,
   type WhereOptions,
 } from "sequelize";
-import {
-  type FieldRequestDto,
-  type FieldSearchRequestDto,
-} from "../apiDtos/FieldDtos";
 import Field from "../../database/models/Field";
-import { defaultLimit } from "../../utils/constants";
 
-export async function getFieldById(fieldId: number): Promise<Field | null> {
+export async function getField(fieldId: number): Promise<Field | null> {
   const field = await Field.findOne({
     where: {
       id: fieldId,
     },
-    include: { all: true },
   });
   return field;
 }
 
-export async function getFieldsByOptions(
-  fieldOptions: FieldSearchRequestDto
-): Promise<Field[] | null> {
-  const whereOptions: WhereOptions = {};
-  if (fieldOptions.name !== undefined) {
-    whereOptions.name = {
-      [Op.iLike]: fieldOptions.name,
-    };
-  }
-  if (fieldOptions.tagIds !== undefined) {
-    whereOptions.tags = {
-      [Op.in]: fieldOptions.tagIds.map((id) => +id),
-    };
-  }
-
+export async function getFields(
+  fieldWhereOptions: WhereOptions<Attributes<Field>>,
+  limit: number,
+  offset: number
+): Promise<Field[]> {
   const findOptions: FindOptions = {
-    offset: +(fieldOptions.offset ?? 0),
-    limit: +(fieldOptions.limit ?? defaultLimit),
-    where: whereOptions,
-    include: { all: true },
+    limit: +limit,
+    offset: +offset,
+    where: fieldWhereOptions,
   };
 
   const fields = await Field.findAll(findOptions);
@@ -48,48 +30,7 @@ export async function getFieldsByOptions(
   return fields;
 }
 
-export async function createFieldFromDto(
-  fieldDto: FieldRequestDto
-): Promise<Field | null> {
-  const createOptions: CreationAttributes<Field> = {
-    name: fieldDto.name ?? "",
-    FieldTypeId: fieldDto.fieldTypeId,
-  };
-
-  const field = await Field.create(createOptions);
-
-  if (fieldDto.tagIds !== undefined) {
-    await field.setTags(fieldDto.tagIds);
-  }
-
-  await field.loadAssociatedIds();
-
-  return field;
-}
-
-export async function updateFieldFromDto(
-  id: number,
-  fieldDto: FieldRequestDto
-): Promise<Field | null> {
-  const field = await Field.findOne({
-    where: {
-      id,
-    },
-  });
-  if (field === null) {
-    return null;
-  }
-  const updateOptions: CreationAttributes<Field> = {
-    name: fieldDto.name ?? "",
-    FieldTypeId: fieldDto.fieldTypeId,
-  };
-  await field.update(updateOptions);
-
-  if (fieldDto.tagIds !== undefined) {
-    await field.setTags(fieldDto.tagIds);
-  }
-
-  await field.loadAssociatedIds();
-
+export async function createOrUpdateField(fieldModel: Field): Promise<Field> {
+  const field = await fieldModel.save();
   return field;
 }
