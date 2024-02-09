@@ -39,7 +39,6 @@ export async function getAccounts(
   };
 
   const accounts = await Account.findAll(findOptions);
-  console.log(accounts);
   return accounts;
 }
 

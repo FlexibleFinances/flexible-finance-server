@@ -89,10 +89,7 @@ export class FieldTypeResponseDto {
 
     const parentFieldTypeComponent =
       await fieldType.getParentFieldTypeComponent();
-    if (
-      parentFieldTypeComponent !== undefined &&
-      parentFieldTypeComponent !== null
-    ) {
+    if (parentFieldTypeComponent != null) {
       this.parentFieldTypeComponent = new FieldTypeComponentResponseDto(
         parentFieldTypeComponent
       );

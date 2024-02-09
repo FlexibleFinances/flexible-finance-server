@@ -83,11 +83,7 @@ export class FieldDatum extends Model<
           FieldId: fieldValue.fieldId,
         };
         const fieldDatumId = fieldValue.fieldDatumId;
-        if (
-          fieldDatumId !== undefined &&
-          fieldDatumId !== null &&
-          !isNaN(+fieldDatumId)
-        ) {
+        if (fieldDatumId != null && !isNaN(+fieldDatumId)) {
           upsertFieldDataOptions.id = fieldDatumId;
         }
         if (accountId !== undefined) {
@@ -182,7 +178,7 @@ export function initializeFieldDatum(sequelize: Sequelize): void {
             this.TransactionId,
           ];
           const nonNullCount = objectList.reduce((prevValue, currValue) => {
-            if (currValue === null || currValue === undefined) {
+            if (currValue == null) {
               prevValue = (prevValue as number) - 1;
             }
             return prevValue;

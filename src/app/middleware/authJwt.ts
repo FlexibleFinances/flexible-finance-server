@@ -13,7 +13,7 @@ function verifyToken(
 ): void {
   let token = req.headers.authorization;
 
-  if (token === undefined || token === null || typeof token !== "string") {
+  if (token == null || typeof token !== "string") {
     res.status(403).send({
       message: "No token provided!",
     });

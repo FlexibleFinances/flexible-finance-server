@@ -25,7 +25,6 @@ export function signup(req: express.Request, res: express.Response): void {
     password: bcrypt.hashSync(req.body.password as string, 8),
   })
     .then((user) => {
-      console.log("user: ", user);
       if (req.body.roles != null) {
         void Role.findAll({
           where: {
@@ -34,21 +33,18 @@ export function signup(req: express.Request, res: express.Response): void {
             },
           },
         }).then((roles) => {
-          console.log("roles", roles);
           void user.setRoles(roles).then(() => {
             res.status(200).send({ message: "User registered successfully!" });
           });
         });
       } else {
-        console.log("role 1");
         // user role = 1
         void Role.findOne({
           where: {
             name: "user",
           },
         }).then((role) => {
-          if (role !== undefined && role !== null) {
-            console.log("role", role);
+          if (role != null) {
             void user.setRoles([role]).then(() => {
               res
                 .status(200)

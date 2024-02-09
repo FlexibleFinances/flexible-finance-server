@@ -58,8 +58,6 @@ export async function createTransaction(
   const transactionResponseDto = new TransactionResponseDto(transaction);
   await transactionResponseDto.loadAssociations(transaction);
 
-  console.log(transactionResponseDto);
-
   res.status(200).send({
     message: "Transaction created.",
     transaction: transactionResponseDto,

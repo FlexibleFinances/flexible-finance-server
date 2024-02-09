@@ -104,7 +104,7 @@ export class TransactionResponseDto {
     });
 
     const recipientTransactor = await transaction.getRecipientTransactor();
-    if (recipientTransactor === undefined || recipientTransactor === null) {
+    if (recipientTransactor == null) {
       throw new Error("Transaction does not have a Recipient Transactor");
     }
     if (recipientTransactor.TransactorTypeId === transactorTypeEnum.Account) {
@@ -124,7 +124,7 @@ export class TransactionResponseDto {
     }
 
     const sourceTransactor = await transaction.getSourceTransactor();
-    if (sourceTransactor === undefined || sourceTransactor === null) {
+    if (sourceTransactor == null) {
       throw new Error("Transaction does not have a Source Transactor");
     }
     if (sourceTransactor.TransactorTypeId === transactorTypeEnum.Account) {
@@ -150,7 +150,7 @@ export class TransactionResponseDto {
     });
 
     const transactionTemplate = await transaction.getTemplate();
-    if (transactionTemplate === undefined || transactionTemplate === null) {
+    if (transactionTemplate == null) {
       throw new Error("Must have template.");
     }
     const transactionTemplateDto = new TransactionTemplateResponseDto(

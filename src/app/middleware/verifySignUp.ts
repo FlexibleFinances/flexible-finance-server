@@ -52,7 +52,7 @@ function checkRolesExisted(
   res: express.Response,
   next: express.NextFunction
 ): void {
-  if (req.body.roles !== undefined && req.body.roles !== null) {
+  if (req.body.roles != null) {
     for (let i = 0; i < req.body.roles.length; i++) {
       if (!ROLES.includes(req.body.roles[i] as string)) {
         res.status(400).send({
