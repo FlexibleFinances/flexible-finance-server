@@ -23,11 +23,11 @@ export async function getFieldComponents(
   const whereOptions: WhereOptions<Attributes<FieldComponent>> = {};
 
   const searchLimit =
-    fieldComponentSearchDto.limit !== undefined
+    fieldComponentSearchDto.limit != null
       ? +fieldComponentSearchDto.limit
       : defaultLimit;
   const searchOffset =
-    fieldComponentSearchDto.offset !== undefined
+    fieldComponentSearchDto.offset != null
       ? +fieldComponentSearchDto.offset
       : 0;
 
@@ -57,7 +57,7 @@ export async function updateFieldComponentFromDto(
   fieldComponentDto: FieldComponentRequestDto
 ): Promise<FieldComponent | null> {
   const fieldComponentModel = await getFieldComponent(id);
-  if (fieldComponentModel === null) {
+  if (fieldComponentModel == null) {
     return null;
   }
 

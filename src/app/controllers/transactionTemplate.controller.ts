@@ -16,7 +16,7 @@ export async function getTransactionTemplate(
     Number(req.params.id)
   );
 
-  if (transactionTemplate === null) {
+  if (transactionTemplate == null) {
     res.status(500).send({
       message: "Transaction not found.",
     });
@@ -39,7 +39,7 @@ export async function createTransactionTemplate(
   res: TransactionTemplateResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -49,7 +49,7 @@ export async function createTransactionTemplate(
   const transactionTemplate =
     await TransactionService.createTransactionTemplateFromDto(requestBody);
 
-  if (transactionTemplate === null) {
+  if (transactionTemplate == null) {
     res.status(500).send({
       message: "Transaction Template not created.",
     });
@@ -72,7 +72,7 @@ export async function updateTransactionTemplate(
   res: TransactionTemplateResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -89,7 +89,7 @@ export async function updateTransactionTemplate(
       requestBody
     );
 
-  if (transactionTemplate === null) {
+  if (transactionTemplate == null) {
     res.status(500).send({
       message: "Transaction Template not found.",
     });
@@ -117,7 +117,7 @@ export async function getTransactionTemplates(
     requestQuery
   );
 
-  if (transactionTemplates === null) {
+  if (transactionTemplates == null) {
     res.status(500).send({
       message: "Transaction Templates not found.",
     });

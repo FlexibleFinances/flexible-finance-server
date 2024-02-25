@@ -73,7 +73,7 @@ export class AccountResponseDto {
     this.isTemplate = account.isTemplate;
     this.name = account.name;
     this.parentGroupId = account.ParentGroupId ?? null;
-    if (account.TemplateId !== undefined) {
+    if (account.TemplateId != null) {
       this.templateId = account.TemplateId;
     } else {
       throw new Error("Must have a template.");
@@ -91,7 +91,7 @@ export class AccountResponseDto {
       this.fieldDatumIds.push(fieldDatum.id);
     });
 
-    if (this.parentGroupId !== null) {
+    if (this.parentGroupId != null) {
       this.parentGroup = new GroupResponseDto(await account.getParentGroup());
     }
 

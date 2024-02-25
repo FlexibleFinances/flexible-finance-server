@@ -17,26 +17,26 @@ export async function getGroups(
   groupSearchDto: GroupSearchRequestDto
 ): Promise<Group[]> {
   const whereOptions: WhereOptions<Attributes<Group>> = {};
-  if (groupSearchDto.name !== undefined) {
+  if (groupSearchDto.name != null) {
     whereOptions.name = {
       [Op.iLike]: groupSearchDto.name,
     };
   }
-  if (groupSearchDto.parentGroupIds !== undefined) {
+  if (groupSearchDto.parentGroupIds != null) {
     whereOptions.ParentGroupId = {
       [Op.in]: groupSearchDto.parentGroupIds.map((id) => +id),
     };
   }
-  if (groupSearchDto.tagIds !== undefined) {
+  if (groupSearchDto.tagIds != null) {
     whereOptions.TagIds = {
       [Op.overlap]: groupSearchDto.tagIds.map((id) => +id),
     };
   }
 
   const searchLimit =
-    groupSearchDto.limit !== undefined ? +groupSearchDto.limit : defaultLimit;
+    groupSearchDto.limit != null ? +groupSearchDto.limit : defaultLimit;
   const searchOffset =
-    groupSearchDto.offset !== undefined ? +groupSearchDto.offset : 0;
+    groupSearchDto.offset != null ? +groupSearchDto.offset : 0;
 
   const groups = await GroupRepository.getGroups(
     whereOptions,
@@ -66,7 +66,7 @@ export async function updateGroupFromDto(
   groupDto: GroupRequestDto
 ): Promise<Group | null> {
   const groupModel = await getGroup(id);
-  if (groupModel === null) {
+  if (groupModel == null) {
     return null;
   }
 

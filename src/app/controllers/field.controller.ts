@@ -14,7 +14,7 @@ export async function getField(
 ): Promise<void> {
   const field = await FieldService.getField(Number(req.params.id));
 
-  if (field === null) {
+  if (field == null) {
     res.status(500).send({
       message: "Field not found.",
     });
@@ -35,7 +35,7 @@ export async function createField(
   res: FieldResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -44,7 +44,7 @@ export async function createField(
 
   const field = await FieldService.createFieldFromDto(requestBody);
 
-  if (field === null) {
+  if (field == null) {
     res.status(500).send({
       message: "Field not created.",
     });
@@ -65,7 +65,7 @@ export async function updateField(
   res: FieldResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -88,7 +88,7 @@ export async function updateField(
     requestBody
   );
 
-  if (field === null) {
+  if (field == null) {
     res.status(500).send({
       message: "Field not found.",
     });
@@ -112,7 +112,7 @@ export async function getFields(
 
   const fields = await FieldService.getFields(requestQuery);
 
-  if (fields === null) {
+  if (fields == null) {
     res.status(500).send({
       message: "Fields not found.",
     });

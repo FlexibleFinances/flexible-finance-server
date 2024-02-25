@@ -6,13 +6,13 @@ import path from "path";
 dotenv.config();
 
 let devDB = "";
-if (process.env.DEV_DATABASE_URL !== undefined) {
+if (process.env.DEV_DATABASE_URL != null) {
   devDB = process.env.DEV_DATABASE_URL;
 }
 
 export async function initializeSequelize(): Promise<Sequelize> {
   let sequelize: Sequelize;
-  if (process.env.DATABASE_URL !== undefined) {
+  if (process.env.DATABASE_URL != null) {
     sequelize = new Sequelize(process.env.DATABASE_URL, {
       dialect: "postgres",
       dialectOptions: {

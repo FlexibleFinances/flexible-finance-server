@@ -11,7 +11,7 @@ import { hasRequestArguments } from "../../utils/helperFunctions";
 export async function getTag(req: TagRequest, res: TagResponse): Promise<void> {
   const tag = await TagService.getTag(Number(req.params.id));
 
-  if (tag === null) {
+  if (tag == null) {
     res.status(500).send({
       message: "Tag not found.",
     });
@@ -31,7 +31,7 @@ export async function createTag(
   res: TagResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -40,7 +40,7 @@ export async function createTag(
 
   const tag = await TagService.createTagFromDto(requestBody);
 
-  if (tag === null) {
+  if (tag == null) {
     res.status(500).send({
       message: "Tag not created.",
     });
@@ -60,7 +60,7 @@ export async function updateTag(
   res: TagResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -76,7 +76,7 @@ export async function updateTag(
     requestBody
   );
 
-  if (tag === null) {
+  if (tag == null) {
     res.status(500).send({
       message: "Tag not found.",
     });
@@ -99,7 +99,7 @@ export async function getTags(
 
   const tags = await TagService.getTags(requestQuery);
 
-  if (tags === null) {
+  if (tags == null) {
     res.status(500).send({
       message: "Tags not found.",
     });

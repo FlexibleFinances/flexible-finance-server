@@ -19,9 +19,8 @@ export async function getUsers(
   const whereOptions: WhereOptions<Attributes<User>> = {};
 
   const searchLimit =
-    userSearchDto.limit !== undefined ? +userSearchDto.limit : defaultLimit;
-  const searchOffset =
-    userSearchDto.offset !== undefined ? +userSearchDto.offset : 0;
+    userSearchDto.limit != null ? +userSearchDto.limit : defaultLimit;
+  const searchOffset = userSearchDto.offset != null ? +userSearchDto.offset : 0;
 
   const users = await UserRepository.getUsers(
     whereOptions,
@@ -48,7 +47,7 @@ export async function updateUserFromDto(
   userDto: UserRequestDto
 ): Promise<User | null> {
   const userModel = await getUser(id);
-  if (userModel === null) {
+  if (userModel == null) {
     return null;
   }
 

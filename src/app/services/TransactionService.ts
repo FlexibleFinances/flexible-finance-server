@@ -36,45 +36,43 @@ export async function getTransactions(
   const whereOptions: WhereOptions<Attributes<Transaction>> = {
     isTemplate: false,
   };
-  if (transactionSearchDto.fieldIds !== undefined) {
+  if (transactionSearchDto.fieldIds != null) {
     whereOptions.FieldIds = {
       [Op.overlap]: transactionSearchDto.fieldIds.map((id) => +id),
     };
   }
-  if (transactionSearchDto.fieldDatumIds !== undefined) {
+  if (transactionSearchDto.fieldDatumIds != null) {
     whereOptions.FieldDatumIds = {
       [Op.overlap]: transactionSearchDto.fieldDatumIds.map((id) => +id),
     };
   }
-  if (transactionSearchDto.recipientTransactorIds !== undefined) {
+  if (transactionSearchDto.recipientTransactorIds != null) {
     whereOptions.RecipientTransactorId = {
       [Op.in]: transactionSearchDto?.recipientTransactorIds?.map((id) => +id),
     };
   }
-  if (transactionSearchDto.sourceTransactorIds !== undefined) {
+  if (transactionSearchDto.sourceTransactorIds != null) {
     whereOptions.SourceTransactorId = {
       [Op.in]: transactionSearchDto?.sourceTransactorIds?.map((id) => +id),
     };
   }
-  if (transactionSearchDto.tagIds !== undefined) {
+  if (transactionSearchDto.tagIds != null) {
     whereOptions.TagIds = {
       [Op.overlap]: transactionSearchDto.tagIds.map((id) => +id),
     };
   }
-  if (transactionSearchDto.templateIds !== undefined) {
+  if (transactionSearchDto.templateIds != null) {
     whereOptions.TemplateId = {
       [Op.in]: transactionSearchDto?.templateIds?.map((id) => +id),
     };
   }
 
   const searchLimit =
-    transactionSearchDto.limit !== undefined
+    transactionSearchDto.limit != null
       ? +transactionSearchDto.limit
       : defaultLimit;
   const searchOffset =
-    transactionSearchDto.offset !== undefined
-      ? +transactionSearchDto.offset
-      : 0;
+    transactionSearchDto.offset != null ? +transactionSearchDto.offset : 0;
 
   const transactions = await TransactionRepository.getTransactions(
     whereOptions,
@@ -91,47 +89,47 @@ export async function getTransactionTemplates(
   const whereOptions: WhereOptions<Attributes<Transaction>> = {
     isTemplate: true,
   };
-  if (transactionTemplateSearchDto.fieldIds !== undefined) {
+  if (transactionTemplateSearchDto.fieldIds != null) {
     whereOptions.FieldIds = {
       [Op.overlap]: transactionTemplateSearchDto.fieldIds.map((id) => +id),
     };
   }
-  if (transactionTemplateSearchDto.fieldDatumIds !== undefined) {
+  if (transactionTemplateSearchDto.fieldDatumIds != null) {
     whereOptions.FieldDatumIds = {
       [Op.overlap]: transactionTemplateSearchDto.fieldDatumIds.map((id) => +id),
     };
   }
-  if (transactionTemplateSearchDto.name !== undefined) {
+  if (transactionTemplateSearchDto.name != null) {
     whereOptions.name = {
       [Op.iLike]: transactionTemplateSearchDto.name,
     };
   }
-  if (transactionTemplateSearchDto.recipientTransactorIds !== undefined) {
+  if (transactionTemplateSearchDto.recipientTransactorIds != null) {
     whereOptions.RecipientTransactorId = {
       [Op.in]: transactionTemplateSearchDto?.recipientTransactorIds?.map(
         (id) => +id
       ),
     };
   }
-  if (transactionTemplateSearchDto.sourceTransactorIds !== undefined) {
+  if (transactionTemplateSearchDto.sourceTransactorIds != null) {
     whereOptions.SourceTransactorId = {
       [Op.in]: transactionTemplateSearchDto?.sourceTransactorIds?.map(
         (id) => +id
       ),
     };
   }
-  if (transactionTemplateSearchDto.tagIds !== undefined) {
+  if (transactionTemplateSearchDto.tagIds != null) {
     whereOptions.TagIds = {
       [Op.overlap]: transactionTemplateSearchDto.tagIds.map((id) => +id),
     };
   }
 
   const searchLimit =
-    transactionTemplateSearchDto.limit !== undefined
+    transactionTemplateSearchDto.limit != null
       ? +transactionTemplateSearchDto.limit
       : defaultLimit;
   const searchOffset =
-    transactionTemplateSearchDto.offset !== undefined
+    transactionTemplateSearchDto.offset != null
       ? +transactionTemplateSearchDto.offset
       : 0;
 
@@ -200,11 +198,11 @@ export async function updateTransactionFromDto(
   transactionDto: TransactionRequestDto
 ): Promise<Transaction | null> {
   const transactionModel = await getTransaction(id);
-  if (transactionModel === null) {
+  if (transactionModel == null) {
     return null;
   }
 
-  if (transactionDto.templateId !== transactionModel.Template.id) {
+  if (transactionDto.templateId !== transactionModel.TemplateId) {
     await FieldDatumService.deleteFieldDataByTransactionId(id);
   }
 
@@ -235,7 +233,7 @@ export async function updateTransactionTemplateFromDto(
   transactionTemplateDto: TransactionTemplateRequestDto
 ): Promise<Transaction | null> {
   const transactionTemplateModel = await getTransactionTemplate(id);
-  if (transactionTemplateModel === null) {
+  if (transactionTemplateModel == null) {
     return null;
   }
 

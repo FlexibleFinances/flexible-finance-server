@@ -14,7 +14,7 @@ export async function getUser(
 ): Promise<void> {
   const user = await UserService.getUser(Number(req.params.id));
 
-  if (user === null) {
+  if (user == null) {
     res.status(500).send({
       message: "User not found.",
     });
@@ -35,7 +35,7 @@ export async function createUser(
   res: UserResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -44,7 +44,7 @@ export async function createUser(
 
   const user = await UserService.createUserFromDto(requestBody);
 
-  if (user === null) {
+  if (user == null) {
     res.status(500).send({
       message: "User not created.",
     });
@@ -65,7 +65,7 @@ export async function updateUser(
   res: UserResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -83,7 +83,7 @@ export async function updateUser(
     requestBody
   );
 
-  if (user === null) {
+  if (user == null) {
     res.status(500).send({
       message: "User not found.",
     });
@@ -107,7 +107,7 @@ export async function getUsers(
 
   const users = await UserService.getUsers(requestQuery);
 
-  if (users === null) {
+  if (users == null) {
     res.status(500).send({
       message: "Users not found.",
     });

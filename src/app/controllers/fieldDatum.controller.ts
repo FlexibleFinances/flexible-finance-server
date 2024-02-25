@@ -16,7 +16,7 @@ export async function getFieldDatum(
     Number(req.params.id)
   );
 
-  if (fieldDatum === null) {
+  if (fieldDatum == null) {
     res.status(500).send({
       message: "FieldDatum not found.",
     });
@@ -37,7 +37,7 @@ export async function createFieldDatum(
   res: FieldDatumResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -48,7 +48,7 @@ export async function createFieldDatum(
     requestBody
   );
 
-  if (fieldDatum === null) {
+  if (fieldDatum == null) {
     res.status(500).send({
       message: "FieldDatum not created.",
     });
@@ -69,7 +69,7 @@ export async function updateFieldDatum(
   res: FieldDatumResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -87,7 +87,7 @@ export async function updateFieldDatum(
     requestBody
   );
 
-  if (fieldDatum === null) {
+  if (fieldDatum == null) {
     res.status(500).send({
       message: "FieldDatum not found.",
     });
@@ -111,7 +111,7 @@ export async function getFieldData(
 
   const fieldData = await FieldDatumService.getFieldData(requestQuery);
 
-  if (fieldData === null) {
+  if (fieldData == null) {
     res.status(500).send({
       message: "FieldData not found.",
     });

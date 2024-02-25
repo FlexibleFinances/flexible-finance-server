@@ -90,7 +90,7 @@ export class FieldResponseDto {
     });
 
     const fieldType = await field.getFieldType();
-    if (fieldType === undefined) {
+    if (fieldType == null) {
       throw new Error("Must have a field type.");
     }
     this.fieldType = new FieldTypeResponseDto(fieldType);

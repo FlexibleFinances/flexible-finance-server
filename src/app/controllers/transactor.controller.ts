@@ -19,7 +19,7 @@ export async function getTransactor(
 ): Promise<void> {
   const transactor = await getTransactorById(Number(req.params.id));
 
-  if (transactor === null) {
+  if (transactor == null) {
     res.status(500).send({
       message: "Transactor not found.",
     });
@@ -37,7 +37,7 @@ export async function createTransactor(
   res: TransactorResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -46,7 +46,7 @@ export async function createTransactor(
 
   const transactor = await createTransactorFromDto(requestBody);
 
-  if (transactor === null) {
+  if (transactor == null) {
     res.status(500).send({
       message: "Transactor not created.",
     });
@@ -64,7 +64,7 @@ export async function updateTransactor(
   res: TransactorResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -80,7 +80,7 @@ export async function updateTransactor(
     requestBody
   );
 
-  if (transactor === null) {
+  if (transactor == null) {
     res.status(500).send({
       message: "Transactor not found.",
     });
@@ -101,7 +101,7 @@ export async function getTransactors(
 
   const transactors = await getTransactorsByOptions(requestQuery);
 
-  if (transactors === null) {
+  if (transactors == null) {
     res.status(500).send({
       message: "Transactors not found.",
     });

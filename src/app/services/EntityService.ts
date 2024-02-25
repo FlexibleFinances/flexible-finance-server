@@ -35,41 +35,41 @@ export async function getEntities(
   const whereOptions: WhereOptions<Attributes<Entity>> = {
     isTemplate: false,
   };
-  if (entitySearchDto.fieldIds !== undefined) {
+  if (entitySearchDto.fieldIds != null) {
     whereOptions.FieldIds = {
       [Op.overlap]: entitySearchDto.fieldIds.map((id) => +id),
     };
   }
-  if (entitySearchDto.fieldDatumIds !== undefined) {
+  if (entitySearchDto.fieldDatumIds != null) {
     whereOptions.FieldDatumIds = {
       [Op.overlap]: entitySearchDto.fieldDatumIds.map((id) => +id),
     };
   }
-  if (entitySearchDto.name !== undefined) {
+  if (entitySearchDto.name != null) {
     whereOptions.name = {
       [Op.iLike]: entitySearchDto.name,
     };
   }
-  if (entitySearchDto.parentGroupIds !== undefined) {
+  if (entitySearchDto.parentGroupIds != null) {
     whereOptions.ParentGroupId = {
       [Op.in]: entitySearchDto.parentGroupIds.map((id) => +id),
     };
   }
-  if (entitySearchDto.tagIds !== undefined) {
+  if (entitySearchDto.tagIds != null) {
     whereOptions.TagIds = {
       [Op.overlap]: entitySearchDto.tagIds.map((id) => +id),
     };
   }
-  if (entitySearchDto.templateIds !== undefined) {
+  if (entitySearchDto.templateIds != null) {
     whereOptions.TemplateId = {
       [Op.in]: entitySearchDto?.templateIds?.map((id) => +id),
     };
   }
 
   const searchLimit =
-    entitySearchDto.limit !== undefined ? +entitySearchDto.limit : defaultLimit;
+    entitySearchDto.limit != null ? +entitySearchDto.limit : defaultLimit;
   const searchOffset =
-    entitySearchDto.offset !== undefined ? +entitySearchDto.offset : 0;
+    entitySearchDto.offset != null ? +entitySearchDto.offset : 0;
 
   const entities = await EntityRepository.getEntities(
     whereOptions,
@@ -86,38 +86,38 @@ export async function getEntityTemplates(
   const whereOptions: WhereOptions<Attributes<Entity>> = {
     isTemplate: true,
   };
-  if (entityTemplateSearchDto.fieldIds !== undefined) {
+  if (entityTemplateSearchDto.fieldIds != null) {
     whereOptions.FieldIds = {
       [Op.overlap]: entityTemplateSearchDto.fieldIds.map((id) => +id),
     };
   }
-  if (entityTemplateSearchDto.fieldDatumIds !== undefined) {
+  if (entityTemplateSearchDto.fieldDatumIds != null) {
     whereOptions.FieldDatumIds = {
       [Op.overlap]: entityTemplateSearchDto.fieldDatumIds.map((id) => +id),
     };
   }
-  if (entityTemplateSearchDto.name !== undefined) {
+  if (entityTemplateSearchDto.name != null) {
     whereOptions.name = {
       [Op.iLike]: entityTemplateSearchDto.name,
     };
   }
-  if (entityTemplateSearchDto.parentGroupIds !== undefined) {
+  if (entityTemplateSearchDto.parentGroupIds != null) {
     whereOptions.ParentGroupId = {
       [Op.in]: entityTemplateSearchDto.parentGroupIds.map((id) => +id),
     };
   }
-  if (entityTemplateSearchDto.tagIds !== undefined) {
+  if (entityTemplateSearchDto.tagIds != null) {
     whereOptions.TagIds = {
       [Op.overlap]: entityTemplateSearchDto.tagIds.map((id) => +id),
     };
   }
 
   const searchLimit =
-    entityTemplateSearchDto.limit !== undefined
+    entityTemplateSearchDto.limit != null
       ? +entityTemplateSearchDto.limit
       : defaultLimit;
   const searchOffset =
-    entityTemplateSearchDto.offset !== undefined
+    entityTemplateSearchDto.offset != null
       ? +entityTemplateSearchDto.offset
       : 0;
 
@@ -181,11 +181,11 @@ export async function updateEntityFromDto(
   entityDto: EntityRequestDto
 ): Promise<Entity | null> {
   const entityModel = await getEntity(id);
-  if (entityModel === null) {
+  if (entityModel == null) {
     return null;
   }
 
-  if (entityDto.templateId !== entityModel.Template?.id) {
+  if (entityDto.templateId !== entityModel.TemplateId) {
     await FieldDatumService.deleteFieldDataByEntityId(id);
   }
 
@@ -216,7 +216,7 @@ export async function updateEntityTemplateFromDto(
   entityTemplateDto: EntityTemplateRequestDto
 ): Promise<Entity | null> {
   const entityTemplateModel = await getEntityTemplate(id);
-  if (entityTemplateModel === null) {
+  if (entityTemplateModel == null) {
     return null;
   }
 

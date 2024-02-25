@@ -61,14 +61,14 @@ export class FieldComponentResponseDto {
     }
 
     const childField = await fieldComponent.getChildField();
-    if (childField === undefined) {
+    if (childField == null) {
       throw new Error("Must have chlid field.");
     }
     this.childField = new FieldResponseDto(childField);
 
     if (includeParent) {
       const parentField = await fieldComponent.getParentField();
-      if (parentField === undefined) {
+      if (parentField == null) {
         throw new Error("Must have parent field.");
       }
       this.parentField = new FieldResponseDto(parentField);

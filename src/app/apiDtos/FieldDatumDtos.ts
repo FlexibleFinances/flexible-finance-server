@@ -83,7 +83,7 @@ export class FieldDatumResponseDto {
     }
 
     const field = await fieldDatum.getField();
-    if (field === undefined) {
+    if (field == null) {
       throw new Error("Must have field.");
     }
     const fieldDto = new FieldResponseDto(field);

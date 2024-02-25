@@ -14,7 +14,7 @@ export async function getFieldType(
 ): Promise<void> {
   const fieldType = await FieldTypeService.getFieldType(Number(req.params.id));
 
-  if (fieldType === null) {
+  if (fieldType == null) {
     res.status(500).send({
       message: "FieldType not found.",
     });
@@ -35,7 +35,7 @@ export async function createFieldType(
   res: FieldTypeResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -44,7 +44,7 @@ export async function createFieldType(
 
   const fieldType = await FieldTypeService.createFieldTypeFromDto(requestBody);
 
-  if (fieldType === null) {
+  if (fieldType == null) {
     res.status(500).send({
       message: "FieldType not created.",
     });
@@ -65,7 +65,7 @@ export async function updateFieldType(
   res: FieldTypeResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -81,7 +81,7 @@ export async function updateFieldType(
     requestBody
   );
 
-  if (fieldType === null) {
+  if (fieldType == null) {
     res.status(500).send({
       message: "FieldType not found.",
     });
@@ -105,7 +105,7 @@ export async function getFieldTypes(
 
   const fieldTypes = await FieldTypeService.getFieldTypes(requestQuery);
 
-  if (fieldTypes === null) {
+  if (fieldTypes == null) {
     res.status(500).send({
       message: "FieldTypes not found.",
     });

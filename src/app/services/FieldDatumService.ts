@@ -19,33 +19,33 @@ export async function getFieldData(
   fieldDatumSearchDto: FieldDatumSearchRequestDto
 ): Promise<FieldDatum[]> {
   const whereOptions: WhereOptions<Attributes<FieldDatum>> = {};
-  if (fieldDatumSearchDto.fieldIds !== undefined) {
+  if (fieldDatumSearchDto.fieldIds != null) {
     whereOptions.FieldId = {
       [Op.in]: fieldDatumSearchDto.fieldIds.map((id) => +id),
     };
   }
-  if (fieldDatumSearchDto.accountIds !== undefined) {
+  if (fieldDatumSearchDto.accountIds != null) {
     whereOptions.AccountId = {
       [Op.in]: fieldDatumSearchDto.accountIds.map((id) => +id),
     };
   }
-  if (fieldDatumSearchDto.entityIds !== undefined) {
+  if (fieldDatumSearchDto.entityIds != null) {
     whereOptions.EntityId = {
       [Op.in]: fieldDatumSearchDto.entityIds.map((id) => +id),
     };
   }
-  if (fieldDatumSearchDto.transactionIds !== undefined) {
+  if (fieldDatumSearchDto.transactionIds != null) {
     whereOptions.TransactionId = {
       [Op.in]: fieldDatumSearchDto.transactionIds.map((id) => +id),
     };
   }
 
   const searchLimit =
-    fieldDatumSearchDto.limit !== undefined
+    fieldDatumSearchDto.limit != null
       ? +fieldDatumSearchDto.limit
       : defaultLimit;
   const searchOffset =
-    fieldDatumSearchDto.offset !== undefined ? +fieldDatumSearchDto.offset : 0;
+    fieldDatumSearchDto.offset != null ? +fieldDatumSearchDto.offset : 0;
 
   const fieldData = await FieldDatumRepository.getFieldData(
     whereOptions,
@@ -72,7 +72,7 @@ export async function updateFieldDatumFromDto(
   fieldDatumDto: FieldDatumRequestDto
 ): Promise<FieldDatum | null> {
   const fieldDatumModel = await getFieldDatum(id);
-  if (fieldDatumModel === null) {
+  if (fieldDatumModel == null) {
     return null;
   }
 
@@ -100,15 +100,15 @@ export async function createOrUpdateFieldDatum(
   const fieldDataSearchResult = await getFieldData({
     fieldIds: [fieldDatumDto.fieldId.toString()],
     accountIds:
-      fieldDatumDto.accountId === undefined
+      fieldDatumDto.accountId == null
         ? undefined
         : [fieldDatumDto.accountId.toString()],
     entityIds:
-      fieldDatumDto.entityId === undefined
+      fieldDatumDto.entityId == null
         ? undefined
         : [fieldDatumDto.entityId.toString()],
     transactionIds:
-      fieldDatumDto.transactionId === undefined
+      fieldDatumDto.transactionId == null
         ? undefined
         : [fieldDatumDto.transactionId.toString()],
   });

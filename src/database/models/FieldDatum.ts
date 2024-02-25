@@ -67,17 +67,13 @@ export class FieldDatum extends Model<
     entityId?: number,
     transactionId?: number
   ): Promise<FieldDatum[]> {
-    if (
-      accountId === undefined &&
-      entityId === undefined &&
-      transactionId === undefined
-    ) {
+    if (accountId == null && entityId == null && transactionId == null) {
       throw new Error(
         "Could not upsert field data. No account, entity, or transaction ID provided."
       );
     }
     const upsertFieldDataPromises: Array<Promise<FieldDatum>> = [];
-    if (fieldValues !== undefined) {
+    if (fieldValues != null) {
       fieldValues.forEach((fieldValue) => {
         const upsertFieldDataOptions: CreationAttributes<FieldDatum> = {
           FieldId: fieldValue.fieldId,
@@ -86,11 +82,11 @@ export class FieldDatum extends Model<
         if (fieldDatumId != null && !isNaN(+fieldDatumId)) {
           upsertFieldDataOptions.id = fieldDatumId;
         }
-        if (accountId !== undefined) {
+        if (accountId != null) {
           upsertFieldDataOptions.AccountId = accountId;
-        } else if (entityId !== undefined) {
+        } else if (entityId != null) {
           upsertFieldDataOptions.EntityId = entityId;
-        } else if (transactionId !== undefined) {
+        } else if (transactionId != null) {
           upsertFieldDataOptions.TransactionId = transactionId;
         }
         const fieldDatumValue = fieldValue.value;

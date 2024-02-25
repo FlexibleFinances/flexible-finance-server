@@ -75,17 +75,17 @@ export class TransactionResponseDto {
     this.createdAt = transaction.createdAt.toISOString();
     this.updatedAt = transaction.updatedAt.toISOString();
     this.isTemplate = transaction.isTemplate;
-    if (transaction.RecipientTransactorId !== undefined) {
+    if (transaction.RecipientTransactorId != null) {
       this.recipientTransactorId = transaction.RecipientTransactorId;
     } else {
       throw new Error("Must have a recipient transactor.");
     }
-    if (transaction.SourceTransactorId !== undefined) {
+    if (transaction.SourceTransactorId != null) {
       this.sourceTransactorId = transaction.SourceTransactorId;
     } else {
       throw new Error("Must have a source transactor.");
     }
-    if (transaction.TemplateId !== undefined) {
+    if (transaction.TemplateId != null) {
       this.templateId = transaction.TemplateId;
     } else {
       throw new Error("Must have a template.");

@@ -35,43 +35,41 @@ export async function getAccounts(
   const whereOptions: WhereOptions<Attributes<Account>> = {
     isTemplate: false,
   };
-  if (accountSearchDto.fieldIds !== undefined) {
+  if (accountSearchDto.fieldIds != null) {
     whereOptions.FieldIds = {
       [Op.overlap]: accountSearchDto.fieldIds.map((id) => +id),
     };
   }
-  if (accountSearchDto.fieldDatumIds !== undefined) {
+  if (accountSearchDto.fieldDatumIds != null) {
     whereOptions.FieldDatumIds = {
       [Op.overlap]: accountSearchDto.fieldDatumIds.map((id) => +id),
     };
   }
-  if (accountSearchDto.name !== undefined) {
+  if (accountSearchDto.name != null) {
     whereOptions.name = {
       [Op.iLike]: accountSearchDto.name,
     };
   }
-  if (accountSearchDto.parentGroupIds !== undefined) {
+  if (accountSearchDto.parentGroupIds != null) {
     whereOptions.ParentGroupId = {
       [Op.in]: accountSearchDto.parentGroupIds.map((id) => +id),
     };
   }
-  if (accountSearchDto.tagIds !== undefined) {
+  if (accountSearchDto.tagIds != null) {
     whereOptions.TagIds = {
       [Op.overlap]: accountSearchDto.tagIds.map((id) => +id),
     };
   }
-  if (accountSearchDto.templateIds !== undefined) {
+  if (accountSearchDto.templateIds != null) {
     whereOptions.TemplateId = {
       [Op.in]: accountSearchDto?.templateIds?.map((id) => +id),
     };
   }
 
   const searchLimit =
-    accountSearchDto.limit !== undefined
-      ? +accountSearchDto.limit
-      : defaultLimit;
+    accountSearchDto.limit != null ? +accountSearchDto.limit : defaultLimit;
   const searchOffset =
-    accountSearchDto.offset !== undefined ? +accountSearchDto.offset : 0;
+    accountSearchDto.offset != null ? +accountSearchDto.offset : 0;
 
   const accounts = await AccountRepository.getAccounts(
     whereOptions,
@@ -88,38 +86,38 @@ export async function getAccountTemplates(
   const whereOptions: WhereOptions<Attributes<Account>> = {
     isTemplate: true,
   };
-  if (accountTemplateSearchDto.fieldIds !== undefined) {
+  if (accountTemplateSearchDto.fieldIds != null) {
     whereOptions.FieldIds = {
       [Op.overlap]: accountTemplateSearchDto.fieldIds.map((id) => +id),
     };
   }
-  if (accountTemplateSearchDto.fieldDatumIds !== undefined) {
+  if (accountTemplateSearchDto.fieldDatumIds != null) {
     whereOptions.FieldDatumIds = {
       [Op.overlap]: accountTemplateSearchDto.fieldDatumIds.map((id) => +id),
     };
   }
-  if (accountTemplateSearchDto.name !== undefined) {
+  if (accountTemplateSearchDto.name != null) {
     whereOptions.name = {
       [Op.iLike]: accountTemplateSearchDto.name,
     };
   }
-  if (accountTemplateSearchDto.parentGroupIds !== undefined) {
+  if (accountTemplateSearchDto.parentGroupIds != null) {
     whereOptions.ParentGroupId = {
       [Op.in]: accountTemplateSearchDto.parentGroupIds.map((id) => +id),
     };
   }
-  if (accountTemplateSearchDto.tagIds !== undefined) {
+  if (accountTemplateSearchDto.tagIds != null) {
     whereOptions.TagIds = {
       [Op.overlap]: accountTemplateSearchDto.tagIds.map((id) => +id),
     };
   }
 
   const searchLimit =
-    accountTemplateSearchDto.limit !== undefined
+    accountTemplateSearchDto.limit != null
       ? +accountTemplateSearchDto.limit
       : defaultLimit;
   const searchOffset =
-    accountTemplateSearchDto.offset !== undefined
+    accountTemplateSearchDto.offset != null
       ? +accountTemplateSearchDto.offset
       : 0;
 
@@ -183,11 +181,11 @@ export async function updateAccountFromDto(
   accountDto: AccountRequestDto
 ): Promise<Account | null> {
   const accountModel = await getAccount(id);
-  if (accountModel === null) {
+  if (accountModel == null) {
     return null;
   }
 
-  if (accountDto.templateId !== accountModel.Template?.id) {
+  if (accountDto.templateId !== accountModel.TemplateId) {
     await FieldDatumService.deleteFieldDataByAccountId(id);
   }
 
@@ -218,7 +216,7 @@ export async function updateAccountTemplateFromDto(
   accountTemplateDto: AccountTemplateRequestDto
 ): Promise<Account | null> {
   const accountTemplateModel = await getAccountTemplate(id);
-  if (accountTemplateModel === null) {
+  if (accountTemplateModel == null) {
     return null;
   }
 

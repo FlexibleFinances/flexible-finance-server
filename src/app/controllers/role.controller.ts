@@ -14,7 +14,7 @@ export async function getRole(
 ): Promise<void> {
   const role = await RoleService.getRole(Number(req.params.id));
 
-  if (role === null) {
+  if (role == null) {
     res.status(500).send({
       message: "Role not found.",
     });
@@ -35,7 +35,7 @@ export async function createRole(
   res: RoleResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -44,7 +44,7 @@ export async function createRole(
 
   const role = await RoleService.createRoleFromDto(requestBody);
 
-  if (role === null) {
+  if (role == null) {
     res.status(500).send({
       message: "Role not created.",
     });
@@ -65,7 +65,7 @@ export async function updateRole(
   res: RoleResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -81,7 +81,7 @@ export async function updateRole(
     requestBody
   );
 
-  if (role === null) {
+  if (role == null) {
     res.status(500).send({
       message: "Role not found.",
     });
@@ -105,7 +105,7 @@ export async function getRoles(
 
   const roles = await RoleService.getRoles(requestQuery);
 
-  if (roles === null) {
+  if (roles == null) {
     res.status(500).send({
       message: "Roles not found.",
     });

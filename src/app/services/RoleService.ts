@@ -19,9 +19,8 @@ export async function getRoles(
   const whereOptions: WhereOptions<Attributes<Role>> = {};
 
   const searchLimit =
-    roleSearchDto.limit !== undefined ? +roleSearchDto.limit : defaultLimit;
-  const searchOffset =
-    roleSearchDto.offset !== undefined ? +roleSearchDto.offset : 0;
+    roleSearchDto.limit != null ? +roleSearchDto.limit : defaultLimit;
+  const searchOffset = roleSearchDto.offset != null ? +roleSearchDto.offset : 0;
 
   const roles = await RoleRepository.getRoles(
     whereOptions,
@@ -48,7 +47,7 @@ export async function updateRoleFromDto(
   roleDto: RoleRequestDto
 ): Promise<Role | null> {
   const roleModel = await getRole(id);
-  if (roleModel === null) {
+  if (roleModel == null) {
     return null;
   }
 

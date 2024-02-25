@@ -23,23 +23,23 @@ export function hasRequestArguments(
 ): boolean {
   let message = "";
   requiredArguments.body?.forEach((argName: string) => {
-    if (req.body[argName] === undefined) {
+    if (req.body[argName] == null) {
       message = `Missing ${argName} in request body.`;
     }
   });
   requiredArguments.query?.forEach((argName: string) => {
-    if (req.query[argName] === undefined) {
+    if (req.query[argName] == null) {
       message = `Missing ${argName} in request query.`;
     }
   });
   requiredArguments.params?.forEach((argName: string) => {
-    if (req.params[argName] === undefined) {
+    if (req.params[argName] == null) {
       message = `Missing ${argName} in request params.`;
     }
   });
   if (
     minOneArguments?.body?.some((argName: string) => {
-      return req.body[argName] !== undefined;
+      return req.body[argName] != null;
     }) === false
   ) {
     message = `Need at least one of [${minOneArguments.body.join(
@@ -48,7 +48,7 @@ export function hasRequestArguments(
   }
   if (
     minOneArguments?.query?.some((argName: string) => {
-      return req.query[argName] !== undefined;
+      return req.query[argName] != null;
     }) === false
   ) {
     message = `Need at least one of [${minOneArguments.query.join(
@@ -57,17 +57,17 @@ export function hasRequestArguments(
   }
   if (
     minOneArguments?.params?.some((argName: string) => {
-      return req.params[argName] !== undefined;
+      return req.params[argName] != null;
     }) === false
   ) {
     message = `Need at least one of [${minOneArguments.params.join(
       ", "
     )}] in request params.`;
   }
-  if (exactlyOneArguments?.body !== undefined) {
+  if (exactlyOneArguments?.body != null) {
     let paramCount = 0;
     exactlyOneArguments.body.forEach((argName: string) => {
-      if (req.body[argName] !== undefined) {
+      if (req.body[argName] != null) {
         paramCount++;
       }
     });
@@ -77,10 +77,10 @@ export function hasRequestArguments(
       )}] in request body.`;
     }
   }
-  if (exactlyOneArguments?.params !== undefined) {
+  if (exactlyOneArguments?.params != null) {
     let paramCount = 0;
     exactlyOneArguments.params.forEach((argName: string) => {
-      if (req.body[argName] !== undefined) {
+      if (req.body[argName] != null) {
         paramCount++;
       }
     });
@@ -90,10 +90,10 @@ export function hasRequestArguments(
       )}] in request params.`;
     }
   }
-  if (exactlyOneArguments?.query !== undefined) {
+  if (exactlyOneArguments?.query != null) {
     let paramCount = 0;
     exactlyOneArguments.query.forEach((argName: string) => {
-      if (req.body[argName] !== undefined) {
+      if (req.body[argName] != null) {
         paramCount++;
       }
     });
@@ -118,14 +118,14 @@ export function isTemplatedUpsertRequest(
   requiredArguments?: argObject
 ): boolean {
   let message = "";
-  if (isTemplate !== undefined && isTemplate) {
-    if (templateId !== undefined) {
+  if (isTemplate != null && isTemplate) {
+    if (templateId != null) {
       message = "Cannot both be a Template and have a Template.";
     }
   } else {
-    if (templateId === undefined) {
+    if (templateId == null) {
       message = "Must either be a Template or have a Template.";
-    } else if (requiredArguments !== undefined) {
+    } else if (requiredArguments != null) {
       return hasRequestArguments(req, res, requiredArguments);
     }
   }
@@ -195,17 +195,17 @@ export function minimizeAssociationsToIds<
   miniObject.TemplateId = object.TemplateId;
 
   if (object.isTemplate) {
-    if (object.Fields !== undefined) {
+    if (object.Fields != null) {
       miniObject.FieldIds = object.Fields.map((field: Field) => field.id);
     }
   } else {
-    if (object.FieldData !== undefined) {
+    if (object.FieldData != null) {
       miniObject.FieldDatumIds = object.FieldData.map(
         (fieldDatum: FieldDatum) => fieldDatum.id
       );
     }
   }
-  if (object.Tags !== undefined) {
+  if (object.Tags != null) {
     miniObject.TagIds = object.Tags.map((tag: Tag) => tag.id);
   }
 

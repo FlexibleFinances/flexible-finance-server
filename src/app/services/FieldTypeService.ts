@@ -21,33 +21,31 @@ export async function getFieldTypes(
   fieldTypeSearchDto: FieldTypeSearchRequestDto
 ): Promise<FieldType[]> {
   const whereOptions: WhereOptions<Attributes<FieldType>> = {};
-  if (fieldTypeSearchDto.name !== undefined) {
+  if (fieldTypeSearchDto.name != null) {
     whereOptions.name = {
       [Op.iLike]: fieldTypeSearchDto.name,
     };
   }
-  if (fieldTypeSearchDto.tagIds !== undefined) {
+  if (fieldTypeSearchDto.tagIds != null) {
     whereOptions.TagIds = {
       [Op.overlap]: fieldTypeSearchDto.tagIds.map((id) => +id),
     };
   }
-  if (fieldTypeSearchDto.validator !== undefined) {
+  if (fieldTypeSearchDto.validator != null) {
     whereOptions.validator = {
       [Op.iLike]: fieldTypeSearchDto.validator,
     };
   }
-  if (fieldTypeSearchDto.valueType !== undefined) {
+  if (fieldTypeSearchDto.valueType != null) {
     whereOptions.type = {
       [Op.eq]: fieldTypeSearchDto.valueType,
     };
   }
 
   const searchLimit =
-    fieldTypeSearchDto.limit !== undefined
-      ? +fieldTypeSearchDto.limit
-      : defaultLimit;
+    fieldTypeSearchDto.limit != null ? +fieldTypeSearchDto.limit : defaultLimit;
   const searchOffset =
-    fieldTypeSearchDto.offset !== undefined ? +fieldTypeSearchDto.offset : 0;
+    fieldTypeSearchDto.offset != null ? +fieldTypeSearchDto.offset : 0;
 
   const fieldTypes = await FieldTypeRepository.getFieldTypes(
     whereOptions,
@@ -94,7 +92,7 @@ export async function updateFieldTypeFromDto(
   fieldTypeDto: FieldTypeRequestDto
 ): Promise<FieldType | null> {
   const fieldTypeModel = await getFieldType(id);
-  if (fieldTypeModel === null) {
+  if (fieldTypeModel == null) {
     return null;
   }
 

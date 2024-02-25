@@ -73,7 +73,7 @@ export class EntityResponseDto {
     this.isTemplate = entity.isTemplate;
     this.name = entity.name;
     this.parentGroupId = entity.ParentGroupId ?? null;
-    if (entity.TemplateId !== undefined) {
+    if (entity.TemplateId != null) {
       this.templateId = entity.TemplateId;
     } else {
       throw new Error("Must have a template.");
@@ -91,7 +91,7 @@ export class EntityResponseDto {
       this.fieldDatumIds.push(fieldDatum.id);
     });
 
-    if (this.parentGroupId !== null) {
+    if (this.parentGroupId != null) {
       this.parentGroup = new GroupResponseDto(await entity.getParentGroup());
     }
 

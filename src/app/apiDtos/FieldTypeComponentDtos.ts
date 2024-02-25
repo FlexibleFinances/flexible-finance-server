@@ -73,14 +73,14 @@ export class FieldTypeComponentResponseDto {
     }
 
     const childFieldType = await fieldTypeComponent.getChildFieldType();
-    if (childFieldType === undefined) {
+    if (childFieldType == null) {
       throw new Error("Must have child field type.");
     }
     this.childFieldType = new FieldTypeResponseDto(childFieldType);
 
     if (includeParent) {
       const parentFieldType = await fieldTypeComponent.getParentFieldType();
-      if (parentFieldType === undefined) {
+      if (parentFieldType == null) {
         throw new Error("Must have parent field type.");
       }
       this.parentFieldType = new FieldTypeResponseDto(parentFieldType);

@@ -16,7 +16,7 @@ export async function getTransaction(
     Number(req.params.id)
   );
 
-  if (transaction === null) {
+  if (transaction == null) {
     res.status(500).send({
       message: "Transaction not found.",
     });
@@ -37,7 +37,7 @@ export async function createTransaction(
   res: TransactionResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -48,7 +48,7 @@ export async function createTransaction(
     requestBody
   );
 
-  if (transaction === null) {
+  if (transaction == null) {
     res.status(500).send({
       message: "Transaction not created.",
     });
@@ -69,14 +69,21 @@ export async function updateTransaction(
   res: TransactionResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
     return;
   }
 
-  if (!hasRequestArguments(req, res, { params: ["id"] }, { body: ["name"] })) {
+  if (
+    !hasRequestArguments(
+      req,
+      res,
+      { params: ["id"] },
+      { body: ["recipientTransactorId", "sourceTransactorId"] }
+    )
+  ) {
     return;
   }
 
@@ -85,7 +92,7 @@ export async function updateTransaction(
     requestBody
   );
 
-  if (transaction === null) {
+  if (transaction == null) {
     res.status(500).send({
       message: "Transaction not found.",
     });
@@ -109,7 +116,7 @@ export async function getTransactions(
 
   const transactions = await TransactionService.getTransactions(requestQuery);
 
-  if (transactions === null) {
+  if (transactions == null) {
     res.status(500).send({
       message: "Transactions not found.",
     });

@@ -14,7 +14,7 @@ export async function getAccount(
 ): Promise<void> {
   const account = await AccountService.getAccount(Number(req.params.id));
 
-  if (account === null) {
+  if (account == null) {
     res.status(500).send({
       message: "Account not found.",
     });
@@ -35,7 +35,7 @@ export async function createAccount(
   res: AccountResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -44,7 +44,7 @@ export async function createAccount(
 
   const account = await AccountService.createAccountFromDto(requestBody);
 
-  if (account === null) {
+  if (account == null) {
     res.status(500).send({
       message: "Account not created.",
     });
@@ -65,7 +65,7 @@ export async function updateAccount(
   res: AccountResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -88,7 +88,7 @@ export async function updateAccount(
     requestBody
   );
 
-  if (account === null) {
+  if (account == null) {
     res.status(500).send({
       message: "Account not found.",
     });
@@ -112,7 +112,7 @@ export async function getAccounts(
 
   const accounts = await AccountService.getAccounts(requestQuery);
 
-  if (accounts === null) {
+  if (accounts == null) {
     res.status(500).send({
       message: "Accounts not found.",
     });

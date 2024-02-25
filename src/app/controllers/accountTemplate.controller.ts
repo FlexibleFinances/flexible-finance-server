@@ -16,7 +16,7 @@ export async function getAccountTemplate(
     Number(req.params.id)
   );
 
-  if (accountTemplate === null) {
+  if (accountTemplate == null) {
     res.status(500).send({
       message: "Account not found.",
     });
@@ -39,7 +39,7 @@ export async function createAccountTemplate(
   res: AccountTemplateResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -50,7 +50,7 @@ export async function createAccountTemplate(
     requestBody
   );
 
-  if (accountTemplate === null) {
+  if (accountTemplate == null) {
     res.status(500).send({
       message: "Account Template not created.",
     });
@@ -73,7 +73,7 @@ export async function updateAccountTemplate(
   res: AccountTemplateResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -96,7 +96,7 @@ export async function updateAccountTemplate(
     requestBody
   );
 
-  if (accountTemplate === null) {
+  if (accountTemplate == null) {
     res.status(500).send({
       message: "Account Template not found.",
     });
@@ -124,7 +124,7 @@ export async function getAccountTemplates(
     requestQuery
   );
 
-  if (accountTemplates === null) {
+  if (accountTemplates == null) {
     res.status(500).send({
       message: "Account Templates not found.",
     });

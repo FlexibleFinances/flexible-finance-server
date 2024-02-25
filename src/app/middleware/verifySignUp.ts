@@ -8,9 +8,9 @@ function checkDuplicateUsernameOrEmail(
   next: express.NextFunction
 ): void {
   if (
-    req.body.username === undefined ||
-    req.body.email === undefined ||
-    req.body.password === undefined
+    req.body.username == null ||
+    req.body.email == null ||
+    req.body.password == null
   ) {
     res.status(400).send({ message: "Missing a required parameter." });
     return;

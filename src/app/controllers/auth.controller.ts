@@ -86,7 +86,7 @@ export function signin(req: express.Request, res: express.Response): void {
         });
       }
       let authSecret = "";
-      if (process.env.AUTH_SECRET !== undefined) {
+      if (process.env.AUTH_SECRET != null) {
         authSecret = process.env.AUTH_SECRET;
       } else {
         res.status(500).send("Authentication secret is unavailable.");

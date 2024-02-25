@@ -14,7 +14,7 @@ export async function getGroup(
 ): Promise<void> {
   const group = await GroupService.getGroup(Number(req.params.id));
 
-  if (group === null) {
+  if (group == null) {
     res.status(500).send({
       message: "Group not found.",
     });
@@ -35,7 +35,7 @@ export async function createGroup(
   res: GroupResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -44,7 +44,7 @@ export async function createGroup(
 
   const group = await GroupService.createGroupFromDto(requestBody);
 
-  if (group === null) {
+  if (group == null) {
     res.status(500).send({
       message: "Group not created.",
     });
@@ -65,7 +65,7 @@ export async function updateGroup(
   res: GroupResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -88,7 +88,7 @@ export async function updateGroup(
     requestBody
   );
 
-  if (group === null) {
+  if (group == null) {
     res.status(500).send({
       message: "Group not found.",
     });
@@ -112,7 +112,7 @@ export async function getGroups(
 
   const groups = await GroupService.getGroups(requestQuery);
 
-  if (groups === null) {
+  if (groups == null) {
     res.status(500).send({
       message: "Groups not found.",
     });

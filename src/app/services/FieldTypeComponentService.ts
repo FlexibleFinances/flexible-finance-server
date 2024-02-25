@@ -24,11 +24,11 @@ export async function getFieldTypeComponents(
   const whereOptions: WhereOptions<Attributes<FieldTypeComponent>> = {};
 
   const searchLimit =
-    fieldTypeComponentSearchDto.limit !== undefined
+    fieldTypeComponentSearchDto.limit != null
       ? +fieldTypeComponentSearchDto.limit
       : defaultLimit;
   const searchOffset =
-    fieldTypeComponentSearchDto.offset !== undefined
+    fieldTypeComponentSearchDto.offset != null
       ? +fieldTypeComponentSearchDto.offset
       : 0;
 
@@ -61,7 +61,7 @@ export async function updateFieldTypeComponentFromDto(
   fieldTypeComponentDto: FieldTypeComponentRequestDto
 ): Promise<FieldTypeComponent | null> {
   const fieldTypeComponentModel = await getFieldTypeComponent(id);
-  if (fieldTypeComponentModel === null) {
+  if (fieldTypeComponentModel == null) {
     return null;
   }
 

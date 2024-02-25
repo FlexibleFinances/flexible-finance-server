@@ -19,21 +19,21 @@ export async function getFields(
   fieldSearchDto: FieldSearchRequestDto
 ): Promise<Field[]> {
   const whereOptions: WhereOptions<Attributes<Field>> = {};
-  if (fieldSearchDto.name !== undefined) {
+  if (fieldSearchDto.name != null) {
     whereOptions.name = {
       [Op.iLike]: fieldSearchDto.name,
     };
   }
-  if (fieldSearchDto.tagIds !== undefined) {
+  if (fieldSearchDto.tagIds != null) {
     whereOptions.TagIds = {
       [Op.overlap]: fieldSearchDto.tagIds.map((id) => +id),
     };
   }
 
   const searchLimit =
-    fieldSearchDto.limit !== undefined ? +fieldSearchDto.limit : defaultLimit;
+    fieldSearchDto.limit != null ? +fieldSearchDto.limit : defaultLimit;
   const searchOffset =
-    fieldSearchDto.offset !== undefined ? +fieldSearchDto.offset : 0;
+    fieldSearchDto.offset != null ? +fieldSearchDto.offset : 0;
 
   const fields = await FieldRepository.getFields(
     whereOptions,
@@ -71,7 +71,7 @@ export async function updateFieldFromDto(
   fieldDto: FieldRequestDto
 ): Promise<Field | null> {
   const fieldModel = await getField(id);
-  if (fieldModel === null) {
+  if (fieldModel == null) {
     return null;
   }
 

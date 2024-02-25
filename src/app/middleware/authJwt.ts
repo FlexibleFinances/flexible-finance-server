@@ -28,7 +28,7 @@ function verifyToken(
   }
   token = tokenParts[1];
 
-  if (process.env.AUTH_SECRET === undefined) {
+  if (process.env.AUTH_SECRET == null) {
     res.status(500).send("Authentication secret is unavailable.");
     return;
   }
@@ -53,7 +53,7 @@ async function isAdmin(
   res: express.Response,
   next: express.NextFunction
 ): Promise<void> {
-  if (req.body.tokenUserId === undefined) {
+  if (req.body.tokenUserId == null) {
     res
       .status(500)
       .send({ message: "Did not decode access token into user ID." });
@@ -81,7 +81,7 @@ async function isSelf(
   res: express.Response,
   next: express.NextFunction
 ): Promise<void> {
-  if (req.body.tokenUserId === undefined) {
+  if (req.body.tokenUserId == null) {
     res
       .status(500)
       .send({ message: "Did not decode access token into user ID." });

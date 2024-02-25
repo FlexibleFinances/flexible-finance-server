@@ -16,7 +16,7 @@ export async function getEntityTemplate(
     Number(req.params.id)
   );
 
-  if (entityTemplate === null) {
+  if (entityTemplate == null) {
     res.status(500).send({
       message: "Entity not found.",
     });
@@ -39,7 +39,7 @@ export async function createEntityTemplate(
   res: EntityTemplateResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -50,7 +50,7 @@ export async function createEntityTemplate(
     requestBody
   );
 
-  if (entityTemplate === null) {
+  if (entityTemplate == null) {
     res.status(500).send({
       message: "Entity Template not created.",
     });
@@ -73,7 +73,7 @@ export async function updateEntityTemplate(
   res: EntityTemplateResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -96,7 +96,7 @@ export async function updateEntityTemplate(
     requestBody
   );
 
-  if (entityTemplate === null) {
+  if (entityTemplate == null) {
     res.status(500).send({
       message: "Entity Template not found.",
     });
@@ -122,7 +122,7 @@ export async function getEntityTemplates(
 
   const entityTemplates = await EntityService.getEntityTemplates(requestQuery);
 
-  if (entityTemplates === null) {
+  if (entityTemplates == null) {
     res.status(500).send({
       message: "Entity Templates not found.",
     });

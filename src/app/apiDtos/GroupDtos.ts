@@ -92,7 +92,7 @@ export class GroupResponseDto {
       this.entityIds.push(entity.id);
     });
 
-    if (this.parentGroupId !== null) {
+    if (this.parentGroupId != null) {
       this.parentGroup = new GroupResponseDto(await group.getParentGroup());
     }
 

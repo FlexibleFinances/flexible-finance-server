@@ -14,7 +14,7 @@ export async function getEntity(
 ): Promise<void> {
   const entity = await EntityService.getEntity(Number(req.params.id));
 
-  if (entity === null) {
+  if (entity == null) {
     res.status(500).send({
       message: "Entity not found.",
     });
@@ -35,7 +35,7 @@ export async function createEntity(
   res: EntityResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -44,7 +44,7 @@ export async function createEntity(
 
   const entity = await EntityService.createEntityFromDto(requestBody);
 
-  if (entity === null) {
+  if (entity == null) {
     res.status(500).send({
       message: "Entity not created.",
     });
@@ -65,7 +65,7 @@ export async function updateEntity(
   res: EntityResponse
 ): Promise<void> {
   const requestBody = req.body;
-  if (requestBody === undefined) {
+  if (requestBody == null) {
     res.status(500).send({
       message: "Request not valid.",
     });
@@ -88,7 +88,7 @@ export async function updateEntity(
     requestBody
   );
 
-  if (entity === null) {
+  if (entity == null) {
     res.status(500).send({
       message: "Entity not found.",
     });
@@ -112,7 +112,7 @@ export async function getEntities(
 
   const entities = await EntityService.getEntities(requestQuery);
 
-  if (entities === null) {
+  if (entities == null) {
     res.status(500).send({
       message: "Entities not found.",
     });

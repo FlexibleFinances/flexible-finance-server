@@ -59,7 +59,7 @@ export async function updateTransactorFromDto(
       id,
     },
   });
-  if (transactor === null) {
+  if (transactor == null) {
     return null;
   }
   const updateOptions: CreationAttributes<Transactor> = {
