@@ -80,10 +80,13 @@ export class AccountTemplateResponseDto {
     }
 
     const fields = await accountTemplate.getFields();
-    fields?.forEach((field) => {
-      this.fields.push(new FieldResponseDto(field));
+    const fieldDtoPromises = fields?.map(async (field) => {
+      const fieldDto = new FieldResponseDto(field);
+      await fieldDto.loadAssociations(field);
+      this.fields.push(fieldDto);
       this.fieldIds.push(field.id);
     });
+    await Promise.all(fieldDtoPromises);
 
     const fieldData = await accountTemplate.getFieldData();
     fieldData?.forEach((fieldDatum) => {
@@ -91,7 +94,7 @@ export class AccountTemplateResponseDto {
       this.fieldDatumIds.push(fieldDatum.id);
     });
 
-    if (this.parentGroupId !== null) {
+    if (this.parentGroupId != null) {
       this.parentGroup = new GroupResponseDto(
         await accountTemplate.getParentGroup()
       );

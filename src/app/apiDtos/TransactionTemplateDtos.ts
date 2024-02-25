@@ -90,10 +90,13 @@ export class TransactionTemplateResponseDto {
     }
 
     const fields = await transactionTemplate.getFields();
-    fields?.forEach((field) => {
-      this.fields.push(new FieldResponseDto(field));
+    const fieldDtoPromises = fields?.map(async (field) => {
+      const fieldDto = new FieldResponseDto(field);
+      await fieldDto.loadAssociations(field);
+      this.fields.push(fieldDto);
       this.fieldIds.push(field.id);
     });
+    await Promise.all(fieldDtoPromises);
 
     const fieldData = await transactionTemplate.getFieldData();
     fieldData?.forEach((fieldDatum) => {
@@ -101,7 +104,7 @@ export class TransactionTemplateResponseDto {
       this.fieldDatumIds.push(fieldDatum.id);
     });
 
-    if (this.recipientTransactorId !== null) {
+    if (this.recipientTransactorId != null) {
       const recipientTransactor =
         await transactionTemplate.getRecipientTransactor();
       if (recipientTransactor.TransactorTypeId === transactorTypeEnum.Account) {
@@ -121,7 +124,7 @@ export class TransactionTemplateResponseDto {
       }
     }
 
-    if (this.sourceTransactorId !== null) {
+    if (this.sourceTransactorId != null) {
       const sourceTransactor = await transactionTemplate.getSourceTransactor();
       if (sourceTransactor.TransactorTypeId === transactorTypeEnum.Account) {
         const sourceAccount = await sourceTransactor.getAccount();

@@ -41,8 +41,6 @@ TransactionSchema:
       items:
         type: integer
       type: array
-    name:
-      type: string
     recipientTransactor:
       $ref: "../../openapi.root.yml#/components/schemas/Transactor"
       readOnly: true

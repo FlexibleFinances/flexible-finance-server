@@ -55,7 +55,7 @@ export class Account extends Model<
   declare Tags: NonAttribute<Tag[]>;
 
   declare TemplateId?: number;
-  declare Template?: NonAttribute<Account>;
+  declare Template: NonAttribute<Account>;
 
   declare TransactorTypeId: CreationOptional<number>;
 

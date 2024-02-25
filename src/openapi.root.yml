@@ -285,7 +285,7 @@ components:
       $ref: ./app/routes/transaction.openapi.yml#/TransactionsResponse
     TransactionTemplate:
       $ref: ./app/routes/transactionTemplate.openapi.yml#/TransactionTemplateResponse
-    TransactionsTemplates:
+    TransactionTemplates:
       $ref: ./app/routes/transactionTemplate.openapi.yml#/TransactionTemplatesResponse
     User:
       $ref: ./app/routes/user.openapi.yml#/UserResponse

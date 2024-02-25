@@ -28,6 +28,7 @@ FieldTypeSchema:
     childFieldTypeComponents:
       items:
         $ref: "../../openapi.root.yml#/components/schemas/FieldTypeComponent"
+      readOnly: true
       type: array
     childFieldTypeComponentIds:
       items:
@@ -37,6 +38,7 @@ FieldTypeSchema:
       type: string
     parentFieldTypeComponent:
       $ref: "../../openapi.root.yml#/components/schemas/FieldTypeComponent"
+      readOnly: true
     parentFieldTypeComponentId:
       nullable: true
       type: integer

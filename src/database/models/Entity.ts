@@ -55,7 +55,7 @@ export class Entity extends Model<
   declare Tags: NonAttribute<Tag[]>;
 
   declare TemplateId?: number;
-  declare Template?: NonAttribute<Entity>;
+  declare Template: NonAttribute<Entity>;
 
   declare TransactorTypeId: CreationOptional<number>;
 

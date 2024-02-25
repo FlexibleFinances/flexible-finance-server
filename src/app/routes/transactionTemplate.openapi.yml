@@ -5,7 +5,7 @@ TransactionTemplateIdRequests:
       - $ref: "../../openapi.root.yml#/components/parameters/path_id"
     responses:
       200:
-        $ref: "../../openapi.root.yml#/components/responses/Transaction"
+        $ref: "../../openapi.root.yml#/components/responses/TransactionTemplate"
       400:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       401:
@@ -22,10 +22,10 @@ TransactionTemplateIdRequests:
       content:
         application/json:
           schema:
-            $ref: "../../openapi.root.yml#/components/schemas/Transaction"
+            $ref: "../../openapi.root.yml#/components/schemas/TransactionTemplate"
     responses:
       200:
-        $ref: "../../openapi.root.yml#/components/responses/Transaction"
+        $ref: "../../openapi.root.yml#/components/responses/TransactionTemplate"
       400:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       401:
@@ -48,7 +48,7 @@ TransactionTemplatesRequests:
       - $ref: "../../openapi.root.yml#/components/parameters/query_tagIds"
     responses:
       200:
-        $ref: "../../openapi.root.yml#/components/responses/Transactions"
+        $ref: "../../openapi.root.yml#/components/responses/TransactionTemplates"
       401:
         $ref: "../../openapi.root.yml#/components/responses/Message"
       403:
