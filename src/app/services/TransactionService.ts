@@ -152,6 +152,7 @@ export async function createTransactionFromDto(
 
   const fieldDataCreationPromises: Array<Promise<FieldDatum>> = [];
   transactionDto.fieldData?.forEach((fieldDatumDto) => {
+    fieldDatumDto.transactionId = transaction.id;
     fieldDataCreationPromises.push(
       FieldDatumService.createFieldDatumFromDto(fieldDatumDto)
     );
@@ -179,6 +180,7 @@ export async function createTransactionTemplateFromDto(
 
   const fieldDataCreationPromises: Array<Promise<FieldDatum>> = [];
   transactionTemplateDto.fieldData?.forEach((fieldDatumDto) => {
+    fieldDatumDto.transactionId = transactionTemplate.id;
     fieldDataCreationPromises.push(
       FieldDatumService.createFieldDatumFromDto(fieldDatumDto)
     );

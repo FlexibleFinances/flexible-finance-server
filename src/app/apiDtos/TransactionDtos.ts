@@ -98,10 +98,16 @@ export class TransactionResponseDto {
     }
 
     const fieldData = await transaction.getFieldData();
+    const fieldDataPromises: Array<Promise<void>> = [];
     fieldData?.forEach((fieldDatum) => {
-      this.fieldData.push(new FieldDatumResponseDto(fieldDatum));
+      const fieldDatumResponseDto = new FieldDatumResponseDto(fieldDatum);
+      fieldDataPromises.push(
+        fieldDatumResponseDto.loadAssociations(fieldDatum)
+      );
+      this.fieldData.push(fieldDatumResponseDto);
       this.fieldDatumIds.push(fieldDatum.id);
     });
+    await Promise.all(fieldDataPromises);
 
     const recipientTransactor = await transaction.getRecipientTransactor();
     if (recipientTransactor == null) {

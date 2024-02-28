@@ -86,10 +86,16 @@ export class EntityResponseDto {
     }
 
     const fieldData = await entity.getFieldData();
+    const fieldDataPromises: Array<Promise<void>> = [];
     fieldData?.forEach((fieldDatum) => {
-      this.fieldData.push(new FieldDatumResponseDto(fieldDatum));
+      const fieldDatumResponseDto = new FieldDatumResponseDto(fieldDatum);
+      fieldDataPromises.push(
+        fieldDatumResponseDto.loadAssociations(fieldDatum)
+      );
+      this.fieldData.push(fieldDatumResponseDto);
       this.fieldDatumIds.push(fieldDatum.id);
     });
+    await Promise.all(fieldDataPromises);
 
     if (this.parentGroupId != null) {
       this.parentGroup = new GroupResponseDto(await entity.getParentGroup());

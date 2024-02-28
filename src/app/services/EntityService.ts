@@ -138,6 +138,7 @@ export async function createEntityFromDto(
 
   const fieldDataCreationPromises: Array<Promise<FieldDatum>> = [];
   entityDto.fieldData?.forEach((fieldDatumDto) => {
+    fieldDatumDto.entityId = entity.id;
     fieldDataCreationPromises.push(
       FieldDatumService.createFieldDatumFromDto(fieldDatumDto)
     );
@@ -162,6 +163,7 @@ export async function createEntityTemplateFromDto(
 
   const fieldDataCreationPromises: Array<Promise<FieldDatum>> = [];
   entityTemplateDto.fieldData?.forEach((fieldDatumDto) => {
+    fieldDatumDto.entityId = entityTemplate.id;
     fieldDataCreationPromises.push(
       FieldDatumService.createFieldDatumFromDto(fieldDatumDto)
     );

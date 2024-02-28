@@ -67,14 +67,14 @@ export class FieldDatumResponseDto {
     this.id = fieldDatum.id;
     this.createdAt = fieldDatum.createdAt.toISOString();
     this.updatedAt = fieldDatum.updatedAt.toISOString();
-    this.accountId = fieldDatum.AccountId;
-    this.boolValue = fieldDatum.boolValue;
-    this.dateValue = fieldDatum.dateValue;
-    this.entityId = fieldDatum.EntityId;
-    this.fieldId = fieldDatum.FieldId;
-    this.intValue = fieldDatum.intValue;
-    this.stringValue = fieldDatum.stringValue;
-    this.transactionId = fieldDatum.TransactionId;
+    this.accountId = fieldDatum.AccountId ?? undefined;
+    this.boolValue = fieldDatum.boolValue ?? undefined;
+    this.dateValue = fieldDatum.dateValue ?? undefined;
+    this.entityId = fieldDatum.EntityId ?? undefined;
+    this.fieldId = fieldDatum.FieldId ?? undefined;
+    this.intValue = fieldDatum.intValue ?? undefined;
+    this.stringValue = fieldDatum.stringValue ?? undefined;
+    this.transactionId = fieldDatum.TransactionId ?? undefined;
   }
 
   public async loadAssociations(fieldDatum: FieldDatum): Promise<void> {

@@ -138,6 +138,7 @@ export async function createAccountFromDto(
 
   const fieldDataCreationPromises: Array<Promise<FieldDatum>> = [];
   accountDto.fieldData?.forEach((fieldDatumDto) => {
+    fieldDatumDto.accountId = account.id;
     fieldDataCreationPromises.push(
       FieldDatumService.createFieldDatumFromDto(fieldDatumDto)
     );
@@ -162,6 +163,7 @@ export async function createAccountTemplateFromDto(
 
   const fieldDataCreationPromises: Array<Promise<FieldDatum>> = [];
   accountTemplateDto.fieldData?.forEach((fieldDatumDto) => {
+    fieldDatumDto.accountId = accountTemplate.id;
     fieldDataCreationPromises.push(
       FieldDatumService.createFieldDatumFromDto(fieldDatumDto)
     );

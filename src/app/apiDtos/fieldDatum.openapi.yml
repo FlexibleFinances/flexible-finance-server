@@ -28,6 +28,7 @@ BoolAccount_FieldDatumSchema:
     boolValue:
       type: boolean
     accountId:
+      nullable: true
       type: integer
 BoolEntity_FieldDatumSchema:
   type: object
@@ -59,6 +60,7 @@ BoolEntity_FieldDatumSchema:
     boolValue:
       type: boolean
     entityId:
+      nullable: true
       type: integer
 BoolTransaction_FieldDatumSchema:
   type: object
@@ -90,6 +92,7 @@ BoolTransaction_FieldDatumSchema:
     boolValue:
       type: boolean
     transactionId:
+      nullable: true
       type: integer
 
 DateAccount_FieldDatumSchema:
@@ -123,6 +126,7 @@ DateAccount_FieldDatumSchema:
       format: date-time
       type: string
     accountId:
+      nullable: true
       type: integer
 DateEntity_FieldDatumSchema:
   type: object
@@ -155,6 +159,7 @@ DateEntity_FieldDatumSchema:
       format: date-time
       type: string
     entityId:
+      nullable: true
       type: integer
 DateTransaction_FieldDatumSchema:
   type: object
@@ -187,6 +192,7 @@ DateTransaction_FieldDatumSchema:
       format: date-time
       type: string
     transactionId:
+      nullable: true
       type: integer
 
 IntAccount_FieldDatumSchema:
@@ -219,6 +225,7 @@ IntAccount_FieldDatumSchema:
     intValue:
       type: integer
     accountId:
+      nullable: true
       type: integer
 IntEntity_FieldDatumSchema:
   type: object
@@ -250,6 +257,7 @@ IntEntity_FieldDatumSchema:
     intValue:
       type: integer
     entityId:
+      nullable: true
       type: integer
 IntTransaction_FieldDatumSchema:
   type: object
@@ -281,6 +289,7 @@ IntTransaction_FieldDatumSchema:
     intValue:
       type: integer
     transactionId:
+      nullable: true
       type: integer
 
 StringAccount_FieldDatumSchema:
@@ -313,6 +322,7 @@ StringAccount_FieldDatumSchema:
     stringValue:
       type: string
     accountId:
+      nullable: true
       type: integer
 StringEntity_FieldDatumSchema:
   type: object
@@ -344,6 +354,7 @@ StringEntity_FieldDatumSchema:
     stringValue:
       type: string
     entityId:
+      nullable: true
       type: integer
 StringTransaction_FieldDatumSchema:
   type: object
@@ -375,6 +386,7 @@ StringTransaction_FieldDatumSchema:
     stringValue:
       type: string
     transactionId:
+      nullable: true
       type: integer
 
 RequestBody:
