@@ -1,32 +1,11 @@
-UserRequestSchema:
-  description: "Must use separate schemas because required + writeOnly combo (for 'password') is not supported in openapi-express-validator"
-  type: object
-  required:
-    - email
-    - password
-    - roleIds
-    - username
-  properties:
-    email:
-      type: string
-    password:
-      writeOnly: true
-      type: string
-    roleIds:
-      items:
-        type: integer
-      type: array
-    username:
-      type: string
-
-UserResponseSchema:
-  description: "Must use separate schemas because required + writeOnly combo (for 'password') is not supported in openapi-express-validator"
+UserSchema:
   type: object
   required:
     - id
     - createdAt
     - updatedAt
     - email
+    - password
     - roles
     - roleIds
     - username
@@ -43,6 +22,9 @@ UserResponseSchema:
       readOnly: true
       type: string
     email:
+      type: string
+    password:
+      writeOnly: true
       type: string
     roles:
       items:

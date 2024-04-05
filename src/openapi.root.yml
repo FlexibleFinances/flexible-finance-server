@@ -355,10 +355,8 @@ components:
       $ref: ./app/apiDtos/transactor.openapi.yml#/TransactorSchema
     Transactor_Nullable:
       $ref: ./app/apiDtos/transactor.openapi.yml#/NullableTransactorSchema
-    UserRequest:
-      $ref: ./app/apiDtos/user.openapi.yml#/UserRequestSchema
-    UserResponse:
-      $ref: ./app/apiDtos/user.openapi.yml#/UserResponseSchema
+    User:
+      $ref: ./app/apiDtos/user.openapi.yml#/UserSchema
   securitySchemes:
     bearerAuth:
       type: http
