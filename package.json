@@ -9,7 +9,7 @@
     "dev": "nodemon -w src -e ts,json -x ts-node ./src/index.ts",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "prepare": "husky install",
+    "prepare": "husky",
     "api": "npx swagger-cli bundle -t yaml -o build/openapi.yml src/openapi.root.yml"
   },
   "repository": {
@@ -72,7 +72,7 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "6.1.1",
-    "husky": "8.0.3",
+    "husky": "^9.0.11",
     "jest": "^29.7.0",
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",
