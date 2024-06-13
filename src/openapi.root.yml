@@ -1,7 +1,7 @@
 openapi: 3.0.3
 servers:
-  - url: https://flexible-finance-server.herokuapp.com/v1
-    description: Production server
+  - url: https://flexible-finance-server.fly.dev/v1
+    description: Demo server
   - url: http://localhost:5001/v1
     description: Local server
 info:

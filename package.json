@@ -57,7 +57,8 @@
     "swagger-ui-express": "^4.6.3",
     "tape": "^5.7.5",
     "toobusy-js": "0.5.1",
-    "umzug": "^3.8.0"
+    "umzug": "^3.8.0",
+    "yaml": "^2.4.5"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.5.4",

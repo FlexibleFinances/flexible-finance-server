@@ -1,10 +1,12 @@
-# fly.toml app configuration file generated for ff-server on 2023-06-05T23:01:43-04:00
+# fly.toml app configuration file generated for flexible-finance-server on 2024-06-13T03:01:04-04:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "ff-server"
-primary_region = "iad"
+app = 'flexible-finance-server'
+primary_region = 'iad'
+
+[build]
 
 [http_service]
   internal_port = 3000
@@ -12,3 +14,9 @@ primary_region = "iad"
   auto_stop_machines = true
   auto_start_machines = true
   min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
