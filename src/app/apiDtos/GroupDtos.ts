@@ -1,4 +1,6 @@
+import type Account from "../../database/models/Account";
 import { AccountResponseDto } from "./AccountDtos";
+import type Entity from "../../database/models/Entity";
 import { EntityResponseDto } from "./EntityDtos";
 import Group from "../../database/models/Group";
 import { type Query } from "express-serve-static-core";
@@ -75,22 +77,52 @@ export class GroupResponseDto {
     }
 
     const accounts = await group.getAccounts();
+    const accountPromises: Array<Promise<void>> = [];
     accounts?.forEach((account) => {
-      this.accounts.push(new AccountResponseDto(account));
-      this.accountIds.push(account.id);
+      async function associatedDtoPromise(
+        groupDto: GroupResponseDto,
+        account: Account
+      ): Promise<void> {
+        const accountDto = new AccountResponseDto(account);
+        await accountDto.loadAssociations(account);
+        groupDto.accounts.push(accountDto);
+        groupDto.accountIds.push(account.id);
+      }
+      accountPromises.push(associatedDtoPromise(this, account));
     });
+    await Promise.all(accountPromises);
 
     const childGroups = await group.getChildGroups();
+    const childGroupPromises: Array<Promise<void>> = [];
     childGroups?.forEach((childGroup) => {
-      this.childGroups.push(new GroupResponseDto(childGroup));
-      this.childGroupIds.push(childGroup.id);
+      async function associatedDtoPromise(
+        groupDto: GroupResponseDto,
+        childGroup: Group
+      ): Promise<void> {
+        const childGroupDto = new GroupResponseDto(childGroup);
+        await childGroupDto.loadAssociations(childGroup);
+        groupDto.childGroups.push(childGroupDto);
+        groupDto.childGroupIds.push(childGroup.id);
+      }
+      accountPromises.push(associatedDtoPromise(this, childGroup));
     });
+    await Promise.all(childGroupPromises);
 
     const entities = await group.getEntities();
+    const entityPromises: Array<Promise<void>> = [];
     entities?.forEach((entity) => {
-      this.entities.push(new EntityResponseDto(entity));
-      this.entityIds.push(entity.id);
+      async function associatedDtoPromise(
+        groupDto: GroupResponseDto,
+        entity: Entity
+      ): Promise<void> {
+        const entityDto = new EntityResponseDto(entity);
+        await entityDto.loadAssociations(entity);
+        groupDto.entities.push(entityDto);
+        groupDto.entityIds.push(entity.id);
+      }
+      accountPromises.push(associatedDtoPromise(this, entity));
     });
+    await Promise.all(entityPromises);
 
     if (this.parentGroupId != null) {
       this.parentGroup = new GroupResponseDto(await group.getParentGroup());
