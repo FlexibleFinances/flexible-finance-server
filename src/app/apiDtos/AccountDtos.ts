@@ -8,6 +8,7 @@ import { GroupResponseDto } from "./GroupDtos";
 import { type Query } from "express-serve-static-core";
 import { TagResponseDto } from "./TagDtos";
 import type express from "express";
+import { transactorTypeEnum } from "../../utils/enumerators";
 
 export interface AccountRequest extends express.Request {
   body: AccountRequestDto;
@@ -65,6 +66,7 @@ export class AccountResponseDto {
   tagIds: number[] = [];
   template: AccountTemplateResponseDto | null = null;
   templateId: number;
+  transactorType = transactorTypeEnum.Account;
 
   constructor(account: Account) {
     this.id = account.id;

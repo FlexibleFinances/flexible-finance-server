@@ -62,6 +62,8 @@ EntitySchema:
       readOnly: true
     templateId:
       type: integer
+    transactorType:
+      type: integer
 
 EntityTemplateSchema:
   type: object
@@ -129,6 +131,8 @@ EntityTemplateSchema:
       items:
         type: integer
       type: array
+    transactorType:
+      type: integer
 
 NullableEntitySchema:
   nullable: true
@@ -194,4 +198,6 @@ NullableEntitySchema:
       $ref: "../../openapi.root.yml#/components/schemas/EntityTemplate"
       readOnly: true
     templateId:
+      type: integer
+    transactorType:
       type: integer

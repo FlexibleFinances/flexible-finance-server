@@ -8,6 +8,7 @@ import { GroupResponseDto } from "./GroupDtos";
 import { type Query } from "express-serve-static-core";
 import { TagResponseDto } from "./TagDtos";
 import type express from "express";
+import { transactorTypeEnum } from "../../utils/enumerators";
 
 export interface EntityRequest extends express.Request {
   body: EntityRequestDto;
@@ -65,6 +66,7 @@ export class EntityResponseDto {
   tagIds: number[] = [];
   template: EntityTemplateResponseDto | null = null;
   templateId: number;
+  transactorType = transactorTypeEnum.Entity;
 
   constructor(entity: Entity) {
     this.id = entity.id;

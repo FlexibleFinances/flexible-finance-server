@@ -62,6 +62,8 @@ AccountSchema:
       readOnly: true
     templateId:
       type: integer
+    transactorType:
+      type: integer
 
 AccountTemplateSchema:
   type: object
@@ -129,6 +131,8 @@ AccountTemplateSchema:
       items:
         type: integer
       type: array
+    transactorType:
+      type: integer
 
 NullableAccountSchema:
   nullable: true
@@ -194,4 +198,6 @@ NullableAccountSchema:
       $ref: "../../openapi.root.yml#/components/schemas/AccountTemplate"
       readOnly: true
     templateId:
+      type: integer
+    transactorType:
       type: integer
