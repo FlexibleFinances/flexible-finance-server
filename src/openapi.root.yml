@@ -292,6 +292,22 @@ components:
     Users:
       $ref: ./app/routes/user.openapi.yml#/UsersResponse
   schemas:
+    DineroObject:
+      type: object
+      properties:
+        amount:
+          type: integer
+        currency:
+          type: object
+          properties:
+            code:
+              type: string
+            base:
+              type: integer
+            exponent:
+              type: integer
+        scale:
+          type: integer
     Message:
       type: object
       properties:

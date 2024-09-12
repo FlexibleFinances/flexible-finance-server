@@ -4,6 +4,8 @@ import Field from "../models/Field";
 import { type QueryInterface } from "sequelize";
 import Transaction from "../models/Transaction";
 import Transactor from "../models/Transactor";
+import { USD } from "@dinero.js/currencies";
+import { dinero } from "dinero.js";
 
 export async function up({
   context: queryInterface,
@@ -109,6 +111,7 @@ export async function up({
   });
   await companyTemplate.setFields([companyName.id, tin.id]);
   const transactionTemplate = await Transaction.create({
+    amount: dinero({ amount: 10, currency: USD }),
     name: "Transaction Template",
     isTemplate: true,
   });

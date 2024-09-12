@@ -281,6 +281,10 @@ export async function up({
       type: DataTypes.DATE,
       allowNull: false,
     },
+    amountJSON: {
+      type: DataTypes.JSON,
+      allowNull: false,
+    },
     name: {
       type: DataTypes.STRING(128),
       allowNull: true,

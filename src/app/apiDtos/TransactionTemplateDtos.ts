@@ -1,3 +1,4 @@
+import { type DineroSnapshot, dinero, toSnapshot } from "dinero.js";
 import {
   type FieldDatumRequestDto,
   FieldDatumResponseDto,
@@ -28,6 +29,7 @@ export interface TransactionTemplatesResponse extends express.Response {
 }
 
 export interface TransactionTemplateRequestDto {
+  amount: DineroSnapshot<number>;
   fieldIds: number[];
   fieldData?: FieldDatumRequestDto[];
   fieldDatumIds?: number[];
@@ -58,6 +60,7 @@ export class TransactionTemplateResponseDto {
   createdAt: string;
   updatedAt: string;
 
+  amount: DineroSnapshot<number>;
   fields: FieldResponseDto[] = [];
   fieldIds: number[] = [];
   fieldData: FieldDatumResponseDto[] = [];
@@ -75,6 +78,7 @@ export class TransactionTemplateResponseDto {
     this.id = transactionTemplate.id;
     this.createdAt = transactionTemplate.createdAt.toISOString();
     this.updatedAt = transactionTemplate.updatedAt.toISOString();
+    this.amount = toSnapshot(transactionTemplate.amount);
     this.isTemplate = transactionTemplate.isTemplate;
     this.name = transactionTemplate.name;
     this.recipientTransactorId =
@@ -156,6 +160,7 @@ export function TransactionTemplateDtoToModel(
 ): Transaction {
   const transaction = Transaction.build({
     isTemplate: transactionDto.isTemplate,
+    amount: dinero(transactionDto.amount),
     name: transactionDto.name,
     RecipientTransactorId: transactionDto.recipientTransactorId ?? undefined,
     SourceTransactorId: transactionDto.sourceTransactorId ?? undefined,

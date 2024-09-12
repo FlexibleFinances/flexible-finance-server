@@ -4,6 +4,7 @@ TransactionSchema:
     - id
     - createdAt
     - updatedAt
+    - amount
     - fieldData
     - fieldDatumIds
     - isTemplate
@@ -27,6 +28,8 @@ TransactionSchema:
       format: date-time
       readOnly: true
       type: string
+    amount:
+      $ref: "../../openapi.root.yml#/components/schemas/DineroObject"
     isTemplate:
       type: boolean
     fieldData:
@@ -72,6 +75,7 @@ TransactionTemplateSchema:
     - id
     - createdAt
     - updatedAt
+    - amount
     - fields
     - fieldIds
     - isTemplate
@@ -92,6 +96,8 @@ TransactionTemplateSchema:
       format: date-time
       readOnly: true
       type: string
+    amount:
+      $ref: "../../openapi.root.yml#/components/schemas/DineroObject"
     isTemplate:
       type: boolean
     fields:

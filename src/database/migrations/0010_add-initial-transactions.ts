@@ -5,6 +5,8 @@ import FieldDatum from "../models/FieldDatum";
 import { Op } from "sequelize";
 import { type QueryInterface } from "sequelize";
 import Transaction from "../models/Transaction";
+import { USD } from "@dinero.js/currencies";
+import { dinero } from "dinero.js";
 
 export async function up({
   context: queryInterface,
@@ -53,6 +55,7 @@ export async function up({
   }
 
   const transactionOne = await Transaction.create({
+    amount: dinero({ amount: 10, currency: USD }),
     isTemplate: false,
     TemplateId: transactionTemplate.id,
     SourceTransactorId: checkingOne.id,

@@ -21,6 +21,12 @@ import {
   type NonAttribute,
   type Sequelize,
 } from "sequelize";
+import {
+  type Dinero,
+  type DineroSnapshot,
+  dinero,
+  toSnapshot,
+} from "dinero.js";
 import type Account from "./Account";
 import type Entity from "./Entity";
 import type Field from "./Field";
@@ -31,11 +37,14 @@ import { isTemplatedObject } from "../../utils/helperFunctions";
 
 export class Transaction extends Model<
   InferAttributes<Transaction>,
-  InferCreationAttributes<Transaction>
+  InferCreationAttributes<Transaction, { omit: "amountJSON" }>
 > {
   declare id: CreationOptional<number>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
+
+  declare amount: Dinero<number>;
+  declare amountJSON: DineroSnapshot<number>;
 
   declare name: CreationOptional<string>;
 
@@ -132,6 +141,26 @@ export function initializeTransaction(sequelize: Sequelize): void {
       },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
+      amount: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          const rawValue = this.getDataValue("amountJSON");
+          return dinero(rawValue);
+        },
+        set(newValue: Dinero<number>) {
+          this.setDataValue("amountJSON", toSnapshot(newValue));
+        },
+      },
+      amountJSON: {
+        type: DataTypes.JSON,
+        get() {
+          throw new Error("Use `amount` instead.");
+        },
+        set(newValue) {
+          throw new Error("Use `amount` instead.");
+        },
+        allowNull: false,
+      },
       name: {
         type: DataTypes.STRING(128),
         allowNull: true,
